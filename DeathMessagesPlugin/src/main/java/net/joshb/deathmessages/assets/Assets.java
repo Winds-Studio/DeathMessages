@@ -549,8 +549,7 @@ public class Assets {
 
         if (msgs.isEmpty()) return null;
         boolean hasOwner = false;
-        if (e instanceof Tameable) {
-            Tameable tameable = (Tameable) e;
+        if (e instanceof Tameable tameable) {
             if (tameable.getOwner() != null) hasOwner = true;
         }
 
@@ -834,8 +833,7 @@ public class Assets {
             return null;
         }
         boolean hasOwner = false;
-        if (em.getEntity() instanceof Tameable) {
-            Tameable tameable = (Tameable) em.getEntity();
+        if (em.getEntity() instanceof Tameable tameable) {
             if (tameable.getOwner() != null) hasOwner = true;
         }
         String msg = msgs.get(random.nextInt(msgs.size()));
@@ -920,8 +918,7 @@ public class Assets {
     public static TextComponent getEntityDeath(Player player, Entity entity, String damageCause, MobType mobType) {
         Random random = new Random();
         boolean hasOwner = false;
-        if (entity instanceof Tameable) {
-            Tameable tameable = (Tameable) entity;
+        if (entity instanceof Tameable tameable) {
             if (tameable.getOwner() != null) hasOwner = true;
         }
         List<String> msgs;
@@ -1014,7 +1011,7 @@ public class Assets {
             }
             //Check for region specific messages
             if (s.contains("REGION[")) {
-                Matcher m = Pattern.compile("REGION\\[([^)]+)\\]").matcher(s);
+                Matcher m = Pattern.compile("REGION\\[([^)]+)]").matcher(s);
                 while (m.find()) {
                     String regionID = m.group(1);
                     if (DeathMessages.worldGuardExtension == null) {
@@ -1065,8 +1062,7 @@ public class Assets {
                 .replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
                 .replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ())));
         if (owner) {
-            if (entity instanceof Tameable) {
-                Tameable tameable = (Tameable) entity;
+            if (entity instanceof Tameable tameable) {
                 if (tameable.getOwner() != null && tameable.getOwner().getName() != null) {
                     msg = msg.replaceAll("%owner%", tameable.getOwner().getName());
                 }
@@ -1171,106 +1167,60 @@ public class Assets {
     }
 
     public static String getEnvironment(World.Environment environment) {
-        switch (environment) {
-            case NORMAL:
-                return Messages.getInstance().getConfig().getString("Environment.normal");
-            case NETHER:
-                return Messages.getInstance().getConfig().getString("Environment.nether");
-            case THE_END:
-                return Messages.getInstance().getConfig().getString("Environment.the_end");
-            default:
-                return Messages.getInstance().getConfig().getString("Environment.unknown");
-        }
+        return switch (environment) {
+            case NORMAL -> Messages.getInstance().getConfig().getString("Environment.normal");
+            case NETHER -> Messages.getInstance().getConfig().getString("Environment.nether");
+            case THE_END -> Messages.getInstance().getConfig().getString("Environment.the_end");
+            default -> Messages.getInstance().getConfig().getString("Environment.unknown");
+        };
     }
 
     public static String getSimpleProjectile(Projectile projectile) {
-        if (projectile instanceof Arrow) {
-            return "Projectile-Arrow";
-        } else if (projectile instanceof DragonFireball) {
-            return "Projectile-Dragon-Fireball";
-        } else if (projectile instanceof Egg) {
-            return "Projectile-Egg";
-        } else if (projectile instanceof EnderPearl) {
-            return "Projectile-EnderPearl";
-        } else if (projectile instanceof WitherSkull) {
-            return "Projectile-WitherSkull";
-        } else if (projectile instanceof Fireball) {
-            return "Projectile-Fireball";
-        } else if (projectile instanceof FishHook) {
-            return "Projectile-FishHook";
-        } else if (projectile instanceof LlamaSpit) {
-            return "Projectile-LlamaSpit";
-        } else if (projectile instanceof Snowball) {
-            return "Projectile-Snowball";
-        } else if (projectile instanceof Trident) {
-            return "Projectile-Trident";
-        } else if (projectile instanceof ShulkerBullet) {
-            return "Projectile-ShulkerBullet";
-        } else {
-            return "Projectile-Arrow";
-        }
+        if (projectile instanceof Arrow) return "Projectile-Arrow";
+        else if (projectile instanceof DragonFireball) return "Projectile-Dragon-Fireball";
+        else if (projectile instanceof Egg) return "Projectile-Egg";
+        else if (projectile instanceof EnderPearl) return "Projectile-EnderPearl";
+        else if (projectile instanceof WitherSkull) return "Projectile-WitherSkull";
+        else if (projectile instanceof Fireball) return "Projectile-Fireball";
+        else if (projectile instanceof FishHook) return "Projectile-FishHook";
+        else if (projectile instanceof LlamaSpit) return "Projectile-LlamaSpit";
+        else if (projectile instanceof Snowball) return "Projectile-Snowball";
+        else if (projectile instanceof Trident) return "Projectile-Trident";
+        else if (projectile instanceof ShulkerBullet) return "Projectile-ShulkerBullet";
+        else return "Projectile-Arrow";
     }
 
     public static String getSimpleCause(EntityDamageEvent.DamageCause damageCause) {
-        switch (damageCause) {
-            case CONTACT:
-                return "Contact";
-            case ENTITY_ATTACK:
-                return "Melee";
-            case PROJECTILE:
-                return "Projectile";
-            case SUFFOCATION:
-                return "Suffocation";
-            case FALL:
-                return "Fall";
-            case FIRE:
-                return "Fire";
-            case FIRE_TICK:
-                return "Fire-Tick";
-            case MELTING:
-                return "Melting";
-            case LAVA:
-                return "Lava";
-            case DROWNING:
-                return "Drowning";
-            case BLOCK_EXPLOSION:
-            case ENTITY_EXPLOSION:
-                return "Explosion";
-            case VOID:
-                return "Void";
-            case LIGHTNING:
-                return "Lightning";
-            case SUICIDE:
-                return "Suicide";
-            case STARVATION:
-                return "Starvation";
-            case POISON:
-                return "Poison";
-            case MAGIC:
-                return "Magic";
-            case WITHER:
-                return "Wither";
-            case FALLING_BLOCK:
-                return "Falling-Block";
-            case THORNS:
-                return "Thorns";
-            case DRAGON_BREATH:
-                return "Dragon-Breath";
-            case CUSTOM:
-                return "Custom";
-            case FLY_INTO_WALL:
-                return "Fly-Into-Wall";
-            case HOT_FLOOR:
-                return "Hot-Floor";
-            case CRAMMING:
-                return "Cramming";
-            case DRYOUT:
-                return "Dryout";
-            case FREEZE:
-                return "Freeze";
-            default:
-                return "Unknown";
-        }
+        return switch (damageCause) {
+            case CONTACT -> "Contact";
+            case ENTITY_ATTACK -> "Melee";
+            case PROJECTILE -> "Projectile";
+            case SUFFOCATION -> "Suffocation";
+            case FALL -> "Fall";
+            case FIRE -> "Fire";
+            case FIRE_TICK -> "Fire-Tick";
+            case MELTING -> "Melting";
+            case LAVA -> "Lava";
+            case DROWNING -> "Drowning";
+            case BLOCK_EXPLOSION, ENTITY_EXPLOSION -> "Explosion";
+            case VOID -> "Void";
+            case LIGHTNING -> "Lightning";
+            case SUICIDE -> "Suicide";
+            case STARVATION -> "Starvation";
+            case POISON -> "Poison";
+            case MAGIC -> "Magic";
+            case WITHER -> "Wither";
+            case FALLING_BLOCK -> "Falling-Block";
+            case THORNS -> "Thorns";
+            case DRAGON_BREATH -> "Dragon-Breath";
+            case CUSTOM -> "Custom";
+            case FLY_INTO_WALL -> "Fly-Into-Wall";
+            case HOT_FLOOR -> "Hot-Floor";
+            case CRAMMING -> "Cramming";
+            case DRYOUT -> "Dryout";
+            case FREEZE -> "Freeze";
+            default -> "Unknown";
+        };
     }
 
     public static FileConfiguration getPlayerDeathMessages() {
