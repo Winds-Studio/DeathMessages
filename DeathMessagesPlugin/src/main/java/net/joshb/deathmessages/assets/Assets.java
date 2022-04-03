@@ -169,25 +169,17 @@ public class Assets {
 
     public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
         if (DeathMessages.majorVersion() < 9) {
-            if (mob.getEquipment() == null || mob.getEquipment().getItemInHand() == null) {
+            if (mob.getEquipment() == null) {
                 return false;
             } else if (isWeapon(mob.getEquipment().getItemInHand())) {
                 return false;
-            } else if (damageCause.equals(EntityDamageEvent.DamageCause.THORNS)) {
-                return false;
-            } else {
-                return true;
-            }
+            } else return !damageCause.equals(EntityDamageEvent.DamageCause.THORNS);
         } else {
-            if (mob.getEquipment() == null || mob.getEquipment().getItemInMainHand() == null) {
+            if (mob.getEquipment() == null) {
                 return false;
             } else if (isWeapon(mob.getEquipment().getItemInMainHand())) {
                 return false;
-            } else if (damageCause.equals(EntityDamageEvent.DamageCause.THORNS)) {
-                return false;
-            } else {
-                return true;
-            }
+            } else return !damageCause.equals(EntityDamageEvent.DamageCause.THORNS);
         }
     }
 
@@ -329,7 +321,8 @@ public class Assets {
                         material = XMaterial.matchXMaterial(fb.getBlockData().getMaterial()).parseMaterial().toString().toLowerCase();
                     }
                     String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
-                    String mssa = Assets.colorize(splitMessage.replaceAll("%block%", configValue));
+                    String mssa = Assets.colorize(splitMessage.replaceAll("%block%", configValue +
+                            (splitMessage.endsWith(".") ? "" : " ")));
                     tc.addExtra(mssa);
                     lastColor = getColorOfString(lastColor + mssa);
                 } catch (NullPointerException e) {
@@ -343,13 +336,10 @@ public class Assets {
             } else if (splitMessage.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
                 try {
                     String material;
-                    if (DeathMessages.majorVersion() < 13) {
-                        material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
-                    } else {
-                        material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
-                    }
+                    material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
                     String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
-                    String mssa = Assets.colorize(splitMessage.replaceAll("%climbable%", configValue));
+                    String mssa = Assets.colorize(splitMessage.replaceAll("%climbable%", configValue +
+                            (splitMessage.endsWith(".") ? "" : " ")));
                     tc.addExtra(mssa);
                     lastColor = getColorOfString(lastColor + mssa);
                 } catch (NullPointerException e) {
@@ -770,9 +760,6 @@ public class Assets {
                 } else {
                     i = mob.getEquipment().getItemInMainHand();
                 }
-                if (i == null) {
-                    continue;
-                }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
@@ -877,9 +864,6 @@ public class Assets {
                     i = p.getEquipment().getItemInHand();
                 } else {
                     i = p.getEquipment().getItemInMainHand();
-                }
-                if (i == null) {
-                    continue;
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
@@ -1011,7 +995,7 @@ public class Assets {
         for (String s : list) {
             //Check for permission messages
             if (s.contains("PERMISSION[")) {
-                Matcher m = Pattern.compile("PERMISSION\\[([^)]+)\\]").matcher(s);
+                Matcher m = Pattern.compile("PERMISSION\\[([^)]+)]").matcher(s);
                 while (m.find()) {
                     String perm = m.group(1);
                     if (player.getPlayer().hasPermission(perm)) {
@@ -1020,7 +1004,7 @@ public class Assets {
                 }
             }
             if (s.contains("PERMISSION_KILLER[")) {
-                Matcher m = Pattern.compile("PERMISSION_KILLER\\[([^)]+)\\]").matcher(s);
+                Matcher m = Pattern.compile("PERMISSION_KILLER\\[([^)]+)]").matcher(s);
                 while (m.find()) {
                     String perm = m.group(1);
                     if (killer.hasPermission(perm)) {
@@ -1118,10 +1102,6 @@ public class Assets {
                 DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
                 msg = msg.replaceAll("%biome%", "Unknown");
             }
-            if (DeathMessages.plugin.placeholderAPIEnabled) {
-                msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
-            }
-            return msg;
         } else {
             String mobName = mob.getName();
             if (Settings.getInstance().getConfig().getBoolean("Rename-Mobs.Enabled")) {
@@ -1159,11 +1139,11 @@ public class Assets {
                 Player p = (Player) mob;
                 msg = msg.replaceAll("%killer_display%", p.getDisplayName());
             }
-            if (DeathMessages.plugin.placeholderAPIEnabled) {
-                msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
-            }
-            return msg;
         }
+        if (DeathMessages.plugin.placeholderAPIEnabled) {
+            msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
+        }
+        return msg;
     }
 
     public static String convertString(String string) {
@@ -1174,7 +1154,7 @@ public class Assets {
             if (i == spl.length - 1) {
                 sb.append(StringUtils.capitalize(spl[i]));
             } else {
-                sb.append(StringUtils.capitalize(spl[i]) + " ");
+                sb.append(StringUtils.capitalize(spl[i])).append(" ");
             }
         }
         return sb.toString();
@@ -1222,8 +1202,6 @@ public class Assets {
             return "Projectile-Snowball";
         } else if (projectile instanceof Trident) {
             return "Projectile-Trident";
-        } else if (projectile instanceof WitherSkull) {
-            return "Projectile-WitherSkull";
         } else if (projectile instanceof ShulkerBullet) {
             return "Projectile-ShulkerBullet";
         } else {
@@ -1311,7 +1289,7 @@ public class Assets {
                 char c = input.charAt(index + 1);
                 ChatColor color = ChatColor.getByChar(c);
                 if (color != null) {
-                    result.insert(0, color.toString());
+                    result.insert(0, color);
                     // Once we find a color or reset we can stop searching
                     if (isChatColorAColor(color) || color.equals(ChatColor.RESET)) {
                         break;
