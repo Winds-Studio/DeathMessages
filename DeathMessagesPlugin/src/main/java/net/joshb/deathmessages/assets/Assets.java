@@ -1192,6 +1192,8 @@ public class Assets {
             return "Projectile-Egg";
         } else if (projectile instanceof EnderPearl) {
             return "Projectile-EnderPearl";
+        } else if (projectile instanceof WitherSkull) {
+            return "Projectile-WitherSkull";
         } else if (projectile instanceof Fireball) {
             return "Projectile-Fireball";
         } else if (projectile instanceof FishHook) {
