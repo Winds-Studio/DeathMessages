@@ -1,7 +1,6 @@
 package net.joshb.deathmessages;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import io.lumine.mythic.api.MythicPlugin;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.joshb.deathmessages.api.PlayerManager;
 import net.joshb.deathmessages.command.deathmessages.CommandManager;
@@ -27,6 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
+import net.joshb.deathmessages.worldguard.WorldGuard7Extension;
+import net.joshb.deathmessages.worldguard.WorldGuardExtension;
 
 public class DeathMessages extends JavaPlugin {
 

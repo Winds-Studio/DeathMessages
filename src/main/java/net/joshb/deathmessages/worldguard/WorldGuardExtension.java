@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.hook;
+package net.joshb.deathmessages.worldguard;
 
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -13,7 +13,7 @@ public interface WorldGuardExtension {
     StateFlag BROADCAST_NATURAL = new StateFlag("broadcast-deathmessage-natural", true);
     StateFlag BROADCAST_ENTITY = new StateFlag("broadcast-deathmessage-entity", true);
 
-    default void registerFlags(){
+    default void registerFlags() {
 
         final FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
         try {

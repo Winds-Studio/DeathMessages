@@ -1,4 +1,4 @@
-package net.joshb.deathmessages.hook;
+package net.joshb.deathmessages.worldguard;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;
