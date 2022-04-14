@@ -20,7 +20,7 @@ public class CommandVersion extends DeathMessagesCommand {
             return;
         }
         String message = Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Version");
-        message = message.replaceAll("%version%", DeathMessages.plugin.getDescription().getVersion());
+        message = message.replaceAll("%version%", DeathMessages.getInstance().getDescription().getVersion());
         sender.sendMessage(message);
     }
 }

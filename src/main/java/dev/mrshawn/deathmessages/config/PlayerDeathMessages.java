@@ -32,10 +32,10 @@ public class PlayerDeathMessages {
         try {
             config.save(file);
         } catch (Exception e){
-            File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+            File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
             file.renameTo(f);
             initialize();
         }
@@ -45,10 +45,10 @@ public class PlayerDeathMessages {
         try {
             config = CommentedConfiguration.loadConfiguration(file);
         } catch (Exception e){
-            File f = new File(DeathMessages.plugin.getDataFolder(), fileName + ".broken." + new Date().getTime());
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+            File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
             file.renameTo(f);
             initialize();
             e.printStackTrace();
@@ -56,15 +56,15 @@ public class PlayerDeathMessages {
     }
 
     public void initialize(){
-        file = new File(DeathMessages.plugin.getDataFolder(), fileName + ".yml");
+        file = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".yml");
 
         if(!file.exists()){
             file.getParentFile().mkdirs();
-            copy(DeathMessages.plugin.getResource(fileName + ".yml"), file);
+            copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
         }
         config = CommentedConfiguration.loadConfiguration(file);
         try{
-            config.syncWithConfig(file, DeathMessages.plugin.getResource(fileName + ".yml"), "Mobs");
+            config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "Mobs");
         } catch (Exception ignored){
 
         }

@@ -16,11 +16,11 @@ public class ConfigManager {
         return instance;
     }
 
-    public File backupDirectory = new File(DeathMessages.plugin.getDataFolder() + File.separator + "Backups");
+    public File backupDirectory = new File(DeathMessages.getInstance().getDataFolder() + File.separator + "Backups");
 
     public void initialize(){
-        if (!DeathMessages.plugin.getDataFolder().exists()) {
-            DeathMessages.plugin.getDataFolder().mkdir();
+        if (!DeathMessages.getInstance().getDataFolder().exists()) {
+            DeathMessages.getInstance().getDataFolder().mkdir();
         }
         EntityDeathMessages.getInstance().initialize();
         Gangs.getInstance().initialize();
@@ -93,9 +93,9 @@ public class ConfigManager {
             String fileName = EntityDeathMessages.getInstance().fileName;
             File f = new File(backupDir + File.separator + fileName + ".yml");
             if(EntityDeathMessages.getInstance().file.delete()){
-                FileUtils.copyFileToDirectory(f, DeathMessages.plugin.getDataFolder());
+                FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
             } else {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -104,9 +104,9 @@ public class ConfigManager {
             String fileName = Gangs.getInstance().fileName;
             File f = new File(backupDir + File.separator + fileName + ".yml");
             if(Gangs.getInstance().file.delete()){
-                FileUtils.copyFileToDirectory(f, DeathMessages.plugin.getDataFolder());
+                FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
             } else {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -115,9 +115,9 @@ public class ConfigManager {
             String fileName = Messages.getInstance().fileName;
             File f = new File(backupDir + File.separator + fileName + ".yml");
             if(Messages.getInstance().file.delete()){
-                FileUtils.copyFileToDirectory(f, DeathMessages.plugin.getDataFolder());
+                FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
             } else {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -126,9 +126,9 @@ public class ConfigManager {
             String fileName = PlayerDeathMessages.getInstance().fileName;
             File f = new File(backupDir + File.separator + fileName + ".yml");
             if(PlayerDeathMessages.getInstance().file.delete()){
-                FileUtils.copyFileToDirectory(f, DeathMessages.plugin.getDataFolder());
+                FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
             } else {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -137,9 +137,9 @@ public class ConfigManager {
             String fileName = Settings.getInstance().fileName;
             File f = new File(backupDir + File.separator + fileName + ".yml");
             if(Settings.getInstance().file.delete()){
-                FileUtils.copyFileToDirectory(f, DeathMessages.plugin.getDataFolder());
+                FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
             } else {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -149,9 +149,9 @@ public class ConfigManager {
                 String fileName = UserData.getInstance().fileName;
                 File f = new File(backupDir + File.separator + fileName + ".yml");
                 if(UserData.getInstance().file.delete()){
-                    FileUtils.copyFileToDirectory(f, DeathMessages.plugin.getDataFolder());
+                    FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
                 } else {
-                    DeathMessages.plugin.getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
+                    DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");
                 }
             } catch (IOException e){
                 e.printStackTrace();

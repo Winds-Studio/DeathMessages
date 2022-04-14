@@ -30,7 +30,7 @@ public class PluginMessaging implements PluginMessageListener {
 
             if (subChannel.equals("GetServer")) {
                 String serverName = in.readUTF();
-                DeathMessages.plugin.getLogger().log(Level.INFO, "Server-Name successfully initialized from Bungee! (" + serverName + ")");
+                DeathMessages.getInstance().getLogger().log(Level.INFO, "Server-Name successfully initialized from Bungee! (" + serverName + ")");
                 DeathMessages.bungeeServerName = serverName;
                 Settings.getInstance().getConfig().set("Hooks.Bungee.Server-Name.Display-Name", serverName);
                 Settings.getInstance().save();
@@ -55,10 +55,10 @@ public class PluginMessaging implements PluginMessageListener {
 
     public static void sendServerNameRequest(Player p) {
         if (!Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) return;
-        DeathMessages.plugin.getLogger().log(Level.INFO, "Attempting to initialize server-name variable from Bungee...");
+        DeathMessages.getInstance().getLogger().log(Level.INFO, "Attempting to initialize server-name variable from Bungee...");
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");
-        p.sendPluginMessage(DeathMessages.plugin, "BungeeCord", out.toByteArray());
+        p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
     }
 
     public static void sendPluginMSG(Player p, String msg) {
@@ -71,7 +71,7 @@ public class PluginMessaging implements PluginMessageListener {
                 out.writeUTF(server);
                 out.writeUTF("DeathMessages");
                 out.writeUTF(DeathMessages.bungeeServerName + "######" + msg);
-                p.sendPluginMessage(DeathMessages.plugin, "BungeeCord", out.toByteArray());
+                p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
             }
         } else {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -79,7 +79,7 @@ public class PluginMessaging implements PluginMessageListener {
             out.writeUTF("ONLINE");
             out.writeUTF("DeathMessages");
             out.writeUTF(DeathMessages.bungeeServerName + "######" + msg);
-            p.sendPluginMessage(DeathMessages.plugin, "BungeeCord", out.toByteArray());
+            p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
         }
     }
 }

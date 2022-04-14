@@ -5,7 +5,6 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import me.clip.placeholderapi.PlaceholderAPI;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
@@ -13,6 +12,7 @@ import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.DeathAffiliation;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.enums.PDMode;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -20,7 +20,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -29,7 +28,10 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,15 +74,16 @@ public class Assets {
     }
 
     public static boolean isClimbable(Material material) {
+        final String name = material.name();
         if (DeathMessages.majorVersion() >= 14) {
-            return material.name().contains("LADDER")
-                    || material.name().contains("VINE")
-                    || material.equals(Material.SCAFFOLDING)
-                    || material.name().contains("TRAPDOOR");
+            return name.contains("LADDER")
+                    || name.contains("VINE")
+                    || material == Material.SCAFFOLDING
+                    || name.contains("TRAPDOOR");
         }
-        return material.name().contains("LADDER")
-                || material.name().contains("VINE")
-                || material.name().contains("TRAPDOOR");
+        return name.contains("LADDER")
+                || name.contains("VINE")
+                || name.contains("TRAPDOOR");
     }
 
     public static boolean itemNameIsWeapon(ItemStack itemStack) {
@@ -290,7 +293,7 @@ public class Assets {
                     tc.addExtra(mssa);
                     lastColor = getColorOfString(lastColor + mssa);
                 } catch (NullPointerException e) {
-                    DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %block%. Please check your config for a wrong value." +
+                    DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not parse %block%. Please check your config for a wrong value." +
                             " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
                             " on the discord https://discord.gg/dhJnq7R");
                     pm.setLastEntityDamager(null);
@@ -307,7 +310,7 @@ public class Assets {
                     tc.addExtra(mssa);
                     lastColor = getColorOfString(lastColor + mssa);
                 } catch (NullPointerException e) {
-                    DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %climbable%. Please check your config for a wrong value." +
+                    DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not parse %climbable%. Please check your config for a wrong value." +
                             " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
                             " on the discord https://discord.gg/dhJnq7R - Parsed block: "+ pm.getLastClimbing().toString());
                     pm.setLastClimbing(null);
@@ -392,13 +395,12 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         //List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer());
 
-        Bukkit.broadcastMessage("getWeapon");
-        Bukkit.broadcastMessage(DeathMessages.plugin.mythicmobsEnabled + " - " + DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
+        //Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
         List<String> msgs;
-        if (DeathMessages.plugin.mythicmobsEnabled
-                &&DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
-            Bukkit.broadcastMessage("is myth - " + internalMobType);
+        if (DeathMessages.getInstance().mythicmobsEnabled
+                && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            //Bukkit.broadcastMessage("is myth - " + internalMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
         } else {
             msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
@@ -494,9 +496,9 @@ public class Assets {
         List<String> msgs;
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String internalMobType = null;
-            if (DeathMessages.plugin.mythicmobsEnabled
-                    && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+            if (DeathMessages.getInstance().mythicmobsEnabled
+                    && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
+                internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
             } else {
                 //reserved
             }
@@ -604,12 +606,11 @@ public class Assets {
 
         // List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer());
 
-        Bukkit.broadcastMessage("get");
         List<String> msgs;
-        if (DeathMessages.plugin.mythicmobsEnabled
-                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
-            Bukkit.broadcastMessage("is myth - " + internalMobType);
+        if (DeathMessages.getInstance().mythicmobsEnabled
+                && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            //Bukkit.broadcastMessage("is myth - " + internalMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
         } else {
             msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
@@ -677,9 +678,9 @@ public class Assets {
       //  List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
 
         List<String> msgs;
-        if (DeathMessages.plugin.mythicmobsEnabled
-                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getInstance().mythicmobsEnabled
+                && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
         } else {
             msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
@@ -772,9 +773,9 @@ public class Assets {
         List<String> msgs;
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String internalMobType = null;
-            if (DeathMessages.plugin.mythicmobsEnabled
-                    && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
-                internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
+            if (DeathMessages.getInstance().mythicmobsEnabled
+                    && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
+                internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
             }
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
         } else {
@@ -882,9 +883,9 @@ public class Assets {
         } else {
             if (mobType.equals(MobType.MYTHIC_MOB)) {
                 String internalMobType = null;
-                if (DeathMessages.plugin.mythicmobsEnabled
-                        && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
-                    internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(entity).getMobType();
+                if (DeathMessages.getInstance().mythicmobsEnabled
+                        && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
+                    internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(entity).getMobType();
                 } else {
                     //reserved
                 }
@@ -1025,11 +1026,11 @@ public class Assets {
         try {
             msg = msg.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
         } catch (NullPointerException e) {
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
-            DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
+            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
             msg = msg.replaceAll("%biome%", "Unknown");
         }
-        if (DeathMessages.plugin.placeholderAPIEnabled) {
+        if (DeathMessages.getInstance().placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(player.getPlayer(), msg);
         }
         return msg;
@@ -1048,8 +1049,8 @@ public class Assets {
             try {
                 msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
             } catch (NullPointerException e) {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
                 msg = msg.replaceAll("%biome%", "Unknown");
             }
         } else {
@@ -1080,8 +1081,8 @@ public class Assets {
             try {
                 msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
             } catch (NullPointerException e) {
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
-                DeathMessages.plugin.getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
+                DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
                 msg = msg.replaceAll("%biome%", "Unknown");
             }
 
@@ -1089,7 +1090,7 @@ public class Assets {
                 msg = msg.replaceAll("%killer_display%", p.getDisplayName());
             }
         }
-        if (DeathMessages.plugin.placeholderAPIEnabled) {
+        if (DeathMessages.getInstance().placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
         }
         return msg;

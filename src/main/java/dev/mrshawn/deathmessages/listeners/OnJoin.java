@@ -19,7 +19,7 @@ public class OnJoin implements Listener {
             public void run() {
                 if(PlayerManager.getPlayer(p) == null) new PlayerManager(p);
             }
-        }.runTaskAsynchronously(DeathMessages.plugin);
+        }.runTaskAsynchronously(DeathMessages.getInstance());
 
         if (!DeathMessages.bungeeInit) return;
         new BukkitRunnable(){
@@ -29,6 +29,6 @@ public class OnJoin implements Listener {
                     PluginMessaging.sendServerNameRequest(p);
                 }
             }
-        }.runTaskLater(DeathMessages.plugin, 5);
+        }.runTaskLater(DeathMessages.getInstance(), 5);
     }
 }

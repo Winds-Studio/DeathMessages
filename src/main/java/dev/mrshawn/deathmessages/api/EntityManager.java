@@ -67,7 +67,7 @@ public class EntityManager {
             public void run() {
                 destroy();
             }
-        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Entity") * 20L);
+        }.runTaskLater(DeathMessages.getInstance(), Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Entity") * 20L);
         this.damageCause = DamageCause.CUSTOM;
     }
 

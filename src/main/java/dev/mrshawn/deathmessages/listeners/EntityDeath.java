@@ -122,8 +122,8 @@ public class EntityDeath implements Listener {
         } else {
             //Player killing mob
             MobType mobType = MobType.VANILLA;
-            if(DeathMessages.plugin.mythicmobsEnabled) {
-                if(DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
+            if(DeathMessages.getInstance().mythicmobsEnabled) {
+                if(DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
                     mobType = MobType.MYTHIC_MOB;
                 }
             }
@@ -166,35 +166,35 @@ public class EntityDeath implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDeath_LOWEST(EntityDeathEvent e) {
-        if (DeathMessages.eventPriority.equals(EventPriority.LOWEST)) {
+        if (DeathMessages.getEventPriority().equals(EventPriority.LOWEST)) {
             onEntityDeath(e);
         }
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDeath_LOW(EntityDeathEvent e) {
-        if (DeathMessages.eventPriority.equals(EventPriority.LOW)) {
+        if (DeathMessages.getEventPriority().equals(EventPriority.LOW)) {
             onEntityDeath(e);
         }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDeath_NORMAL(EntityDeathEvent e) {
-        if (DeathMessages.eventPriority.equals(EventPriority.NORMAL)) {
+        if (DeathMessages.getEventPriority().equals(EventPriority.NORMAL)) {
             onEntityDeath(e);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDeath_HIGH(EntityDeathEvent e) {
-        if (DeathMessages.eventPriority.equals(EventPriority.HIGH)) {
+        if (DeathMessages.getEventPriority().equals(EventPriority.HIGH)) {
             onEntityDeath(e);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDeath_HIGHEST(EntityDeathEvent e) {
-        if (DeathMessages.eventPriority.equals(EventPriority.HIGHEST)) {
+        if (DeathMessages.getEventPriority().equals(EventPriority.HIGHEST)) {
             onEntityDeath(e);
         }
     }

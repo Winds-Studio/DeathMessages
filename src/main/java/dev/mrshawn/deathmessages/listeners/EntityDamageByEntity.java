@@ -70,19 +70,19 @@ public class EntityDamageByEntity implements Listener {
             Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
                     .getKeys(false);
             if(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null
-                    && DeathMessages.plugin.mythicmobsEnabled){
+                    && DeathMessages.getInstance().mythicmobsEnabled){
                 listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
                         .getKeys(false));
             }
             if(listenedMobs.isEmpty()) return;
             for (String listened : listenedMobs) {
                 if(listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())
-                        || (DeathMessages.plugin.mythicmobsEnabled && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
+                        || (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
                     EntityManager em;
                     if (EntityManager.getEntity(e.getEntity().getUniqueId()) == null) {
                         MobType mobType = MobType.VANILLA;
-                        if(DeathMessages.plugin.mythicmobsEnabled
-                                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
+                        if(DeathMessages.getInstance().mythicmobsEnabled
+                                && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
                             mobType = MobType.MYTHIC_MOB;
                         }
                         em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
@@ -95,8 +95,7 @@ public class EntityDamageByEntity implements Listener {
                                 em.setLastPlayerDamager(PlayerManager.getPlayer((Player) explosions.get(e.getDamager().getUniqueId())));
                                 em.setLastExplosiveEntity(e.getDamager());
                             }
-                        } else if (e.getDamager() instanceof TNTPrimed) {
-                            TNTPrimed tnt = (TNTPrimed) e.getDamager();
+                        } else if (e.getDamager() instanceof TNTPrimed tnt) {
                             if (tnt.getSource() instanceof Player) {
                                 em.setLastPlayerDamager(PlayerManager.getPlayer((Player) tnt.getSource()));
                             }

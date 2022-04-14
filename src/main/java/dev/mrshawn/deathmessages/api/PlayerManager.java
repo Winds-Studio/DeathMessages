@@ -116,7 +116,7 @@ public class PlayerManager {
             public void run() {
                 setLastEntityDamager(null);
             }
-        }.runTaskLater(DeathMessages.plugin, Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Player") * 20L);
+        }.runTaskLater(DeathMessages.getInstance(), Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Player") * 20L);
     }
 
     public Entity getLastEntityDamager() {
@@ -169,7 +169,7 @@ public class PlayerManager {
                 }
                 cooldown--;
             }
-        }.runTaskTimer(DeathMessages.plugin, 0, 20);
+        }.runTaskTimer(DeathMessages.getInstance(), 0, 20);
     }
 
     public void setCachedInventory(Inventory inventory){

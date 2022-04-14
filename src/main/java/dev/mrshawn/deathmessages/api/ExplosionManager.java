@@ -31,7 +31,7 @@ public class ExplosionManager {
             public void run() {
                 destroy();
             }
-        }.runTaskLater(DeathMessages.plugin, 5 * 20);
+        }.runTaskLater(DeathMessages.getInstance(), 5 * 20);
     }
 
     public UUID getPyro() {

@@ -9,20 +9,20 @@ import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
+import dev.mrshawn.deathmessages.hooks.Metrics;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.listeners.*;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
+import dev.mrshawn.deathmessages.utils.EventUtils;
 import dev.mrshawn.deathmessages.worldguard.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.worldguard.WorldGuardExtension;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,7 +33,7 @@ import java.util.logging.Level;
 
 public class DeathMessages extends JavaPlugin {
 
-    public static DeathMessages plugin;
+    private static DeathMessages instance;
 
     public boolean placeholderAPIEnabled = false;
     public boolean combatLogXAPIEnabled = false;
@@ -53,7 +53,7 @@ public class DeathMessages extends JavaPlugin {
     public static DiscordBotAPIExtension discordBotAPIExtension;
     public static DiscordSRVExtension discordSRVExtension;
 
-    public static EventPriority eventPriority = EventPriority.HIGH;
+    private static EventPriority eventPriority = EventPriority.HIGH;
 
 
     public void onEnable() {
@@ -70,14 +70,13 @@ public class DeathMessages extends JavaPlugin {
     }
 
     public void onLoad() {
-        plugin = this;
+        instance = this;
         initializeConfigs();
         initializeHooksOnLoad();
     }
 
     public void onDisable() {
-
-        plugin = null;
+        instance = null;
     }
 
     public static String serverVersion() {
@@ -93,40 +92,28 @@ public class DeathMessages extends JavaPlugin {
     private void initializeConfigs() {
         ConfigManager.getInstance().initialize();
 
-        String eventPri = Settings.getInstance().getConfig().getString("Death-Listener-Priority");
-        if (eventPri.equalsIgnoreCase("LOWEST")) {
-            eventPriority = EventPriority.LOWEST;
-        } else if (eventPri.equalsIgnoreCase("LOW")) {
-            eventPriority = EventPriority.LOW;
-        } else if (eventPri.equalsIgnoreCase("NORMAL")) {
-            eventPriority = EventPriority.NORMAL;
-        } else if (eventPri.equalsIgnoreCase("HIGH")) {
-            eventPriority = EventPriority.HIGH;
-        } else if (eventPri.equalsIgnoreCase("HIGHEST")) {
-            eventPriority = EventPriority.HIGHEST;
-        } else if (eventPri.equalsIgnoreCase("MONITOR")) {
-            eventPriority = EventPriority.HIGH;
-        } else {
-            eventPriority = EventPriority.HIGH;
-        }
+        String eventPriority = Settings.getInstance().getConfig().getString("Death-Listener-Priority");
+        DeathMessages.eventPriority = EventPriority.valueOf(eventPriority.toUpperCase());
     }
 
     private void initializeListeners() {
-        //Custom Events
-        Bukkit.getPluginManager().registerEvents(new BroadcastPlayerDeathListener(), this);
-        Bukkit.getPluginManager().registerEvents(new BroadcastEntityDeathListener(), this);
-        //Bukkits events
-        Bukkit.getPluginManager().registerEvents(new BlockExplosion(), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDamage(), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDamageByBlock(), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDamageByEntity(), this);
-        Bukkit.getPluginManager().registerEvents(new EntityDeath(), this);
-        Bukkit.getPluginManager().registerEvents(new InteractEvent(), this);
-        Bukkit.getPluginManager().registerEvents(new OnChat(), this);
-        Bukkit.getPluginManager().registerEvents(new OnJoin(), this);
-        Bukkit.getPluginManager().registerEvents(new OnMove(), this);
-        Bukkit.getPluginManager().registerEvents(new OnQuit(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerDeath(), this);
+        EventUtils.registerEvents(
+                // Self
+                new BroadcastPlayerDeathListener(),
+                new BroadcastEntityDeathListener(),
+                // Bukkit
+                new BlockExplosion(),
+                new EntityDamage(),
+                new EntityDamageByBlock(),
+                new EntityDamageByEntity(),
+                new EntityDeath(),
+                new InteractEvent(),
+                new OnChat(),
+                new OnJoin(),
+                new OnMove(),
+                new OnQuit(),
+                new PlayerDeath()
+        );
     }
 
     private void initializeCommands() {
@@ -225,16 +212,14 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initializeOnlinePlayers() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            new PlayerManager(p);
-        }
+        Bukkit.getOnlinePlayers().forEach(PlayerManager::new);
     }
 
     private void checkGameRules() {
         if (Settings.getInstance().getConfig().getBoolean("Disable-Default-Messages") && majorVersion() >= 13) {
-            for (World w : Bukkit.getWorlds()) {
-                if (w.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES).equals(true)) {
-                    w.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
+            for (World world : Bukkit.getWorlds()) {
+                if (world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES).equals(true)) {
+                    world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
                 }
             }
         }
@@ -243,4 +228,9 @@ public class DeathMessages extends JavaPlugin {
     public static EventPriority getEventPriority() {
         return eventPriority;
     }
+
+    public static DeathMessages getInstance() {
+        return instance;
+    }
+
 }

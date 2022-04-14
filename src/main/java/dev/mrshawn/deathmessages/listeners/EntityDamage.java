@@ -29,7 +29,7 @@ public class EntityDamage implements Listener {
             Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
                     .getKeys(false);
             if(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null
-                    && DeathMessages.plugin.mythicmobsEnabled){
+                    && DeathMessages.getInstance().mythicmobsEnabled){
                 listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
                         .getKeys(false));
             }
@@ -39,8 +39,8 @@ public class EntityDamage implements Listener {
                     EntityManager em;
                     if(EntityManager.getEntity(e.getEntity().getUniqueId()) == null){
                         MobType mobType = MobType.VANILLA;
-                        if(DeathMessages.plugin.mythicmobsEnabled
-                         && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
+                        if(DeathMessages.getInstance().mythicmobsEnabled
+                         && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
                             mobType = MobType.MYTHIC_MOB;
                         }
                         em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
