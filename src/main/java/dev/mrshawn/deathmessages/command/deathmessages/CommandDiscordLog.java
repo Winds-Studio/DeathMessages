@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.assets.Assets;
-import dev.mrshawn.deathmessages.assets.CommentedConfiguration;
+import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.Permission;

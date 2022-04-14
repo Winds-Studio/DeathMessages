@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.assets;
+package dev.mrshawn.deathmessages.utils;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.mrshawn.deathmessages.DeathMessages;
@@ -38,51 +38,6 @@ public class Assets {
 
     static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
 
-    public static List<String> damageTypes = Arrays.asList(
-            "Bed",
-            "Respawn-Anchor",
-            "Projectile-Arrow",
-            "Projectile-Dragon-Fireball",
-            "Projectile-Egg",
-            "Projectile-EnderPearl",
-            "Projectile-Fireball",
-            "Projectile-FishHook",
-            "Projectile-LlamaSpit",
-            "Projectile-Snowball",
-            "Projectile-Trident",
-            "Projectile-WitherSkull",
-            "Projectile-ShulkerBullet",
-            "Contact",
-            "Melee",
-            "Suffocation",
-            "Fall",
-            "Climbable",
-            "Fire",
-            "Fire-Tick",
-            "Melting",
-            "Lava",
-            "Drowning",
-            "Explosion",
-            "Tnt",
-            "Firework",
-            "End-Crystal",
-            "Void",
-            "Lightning",
-            "Suicide",
-            "Starvation",
-            "Poison",
-            "Magic",
-            "Wither",
-            "Falling-Block",
-            "Dragon-Breath",
-            "Custom",
-            "Fly-Into-Wall",
-            "Hot-Floor",
-            "Cramming",
-            "Dryout",
-            "Unknown",
-            "CombatLogX-Quit");
-
     public static boolean isNumeric(String s) {
         for (char c : s.toCharArray()) {
             if (!Character.isDigit(c))
@@ -112,16 +67,20 @@ public class Assets {
         return newList;
     }
 
-    public static boolean isClimable(Block b) {
+    public static boolean isClimbable(Block block) {
+        return isClimbable(block.getType());
+    }
+
+    public static boolean isClimbable(Material material) {
         if (DeathMessages.majorVersion() >= 14) {
-            return b.getType().name().contains("LADDER")
-                    || b.getType().name().contains("VINE")
-                    || b.getType().equals(Material.SCAFFOLDING)
-                    || b.getType().name().contains("TRAPDOOR");
+            return material.name().contains("LADDER")
+                    || material.name().contains("VINE")
+                    || material.equals(Material.SCAFFOLDING)
+                    || material.name().contains("TRAPDOOR");
         }
-        return b.getType().name().contains("LADDER")
-                || b.getType().name().contains("VINE")
-                || b.getType().name().contains("TRAPDOOR");
+        return material.name().contains("LADDER")
+                || material.name().contains("VINE")
+                || material.name().contains("TRAPDOOR");
     }
 
     public static boolean itemNameIsWeapon(ItemStack itemStack) {
@@ -157,14 +116,19 @@ public class Assets {
     }
 
     public static boolean isWeapon(ItemStack itemStack) {
-        return !itemStack.getType().toString().contains("SHOVEL")
-                && !itemStack.getType().toString().contains("PICKAXE")
-                && !itemStack.getType().toString().contains("AXE")
-                && !itemStack.getType().toString().contains("HOE")
-                && !itemStack.getType().toString().contains("SWORD")
-                && !itemStack.getType().toString().contains("BOW")
+        return isWeapon(itemStack.getType())
                 && !itemNameIsWeapon(itemStack)
                 && !itemMaterialIsWeapon(itemStack);
+    }
+
+    public static boolean isWeapon(Material material) {
+        String materialName = material.toString();
+        return !materialName.contains("SHOVEL")
+                && !materialName.contains("PICKAXE")
+                && !materialName.contains("AXE")
+                && !materialName.contains("HOE")
+                && !materialName.contains("SWORD")
+                && !materialName.contains("BOW");
     }
 
     public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
@@ -328,7 +292,7 @@ public class Assets {
                 } catch (NullPointerException e) {
                     DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %block%. Please check your config for a wrong value." +
                             " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
-                            " on the discord https://discord.gg/K9zVDwt");
+                            " on the discord https://discord.gg/dhJnq7R");
                     pm.setLastEntityDamager(null);
                     return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
                 }
@@ -345,7 +309,7 @@ public class Assets {
                 } catch (NullPointerException e) {
                     DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not parse %climbable%. Please check your config for a wrong value." +
                             " Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
-                            " on the discord https://discord.gg/K9zVDwt - Parsed block: "+ pm.getLastClimbing().toString());
+                            " on the discord https://discord.gg/dhJnq7R - Parsed block: "+ pm.getLastClimbing().toString());
                     pm.setLastClimbing(null);
                     return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
                 }
@@ -366,9 +330,6 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Allow-Message-Color-Override")) {
-
-                    }
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
                         if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
                             if (i.getEnchantments().size() == 0) {
@@ -473,9 +434,6 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Allow-Message-Color-Override")) {
-
-                    }
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
                         if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
                             if (i.getEnchantments().size() == 0) {
@@ -549,8 +507,7 @@ public class Assets {
 
         if (msgs.isEmpty()) return null;
         boolean hasOwner = false;
-        if (e instanceof Tameable) {
-            Tameable tameable = (Tameable) e;
+        if (e instanceof Tameable tameable) {
             if (tameable.getOwner() != null) hasOwner = true;
         }
 
@@ -583,9 +540,6 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Allow-Message-Color-Override")) {
-
-                    }
                     if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
                         if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
                             if (i.getEnchantments().size() == 0) {
@@ -821,7 +775,6 @@ public class Assets {
             if (DeathMessages.plugin.mythicmobsEnabled
                     && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
                 internalMobType = DeathMessages.plugin.mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
-            } else {
             }
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
         } else {
@@ -834,8 +787,7 @@ public class Assets {
             return null;
         }
         boolean hasOwner = false;
-        if (em.getEntity() instanceof Tameable) {
-            Tameable tameable = (Tameable) em.getEntity();
+        if (em.getEntity() instanceof Tameable tameable) {
             if (tameable.getOwner() != null) hasOwner = true;
         }
         String msg = msgs.get(random.nextInt(msgs.size()));
@@ -920,8 +872,7 @@ public class Assets {
     public static TextComponent getEntityDeath(Player player, Entity entity, String damageCause, MobType mobType) {
         Random random = new Random();
         boolean hasOwner = false;
-        if (entity instanceof Tameable) {
-            Tameable tameable = (Tameable) entity;
+        if (entity instanceof Tameable tameable) {
             if (tameable.getOwner() != null) hasOwner = true;
         }
         List<String> msgs;
@@ -1065,8 +1016,7 @@ public class Assets {
                 .replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
                 .replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ())));
         if (owner) {
-            if (entity instanceof Tameable) {
-                Tameable tameable = (Tameable) entity;
+            if (entity instanceof Tameable tameable) {
                 if (tameable.getOwner() != null && tameable.getOwner().getName() != null) {
                     msg = msg.replaceAll("%owner%", tameable.getOwner().getName());
                 }
@@ -1135,8 +1085,7 @@ public class Assets {
                 msg = msg.replaceAll("%biome%", "Unknown");
             }
 
-            if (mob instanceof Player) {
-                Player p = (Player) mob;
+            if (mob instanceof Player p) {
                 msg = msg.replaceAll("%killer_display%", p.getDisplayName());
             }
         }
@@ -1171,16 +1120,12 @@ public class Assets {
     }
 
     public static String getEnvironment(World.Environment environment) {
-        switch (environment) {
-            case NORMAL:
-                return Messages.getInstance().getConfig().getString("Environment.normal");
-            case NETHER:
-                return Messages.getInstance().getConfig().getString("Environment.nether");
-            case THE_END:
-                return Messages.getInstance().getConfig().getString("Environment.the_end");
-            default:
-                return Messages.getInstance().getConfig().getString("Environment.unknown");
-        }
+        return switch (environment) {
+            case NORMAL -> Messages.getInstance().getConfig().getString("Environment.normal");
+            case NETHER -> Messages.getInstance().getConfig().getString("Environment.nether");
+            case THE_END -> Messages.getInstance().getConfig().getString("Environment.the_end");
+            default -> Messages.getInstance().getConfig().getString("Environment.unknown");
+        };
     }
 
     public static String getSimpleProjectile(Projectile projectile) {
@@ -1212,65 +1157,36 @@ public class Assets {
     }
 
     public static String getSimpleCause(EntityDamageEvent.DamageCause damageCause) {
-        switch (damageCause) {
-            case CONTACT:
-                return "Contact";
-            case ENTITY_ATTACK:
-                return "Melee";
-            case PROJECTILE:
-                return "Projectile";
-            case SUFFOCATION:
-                return "Suffocation";
-            case FALL:
-                return "Fall";
-            case FIRE:
-                return "Fire";
-            case FIRE_TICK:
-                return "Fire-Tick";
-            case MELTING:
-                return "Melting";
-            case LAVA:
-                return "Lava";
-            case DROWNING:
-                return "Drowning";
-            case BLOCK_EXPLOSION:
-            case ENTITY_EXPLOSION:
-                return "Explosion";
-            case VOID:
-                return "Void";
-            case LIGHTNING:
-                return "Lightning";
-            case SUICIDE:
-                return "Suicide";
-            case STARVATION:
-                return "Starvation";
-            case POISON:
-                return "Poison";
-            case MAGIC:
-                return "Magic";
-            case WITHER:
-                return "Wither";
-            case FALLING_BLOCK:
-                return "Falling-Block";
-            case THORNS:
-                return "Thorns";
-            case DRAGON_BREATH:
-                return "Dragon-Breath";
-            case CUSTOM:
-                return "Custom";
-            case FLY_INTO_WALL:
-                return "Fly-Into-Wall";
-            case HOT_FLOOR:
-                return "Hot-Floor";
-            case CRAMMING:
-                return "Cramming";
-            case DRYOUT:
-                return "Dryout";
-            case FREEZE:
-                return "Freeze";
-            default:
-                return "Unknown";
-        }
+        return switch (damageCause) {
+            case CONTACT -> "Contact";
+            case ENTITY_ATTACK -> "Melee";
+            case PROJECTILE -> "Projectile";
+            case SUFFOCATION -> "Suffocation";
+            case FALL -> "Fall";
+            case FIRE -> "Fire";
+            case FIRE_TICK -> "Fire-Tick";
+            case MELTING -> "Melting";
+            case LAVA -> "Lava";
+            case DROWNING -> "Drowning";
+            case BLOCK_EXPLOSION, ENTITY_EXPLOSION -> "Explosion";
+            case VOID -> "Void";
+            case LIGHTNING -> "Lightning";
+            case SUICIDE -> "Suicide";
+            case STARVATION -> "Starvation";
+            case POISON -> "Poison";
+            case MAGIC -> "Magic";
+            case WITHER -> "Wither";
+            case FALLING_BLOCK -> "Falling-Block";
+            case THORNS -> "Thorns";
+            case DRAGON_BREATH -> "Dragon-Breath";
+            case CUSTOM -> "Custom";
+            case FLY_INTO_WALL -> "Fly-Into-Wall";
+            case HOT_FLOOR -> "Hot-Floor";
+            case CRAMMING -> "Cramming";
+            case DRYOUT -> "Dryout";
+            case FREEZE -> "Freeze";
+            default -> "Unknown";
+        };
     }
 
     public static FileConfiguration getPlayerDeathMessages() {

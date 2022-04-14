@@ -5,7 +5,6 @@ public enum MobType {
     VANILLA("Entities"),
     MYTHIC_MOB("Mythic-Mobs-Entities");
 
-
     private final String value;
 
     MobType(String value) {

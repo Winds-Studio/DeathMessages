@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;

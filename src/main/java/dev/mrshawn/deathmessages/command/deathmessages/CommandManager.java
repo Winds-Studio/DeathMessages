@@ -1,12 +1,13 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.Permission;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class CommandManager implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String cmdLabel, String[] args){
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args){
         if(sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())){
             sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
             return false;

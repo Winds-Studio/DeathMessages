@@ -1,29 +1,31 @@
-package dev.mrshawn.deathmessages.hook;
+package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.enums.MessageType;
-import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
-import github.scarsz.discordsrv.util.DiscordUtil;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 import java.awt.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.logging.Level;
 
-public class DiscordSRVExtension {
+public class DiscordBotAPIExtension {
 
-    public DiscordSRVExtension() {
+    public DiscordBotAPIExtension() {
 
     }
 
@@ -37,19 +39,18 @@ public class DiscordSRVExtension {
             String[] groupSplit = groups.split(":");
             String guildID = groupSplit[0];
             String channelID = groupSplit[1];
-            if (DiscordUtil.getJda().getGuildById(guildID) == null) {
+            if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
                 DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
                 continue;
             }
-            Guild g = DiscordUtil.getJda().getGuildById(guildID);
+            Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
             if (g.getTextChannelById(channelID) == null) {
                 DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord text channel with ID: "
                         + channelID + " in guild: " + g.getName());
                 continue;
             }
             TextChannel textChannel = g.getTextChannelById(channelID);
-            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
-                    && Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages")) {
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
                 message = message.substring(prefix.length());
@@ -87,14 +88,15 @@ public class DiscordSRVExtension {
                 DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
                 continue;
             }
-            Guild g = DiscordUtil.getJda().getGuildById(guildID);
+            Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
             if (g.getTextChannelById(channelID) == null) {
                 DeathMessages.plugin.getLogger().log(Level.SEVERE, "Could not find the discord text channel with ID: "
                         + channelID + " in guild: " + g.getName());
                 continue;
             }
             TextChannel textChannel = g.getTextChannelById(channelID);
-            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
+                    && Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages")) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
                 message = message.substring(prefix.length());
@@ -142,8 +144,14 @@ public class DiscordSRVExtension {
             eb.setThumbnail(getMessages().getString("Discord.DeathMessage.Image").replaceAll("%uuid%",
                     pm.getUUID().toString()).replaceAll("%username%", pm.getName()));
         }
-        String title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
-                (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
+        String title;
+        if (pm.getLastEntityDamager() instanceof LivingEntity) {
+            title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
+                    (LivingEntity) pm.getLastEntityDamager()).replaceAll("%message%", message);
+        } else {
+            title = Assets.playerDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), pm,
+                    null).replaceAll("%message%", message);
+        }
         if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);
         }
@@ -272,4 +280,5 @@ public class DiscordSRVExtension {
     private FileConfiguration getMessages() {
         return Messages.getInstance().getConfig();
     }
+
 }

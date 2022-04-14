@@ -49,14 +49,14 @@ public class PlayerManager {
         this.name = p.getName();
 
         if(saveUserData && !UserData.getInstance().getConfig().contains(p.getUniqueId().toString())){
-            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".username", p.getName());
-            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".messages-enabled", true);
-            UserData.getInstance().getConfig().set(p.getUniqueId().toString() + ".is-blacklisted", false);
+            UserData.getInstance().getConfig().set(p.getUniqueId() + ".username", p.getName());
+            UserData.getInstance().getConfig().set(p.getUniqueId() + ".messages-enabled", true);
+            UserData.getInstance().getConfig().set(p.getUniqueId() + ".is-blacklisted", false);
             UserData.getInstance().save();
         }
         if(saveUserData){
-            messagesEnabled = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".messages-enabled");
-            isBlacklisted = UserData.getInstance().getConfig().getBoolean(p.getUniqueId().toString() + ".is-blacklisted");
+            messagesEnabled = UserData.getInstance().getConfig().getBoolean(p.getUniqueId() + ".messages-enabled");
+            isBlacklisted = UserData.getInstance().getConfig().getBoolean(p.getUniqueId() + ".is-blacklisted");
         } else {
             messagesEnabled = true;
             isBlacklisted = false;

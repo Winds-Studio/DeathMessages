@@ -11,7 +11,7 @@ import java.util.logging.Level;
 public class ConfigManager {
 
     public ConfigManager(){ }
-    private static ConfigManager instance = new ConfigManager();
+    private static final ConfigManager instance = new ConfigManager();
     public static ConfigManager getInstance(){
         return instance;
     }

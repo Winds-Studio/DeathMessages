@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.enums.DamageTypes;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -46,12 +46,12 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
                 arguments.add("gang");
                 return arguments;
             } else if(args[1].equalsIgnoreCase("entity")){
-                return Assets.damageTypes;
+                return DamageTypes.getFriendlyNames();
             }
         } else if(args.length == 5){
             // /dm edit <player> <mobName> <solo, gang> <damage-type>
             if(args[1].equalsIgnoreCase("player")){
-                return Assets.damageTypes;
+                return DamageTypes.getFriendlyNames();
             } else if(args[1].equalsIgnoreCase("entity")){
                 List<String> arguments = new ArrayList<>();
                 arguments.add("add");

@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.config.Settings;
 import org.bukkit.event.EventHandler;

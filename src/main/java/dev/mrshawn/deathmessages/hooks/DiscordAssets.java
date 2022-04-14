@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.hook;
+package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.config.Settings;

@@ -1,6 +1,6 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
 import org.bukkit.entity.Player;

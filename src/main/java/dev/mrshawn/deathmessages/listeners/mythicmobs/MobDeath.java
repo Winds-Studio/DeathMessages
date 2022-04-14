@@ -1,10 +1,10 @@
-package dev.mrshawn.deathmessages.listener.mythicmobs;
+package dev.mrshawn.deathmessages.listeners.mythicmobs;
 
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;

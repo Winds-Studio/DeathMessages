@@ -1,10 +1,10 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
 import net.md_5.bungee.api.chat.TextComponent;

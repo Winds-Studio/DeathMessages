@@ -1,11 +1,11 @@
-package dev.mrshawn.deathmessages.listener.combatlogx;
+package dev.mrshawn.deathmessages.listeners.combatlogx;
 
 import com.github.sirblobman.combatlogx.api.event.PlayerUntagEvent;
 import com.github.sirblobman.combatlogx.api.object.UntagReason;
-import dev.mrshawn.deathmessages.listener.EntityDeath;
+import dev.mrshawn.deathmessages.listeners.EntityDeath;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import net.md_5.bungee.api.chat.TextComponent;

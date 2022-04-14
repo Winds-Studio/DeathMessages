@@ -17,7 +17,7 @@ public class UserData {
     File file;
 
     public UserData(){ }
-    private static UserData instance = new UserData();
+    private static final UserData instance = new UserData();
     public static UserData getInstance(){
         return instance;
     }

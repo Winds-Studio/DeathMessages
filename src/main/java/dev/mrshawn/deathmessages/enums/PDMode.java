@@ -4,7 +4,6 @@ public enum PDMode {
     BASIC_MODE("Basic-Mode"),
     MOBS("Mobs");
 
-
     private final String value;
 
     PDMode(String value) {

@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.hook;
+package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;

@@ -5,7 +5,6 @@ public enum DeathAffiliation {
     SOLO("Solo"),
     GANG("Gang");
 
-
     private final String value;
 
     DeathAffiliation(String value) {

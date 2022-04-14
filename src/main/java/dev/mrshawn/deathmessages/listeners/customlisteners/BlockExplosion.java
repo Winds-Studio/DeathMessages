@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.listener.customlisteners;
+package dev.mrshawn.deathmessages.listeners.customlisteners;
 
 import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;

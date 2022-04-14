@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.assets.CommentedConfiguration;
+import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,7 +19,7 @@ public class Settings {
     File file;
 
     public Settings(){ }
-    private static Settings instance = new Settings();
+    private static final Settings instance = new Settings();
     public static Settings getInstance(){
         return instance;
     }

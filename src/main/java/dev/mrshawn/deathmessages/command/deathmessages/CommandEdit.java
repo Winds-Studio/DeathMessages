@@ -1,9 +1,10 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
 import dev.mrshawn.deathmessages.enums.Permission;
+import dev.mrshawn.deathmessages.enums.DamageTypes;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
@@ -40,7 +41,7 @@ public class CommandEdit extends DeathMessagesCommand {
                     sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type"));
                     return;
                 }
-                if (!Assets.damageTypes.contains(damageType)) {
+                if (!DamageTypes.getFriendlyNames().contains(damageType)) {
                     sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Damage-Type"));
                     return;
                 }
@@ -123,7 +124,7 @@ public class CommandEdit extends DeathMessagesCommand {
                     sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type"));
                     return;
                 }
-                if (!Assets.damageTypes.contains(damageType)) {
+                if (!DamageTypes.getFriendlyNames().contains(damageType)) {
                     sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Damage-Type"));
                     return;
                 }

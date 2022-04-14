@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
@@ -6,7 +6,7 @@ import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;

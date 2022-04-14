@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
@@ -8,26 +8,28 @@ import dev.mrshawn.deathmessages.enums.MobType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.Set;
 
-public class EntityDamageByBlock implements Listener {
+public class EntityDamage implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onEntityDeath(EntityDamageByBlockEvent e) {
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent e) {
+        if (e.isCancelled()) return;
         if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager pm = PlayerManager.getPlayer(p);
             pm.setLastDamageCause(e.getCause());
-        } else {
+            // for fall large if ppl want it float dist = e.getEntity().getFallDistance();
+        } else if (!(e.getEntity() instanceof Player)){
             if(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
             Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
                     .getKeys(false);
             if(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null
-                        && DeathMessages.plugin.mythicmobsEnabled){
+                    && DeathMessages.plugin.mythicmobsEnabled){
                 listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
                         .getKeys(false));
             }
@@ -38,7 +40,7 @@ public class EntityDamageByBlock implements Listener {
                     if(EntityManager.getEntity(e.getEntity().getUniqueId()) == null){
                         MobType mobType = MobType.VANILLA;
                         if(DeathMessages.plugin.mythicmobsEnabled
-                                && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
+                         && DeathMessages.plugin.mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())){
                             mobType = MobType.MYTHIC_MOB;
                         }
                         em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
@@ -52,4 +54,3 @@ public class EntityDamageByBlock implements Listener {
     }
 
 }
-

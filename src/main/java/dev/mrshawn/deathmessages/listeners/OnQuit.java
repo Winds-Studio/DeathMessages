@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.listener;
+package dev.mrshawn.deathmessages.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

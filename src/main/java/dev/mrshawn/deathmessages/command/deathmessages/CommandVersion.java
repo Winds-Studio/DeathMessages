@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.assets.Assets;
+import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.enums.Permission;
 import org.bukkit.command.CommandSender;
 

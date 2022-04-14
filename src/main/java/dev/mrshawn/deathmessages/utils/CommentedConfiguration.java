@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.assets;
+package dev.mrshawn.deathmessages.utils;
 
 /*******************************************************************************
  *
