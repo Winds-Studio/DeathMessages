@@ -1,4 +1,9 @@
 package dev.mrshawn.deathmessages.kotlin
 
-class Test {
+object Test {
+
+	fun print(message: String) {
+		println(message)
+	}
+
 }
