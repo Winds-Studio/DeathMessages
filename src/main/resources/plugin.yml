@@ -1,6 +1,6 @@
 name: DeathMessages
 version: ${project.version}
-main: net.joshb.deathmessages.DeathMessages
+main: dev.mrshawn.deathmessages.DeathMessages
 api-version: 1.13
 softdepend:
   - MythicMobs
@@ -10,7 +10,7 @@ softdepend:
   - DiscordBotAPI
   - DiscordSRV
   - CombatLogX
-author: Joshb_
+authors: [ Joshb_, MrShawn ]
 commands:
   deathmessages:
     description: Main plugin command
