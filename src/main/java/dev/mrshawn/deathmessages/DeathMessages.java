@@ -11,6 +11,8 @@ import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.Metrics;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
+import dev.mrshawn.deathmessages.kotlin.Test;
+import dev.mrshawn.deathmessages.kotlin.TestTwo;
 import dev.mrshawn.deathmessages.listeners.*;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
@@ -67,6 +69,9 @@ public class DeathMessages extends JavaPlugin {
         checkGameRules();
         new Metrics(this, 12365);
         getLogger().log(Level.INFO, "bStats Hook Enabled!");
+
+        Test.INSTANCE.print("Hello world!");
+        new TestTwo();
     }
 
     public void onLoad() {
