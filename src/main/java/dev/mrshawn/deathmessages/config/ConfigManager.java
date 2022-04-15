@@ -66,7 +66,7 @@ public class ConfigManager {
             e.printStackTrace();
         }
         try{
-            FileUtils.copyFileToDirectory(Settings.getInstance().file, backupDir);
+            FileUtils.copyFileToDirectory(Settings.getInstance().getFile(), backupDir);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -136,7 +136,7 @@ public class ConfigManager {
         try{
             String fileName = Settings.getInstance().fileName;
             File f = new File(backupDir + File.separator + fileName + ".yml");
-            if(Settings.getInstance().file.delete()){
+            if(Settings.getInstance().getFile().delete()){
                 FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
             } else {
                 DeathMessages.getInstance().getLogger().log(Level.SEVERE, "COULD NOT RESTORE " + fileName + ".");

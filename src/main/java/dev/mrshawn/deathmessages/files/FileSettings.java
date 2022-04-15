@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -13,21 +14,41 @@ public class FileSettings {
 
 	private final JavaPlugin plugin;
 	private final File file;
+	private final boolean isResource;
 	private final Map<Enum<?>, Object> values = new HashMap<>();
 
 	public FileSettings(JavaPlugin plugin, File file, boolean isResource) {
 		this.plugin = plugin;
 		this.file = file;
-		if (isResource) {
-			plugin.saveResource(this.file.getPath(), false);
-		}
+		this.isResource = isResource;
+//		if (isResource) {
+//			plugin.saveResource(this.file.getPath(), false);
+//		}
+		loadFile();
 	}
 
 	public FileSettings(JavaPlugin plugin, String filePath, boolean isResource) {
 		this.plugin = plugin;
-		this.file = new File(filePath + ".yml");
-		if (isResource) {
-			plugin.saveResource(this.file.getPath(), false);
+		this.file = new File(filePath.replace(".yml", "") + ".yml");
+		this.isResource = isResource;
+//		if (isResource) {
+//			plugin.saveResource(this.file.getPath(), false);
+//		}
+		loadFile();
+	}
+
+	private void loadFile() {
+		if (!file.exists()) {
+			if (isResource) {
+				plugin.saveResource(file.getPath(), false);
+			} else {
+				file.getParentFile().mkdirs();
+				try {
+					file.createNewFile();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -104,7 +125,7 @@ public class FileSettings {
 
 	public List<String> getStringList(Enum<?> value) {
 		List<String> tempList = new ArrayList<>();
-		for (Object val : get(value, ArrayList.class)) {
+		for (Object val : get(value, List.class)) {
 			tempList.add((String) val);
 		}
 		return tempList;

@@ -6,7 +6,6 @@ import dev.mrshawn.deathmessages.files.FileSettings
 
 object FileStore {
 
-	val CONFIG = FileSettings(DeathMessages.getInstance(), "Settings.yml", true)
-		.loadSettings(Config::class.java)
+	val CONFIG = FileSettings(DeathMessages.getInstance(), "Settings.yml", true).loadSettings(Config::class.java)
 
 }
