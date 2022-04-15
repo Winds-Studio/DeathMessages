@@ -1,8 +1,10 @@
 package dev.mrshawn.deathmessages.api;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.UserData;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,6 +22,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerManager {
+
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
 
     private final UUID uuid;
     private final String name;
@@ -40,7 +44,7 @@ public class PlayerManager {
 
     private static final List<PlayerManager> players = new ArrayList<>();
 
-    public boolean saveUserData = Settings.getInstance().getConfig().getBoolean("Saved-User-Data");
+    public boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
 
     public PlayerManager(Player p){
 
@@ -116,7 +120,7 @@ public class PlayerManager {
             public void run() {
                 setLastEntityDamager(null);
             }
-        }.runTaskLater(DeathMessages.getInstance(), Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Player") * 20L);
+        }.runTaskLater(DeathMessages.getInstance(), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
     }
 
     public Entity getLastEntityDamager() {
@@ -160,7 +164,7 @@ public class PlayerManager {
     }
 
     public void setCooldown() {
-        cooldown = Settings.getInstance().getConfig().getInt("Cooldown");
+        cooldown = config.getInt(Config.COOLDOWN);
         cooldownTask = new BukkitRunnable(){
             @Override
             public void run() {

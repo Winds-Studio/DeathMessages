@@ -1,8 +1,10 @@
 package dev.mrshawn.deathmessages.api;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -17,6 +19,8 @@ import java.util.UUID;
 //Class designed to keep track of damage and data to mobs that were damaged by players
 
 public class EntityManager {
+
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
 
     private Entity entity;
     private UUID entityUUID;
@@ -67,7 +71,7 @@ public class EntityManager {
             public void run() {
                 destroy();
             }
-        }.runTaskLater(DeathMessages.getInstance(), Settings.getInstance().getConfig().getInt("Expire-Last-Damage.Expire-Entity") * 20L);
+        }.runTaskLater(DeathMessages.getInstance(), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
         this.damageCause = DamageCause.CUSTOM;
     }
 

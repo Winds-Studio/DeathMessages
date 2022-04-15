@@ -6,11 +6,13 @@ import dev.mrshawn.deathmessages.command.deathmessages.CommandManager;
 import dev.mrshawn.deathmessages.command.deathmessages.TabCompleter;
 import dev.mrshawn.deathmessages.command.deathmessages.alias.CommandDeathMessagesToggle;
 import dev.mrshawn.deathmessages.config.ConfigManager;
-import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.Metrics;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.kotlin.utils.EventUtils;
 import dev.mrshawn.deathmessages.listeners.*;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
@@ -55,6 +57,7 @@ public class DeathMessages extends JavaPlugin {
 
     private static EventPriority eventPriority = EventPriority.HIGH;
 
+    private static FileSettings config;
 
     public void onEnable() {
 
@@ -91,9 +94,11 @@ public class DeathMessages extends JavaPlugin {
 
     private void initializeConfigs() {
         ConfigManager.getInstance().initialize();
+        config = FileStore.INSTANCE.getCONFIG();
 
-        String eventPriority = Settings.getInstance().getConfig().getString("Death-Listener-Priority");
-        DeathMessages.eventPriority = EventPriority.valueOf(eventPriority.toUpperCase());
+        DeathMessages.eventPriority = EventPriority.valueOf(
+                config.getString(Config.DEATH_LISTENER_PRIORITY).toUpperCase()
+        );
     }
 
     private void initializeListeners() {
@@ -136,13 +141,13 @@ public class DeathMessages extends JavaPlugin {
         }
 
         if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null
-                && Settings.getInstance().getConfig().getBoolean("Hooks.Discord.Enabled")) {
+                && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
             discordBotAPIExtension = new DiscordBotAPIExtension();
             getLogger().log(Level.INFO, "DiscordBotAPI Hook Enabled!");
         }
 
         if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null
-                && Settings.getInstance().getConfig().getBoolean("Hooks.Discord.Enabled")) {
+                && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
             discordSRVExtension = new DiscordSRVExtension();
             getLogger().log(Level.INFO, "DiscordSRV Hook Enabled!");
         }
@@ -170,28 +175,28 @@ public class DeathMessages extends JavaPlugin {
 //        }
 
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null
-                && Settings.getInstance().getConfig().getBoolean("Hooks.MythicMobs.Enabled")) {
+                && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
             mythicMobs = MythicBukkit.inst();
             mythicmobsEnabled = true;
             getLogger().log(Level.INFO, "MythicMobs Hook Enabled!");
             Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
         }
 
-        if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) {
+        if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
             Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
             getLogger().log(Level.INFO, "Bungee Hook enabled!");
-            if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Server-Name.Get-From-Bungee")) {
+            if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
                 bungeeInit = true;
             } else {
                 bungeeInit = false;
-                bungeeServerName = Settings.getInstance().getConfig().getString("Hooks.Bungee.Server-Name.Display-Name");
+                bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
             }
         }
     }
 
     private void initializeHooksOnLoad() {
-        if (Settings.getInstance().getConfig().getBoolean("Hooks.WorldGuard.Enabled")) {
+        if (config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
             try {
                 final WorldGuardPlugin worldGuardPlugin = WorldGuardPlugin.inst();
                 if (worldGuardPlugin == null) throw new Exception();
@@ -216,7 +221,7 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void checkGameRules() {
-        if (Settings.getInstance().getConfig().getBoolean("Disable-Default-Messages") && majorVersion() >= 13) {
+        if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES) && majorVersion() >= 13) {
             for (World world : Bukkit.getWorlds()) {
                 if (world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES).equals(true)) {
                     world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);

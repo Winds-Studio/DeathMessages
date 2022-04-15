@@ -9,10 +9,10 @@ public enum Config {
 	DISABLE_DEFAULT_MESSAGES("Disable-Default-Messages", true),
 	ADD_PREFIX_TO_ALL_MESSAGES("Add-Prefix-To-All-Messages", true),
 
-	HOOKS_MYTHICMOBS_ENABLE("Hooks.MythicMobs.Enable", true),
-	HOOKS_WORLDGUARD_ENABLE("Hooks.WorldGuard.Enable", true),
+	HOOKS_MYTHICMOBS_ENABLED("Hooks.MythicMobs.Enabled", true),
+	HOOKS_WORLDGUARD_ENABLED("Hooks.WorldGuard.Enabled", true),
 
-	HOOKS_DISCORD_ENABLE("Hooks.Discord.Enable", true),
+	HOOKS_DISCORD_ENABLED("Hooks.Discord.Enabled", true),
 	HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED("Hooks.Discord.Channels.Player.Enabled", true),
 	HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS("Hooks.Discord.Channels.Player.Channels", List.of("218258614192450048:827286062147837621")),
 	HOOKS_DISCORD_CHANNELS_MOB_ENABLED("Hooks.Discord.Channels.Mob.Enabled", true),

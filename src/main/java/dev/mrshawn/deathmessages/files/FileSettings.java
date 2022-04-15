@@ -14,6 +14,7 @@ public class FileSettings {
 
 	private final JavaPlugin plugin;
 	private final File file;
+	private YamlConfiguration yamlConfig;
 	private final boolean isResource;
 	private final Map<Enum<?>, Object> values = new HashMap<>();
 
@@ -52,9 +53,17 @@ public class FileSettings {
 		}
 	}
 
+	public void save() {
+		try {
+			yamlConfig.save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public <E extends Enum<E>> FileSettings loadSettings(Class<E> enumClass) {
 		try {
-			YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+			yamlConfig = YamlConfiguration.loadConfiguration(file);
 
 			EnumSet<E> eSet = EnumSet.allOf(enumClass);
 
@@ -73,15 +82,15 @@ public class FileSettings {
 
 				String configPath = (String) getPath.invoke(value);
 
-				if (!config.contains(configPath)) {
+				if (!yamlConfig.contains(configPath)) {
 					if (hasDefaults) {
-						config.set(configPath, getDefault.invoke(value));
+						yamlConfig.set(configPath, getDefault.invoke(value));
 					} else {
 						continue;
 					}
 				}
 
-				values.put(value, config.get((String) getPath.invoke(value)));
+				values.put(value, yamlConfig.get((String) getPath.invoke(value)));
 			}
 			return this;
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -141,6 +150,20 @@ public class FileSettings {
 
 	public <T> T get(Enum<?> value, Class<T> clazz, T defaultValue) {
 		return values.containsKey(value) ? get(value, clazz) : clazz.cast(defaultValue);
+	}
+
+	public <T, E extends Enum<E>> void set(Class<E> enumClass, Enum<?> value, T setValue) {
+		values.put(value, setValue);
+		yamlConfig.set(getPath(enumClass, value), setValue);
+	}
+
+	private <E extends Enum<E>> String getPath(Class<E> enumClass, Enum<?> value) {
+		try {
+			Method getPath = enumClass.getMethod("getPath");
+			return (String) getPath.invoke(value);
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+			return "";
+		}
 	}
 
 }

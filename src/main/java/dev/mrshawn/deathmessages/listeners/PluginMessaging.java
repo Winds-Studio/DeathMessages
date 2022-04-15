@@ -4,9 +4,11 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.utils.Assets;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
@@ -21,6 +23,8 @@ import java.util.logging.Level;
 
 public class PluginMessaging implements PluginMessageListener {
 
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+
     public void onPluginMessageReceived(String channel, @NotNull Player player, byte[] messageBytes) {
         if (!channel.equals("BungeeCord")) return;
 
@@ -32,8 +36,8 @@ public class PluginMessaging implements PluginMessageListener {
                 String serverName = in.readUTF();
                 DeathMessages.getInstance().getLogger().log(Level.INFO, "Server-Name successfully initialized from Bungee! (" + serverName + ")");
                 DeathMessages.bungeeServerName = serverName;
-                Settings.getInstance().getConfig().set("Hooks.Bungee.Server-Name.Display-Name", serverName);
-                Settings.getInstance().save();
+                config.set(Config.class, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName);
+                config.save();
                 DeathMessages.bungeeServerNameRequest = false;
             } else if (subChannel.equals("DeathMessages")) {
                 String[] data = in.readUTF().split("######");
@@ -54,7 +58,7 @@ public class PluginMessaging implements PluginMessageListener {
     }
 
     public static void sendServerNameRequest(Player p) {
-        if (!Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) return;
+        if (!config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
         DeathMessages.getInstance().getLogger().log(Level.INFO, "Attempting to initialize server-name variable from Bungee...");
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");
@@ -62,9 +66,9 @@ public class PluginMessaging implements PluginMessageListener {
     }
 
     public static void sendPluginMSG(Player p, String msg) {
-        if (!Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Enabled")) return;
-        if (Settings.getInstance().getConfig().getBoolean("Hooks.Bungee.Server-Groups.Enabled")) {
-            List<String> serverList = Settings.getInstance().getConfig().getStringList("Hooks.Bungee.Server-Groups.Servers");
+        if (!config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
+        if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_GROUPS_ENABLED)) {
+            List<String> serverList = config.getStringList(Config.HOOKS_BUNGEE_SERVER_GROUPS_SERVERS);
             for (String server : serverList) {
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("Forward");
