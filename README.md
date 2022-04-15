@@ -6,3 +6,7 @@ By downloading DeathMessages from [SpigotMC](https://www.spigotmc.org/resources/
 TOS subjected to change at any time
 
 You are urged to join the [discord](https://discord.gg/dhJnq7R) as that is where the community sits.
+
+Developers:
+- The plugin uses a mix of kotlin and java and as such you must compile kotlin as well
+- Compile the plugin with `mvn clean kotlin:compile install`

@@ -1,6 +1,4 @@
-# DeathMessages by Joshb_ (Original DeathMessagesPrime by CosmoConsole)
-# All configs from this plugin has an auto updater. Meaning if I add a value in the config from updates,
-# the value will be automatically added without regenerating the configs.
+# DeathMessages by MrShawn
 #
 # Disable the default messages from minecraft
 Disable-Default-Messages: true
@@ -8,7 +6,7 @@ Disable-Default-Messages: true
 # Add a prefix to all death messages? (Prefix from Messages.yml)
 Add-Prefix-To-All-Messages: true
 
-#Settings for specific hooks the plugins interact with
+# Settings for specific hooks the plugins interact with
 Hooks:
   # If MythicMobs is found, enable the hook
   # Enable/Disable MythicMobs hook
@@ -29,8 +27,8 @@ Hooks:
 
   # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) or DiscordSRV
   # (https://www.spigotmc.org/resources/discordsrv.18494/)is installed, and enabled here.
-  # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right click the
-  # guild and click on "Copy ID". Then, you will right click the channel you want to send the messages to and again, click
+  # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right-click the
+  # guild and click on "Copy ID". Then, you will right-click the channel you want to send the messages to and again, click
   # "Copy ID". The format for the list of Channels is: "guild_ID:channel_ID"
   # Example: "218258614192450048:827286062147837621"
   # THE ABOVE EXAMPLE SHOULD NOT BE USED IN LIVE APPLICATIONS! DO NOT ATTEMPT TO USE IT.

@@ -14,18 +14,14 @@ public class Settings {
 
     public final String fileName = "Settings";
 
-    CommentedConfiguration config;
+    private CommentedConfiguration config;
 
-    File file;
+    private File file;
 
     public Settings(){ }
     private static final Settings instance = new Settings();
     public static Settings getInstance(){
         return instance;
-    }
-
-    public CommentedConfiguration getConfig(){
-        return config;
     }
 
     public void save(){
@@ -66,7 +62,7 @@ public class Settings {
         try{
             config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
         } catch (Exception e){
-
+            // Ignored
         }
     }
 
@@ -83,5 +79,13 @@ public class Settings {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public CommentedConfiguration getConfig(){
+        return config;
+    }
+
+    public File getFile() {
+        return file;
     }
 }
