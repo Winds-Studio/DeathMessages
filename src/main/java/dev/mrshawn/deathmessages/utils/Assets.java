@@ -8,10 +8,12 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
-import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.DeathAffiliation;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.enums.PDMode;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -38,7 +40,9 @@ import java.util.regex.Pattern;
 
 public class Assets {
 
-    static boolean addPrefix = Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages");
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+
+    private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES);
 
     public static boolean isNumeric(String s) {
         for (char c : s.toCharArray()) {
@@ -92,7 +96,7 @@ public class Assets {
         }
         String displayName = itemStack.getItemMeta().getDisplayName();
 
-        for (String s : Settings.getInstance().getConfig().getStringList("Custom-Item-Display-Names-Is-Weapon")) {
+        for (String s : config.getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON)) {
             Pattern pattern = Pattern.compile(Assets.colorize(s));
             Matcher matcher = pattern.matcher(displayName);
             if (matcher.find()) {
@@ -106,7 +110,7 @@ public class Assets {
         if (itemStack == null) {
             return false;
         }
-        for (String s : Settings.getInstance().getConfig().getStringList("Custom-Item-Material-Is-Weapon")) {
+        for (String s : config.getStringList(Config.CUSTOM_ITEM_MATERIAL_IS_WEAPON)) {
             Material mat = Material.getMaterial(s);
             if (mat == null) {
                 return false;
@@ -333,8 +337,8 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
+                    if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+                        if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
                             if (i.getEnchantments().size() == 0) {
                                 return getNaturalDeath(pm, "Projectile-Unknown");
                             }
@@ -436,15 +440,15 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
+                    if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+                        if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
                             if (i.getEnchantments().size() == 0) {
-                                return get(gang, pm, mob, Settings.getInstance().getConfig()
-                                        .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                                return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
+                                        .getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
                             }
                         } else {
-                            return get(gang, pm, mob, Settings.getInstance().getConfig()
-                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"));
+                            return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
+                                    .getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
                         }
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -542,15 +546,15 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        if (!Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments")) {
+                    if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+                        if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
                             if (i.getEnchantments().size() == 0) {
-                                return getEntityDeath(p, e, Settings.getInstance().getConfig()
-                                        .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"), mobType);
+                                return getEntityDeath(p, e,
+                                        config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
                             }
                         } else {
-                            return getEntityDeath(p, e, Settings.getInstance().getConfig()
-                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Weapon.Default-To"), mobType);
+                            return getEntityDeath(p, e,
+                                    config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
                         }
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -617,9 +621,9 @@ public class Assets {
         }
 
         if (msgs.isEmpty()) {
-            if (Settings.getInstance().getConfig().getBoolean("Default-Natural-Death-Not-Defined"))
+            if (config.getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED))
                 return getNaturalDeath(pm, damageCause);
-            if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined"))
+            if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED))
                 return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
             return null;
         }
@@ -717,11 +721,10 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        if (!Settings.getInstance().getConfig()
-                                .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To").equals(projectileDamage)) {
-                            return getProjectile(gang, pm, mob, Settings.getInstance().getConfig()
-                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"));
+                    if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+                        if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
+                                .equals(projectileDamage)) {
+                            return getProjectile(gang, pm, mob,config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO));
                         }
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -782,7 +785,7 @@ public class Assets {
             msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
         }
         if (msgs.isEmpty()) {
-            if (Settings.getInstance().getConfig().getBoolean("Default-Melee-Last-Damage-Not-Defined")) {
+            if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED)) {
                 return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
             }
             return null;
@@ -820,11 +823,11 @@ public class Assets {
                 }
                 String displayName;
                 if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
-                    if (Settings.getInstance().getConfig().getBoolean("Disable-Weapon-Kill-With-No-Custom-Name.Enabled")) {
-                        if (!Settings.getInstance().getConfig()
-                                .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To").equals(projectileDamage)) {
-                            return getEntityDeathProjectile(p, em, Settings.getInstance().getConfig()
-                                    .getString("Disable-Weapon-Kill-With-No-Custom-Name.Source.Projectile.Default-To"), mobType);
+                    if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+                        if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
+                                .equals(projectileDamage)) {
+                            return getEntityDeathProjectile(p, em,
+                                    config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO), mobType);
                         }
                     }
                     displayName = Assets.convertString(i.getType().name());
@@ -1055,8 +1058,8 @@ public class Assets {
             }
         } else {
             String mobName = mob.getName();
-            if (Settings.getInstance().getConfig().getBoolean("Rename-Mobs.Enabled")) {
-                String[] chars = Settings.getInstance().getConfig().getString("Rename-Mobs.If-Contains").split("(?!^)");
+            if (config.getBoolean(Config.RENAME_MOBS_ENABLED)) {
+                String[] chars = config.getString(Config.RENAME_MOBS_IF_CONTAINS).split("(?!^)");
                 for (String ch : chars) {
                     if (mobName.contains(ch)) {
                         mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
@@ -1064,7 +1067,7 @@ public class Assets {
                     }
                 }
             }
-            if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean("Disable-Named-Mobs")) {
+            if (!(mob instanceof Player) && config.getBoolean(Config.DISABLE_NAMED_MOBS)) {
                 mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
             }
             msg = msg

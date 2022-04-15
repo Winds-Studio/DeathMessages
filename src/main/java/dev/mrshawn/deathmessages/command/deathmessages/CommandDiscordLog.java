@@ -1,11 +1,12 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.utils.Assets;
-import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.Permission;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.utils.Assets;
 import github.scarsz.discordsrv.DiscordSRV;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
 import org.bukkit.command.CommandSender;
@@ -14,6 +15,8 @@ import java.util.List;
 
 public class CommandDiscordLog extends DeathMessagesCommand {
 
+
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
 
     @Override
     public String command() {
@@ -27,7 +30,6 @@ public class CommandDiscordLog extends DeathMessagesCommand {
             return;
         }
         List<String> discordLog = Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog");
-        CommentedConfiguration settings = Settings.getInstance().getConfig();
         String discordJar;
         if(DeathMessages.discordBotAPIExtension != null){
             discordJar = "DiscordBotAPI";
@@ -46,30 +48,30 @@ public class CommandDiscordLog extends DeathMessagesCommand {
         }
         for(String log : discordLog){
             if(log.equals("%discordConfig%")){
-                sender.sendMessage(Assets.colorize("  &aEnabled: &c" + settings.getBoolean("Hooks.Discord.Enabled")));
+                sender.sendMessage(Assets.colorize("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
                 sender.sendMessage(Assets.colorize("  &aChannels:"));
                 //Player
-                sender.sendMessage(Assets.colorize("    &aPlayer-Enabled: &c" + settings.getBoolean("Hooks.Discord.Player.Enabled")));
+                sender.sendMessage(Assets.colorize("    &aPlayer-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED)));
                 sender.sendMessage(Assets.colorize("    &aPlayer-Channels:"));
-                for(String channels : settings.getStringList("Hooks.Discord.Channels.Player.Channels")){
+                for(String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS)){
                     sender.sendMessage("      - " + channels);
                 }
                 //Mob
-                sender.sendMessage(Assets.colorize("    &aMob-Enabled: &c" + settings.getBoolean("Hooks.Discord.Mob.Enabled")));
+                sender.sendMessage(Assets.colorize("    &aMob-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED)));
                 sender.sendMessage(Assets.colorize("    &aMob-Channels:"));
-                for(String channels : settings.getStringList("Hooks.Discord.Channels.Mob.Channels")){
+                for(String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS)){
                     sender.sendMessage("      - " + channels);
                 }
                 //Player
-                sender.sendMessage(Assets.colorize("    &aNatural-Enabled: &c" + settings.getBoolean("Hooks.Discord.Natural.Enabled")));
+                sender.sendMessage(Assets.colorize("    &aNatural-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED)));
                 sender.sendMessage(Assets.colorize("    &aNatural-Channels:"));
-                for(String channels : settings.getStringList("Hooks.Discord.Channels.Natural.Channels")){
+                for(String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS)){
                     sender.sendMessage("      - " + channels);
                 }
                 //Player
-                sender.sendMessage(Assets.colorize("    &aEntity-Enabled: &c" + settings.getBoolean("Hooks.Discord.Entity.Enabled")));
+                sender.sendMessage(Assets.colorize("    &aEntity-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED)));
                 sender.sendMessage(Assets.colorize("    &aEntity-Channels:"));
-                for(String channels : settings.getStringList("Hooks.Discord.Channels.Entity.Channels")){
+                for(String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS)){
                     sender.sendMessage("      - " + channels);
                 }
                 continue;

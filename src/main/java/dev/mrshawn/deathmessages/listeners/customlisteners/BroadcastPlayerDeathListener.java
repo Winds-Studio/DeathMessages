@@ -1,14 +1,16 @@
 package dev.mrshawn.deathmessages.listeners.customlisteners;
 
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
-import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.listeners.PluginMessaging;
+import dev.mrshawn.deathmessages.utils.Assets;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +23,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 public class BroadcastPlayerDeathListener implements Listener {
+
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
 
     private boolean discordSent = false;
 
@@ -41,15 +45,15 @@ public class BroadcastPlayerDeathListener implements Listener {
                 pm.setCooldown();
             }
 
-            boolean privatePlayer = Settings.getInstance().getConfig().getBoolean("Private-Messages.Player");
-            boolean privateMobs = Settings.getInstance().getConfig().getBoolean("Private-Messages.Mobs");
-            boolean privateNatural = Settings.getInstance().getConfig().getBoolean("Private-Messages.Natural");
+            boolean privatePlayer = config.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
+            boolean privateMobs = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
+            boolean privateNatural = config.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
 
             //To reset for each death message
             discordSent = false;
 
             for (World w : e.getBroadcastedWorlds()) {
-                if(Settings.getInstance().getConfig().getStringList("Disabled-Worlds").contains(w.getName())){
+                if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
                     continue;
                 }
                 for (Player pls : w.getPlayers()) {
@@ -94,8 +98,8 @@ public class BroadcastPlayerDeathListener implements Listener {
             if (pms.getMessagesEnabled()) {
                 pls.spigot().sendMessage(e.getTextComponent());
             }
-            if(Settings.getInstance().getConfig().getBoolean("Hooks.Discord.World-Whitelist.Enabled")) {
-                List<String> discordWorldWhitelist = Settings.getInstance().getConfig().getStringList("Hooks.Discord.World-Whitelist.Worlds");
+            if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
+                List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
                 boolean broadcastToDiscord = false;
                 for(World world : worlds){
                     if(discordWorldWhitelist.contains(world.getName())){

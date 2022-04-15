@@ -2,15 +2,17 @@ package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.utils.Assets;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
-import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.config.Settings;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -24,6 +26,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class DiscordBotAPIExtension {
+
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
 
     public DiscordBotAPIExtension() {
 
@@ -96,7 +100,7 @@ public class DiscordBotAPIExtension {
             }
             TextChannel textChannel = g.getTextChannelById(channelID);
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
-                    && Settings.getInstance().getConfig().getBoolean("Add-Prefix-To-All-Messages")) {
+                    && config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
                 String prefix = Assets.colorize(getMessages().getString("Prefix"));
                 prefix = ChatColor.stripColor(prefix);
                 message = message.substring(prefix.length());

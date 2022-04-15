@@ -1,14 +1,16 @@
 package dev.mrshawn.deathmessages.listeners.customlisteners;
 
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
-import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.listeners.PluginMessaging;
+import dev.mrshawn.deathmessages.utils.Assets;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,12 +25,13 @@ import java.util.regex.Matcher;
 
 public class BroadcastEntityDeathListener implements Listener {
 
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+
     @EventHandler
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
         PlayerManager pm = e.getPlayer();
         boolean hasOwner = false;
-        if(e.getEntity() instanceof Tameable){
-            Tameable tameable = (Tameable) e.getEntity();
+        if(e.getEntity() instanceof Tameable tameable){
             if(tameable.getOwner() != null) hasOwner = true;
         }
         if (!e.isCancelled()) {
@@ -45,15 +48,15 @@ public class BroadcastEntityDeathListener implements Listener {
 
             boolean discordSent = false;
 
-            boolean privateTameable = Settings.getInstance().getConfig().getBoolean("Private-Messages.Entity");
+            boolean privateTameable = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
 
             for(World w : e.getBroadcastedWorlds()){
                 for(Player pls : w.getPlayers()){
-                    if(Settings.getInstance().getConfig().getStringList("Disabled-Worlds").contains(w.getName())){
+                    if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
                         continue;
                     }
                     PlayerManager pms = PlayerManager.getPlayer(pls);
-                    if(privateTameable && pms.getUUID().equals(pm.getPlayer().getUniqueId())){
+                    if (privateTameable && pms.getUUID().equals(pm.getPlayer().getUniqueId())) {
                         if (pms.getMessagesEnabled()) {
                             pls.spigot().sendMessage(e.getTextComponent());
                         }
@@ -67,15 +70,15 @@ public class BroadcastEntityDeathListener implements Listener {
                             pls.spigot().sendMessage(e.getTextComponent());
                             PluginMessaging.sendPluginMSG(pms.getPlayer(), e.getTextComponent().toString());
                         }
-                        if(Settings.getInstance().getConfig().getBoolean("Hooks.Discord.World-Whitelist.Enabled")) {
-                            List<String> discordWorldWhitelist = Settings.getInstance().getConfig().getStringList("Hooks.Discord.World-Whitelist.Worlds");
+                        if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
+                            List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
                             boolean broadcastToDiscord = false;
                             for(World world : e.getBroadcastedWorlds()){
                                 if(discordWorldWhitelist.contains(world.getName())){
                                     broadcastToDiscord = true;
                                 }
                             }
-                            if(!broadcastToDiscord){
+                            if (!broadcastToDiscord) {
                                 //Wont reach the discord broadcast
                                 return;
                             }

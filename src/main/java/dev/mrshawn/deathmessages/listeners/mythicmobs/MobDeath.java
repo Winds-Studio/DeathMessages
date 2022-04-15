@@ -1,5 +1,8 @@
 package dev.mrshawn.deathmessages.listeners.mythicmobs;
 
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
@@ -21,6 +24,8 @@ import java.util.List;
 
 public class MobDeath implements Listener {
 
+    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+
     @EventHandler
     public void onMythicMobDeath(MythicMobDeathEvent e) {
         if (getEntityDeathMessages().getConfigurationSection("Mythic-Mobs-Entities").getKeys(false).isEmpty()) return;
@@ -41,10 +46,10 @@ public class MobDeath implements Listener {
 
     public static List<World> getWorlds(Entity e){
         List<World> broadcastWorlds = new ArrayList<>();
-        if(Settings.getInstance().getConfig().getStringList("Disabled-Worlds").contains(e.getWorld().getName())){
+        if(config.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())){
             return broadcastWorlds;
         }
-        if (Settings.getInstance().getConfig().getBoolean("Per-World-Messages")) {
+        if (config.getBoolean(Config.PER_WORLD_MESSAGES)) {
             for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
                 List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);
                 if(worlds.contains(e.getWorld().getName())){
