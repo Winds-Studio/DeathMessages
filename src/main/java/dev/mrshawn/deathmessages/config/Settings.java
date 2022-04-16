@@ -12,80 +12,83 @@ import java.util.logging.Level;
 
 public class Settings {
 
-    public final String fileName = "Settings";
+	public final String fileName = "Settings";
 
-    private CommentedConfiguration config;
+	private CommentedConfiguration config;
 
-    private File file;
+	private File file;
 
-    public Settings(){ }
-    private static final Settings instance = new Settings();
-    public static Settings getInstance() {
-        return instance;
-    }
+	public Settings() {
+	}
 
-    public void save(){
-        try {
-            config.save(file);
-        } catch (Exception e){
-            File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
-            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
-            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
-            file.renameTo(f);
-            initialize();
-        }
-    }
+	private static final Settings instance = new Settings();
 
-    public void reload(){
-        try {
-            config = CommentedConfiguration.loadConfiguration(file);
-        } catch (Exception e){
-            e.printStackTrace();
-            File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");
-            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
-            DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
-            file.renameTo(f);
-            initialize();
-        }
-    }
+	public static Settings getInstance() {
+		return instance;
+	}
 
-    public void initialize(){
-        file = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".yml");
+	public void save() {
+		try {
+			config.save(file);
+		} catch (Exception e) {
+			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
+			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
+			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+			file.renameTo(f);
+			initialize();
+		}
+	}
 
-        if(!file.exists()){
-            file.getParentFile().mkdirs();
-            copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
-        }
-        config = CommentedConfiguration.loadConfiguration(file);
-        try{
-            config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
-        } catch (Exception e){
-            // Ignored
-        }
-    }
+	public void reload() {
+		try {
+			config = CommentedConfiguration.loadConfiguration(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
+			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");
+			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
+			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+			file.renameTo(f);
+			initialize();
+		}
+	}
 
-    private void copy(InputStream in, File file) {
-        try {
-            OutputStream out = new FileOutputStream(file);
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            out.close();
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public void initialize() {
+		file = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".yml");
 
-    public CommentedConfiguration getConfig(){
-        return config;
-    }
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+			copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
+		}
+		config = CommentedConfiguration.loadConfiguration(file);
+		try {
+			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
+		} catch (Exception e) {
+			// Ignored
+		}
+	}
 
-    public File getFile() {
-        return file;
-    }
+	private void copy(InputStream in, File file) {
+		try {
+			OutputStream out = new FileOutputStream(file);
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			out.close();
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public CommentedConfiguration getConfig() {
+		return config;
+	}
+
+	public File getFile() {
+		return file;
+	}
 }

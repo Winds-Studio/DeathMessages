@@ -17,10 +17,10 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 	companion object {
 		fun glow(item: ItemStack): ItemStack {
 			val meta = item.itemMeta
-            meta?.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            meta?.addEnchant(Enchantment.DURABILITY, 1, true)
-            item.itemMeta = meta
-            return item
+			meta?.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+			meta?.addEnchant(Enchantment.DURABILITY, 1, true)
+			item.itemMeta = meta
+			return item
 		}
 	}
 
@@ -46,7 +46,7 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 
 	fun addLoreLines(lines: MutableList<String>): ItemBuilder {
 		lore.addAll(lines.map { Chat.colorize(it) })
-        return this
+		return this
 	}
 
 	fun addEnchantment(enchantment: Enchantment, level: Int): ItemBuilder {
@@ -63,9 +63,9 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 	}
 
 	fun glowIf(condition: () -> Boolean): ItemBuilder {
-        if (condition.invoke()) glow()
-        return this
-    }
+		if (condition.invoke()) glow()
+		return this
+	}
 
 	fun addData(key: NamespacedKey, value: String): ItemBuilder {
 		val container = meta?.persistentDataContainer

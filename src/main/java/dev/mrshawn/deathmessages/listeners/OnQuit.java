@@ -7,8 +7,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class OnQuit implements Listener {
 
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e){
-        Player p = e.getPlayer();
-    }
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		Player p = e.getPlayer();
+	}
 }

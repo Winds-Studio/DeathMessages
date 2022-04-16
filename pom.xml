@@ -4,7 +4,7 @@
 
     <groupId>dev.mrshawn</groupId>
     <artifactId>DeathMessages</artifactId>
-    <version>1.4.12</version>
+    <version>1.4.13</version>
     <packaging>jar</packaging>
 
     <name>DeathMessages</name>
@@ -31,7 +31,7 @@
                 <executions>
                     <execution>
                         <id>compile</id>
-                        <phase>compile</phase>
+                        <phase>process-sources</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>

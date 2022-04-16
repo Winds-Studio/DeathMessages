@@ -13,31 +13,31 @@ import org.bukkit.entity.Player;
 
 public final class WorldGuard7Extension implements WorldGuardExtension {
 
-    @Override
-    public StateFlag.State getRegionState(final Player p, String type) {
-        final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
-        final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
-        final LocalPlayer lp = WorldGuardPlugin.inst().wrapPlayer(p);
-        return switch (type) {
-            case "player" -> set.queryState(lp, BROADCAST_PLAYER);
-            case "mob" -> set.queryState(lp, BROADCAST_MOBS);
-            case "natural" -> set.queryState(lp, BROADCAST_NATURAL);
-            case "entity" -> set.queryState(lp, BROADCAST_ENTITY);
-            default -> StateFlag.State.ALLOW;
-        };
-    }
+	@Override
+	public StateFlag.State getRegionState(final Player p, String type) {
+		final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
+		final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
+		final LocalPlayer lp = WorldGuardPlugin.inst().wrapPlayer(p);
+		return switch (type) {
+			case "player" -> set.queryState(lp, BROADCAST_PLAYER);
+			case "mob" -> set.queryState(lp, BROADCAST_MOBS);
+			case "natural" -> set.queryState(lp, BROADCAST_NATURAL);
+			case "entity" -> set.queryState(lp, BROADCAST_ENTITY);
+			default -> StateFlag.State.ALLOW;
+		};
+	}
 
-    @Override
-    public boolean isInRegion(Player p, String regionID) {
-        final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
-        final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
-        for (ProtectedRegion region : set) {
-            if (region.getId().equals(regionID)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	@Override
+	public boolean isInRegion(Player p, String regionID) {
+		final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
+		final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
+		for (ProtectedRegion region : set) {
+			if (region.getId().equals(regionID)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

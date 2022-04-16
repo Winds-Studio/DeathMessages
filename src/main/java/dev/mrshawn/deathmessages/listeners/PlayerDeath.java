@@ -10,12 +10,12 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeath implements Listener {
 
-    private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDeath(PlayerDeathEvent e){
-        if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
-            e.setDeathMessage(null);
-        }
-    }
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerDeath(PlayerDeathEvent e) {
+		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
+			e.setDeathMessage(null);
+		}
+	}
 }

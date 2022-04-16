@@ -16,39 +16,39 @@ object ItemEditor {
 	}
 
 	fun rename(item: ItemStack, name: String): ItemStack {
-        val meta = getItemMeta(item)
+		val meta = getItemMeta(item)
 		meta.setDisplayName(Chat.colorize(name))
 		item.itemMeta = meta
-        return item
-    }
+		return item
+	}
 
 	fun relore(item: ItemStack, lore: Array<String>): ItemStack {
 		val meta = getItemMeta(item)
-        meta.lore = lore.map { Chat.colorize(it) }.toMutableList()
-        item.itemMeta = meta
-        return item
+		meta.lore = lore.map { Chat.colorize(it) }.toMutableList()
+		item.itemMeta = meta
+		return item
 	}
 
 	fun amount(item: ItemStack, amount: Int): ItemStack {
-        item.amount = amount
+		item.amount = amount
 		return item
-    }
+	}
 
 	fun glow(item: ItemStack): ItemStack {
-        val meta = getItemMeta(item)
-        meta.addEnchant(Enchantment.DURABILITY, 1, true)
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+		val meta = getItemMeta(item)
+		meta.addEnchant(Enchantment.DURABILITY, 1, true)
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
 		item.itemMeta = meta
-        return item
-    }
+		return item
+	}
 
 	fun unglow(item: ItemStack): ItemStack {
-        val meta = getItemMeta(item)
-        meta.removeEnchant(Enchantment.DURABILITY)
-        meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS)
-        item.itemMeta = meta
-        return item
-    }
+		val meta = getItemMeta(item)
+		meta.removeEnchant(Enchantment.DURABILITY)
+		meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS)
+		item.itemMeta = meta
+		return item
+	}
 
 	fun getData(item: ItemStack, key: NamespacedKey): String? {
 		return getItemMeta(item).persistentDataContainer
