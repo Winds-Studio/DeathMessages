@@ -83,13 +83,16 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public static String serverVersion() {
-		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
+		return Bukkit.getServer().getClass().getPackage().getName()
+				.replace(".", ",")
 				.split(",")[3];
 	}
 
 	public static int majorVersion() {
-		return Integer.parseInt(serverVersion().replace("1_", "")
-				.replaceAll("_R\\d", "").replaceAll("v", ""));
+		return Integer.parseInt(serverVersion()
+				.replace("1_", "")
+				.replaceAll("_R\\d", "")
+				.replaceAll("v", ""));
 	}
 
 	private void initializeConfigs() {
