@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.utils;
 
+import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
@@ -322,11 +323,11 @@ public class Assets {
 				} else {
 					i = pm.getPlayer().getEquipment().getItemInMainHand();
 				}
-				if (!i.getType().equals(Material.BOW)) {
+				if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
 					return getNaturalDeath(pm, "Projectile-Unknown");
 				}
-				if (DeathMessages.majorVersion() < 14) {
-					if (!i.getType().equals(Material.CROSSBOW)) {
+				if (DeathMessages.majorVersion() >= 14) {
+					if (!i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
 						return getNaturalDeath(pm, "Projectile-Unknown");
 					}
 				}
