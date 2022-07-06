@@ -9,8 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeath implements Listener {
-
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent e) {

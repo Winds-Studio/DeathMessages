@@ -35,9 +35,9 @@ public class UserData {
 			config.save(file);
 		} catch (IOException e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not save: " + fileName + ".yml");
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+			DeathMessages.getInstance().getLogger().severe("Could not save: " + fileName + ".yml");
+			DeathMessages.getInstance().getLogger().severe("Regenerating file and renaming the current file to: " + f.getName());
+			DeathMessages.getInstance().getLogger().severe("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -48,9 +48,9 @@ public class UserData {
 			config.load(file);
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not reload: " + fileName + ".yml");
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Regenerating file and renaming the current file to: " + f.getName());
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "You can try fixing the file with a yaml parser online!");
+			DeathMessages.getInstance().getLogger().severe("Could not reload: " + fileName + ".yml");
+			DeathMessages.getInstance().getLogger().severe("Regenerating file and renaming the current file to: " + f.getName());
+			DeathMessages.getInstance().getLogger().severe("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}

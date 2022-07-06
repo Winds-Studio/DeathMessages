@@ -30,7 +30,7 @@ import java.util.List;
 
 public class EntityDeath implements Listener {
 
-	private static FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	synchronized void onEntityDeath(EntityDeathEvent e) {
 		if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {

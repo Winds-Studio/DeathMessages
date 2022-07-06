@@ -12,7 +12,6 @@ import java.util.List;
 
 public class OnChat implements Listener {
 
-
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();

@@ -13,7 +13,7 @@ public class DiscordAssets {
 	}
 
 	private static final DiscordAssets instance = new DiscordAssets();
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public static DiscordAssets getInstance() {
 		return instance;

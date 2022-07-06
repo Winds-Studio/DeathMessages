@@ -27,7 +27,7 @@ import java.util.logging.Level;
 
 public class DiscordBotAPIExtension {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public DiscordBotAPIExtension() {
 
@@ -44,12 +44,12 @@ public class DiscordBotAPIExtension {
 			String guildID = groupSplit[0];
 			String channelID = groupSplit[1];
 			if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
+				DeathMessages.getInstance().getLogger().severe("Could not find the discord guild with ID: " + guildID);
 				continue;
 			}
 			Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
 			if (g.getTextChannelById(channelID) == null) {
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not find the discord text channel with ID: "
+				DeathMessages.getInstance().getLogger().severe("Could not find the discord text channel with ID: "
 						+ channelID + " in guild: " + g.getName());
 				continue;
 			}
@@ -89,12 +89,12 @@ public class DiscordBotAPIExtension {
 			String guildID = groupSplit[0];
 			String channelID = groupSplit[1];
 			if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not find the discord guild with ID: " + guildID);
+				DeathMessages.getInstance().getLogger().severe("Could not find the discord guild with ID: " + guildID);
 				continue;
 			}
 			Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
 			if (g.getTextChannelById(channelID) == null) {
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not find the discord text channel with ID: "
+				DeathMessages.getInstance().getLogger().severe("Could not find the discord text channel with ID: "
 						+ channelID + " in guild: " + g.getName());
 				continue;
 			}
@@ -275,8 +275,8 @@ public class DiscordBotAPIExtension {
 			}
 			return getMessages().getInt("Discord.DeathMessage.Color", color);
 		} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Error while parsing " + getMessages().getString("Discord.DeathMessage.Color") + " as a color!");
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Make sure your using spigot for your server!");
+			DeathMessages.getInstance().getLogger().severe("Error while parsing " + getMessages().getString("Discord.DeathMessage.Color") + " as a color!");
+			DeathMessages.getInstance().getLogger().severe("Make sure your using spigot for your server!");
 			return color;
 		}
 	}

@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 
 public class BroadcastPlayerDeathListener implements Listener {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	private boolean discordSent = false;
 

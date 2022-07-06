@@ -13,12 +13,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 public class EntityDamageByEntity implements Listener {
 
-	public static HashMap<UUID, Entity> explosions = new HashMap<>();
+	public static Map<UUID, Entity> explosions = new HashMap<>();
 
 	@EventHandler
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
