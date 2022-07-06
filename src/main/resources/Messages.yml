@@ -2,7 +2,7 @@ Prefix: "&7[&cDM&7] "
 Console:
   #Send death messages to console
   Enabled: true
-  Message: "%message% (Extra: World:%world%, X:%x%, Y:%y%)"
+  Message: "%message% (Extra: World:%world%, X:%x%, Y:%y%, Z:%z%)"
 Bungee:
   # Configure how bungee messages look from other servers.
   # Only available placeholder is %server_name%
