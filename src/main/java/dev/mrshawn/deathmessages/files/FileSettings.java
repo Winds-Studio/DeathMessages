@@ -1,169 +1,94 @@
 package dev.mrshawn.deathmessages.files;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class FileSettings {
+    private final JavaPlugin plugin;
+    private final String fileName;
+    private final File file;
+    private YamlConfiguration yamlConfig;
+    private final Map<Enum<?>, Object> values = new HashMap<>();
 
-	private final JavaPlugin plugin;
-	private final File file;
-	private YamlConfiguration yamlConfig;
-	private final boolean isResource;
-	private final Map<Enum<?>, Object> values = new HashMap<>();
+    public FileSettings(JavaPlugin plugin, String fileName) {
+        this.plugin = plugin;
+        this.fileName = fileName;
+        this.file = new File(plugin.getDataFolder(), fileName);
+        loadFile();
+    }
 
-	public FileSettings(JavaPlugin plugin, File file, boolean isResource) {
-		this.plugin = plugin;
-		this.file = file;
-		this.isResource = isResource;
-//		if (isResource) {
-//			plugin.saveResource(this.file.getPath(), false);
-//		}
-		loadFile();
-	}
+    private void loadFile() {
+        if (!file.exists()) {
+            plugin.saveResource(fileName, false);
+        }
+    }
 
-	public FileSettings(JavaPlugin plugin, String filePath, boolean isResource) {
-		this.plugin = plugin;
-		this.file = new File(filePath.replace(".yml", "") + ".yml");
-		this.isResource = isResource;
-//		if (isResource) {
-//			plugin.saveResource(this.file.getPath(), false);
-//		}
-		loadFile();
-	}
+    public void save() {
+        try {
+            yamlConfig.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	private void loadFile() {
-		if (!file.exists()) {
-			if (isResource) {
-				plugin.saveResource(file.getPath(), false);
-			} else {
-				file.getParentFile().mkdirs();
-				try {
-					file.createNewFile();
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
+    public <E extends Enum<E>> FileSettings loadSettings(Class<E> enumClass) {
+        yamlConfig = YamlConfiguration.loadConfiguration(file);
 
-	public void save() {
-		try {
-			yamlConfig.save(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+        EnumSet<E> enumSet = EnumSet.allOf(enumClass);
+        for (E value : enumSet) {
+            if (!(value instanceof ConfigEnum configEnum)) {
+                throw new IllegalArgumentException("Enum " + enumClass.getName() + " must implement ConfigEnum");
+            }
 
-	public <E extends Enum<E>> FileSettings loadSettings(Class<E> enumClass) {
-		try {
-			yamlConfig = YamlConfiguration.loadConfiguration(file);
+            String configPath = configEnum.getPath();
+            if (yamlConfig.contains(configPath)) {
+                values.put(value, yamlConfig.get(configPath));
+            } else {
+                Object defaultValue = configEnum.getDefault();
+                if (defaultValue != null) {
+                    yamlConfig.set(configPath, defaultValue);
+                    values.put(value, defaultValue);
+                }
+            }
+        }
 
-			EnumSet<E> eSet = EnumSet.allOf(enumClass);
+        return this;
+    }
 
-			Method getPath = enumClass.getMethod("getPath");
-			Method getDefault = null;
+    public boolean getBoolean(Enum<?> value) {
+        return get(value, Boolean.class);
+    }
 
-			boolean hasDefaults = true;
+    public String getString(Enum<?> value) {
+        return get(value, String.class);
+    }
 
-			try {
-				getDefault = enumClass.getMethod("getDefault");
-			} catch (NoSuchMethodException | SecurityException e) {
-				hasDefaults = false;
-			}
+    public int getInt(Enum<?> value) {
+        return get(value, Integer.class);
+    }
 
-			for (E value : eSet) {
+    public long getLong(Enum<?> value) {
+        return get(value, Long.class);
+    }
 
-				String configPath = (String) getPath.invoke(value);
+    public List<String> getStringList(Enum<?> value) {
+        List<String> tempList = new ArrayList<>();
+        for (Object val : get(value, List.class)) {
+            tempList.add((String) val);
+        }
+        return tempList;
+    }
 
-				if (!yamlConfig.contains(configPath)) {
-					if (hasDefaults) {
-						yamlConfig.set(configPath, getDefault.invoke(value));
-					} else {
-						continue;
-					}
-				}
+    public <T> T get(Enum<?> value, Class<T> clazz) {
+        return clazz.cast(values.get(value));
+    }
 
-				values.put(value, yamlConfig.get((String) getPath.invoke(value)));
-			}
-			return this;
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			Bukkit.getLogger().severe("Error when loading settings for: " + file);
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public boolean getBoolean(Enum<?> value) {
-		return get(value, Boolean.class);
-	}
-
-	public boolean getBoolean(Enum<?> value, boolean defaultValue) {
-		return get(value, Boolean.class, defaultValue);
-	}
-
-	public String getString(Enum<?> value) {
-		return get(value, String.class);
-	}
-
-	public String getString(Enum<?> value, String defaultValue) {
-		return get(value, String.class, defaultValue);
-	}
-
-	public int getInt(Enum<?> value) {
-		return get(value, Integer.class);
-	}
-
-	public int getInt(Enum<?> value, int defaultValue) {
-		return get(value, Integer.class, defaultValue);
-	}
-
-	public long getLong(Enum<?> value) {
-		return get(value, Long.class);
-	}
-
-	public long getLong(Enum<?> value, long defaultValue) {
-		return get(value, Long.class, defaultValue);
-	}
-
-	public List<String> getStringList(Enum<?> value) {
-		List<String> tempList = new ArrayList<>();
-		for (Object val : get(value, List.class)) {
-			tempList.add((String) val);
-		}
-		return tempList;
-	}
-
-	public List<String> getStringList(Enum<?> value, List<String> defaultValue) {
-		return values.containsKey(value) ? getStringList(value) : defaultValue;
-	}
-
-	public <T> T get(Enum<?> value, Class<T> clazz) {
-		return clazz.cast(values.get(value));
-	}
-
-	public <T> T get(Enum<?> value, Class<T> clazz, T defaultValue) {
-		return values.containsKey(value) ? get(value, clazz) : clazz.cast(defaultValue);
-	}
-
-	public <T, E extends Enum<E>> void set(Class<E> enumClass, Enum<?> value, T setValue) {
-		values.put(value, setValue);
-		yamlConfig.set(getPath(enumClass, value), setValue);
-	}
-
-	private <E extends Enum<E>> String getPath(Class<E> enumClass, Enum<?> value) {
-		try {
-			Method getPath = enumClass.getMethod("getPath");
-			return (String) getPath.invoke(value);
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			return "";
-		}
-	}
-
+    public void set(Enum<?> enumValue, ConfigEnum configEnum, Object setValue) {
+        values.put(enumValue, setValue);
+        yamlConfig.set(configEnum.getPath(), setValue);
+    }
 }

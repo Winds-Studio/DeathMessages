@@ -19,7 +19,7 @@ public class ConfigManager {
 		return instance;
 	}
 
-	public File backupDirectory = new File(DeathMessages.getInstance().getDataFolder() + File.separator + "Backups");
+	public File backupDirectory = new File(DeathMessages.getInstance().getDataFolder(), "Backups");
 
 	public void initialize() {
 		if (!DeathMessages.getInstance().getDataFolder().exists()) {
@@ -46,7 +46,7 @@ public class ConfigManager {
 			backupDirectory.mkdir();
 		}
 		String randomCode = RandomStringUtils.randomNumeric(4);
-		File backupDir = new File(backupDirectory + File.separator + randomCode);
+		File backupDir = new File(backupDirectory, randomCode);
 		backupDir.mkdir();
 		try {
 			FileUtils.copyFileToDirectory(EntityDeathMessages.getInstance().file, backupDir);
@@ -88,13 +88,13 @@ public class ConfigManager {
 		Returns false if the operation was not successful.
 	 */
 	public boolean restore(String code, boolean excludeUserData) {
-		File backupDir = new File(backupDirectory + File.separator + code);
+		File backupDir = new File(backupDirectory, code);
 		if (!backupDir.exists()) {
 			return false;
 		}
 		try {
 			String fileName = EntityDeathMessages.getInstance().fileName;
-			File f = new File(backupDir + File.separator + fileName + ".yml");
+			File f = new File(backupDir, fileName + ".yml");
 			if (EntityDeathMessages.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
@@ -105,7 +105,7 @@ public class ConfigManager {
 		}
 		try {
 			String fileName = Gangs.getInstance().fileName;
-			File f = new File(backupDir + File.separator + fileName + ".yml");
+			File f = new File(backupDir, fileName + ".yml");
 			if (Gangs.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
@@ -116,7 +116,7 @@ public class ConfigManager {
 		}
 		try {
 			String fileName = Messages.getInstance().fileName;
-			File f = new File(backupDir + File.separator + fileName + ".yml");
+			File f = new File(backupDir, fileName + ".yml");
 			if (Messages.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
@@ -127,7 +127,7 @@ public class ConfigManager {
 		}
 		try {
 			String fileName = PlayerDeathMessages.getInstance().fileName;
-			File f = new File(backupDir + File.separator + fileName + ".yml");
+			File f = new File(backupDir, fileName + ".yml");
 			if (PlayerDeathMessages.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
@@ -138,7 +138,7 @@ public class ConfigManager {
 		}
 		try {
 			String fileName = Settings.getInstance().fileName;
-			File f = new File(backupDir + File.separator + fileName + ".yml");
+			File f = new File(backupDir, fileName + ".yml");
 			if (Settings.getInstance().getFile().delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
@@ -150,7 +150,7 @@ public class ConfigManager {
 		if (!excludeUserData) {
 			try {
 				String fileName = UserData.getInstance().fileName;
-				File f = new File(backupDir + File.separator + fileName + ".yml");
+				File f = new File(backupDir, fileName + ".yml");
 				if (UserData.getInstance().file.delete()) {
 					FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 				} else {

@@ -199,7 +199,8 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initializeHooksOnLoad() {
-		if (config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
+		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null
+				&& config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
 			try {
 				final WorldGuardPlugin worldGuardPlugin = WorldGuardPlugin.inst();
 				if (worldGuardPlugin == null) throw new Exception();
