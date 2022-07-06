@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class EntityManager {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	private Entity entity;
 	private UUID entityUUID;

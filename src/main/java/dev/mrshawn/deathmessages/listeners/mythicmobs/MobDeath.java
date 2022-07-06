@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MobDeath implements Listener {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	@EventHandler
 	public void onMythicMobDeath(MythicMobDeathEvent e) {

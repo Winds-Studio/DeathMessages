@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 
 public class BroadcastEntityDeathListener implements Listener {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	@EventHandler
 	public void broadcastListener(BroadcastEntityDeathMessageEvent e) {

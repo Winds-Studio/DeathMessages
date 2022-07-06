@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 
 public class Assets {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES);
 
@@ -293,7 +293,7 @@ public class Assets {
 					tc.addExtra(mssa);
 					lastColor = getColorOfString(lastColor + mssa);
 				} catch (NullPointerException e) {
-					DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not parse %block%. Please check your config for a wrong value." +
+					DeathMessages.getInstance().getLogger().severe("Could not parse %block%. Please check your config for a wrong value." +
 							" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
 							" on the discord https://discord.gg/dhJnq7R");
 					pm.setLastEntityDamager(null);
@@ -310,7 +310,7 @@ public class Assets {
 					tc.addExtra(mssa);
 					lastColor = getColorOfString(lastColor + mssa);
 				} catch (NullPointerException e) {
-					DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Could not parse %climbable%. Please check your config for a wrong value." +
+					DeathMessages.getInstance().getLogger().severe("Could not parse %climbable%. Please check your config for a wrong value." +
 							" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
 							" on the discord https://discord.gg/dhJnq7R - Parsed block: " + pm.getLastClimbing().toString());
 					pm.setLastClimbing(null);
@@ -1025,8 +1025,8 @@ public class Assets {
 		try {
 			msg = msg.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
 		} catch (NullPointerException e) {
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
-			DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
+			DeathMessages.getInstance().getLogger().severe("Custom Biome detected. Using 'Unknown' for a biome name.");
+			DeathMessages.getInstance().getLogger().severe("Custom Biomes are not supported yet.'");
 			msg = msg.replaceAll("%biome%", "Unknown");
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
@@ -1048,8 +1048,8 @@ public class Assets {
 			try {
 				msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
 			} catch (NullPointerException e) {
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
+				DeathMessages.getInstance().getLogger().severe("Custom Biome detected. Using 'Unknown' for a biome name.");
+				DeathMessages.getInstance().getLogger().severe("Custom Biomes are not supported yet.'");
 				msg = msg.replaceAll("%biome%", "Unknown");
 			}
 		} else {
@@ -1080,8 +1080,8 @@ public class Assets {
 			try {
 				msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
 			} catch (NullPointerException e) {
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biome detected. Using 'Unknown' for a biome name.");
-				DeathMessages.getInstance().getLogger().log(Level.SEVERE, "Custom Biomes are not supported yet.'");
+				DeathMessages.getInstance().getLogger().severe("Custom Biome detected. Using 'Unknown' for a biome name.");
+				DeathMessages.getInstance().getLogger().severe("Custom Biomes are not supported yet.'");
 				msg = msg.replaceAll("%biome%", "Unknown");
 			}
 

@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class PlayerManager {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	private final UUID uuid;
 	private final String name;

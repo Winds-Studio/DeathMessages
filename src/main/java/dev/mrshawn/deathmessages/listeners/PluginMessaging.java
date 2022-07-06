@@ -23,7 +23,7 @@ import java.util.logging.Level;
 
 public class PluginMessaging implements PluginMessageListener {
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public void onPluginMessageReceived(String channel, @NotNull Player player, byte[] messageBytes) {
 		if (!channel.equals("BungeeCord")) return;
@@ -34,7 +34,7 @@ public class PluginMessaging implements PluginMessageListener {
 
 			if (subChannel.equals("GetServer")) {
 				String serverName = in.readUTF();
-				DeathMessages.getInstance().getLogger().log(Level.INFO, "Server-Name successfully initialized from Bungee! (" + serverName + ")");
+				DeathMessages.getInstance().getLogger().info("Server-Name successfully initialized from Bungee! (" + serverName + ")");
 				DeathMessages.bungeeServerName = serverName;
 				config.set(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName);
 				config.save();
@@ -59,7 +59,7 @@ public class PluginMessaging implements PluginMessageListener {
 
 	public static void sendServerNameRequest(Player p) {
 		if (!config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
-		DeathMessages.getInstance().getLogger().log(Level.INFO, "Attempting to initialize server-name variable from Bungee...");
+		DeathMessages.getInstance().getLogger().info("Attempting to initialize server-name variable from Bungee...");
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("GetServer");
 		p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());

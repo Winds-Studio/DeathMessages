@@ -7,12 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class FileSettings {
+public class FileSettings<C extends Enum<C>> {
     private final JavaPlugin plugin;
     private final String fileName;
     private final File file;
     private YamlConfiguration yamlConfig;
-    private final Map<Enum<?>, Object> values = new HashMap<>();
+    private final Map<Enum<C>, Object> values = new HashMap<>();
 
     public FileSettings(JavaPlugin plugin, String fileName) {
         this.plugin = plugin;
@@ -35,11 +35,11 @@ public class FileSettings {
         }
     }
 
-    public <E extends Enum<E>> FileSettings loadSettings(Class<E> enumClass) {
+    public FileSettings<C> loadSettings(Class<C> enumClass) {
         yamlConfig = YamlConfiguration.loadConfiguration(file);
 
-        EnumSet<E> enumSet = EnumSet.allOf(enumClass);
-        for (E value : enumSet) {
+        EnumSet<C> enumSet = EnumSet.allOf(enumClass);
+        for (C value : enumSet) {
             if (!(value instanceof ConfigEnum configEnum)) {
                 throw new IllegalArgumentException("Enum " + enumClass.getName() + " must implement ConfigEnum");
             }
@@ -87,7 +87,7 @@ public class FileSettings {
         return clazz.cast(values.get(value));
     }
 
-    public void set(Enum<?> enumValue, ConfigEnum configEnum, Object setValue) {
+    public void set(Enum<C> enumValue, ConfigEnum configEnum, Object setValue) {
         values.put(enumValue, setValue);
         yamlConfig.set(configEnum.getPath(), setValue);
     }

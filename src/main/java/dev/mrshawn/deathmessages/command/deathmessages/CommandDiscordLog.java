@@ -16,7 +16,7 @@ import java.util.List;
 public class CommandDiscordLog extends DeathMessagesCommand {
 
 
-	private static final FileSettings config = FileStore.INSTANCE.getCONFIG();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	@Override
 	public String command() {
