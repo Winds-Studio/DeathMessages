@@ -1303,6 +1303,17 @@ Mobs:
     Gang:
       Melee:
         - "%player% was knocked by a bunch of %killer%'s"
+  warden:
+    Solo:
+      Melee:
+        - "%player% was slain by %killer%"
+      Sonic-Boom:
+        - "%player% was obliterated by a sonically-charged shriek"
+    Gang:
+      Melee:
+        - "%player% was slain by a bunch of %killer%'s"
+      Sonic-Boom:
+        - "%player% was obliterated by a bunch of sonically-charged shrieks"
 
 Custom-Mobs:
   Mythic-Mobs:

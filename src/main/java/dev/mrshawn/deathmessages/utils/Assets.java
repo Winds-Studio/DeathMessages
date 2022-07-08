@@ -1185,6 +1185,7 @@ public class Assets {
 			case CRAMMING -> "Cramming";
 			case DRYOUT -> "Dryout";
 			case FREEZE -> "Freeze";
+			case SONIC_BOOM -> "Sonic-Boom";
 			default -> "Unknown";
 		};
 	}

@@ -220,3 +220,6 @@ Gang:
     goat:
       Radius: 5
       Amount: 4
+    warden:
+      Radius: 5
+      Amount: 4
