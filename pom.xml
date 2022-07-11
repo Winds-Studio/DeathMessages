@@ -4,7 +4,7 @@
 
     <groupId>dev.mrshawn</groupId>
     <artifactId>DeathMessages</artifactId>
-    <version>1.4.14-SNAPSHOT</version>
+    <version>1.4.15</version>
     <packaging>jar</packaging>
 
     <name>DeathMessages</name>
