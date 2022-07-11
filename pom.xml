@@ -125,6 +125,10 @@
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.shade.nbtapi</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>kotlin</pattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.kotlin</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
