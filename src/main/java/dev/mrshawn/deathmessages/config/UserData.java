@@ -1,13 +1,14 @@
 package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.logging.Level;
+import java.util.Stack;
 
 public class UserData {
 
@@ -30,9 +31,26 @@ public class UserData {
 		return config;
 	}
 
-	public void save() {
+	private IOOperation ioRunning = null;
+	private final Stack<IOOperation> ioOperations = new Stack<>();
+
+	public void save() {this.save(false);}
+	public void save(boolean sync) {
+		if (ioRunning != null) ioOperations.push(IOOperation.SAVE);
+		// We should not halt the main server thread
+		if (!sync) {
+			Bukkit.getScheduler().runTaskAsynchronously(DeathMessages.getInstance(), this::saveFile);
+		} else {
+			saveFile();
+		}
+	}
+
+	private void saveFile() {
 		try {
+			ioRunning = IOOperation.SAVE;
+			ioOperations.removeIf(op -> op == IOOperation.SAVE);
 			config.save(file);
+			ioRunning = null;
 		} catch (IOException e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
 			DeathMessages.getInstance().getLogger().severe("Could not save: " + fileName + ".yml");
@@ -43,9 +61,23 @@ public class UserData {
 		}
 	}
 
-	public void reload() {
+	public void reload() {this.reload(false);}
+	public void reload(boolean sync) {
+		if (ioRunning != null) ioOperations.push(IOOperation.LOAD);
+		// We should not halt the main server thread
+		if (!sync) {
+			Bukkit.getScheduler().runTaskAsynchronously(DeathMessages.getInstance(), this::reloadFile);
+		} else {
+			saveFile();
+		}
+	}
+
+	private void reloadFile() {
 		try {
+			ioRunning = IOOperation.LOAD;
+			ioOperations.removeIf(op -> op == IOOperation.LOAD);
 			config.load(file);
+			ioRunning = null;
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
 			DeathMessages.getInstance().getLogger().severe("Could not reload: " + fileName + ".yml");
@@ -68,7 +100,11 @@ public class UserData {
 			}
 		}
 		config = YamlConfiguration.loadConfiguration(file);
-		save();
-		reload();
+		save(true);
+		reload(true);
+	}
+
+	private enum IOOperation {
+		SAVE, LOAD
 	}
 }
