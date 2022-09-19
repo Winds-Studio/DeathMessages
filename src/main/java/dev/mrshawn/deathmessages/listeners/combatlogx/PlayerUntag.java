@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,9 +44,9 @@ public class PlayerUntag implements Listener {
 				gangKill = true;
 			}
 		}
-		TextComponent tx = Assets.get(gangKill, pm, e.getPreviousEnemy(), "CombatLogX-Quit");
+		TextComponent tx = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
 		if (tx == null) return;
-		BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, e.getPreviousEnemy(), MessageType.PLAYER, tx, EntityDeath.getWorlds(p), gangKill);
+		BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, tx, EntityDeath.getWorlds(p), gangKill);
 		Bukkit.getPluginManager().callEvent(event);
 	}
 }
