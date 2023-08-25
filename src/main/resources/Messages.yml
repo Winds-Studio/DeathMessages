@@ -1,0 +1,191 @@
+Prefix: "&7[&cDM&7] "
+Console:
+  #Send death messages to console
+  Enabled: true
+  Message: "%message% (Extra: World:%world%, X:%x%, Y:%y%, Z:%z%)"
+Bungee:
+  # Configure how bungee messages look from other servers.
+  # Only available placeholder is %server_name%
+  Message: '&a%server_name%&7> '
+Commands:
+  DeathMessages:
+    Player-Only-Command: "&cOnly players can run this command."
+    No-Permission: "%prefix% &cYou do not have permission for this command."
+    Help:
+      - "%prefix% &aDeathMessages Command Help List:"
+      - ""
+      - "&a/deathmessages blacklist <username> &7- blacklists the user from death messages. They will still see other players' death messages, but not send them."
+      - "&a/deathmessages toggle &7- Toggle death messages on or off."
+      - "&a/deathmessages reload &7- Reload plugin configs."
+      - "&a/deathmessages edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
+      - ""
+    Sub-Commands:
+      Reload:
+        Reloaded: "%prefix% &aReloaded all plugin configs."
+      Toggle:
+        Toggle-On: "%prefix% &aYou have toggled your death messages &lON"
+        Toggle-Off: "%prefix% &aYou have toggled your death messages &c&lOFF"
+      Blacklist:
+        Help: "%prefix% &cUsage: /dm blacklist <username> - blacklists the user from death messages. They will still see death messages, but not send them."
+        Username-None-Existent: "%prefix% &cCould not find the player with the username &e%player%"
+        Blacklist-Add: "%prefix% &aBlacklisted &e%player%&a!"
+        Blacklist-Remove: "%prefix% &aRemoved &e%player% &afrom being blacklisted."
+      Version: "%prefix% &aRunning DeathMessages %version% by Joshb_"
+      Edit:
+        Usage: "%prefix% &a/dm edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
+        Invalid-Mob-Type: "%prefix% &cThe mob name you specified does not exist."
+        Invalid-Damage-Type: "%prefix% &cThe damage type you specified does not exist. Try using tab complete to select one."
+        Invalid-Arguments: "%prefix% &cInvalid arguments. Use &a/dm edit &cto view them."
+        Invalid-Placeholder: "%prefix% &cThe placeholder must be numeric."
+        Removed-Message: "%prefix% &cRemoved '%message%'"
+        Invalid-Selection: "%prefix% &cThe message with that placeholder does not exist."
+        Adding-Start: "%prefix% &a You are in add message mode. Start typing in chat to add a new message."
+        Added-Message: "%prefix% &aAdded &e'&r%message%&e' &a to %mob_name% > %mode% > %damage_type%"
+      Backup:
+        Usage: "%prefix% &a/dm backup <true, false> &7- Backup plugin files. True will not save user-data, false will save user-data."
+        Backed-Up: "%prefix% &aBackup &e#%backup-code% &ahas been saved."
+      Restore:
+        Usage: "%prefix% &a/dm restore <backup-code> <true, false> &7- True will not restore user-data, false will restore user-data."
+        Restored: "%prefix% &aPlugin files restored from backup &e#%backup-code%"
+        Backup-Not-Found: "%prefix% &cThe backup with that code does not exist."
+      # Do not touch this section. If you do. Leave the last line alone.
+      DiscordLog:
+        - "%prefix% &3Discord Status Log for support:"
+        - "&7Take a picture of this and send it to the support chat if you created a ticket regarding discord issues:"
+        - "&aDiscord-API-JAR: &c%discordJar%"
+        - "&aToken &c(Redacted)&a: &c%discordToken%"
+        - "&aConfig Output:"
+        - "%discordConfig%"
+Discord:
+  # %player% - returns the player name
+  # %player_display% - returns the custom display name of the player
+  # %killer% - returns the entity's name. If there is no name set, it will be the entity type.
+  # %killer_display% - if the killer is a player, returns the display name of the player
+  # %killer_type% - returns the entity type from Mobs.<Mob> in Messages.yml
+  # %biome% - returns the biome the player was in
+  # %world% - returns the world name
+  # %world_environment% - returns the environment of the world (normal, nether, the_end) (These are configurable in Messages.yml (Environment))
+  # %x% - returns the x position the player died at.
+  # %y% - returns the y position the player died at.
+  # %z% - returns the z position the player died at.
+  # Placeholders from placeholderapi works here too
+  DeathMessage:
+    Remove-Plugin-Prefix: false
+    # Besides the color, you can leave all this blank if you want.
+    Color: BLUE
+    # NEW: this was how the old DMP had messages formatted (Playerhead - IconURL, Name - the death message)
+    Author:
+      # The message of the author
+      Name: '%message%'
+      # The clickable link
+      URL: ""
+      # The picture that shows up in the author name
+      # Placeholders: %uuid%, %username%
+      Icon-URL: "https://crafatar.com/avatars/%uuid%"
+    Title: DeathMessage
+    Description: '%message%'
+    Image: https://crafatar.com/avatars/%uuid%
+    # Block title|Block value|inline boolean
+    # To have no content, set content to 'Content: []'
+    Content:
+      - "Location:|World: %world%, X: %x%, Y: %y%, Z: %z%|false"
+    Footer:
+      Text: "Footer text here"
+      Icon-URL: https://crafatar.com/avatars/%uuid%
+    Timestamp: true
+    # Defining the message below will ignore all above embed values and just return regular text.
+    # Meaning if you change Text: "" to anything else, the plugin will send regular text.
+    # You may use \n to make another line.
+    # Example: Text: "%message%\nX:%x%\nY:%y%\nZ:%z%"
+    Text: ""
+#Translations
+# Mobs: these translations will effect the %killer_type% placeholder
+Mobs:
+  elderguardian: "Elder Guardian"
+  witherskeleton: "Wither Skeleton"
+  stray: "Stray"
+  husk: "Husk"
+  zombievillager: "Zombie Villager"
+  skeletonhorse: "Skeleton Horse"
+  zombiehorse: "Zombie Horse"
+  armorstand: "Armor Stand"
+  donkey: "Donkey"
+  mule: "Mule"
+  evoker: "Evoker"
+  vex: "Vex"
+  vindicator: "Vindicator"
+  illusioner: "Illusioner"
+  creeper: "Creeper"
+  skeleton: "Skeleton"
+  spider: "Spider"
+  giant: "Giant"
+  zombie: "Zombieeeeeee"
+  slime: "Slime"
+  ghast: "Ghast"
+  pigzombie: "Pig Zombie"
+  enderman: "Enderman"
+  cavespider: "Cave Spider"
+  silverfish: "Silverfish"
+  blaze: "Blaze"
+  magmacube: "Magma Cube"
+  enderdragon: "Ender Dragon"
+  wither: "Wither"
+  bat: "Bat"
+  witch: "Witch"
+  endermite: "Endermite"
+  guardian: "Guardian"
+  shulker: "Shulker"
+  pig: "Pig"
+  sheep: "Sheep"
+  cow: "Cow"
+  chicken: "Chicken"
+  squid: "Squid"
+  wolf: "Wolf"
+  mushroomcow: "Mushroom Cow"
+  snowman: "Snowman"
+  ocelot: "Ocelot"
+  irongolem: "Iron Golem"
+  horse: "Horse"
+  rabbit: "Rabbit"
+  polarbear: "Polar Bear"
+  llama: "Llama"
+  parrot: "Parrot"
+  villager: "Villager"
+  turtle: "Turtle"
+  phantom: "Phantom"
+  cod: "Cod"
+  salmon: "Salmon"
+  pufferfish: "Puffer Fish"
+  tropicalfish: "Tropical Fish"
+  drowned: "Drowned"
+  dolphin: "Dolphin"
+  cat: "Cat"
+  panda: "Panda"
+  pillager: "Pillager"
+  ravager: "Ravager"
+  traderllama: "Trader Llama"
+  wanderingtrader: "Wandering Trader"
+  fox: "Fox"
+  bee: "Bee"
+  hoglin: "Hoglin"
+  piglin: "Piglin"
+  strider: "Strider"
+  zoglin: "Zoglin"
+  piglinbrute: "Piglin Brute"
+  goat: "Goat"
+  glow_squid: "Glow Squid"
+  axolotl: "Axolotl"
+Blocks:
+  ladder: "Ladder"
+  anvil: "Anvil"
+  vine: "Vine"
+  twisted_vines_plant: "Twisted Vine"
+  weeping_vines_plant: "Weeping Vine"
+  cave_vines_plant: "Cave Vines"
+  scaffolding: "Scaffolding"
+  chain: "Chain"
+Environment:
+  normal: "over-world"
+  nether: "nether"
+  the_end: "the end"
+  unknown: "unknown"

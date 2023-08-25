@@ -1,0 +1,20 @@
+name: DeathMessages
+version: ${project.version}
+main: dev.mrshawn.deathmessages.DeathMessages
+api-version: 1.13
+softdepend:
+  - MythicMobs
+  - PlaceholderAPI
+  - WorldEdit
+  - WorldGuard
+  - DiscordBotAPI
+  - DiscordSRV
+  - CombatLogX
+authors: [ Joshb_, MrShawn ]
+commands:
+  deathmessages:
+    description: Main plugin command
+    aliases: [dm]
+  deathmessagestoggle:
+    description: Alias for /dm toggle in one command
+    aliases: [dmt, dmtoggle]

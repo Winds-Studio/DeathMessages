@@ -1,0 +1,181 @@
+# DeathMessages by MrShawn
+#
+# Disable the default messages from minecraft
+Disable-Default-Messages: true
+
+# Add a prefix to all death messages? (Prefix from Messages.yml)
+Add-Prefix-To-All-Messages: true
+
+# Settings for specific hooks the plugins interact with
+Hooks:
+  # If MythicMobs is found, enable the hook
+  # Enable/Disable MythicMobs hook
+  MythicMobs:
+    Enabled: true
+
+  # If WorldGuard is found, enable the hook
+  # This creates custom flags for regions. These flags are set to ALLOW by default
+  # Flags:
+  #   broadcast-deathmessage-player
+  #   broadcast-deathmessage-mobs
+  #   broadcast-deathmessage-natural
+  #   broadcast-deathmessage-tameable
+  # Use: /rg flag <regionName> <customFlag> allow/deny
+  # The above flags determine death message from being broadcasted if the pvp/pve is taking place in the region.
+  WorldGuard:
+    Enabled: true
+
+  # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) or DiscordSRV
+  # (https://www.spigotmc.org/resources/discordsrv.18494/)is installed, and enabled here.
+  # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right-click the
+  # guild and click on "Copy ID". Then, you will right-click the channel you want to send the messages to and again, click
+  # "Copy ID". The format for the list of Channels is: "guild_ID:channel_ID"
+  # Example: "218258614192450048:827286062147837621"
+  # THE ABOVE EXAMPLE SHOULD NOT BE USED IN LIVE APPLICATIONS! DO NOT ATTEMPT TO USE IT.
+  Discord:
+    Enabled: false
+    # Specify which channel certain death messages get sent.
+    Channels:
+      Player:
+        Enabled: true
+        Channels:
+          - "218258614192450048:827286062147837621"
+      Mob:
+        Enabled: true
+        Channels: []
+      Natural:
+        Enabled: true
+        Channels: []
+      Entity:
+        Enabled: true
+        Channels: []
+    # If you wish to only have certain worlds with death message broadcast to discord, define them here
+    World-Whitelist:
+      Enabled: false
+      Worlds:
+        - test1
+        - test2
+
+  # If you run a bungee server that you would like to send death messages to other servers, enable this
+  Bungee:
+    Enabled: false
+    # The server name that other servers will see
+    Server-Name:
+      # Should the plugin set the server name from the bungee config?
+      Get-From-Bungee: false
+      # Ignored if Get-From-Bungee is enabled.
+      Display-Name: lobby
+    Server-Groups:
+      # If enabled, the messages will only send to specified servers you list in the Servers section.
+      # If disabled, messages will send to all servers you have the plugin installed on.
+      Enabled: false
+      # Get the server names from your config.yml in bungee
+      Servers:
+        - lobby
+        - survival
+
+
+# If enabled, user data will be saved. (Blacklist, and /dm toggle data)
+# If disabled, data wont be saved in UserData.yml
+Saved-User-Data: true
+
+# If enabled, weapon kills will default to a defined kill if the weapon does not have a custom display name
+Disable-Weapon-Kill-With-No-Custom-Name:
+  Enabled: false
+
+  #If enabled, weapons with default display names (white) will be overridden with the message color.
+  # So if the last word is red, then if this is enabled, the weapon name will be red as well.
+  # NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET,
+  Allow-Message-Color-Override: true
+
+  # If the weapon has enchantments and you still want the death type to still be Weapon, set this to false.
+  # Even if the weapon name is still default.
+  Ignore-Enchantments: true
+  Source:
+    Projectile:
+      Default-To: Projectile-Unknown
+    Weapon:
+      Default-To: Melee
+
+# If enabled, if a player was pushed into the void by a killer, and void kill message is not defined, use melee death.
+# This option is ignored if Default-Natural-Death-Not-Defined is set to true.
+Default-Melee-Last-Damage-Not-Defined: true
+
+# If enabled, for example, if a player was pushed into the void by a killer,
+# and void kill message is not defined in the player section, natural death message will be used.
+Default-Natural-Death-Not-Defined: true
+
+# Set the listener call priority for death messages.
+# LOWEST, LOW, NORMAL, HIGH, HIGHEST are allowed
+# MONITOR is not support and is defaulted to HIGH
+Death-Listener-Priority: HIGH
+
+# If enabled, if mobs that have any specified characters from If-Contains, the default mob name will be displayed.
+Rename-Mobs:
+  Enabled: true
+  If-Contains: "♡♥❤■"
+
+# If enabled, mobs will always default to their entity name. Display names will always be ignored. (Besides players)
+Disable-Named-Mobs: false
+
+Expire-Last-Damage:
+  # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
+  # Default: 7
+  Expire-Player: 7
+  # How long until the last player that damaged an entity expires (Cancels the deathmessage listener)
+  # Default: 7
+  Expire-Entity: 7
+
+# If enabled, death messages will only be sent to players in the same world the player died in.
+Per-World-Messages: false
+
+# Group worlds together to send messages to a group of worlds instead of messages per world.
+# Per-World-Messages must be set to true, otherwise, this setting is ignored.
+# World groups are unlimited, and the key names can be named whatever you want, they are ignored
+# and not used in the code.
+# If a world a player dies in is not specified, it will only broadcast to the world the player died in.
+World-Groups:
+  1:
+    - world
+    - world_nether
+    - world_the_end
+
+# Worlds that death messages will never be sent to.
+# Regardless of any other settings, messages will never be sent on these worlds.
+# If a world listed below belongs in a world group. Still, the messages will never be sent to any world.
+Disabled-Worlds:
+  - someDisabledWorld1
+  - someOtherDisabledWorld
+
+Private-Messages:
+  # All messages will still be sent to the console log no matter the setting.
+  # Discord messages will be effected depending on if the below settings are changed.
+  # Example: Setting Player to true will not send the message to discord.
+  # The victim and the killer will only have the death message sent to them.
+  Player: false
+  # The victim will only have the death message sent to them.
+  Mobs: false
+  # The victim will only have the death message sent to them.
+  Natural: false
+  # The killer will only have the message sent to them.
+  Tameable: false
+
+# Set the cooldown for player deaths to prevent spam
+# Cooldown time in seconds
+# Console messages ignore cooldowns and will still send to console
+# Default: 0 (disabled)
+Cooldown: 0
+
+# Custom Items
+
+# Add item display names here. If an item has the display name of something you provide here. Will be counted as
+# a Weapon Kill. Not a melee kill.
+# REGEX is required here.
+Custom-Item-Display-Names-Is-Weapon:
+  - '&6SUPER\sCOOL\sGOLDEN\sAPPLE'
+  - 'SICKNAME'
+
+# Any item materials you list here will return a weapon kill. Not a melee kill
+# Material names are listed here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+Custom-Item-Material-Is-Weapon:
+  - 'ACACIA_FENCE'
