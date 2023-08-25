@@ -241,8 +241,7 @@
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <!--TODO: Need Update-->
-            <version>1.21.3</version>
+            <version>1.26.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
