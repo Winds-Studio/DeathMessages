@@ -224,8 +224,8 @@ public class DeathMessages extends JavaPlugin {
 	private void checkGameRules() {
 		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES) && majorVersion() >= 13) {
 			for (World world : Bukkit.getWorlds()) {
-				if (world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES).equals(true)) {
-					world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
+				if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
+					instance.getServer().getGlobalRegionScheduler().run(instance, run -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
 				}
 			}
 		}
