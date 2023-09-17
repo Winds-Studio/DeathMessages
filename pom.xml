@@ -129,6 +129,10 @@
                             <pattern>kotlin</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.shade.kotlin</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.dv8tion.jda</pattern>
+                            <shadedPattern>github.scarsz.discordsrv.dependencies.jda</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
