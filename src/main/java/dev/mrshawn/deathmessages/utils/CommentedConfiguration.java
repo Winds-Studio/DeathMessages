@@ -145,7 +145,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 				//If there is a valid comment for the section.
 				if (comments.length() > 1)
 					//Adding the comment.
-					setComment(currentSection, comments.toString().substring(0, comments.length() - 1));
+					setComment(currentSection, comments.substring(0, comments.length() - 1));
 
 				//Reseting the comment variable for further usage.
 				comments = new StringBuilder();
@@ -197,7 +197,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 		for (String line : lines)
 			contents.append("\n").append(line);
 
-		return contents.length() == 0 ? "" : contents.substring(1);
+		return contents.isEmpty() ? "" : contents.substring(1);
 	}
 
 	/**

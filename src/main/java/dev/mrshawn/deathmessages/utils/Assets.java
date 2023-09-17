@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -332,10 +331,10 @@ public class Assets {
 					}
 				}
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
-							if (i.getEnchantments().size() == 0) {
+							if (i.getEnchantments().isEmpty()) {
 								return getNaturalDeath(pm, "Projectile-Unknown");
 							}
 						} else {
@@ -347,10 +346,10 @@ public class Assets {
 					displayName = i.getItemMeta().getDisplayName();
 				}
 				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
+				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
 					displayName = Assets.colorize(spl[0]) + displayName;
 				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
+				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
 					displayName = displayName + Assets.colorize(spl[1]);
 				}
 				TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
@@ -435,10 +434,10 @@ public class Assets {
 					i = mob.getEquipment().getItemInMainHand();
 				}
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
-							if (i.getEnchantments().size() == 0) {
+							if (i.getEnchantments().isEmpty()) {
 								return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
 										.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
 							}
@@ -452,10 +451,10 @@ public class Assets {
 					displayName = i.getItemMeta().getDisplayName();
 				}
 				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
+				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
 					displayName = Assets.colorize(spl[0]) + displayName;
 				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
+				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
 					displayName = displayName + Assets.colorize(spl[1]);
 				}
 				TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
@@ -541,10 +540,10 @@ public class Assets {
 					i = p.getEquipment().getItemInMainHand();
 				}
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
-							if (i.getEnchantments().size() == 0) {
+							if (i.getEnchantments().isEmpty()) {
 								return getEntityDeath(p, e,
 										config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
 							}
@@ -558,10 +557,10 @@ public class Assets {
 					displayName = i.getItemMeta().getDisplayName();
 				}
 				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
+				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
 					displayName = Assets.colorize(spl[0]) + displayName;
 				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
+				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
 					displayName = displayName + Assets.colorize(spl[1]);
 				}
 				TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
@@ -716,7 +715,7 @@ public class Assets {
 					i = mob.getEquipment().getItemInMainHand();
 				}
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 								.equals(projectileDamage)) {
@@ -728,10 +727,10 @@ public class Assets {
 					displayName = i.getItemMeta().getDisplayName();
 				}
 				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
+				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
 					displayName = Assets.colorize(spl[0]) + ChatColor.RESET + displayName;
 				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
+				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
 					displayName = displayName + ChatColor.RESET + Assets.colorize(spl[1]);
 				}
 				TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));
@@ -818,7 +817,7 @@ public class Assets {
 					i = p.getEquipment().getItemInMainHand();
 				}
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().equals("")) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 								.equals(projectileDamage)) {
@@ -831,10 +830,10 @@ public class Assets {
 					displayName = i.getItemMeta().getDisplayName();
 				}
 				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].equals("")) {
+				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
 					displayName = Assets.colorize(spl[0]) + ChatColor.RESET + displayName;
 				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].equals("")) {
+				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
 					displayName = displayName + ChatColor.RESET + Assets.colorize(spl[1]);
 				}
 				TextComponent weaponComp = new TextComponent(TextComponent.fromLegacyText(displayName));

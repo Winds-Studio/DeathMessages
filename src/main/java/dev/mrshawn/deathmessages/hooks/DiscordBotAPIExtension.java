@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 import java.awt.*;
 import java.time.Instant;
 import java.util.List;
-import java.util.logging.Level;
 
 public class DiscordBotAPIExtension {
 

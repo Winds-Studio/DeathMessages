@@ -33,7 +33,7 @@ public class CommandEdit extends DeathMessagesCommand {
 				boolean exists = false;
 				for (EntityType entityType : EntityType.values()) {
 					//Check isAlive as getSimpleName could be null if the entity is not living
-					if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().toLowerCase().equalsIgnoreCase(mobName.toLowerCase())) {
+					if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().equalsIgnoreCase(mobName)) {
 						exists = true;
 					}
 				}
@@ -116,7 +116,7 @@ public class CommandEdit extends DeathMessagesCommand {
 				boolean exists = false;
 				for (EntityType entityType : EntityType.values()) {
 					//Check isAlive as getSimpleName could be null if the entity is not living
-					if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().toLowerCase().equalsIgnoreCase(mobName.toLowerCase())) {
+					if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().equalsIgnoreCase(mobName)) {
 						exists = true;
 					}
 				}

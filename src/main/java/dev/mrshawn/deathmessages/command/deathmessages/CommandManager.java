@@ -44,7 +44,7 @@ public class CommandManager implements CommandExecutor {
 			if (!(cmd == null)) {
 				ArrayList<String> a = new ArrayList<>(Arrays.asList(args));
 				a.remove(0);
-				args = a.toArray(new String[a.size()]);
+				args = a.toArray(new String[0]);
 				cmd.onCommand(sender, args);
 				return false;
 			}

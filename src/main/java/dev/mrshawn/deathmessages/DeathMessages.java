@@ -31,7 +31,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.logging.Level;
 
 public class DeathMessages extends JavaPlugin {
 

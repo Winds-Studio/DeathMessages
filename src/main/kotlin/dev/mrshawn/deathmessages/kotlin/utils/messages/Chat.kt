@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender
 
 object Chat {
 
-	fun tell(toWhom: CommandSender?, message: String?) {
+	private fun tell(toWhom: CommandSender?, message: String?) {
 		if (toWhom != null && message != null) toWhom.sendMessage(
 			colorize(message)
 		)

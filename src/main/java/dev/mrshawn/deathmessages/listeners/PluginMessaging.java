@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.List;
-import java.util.logging.Level;
 
 public class PluginMessaging implements PluginMessageListener {
 
