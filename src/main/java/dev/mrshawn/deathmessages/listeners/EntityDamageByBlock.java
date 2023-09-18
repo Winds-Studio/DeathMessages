@@ -21,7 +21,9 @@ public class EntityDamageByBlock implements Listener {
 		if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
 			Player p = (Player) e.getEntity();
 			PlayerManager pm = PlayerManager.getPlayer(p);
-			pm.setLastDamageCause(e.getCause());
+			if (pm != null) {
+				pm.setLastDamageCause(e.getCause());
+			}
 		} else {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
@@ -45,7 +47,9 @@ public class EntityDamageByBlock implements Listener {
 					} else {
 						em = EntityManager.getEntity(e.getEntity().getUniqueId());
 					}
-					em.setLastDamageCause(e.getCause());
+					if (em != null) {
+						em.setLastDamageCause(e.getCause());
+					}
 				}
 			}
 		}

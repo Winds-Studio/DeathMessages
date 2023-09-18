@@ -27,7 +27,26 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.DragonFireball;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.FishHook;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.LlamaSpit;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ShulkerBullet;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Tameable;
+import org.bukkit.entity.Trident;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -52,7 +71,7 @@ public class Assets {
 		return true;
 	}
 
-	public static HashMap<String, String> addingMessage = new HashMap<>();
+	public static final HashMap<String, String> addingMessage = new HashMap<>();
 
 	public static String formatMessage(String path) {
 		return colorize(Messages.getInstance().getConfig().getString(path)

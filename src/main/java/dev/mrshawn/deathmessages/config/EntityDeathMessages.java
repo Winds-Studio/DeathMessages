@@ -66,7 +66,7 @@ public class EntityDeathMessages {
 		config = CommentedConfiguration.loadConfiguration(file);
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "Entities", "Mythic-Mobs-Entities");
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 
 		}
 	}

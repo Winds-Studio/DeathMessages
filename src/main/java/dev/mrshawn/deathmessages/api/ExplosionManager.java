@@ -16,7 +16,7 @@ public class ExplosionManager {
 	private Location location;
 	private final List<UUID> effected;
 
-	public static List<ExplosionManager> explosions = new ArrayList<>();
+	public static final List<ExplosionManager> explosions = new ArrayList<>();
 
 	public ExplosionManager(UUID pyro, Material material, Location location, List<UUID> effected) {
 		this.pyro = pyro;

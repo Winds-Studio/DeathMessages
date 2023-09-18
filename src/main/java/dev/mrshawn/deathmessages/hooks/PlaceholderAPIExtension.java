@@ -4,10 +4,11 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class PlaceholderAPIExtension extends PlaceholderExpansion {
 
-	private DeathMessages plugin;
+	private final DeathMessages plugin;
 
 
 	/**
@@ -51,7 +52,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 * @return The name of the author as a String.
 	 */
 	@Override
-	public String getAuthor() {
+	public @NotNull String getAuthor() {
 		return plugin.getDescription().getAuthors().toString();
 	}
 
@@ -65,7 +66,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 * @return The identifier in {@code %<identifier>_<value>%} as String.
 	 */
 	@Override
-	public String getIdentifier() {
+	public @NotNull String getIdentifier() {
 		return "deathmessages";
 	}
 
@@ -78,7 +79,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 * @return The version as a String.
 	 */
 	@Override
-	public String getVersion() {
+	public @NotNull String getVersion() {
 		return plugin.getDescription().getVersion();
 	}
 
@@ -92,7 +93,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 * @return possibly-null String of the requested identifier.
 	 */
 	@Override
-	public String onPlaceholderRequest(Player player, String identifier) {
+	public String onPlaceholderRequest(Player player, @NotNull String identifier) {
 
 		if (player == null) {
 			return "";

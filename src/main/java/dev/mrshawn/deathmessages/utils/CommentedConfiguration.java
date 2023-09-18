@@ -17,14 +17,26 @@ package dev.mrshawn.deathmessages.utils;
  *
  *******************************************************************************/
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import org.jetbrains.annotations.NotNull;
 
 public final class CommentedConfiguration extends YamlConfiguration {
 
@@ -118,7 +130,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 * @throws InvalidConfigurationException if the contents are invalid.
 	 */
 	@Override
-	public void loadFromString(String contents) throws InvalidConfigurationException {
+	public void loadFromString(@NotNull String contents) throws InvalidConfigurationException {
 		//Load data of the base yaml (keys and values).
 		super.loadFromString(contents);
 
@@ -162,7 +174,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 * @return A string that contains all the data, ready to be written into a file.
 	 */
 	@Override
-	public String saveToString() {
+	public @NotNull String saveToString() {
 		//First, we set headers to null - as we will handle all comments, including headers, in this method.
 		this.options().header(null);
 		//Get the string of the data (keys and values) and parse it into an array of lines.
@@ -273,7 +285,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 * @param file The file to load the config from.
 	 * @return A new instance of CommentedConfiguration contains all the data (keys, values and comments).
 	 */
-	public static CommentedConfiguration loadConfiguration(File file) {
+	public static @NotNull CommentedConfiguration loadConfiguration(@NotNull File file) {
 		try {
 			FileInputStream stream = new FileInputStream(file);
 			return loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
@@ -299,7 +311,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 * @param reader The reader to load the config from.
 	 * @return A new instance of CommentedConfiguration contains all the data (keys, values and comments).
 	 */
-	public static CommentedConfiguration loadConfiguration(Reader reader) {
+	public static @NotNull CommentedConfiguration loadConfiguration(@NotNull Reader reader) {
 		//Creating a blank instance of the config.
 		CommentedConfiguration config = new CommentedConfiguration();
 
@@ -455,25 +467,17 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	/**
 	 * A class that is used as a way of representing a map's entry (which is not implemented).
 	 */
-	private static class Pair<K, V> {
-
-		private final K key;
-		private final V value;
-
-		Pair(K key, V value) {
-			this.key = key;
-			this.value = value;
-		}
+		private record Pair<K, V>(K key, V value) {
 
 		@Override
-		public boolean equals(Object obj) {
-			return obj instanceof Pair && key.equals(((Pair) obj).key) && value.equals(((Pair) obj).value);
-		}
+			public boolean equals(Object obj) {
+				return obj instanceof Pair && key.equals(((Pair<?, ?>) obj).key) && value.equals(((Pair<?, ?>) obj).value);
+			}
 
-		@Override
-		public int hashCode() {
-			return key.hashCode();
+			@Override
+			public int hashCode() {
+				return key.hashCode();
+			}
 		}
-	}
 
 }

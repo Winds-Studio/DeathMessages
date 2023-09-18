@@ -5,8 +5,17 @@ import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EvokerFangs;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -19,13 +28,14 @@ import java.util.UUID;
 
 public class EntityDamageByEntity implements Listener {
 
-	public static Map<UUID, Entity> explosions = new HashMap<>();
+	public static final Map<UUID, Entity> explosions = new HashMap<>();
 
 	@EventHandler
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
 			Player p = (Player) e.getEntity();
 			PlayerManager pm = PlayerManager.getPlayer(p);
+			if (pm == null) return; // Dreeam - No NPE
 			if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 				if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager().getUniqueId())) {
 					pm.setLastEntityDamager(explosions.get(e.getDamager().getUniqueId()));
@@ -90,6 +100,7 @@ public class EntityDamageByEntity implements Listener {
 					} else {
 						em = EntityManager.getEntity(e.getEntity().getUniqueId());
 					}
+					if (em == null) return; // Dreeam - No NPE
 					if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 						if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
 							if (explosions.get(e.getDamager().getUniqueId()) instanceof Player) {

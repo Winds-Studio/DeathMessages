@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 
 public class BroadcastEntityDeathMessageEvent extends Event implements Cancellable {
@@ -46,7 +47,7 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
 	}
 
 	@Override
-	public HandlerList getHandlers() {
+	public @NotNull HandlerList getHandlers() {
 		return HANDLERS;
 	}
 

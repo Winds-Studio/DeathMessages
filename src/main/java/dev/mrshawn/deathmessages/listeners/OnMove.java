@@ -2,6 +2,8 @@ package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.utils.Assets;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,8 +20,10 @@ public class OnMove implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
+		PlayerManager pm = PlayerManager.getPlayer(p);
+		if (pm == null) return; // Dreeam - No NPE
 		if (Assets.isClimbable(e.getTo().getBlock())) {
-			PlayerManager.getPlayer(p).setLastClimbing(e.getTo().getBlock().getType());
+			pm.setLastClimbing(e.getTo().getBlock().getType());
 			lastBlock = e.getTo().getBlock().getType();
 		} else {
 			if (p.getFallDistance() > 0) {
@@ -30,7 +34,7 @@ public class OnMove implements Listener {
 				}
 			} else {
 				if (message) {
-					PlayerManager.getPlayer(p).setLastClimbing(null);
+					pm.setLastClimbing(null);
 					falling = false;
 					message = false;
 				}

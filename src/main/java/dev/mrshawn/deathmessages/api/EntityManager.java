@@ -22,9 +22,9 @@ public class EntityManager {
 
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
-	private Entity entity;
-	private UUID entityUUID;
-	private MobType mobType;
+	private final Entity entity;
+	private final UUID entityUUID;
+	private final MobType mobType;
 	private DamageCause damageCause;
 	private PlayerManager lastPlayerDamager;
 	private Entity lastExplosiveEntity;
@@ -48,6 +48,10 @@ public class EntityManager {
 
 	public UUID getEntityUUID() {
 		return entityUUID;
+	}
+
+	public MobType getMobType() {
+		return mobType;
 	}
 
 	public void setLastDamageCause(DamageCause dc) {

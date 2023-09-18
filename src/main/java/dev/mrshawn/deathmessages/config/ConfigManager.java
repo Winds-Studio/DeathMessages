@@ -18,7 +18,7 @@ public class ConfigManager {
 		return instance;
 	}
 
-	public File backupDirectory = new File(DeathMessages.getInstance().getDataFolder(), "Backups");
+	public final File backupDirectory = new File(DeathMessages.getInstance().getDataFolder(), "Backups");
 
 	public void initialize() {
 		if (!DeathMessages.getInstance().getDataFolder().exists()) {

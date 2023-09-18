@@ -18,7 +18,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerManager {
@@ -37,14 +36,13 @@ public class PlayerManager {
 	private Location explosionCauser;
 	private Location location;
 	private int cooldown = 0;
-	private BukkitTask cooldownTask;
 	private Inventory cachedInventory;
 
 	private BukkitTask lastEntityTask;
 
 	private static final List<PlayerManager> players = new ArrayList<>();
 
-	public boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
+	public final boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
 
 	public PlayerManager(Player p) {
 
@@ -52,15 +50,15 @@ public class PlayerManager {
 		this.uuid = p.getUniqueId();
 		this.name = p.getName();
 
-		if (saveUserData && !UserData.getInstance().getConfig().contains(p.getUniqueId().toString())) {
-			UserData.getInstance().getConfig().set(p.getUniqueId() + ".username", p.getName());
-			UserData.getInstance().getConfig().set(p.getUniqueId() + ".messages-enabled", true);
-			UserData.getInstance().getConfig().set(p.getUniqueId() + ".is-blacklisted", false);
+		if (saveUserData && !UserData.getInstance().getConfig().contains(uuid.toString())) {
+			UserData.getInstance().getConfig().set(uuid + ".username", name);
+			UserData.getInstance().getConfig().set(uuid + ".messages-enabled", true);
+			UserData.getInstance().getConfig().set(uuid + ".is-blacklisted", false);
 			UserData.getInstance().save();
 		}
 		if (saveUserData) {
-			messagesEnabled = UserData.getInstance().getConfig().getBoolean(p.getUniqueId() + ".messages-enabled");
-			isBlacklisted = UserData.getInstance().getConfig().getBoolean(p.getUniqueId() + ".is-blacklisted");
+			messagesEnabled = UserData.getInstance().getConfig().getBoolean(uuid + ".messages-enabled");
+			isBlacklisted = UserData.getInstance().getConfig().getBoolean(uuid + ".is-blacklisted");
 		} else {
 			messagesEnabled = true;
 			isBlacklisted = false;
@@ -70,15 +68,15 @@ public class PlayerManager {
 	}
 
 	public Player getPlayer() {
-		return Bukkit.getServer().getPlayer(uuid);
+		return Bukkit.getPlayer(uuid);
 	}
 
 	public UUID getUUID() {
-		return Objects.requireNonNull(uuid);
+		return uuid;
 	}
 
 	public String getName() {
-		return Objects.requireNonNull(name);
+		return name;
 	}
 
 	public boolean getMessagesEnabled() {
@@ -175,7 +173,7 @@ public class PlayerManager {
 
 	public void setCooldown() {
 		cooldown = config.getInt(Config.COOLDOWN);
-		cooldownTask = new BukkitRunnable() {
+		BukkitTask cooldownTask = new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (cooldown <= 0) {
