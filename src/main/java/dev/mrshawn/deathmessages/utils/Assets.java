@@ -46,10 +46,10 @@ public class Assets {
 
 	public static boolean isNumeric(String s) {
 		for (char c : s.toCharArray()) {
-			if (!Character.isDigit(c))
-				return false;
+			if (Character.isDigit(c))
+				return true;
 		}
-		return true;
+		return false;
 	}
 
 	public static final HashMap<String, String> addingMessage = new HashMap<>();
@@ -176,8 +176,7 @@ public class Assets {
 		if (hasWeapon) {
 			if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
 				return getWeapon(gang, pm, mob);
-			} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)
-					&& pm.getLastProjectileEntity() instanceof Arrow) {
+			} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && pm.getLastProjectileEntity() instanceof Arrow) {
 				return getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
 			} else {
 				return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
@@ -227,8 +226,7 @@ public class Assets {
 		if (hasWeapon) {
 			if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
 				return getEntityDeathWeapon(p, em.getEntity(), mobType);
-			} else if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)
-					&& em.getLastProjectileEntity() instanceof Arrow) {
+			} else if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && em.getLastProjectileEntity() instanceof Arrow) {
 				return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
 			} else {
 				return getEntityDeathWeapon(p, em.getEntity(), mobType);
@@ -249,11 +247,10 @@ public class Assets {
 
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
-		if (msgs.isEmpty()) return null;
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent prefix = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(prefix);
 		}
 		String[] sec = msg.split("::");
@@ -278,7 +275,7 @@ public class Assets {
 					String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 					String mssa = splitMessage.replaceAll("%block%", configValue +
 							(splitMessage.endsWith(".") ? "" : " "));
-					tc.append(Component.text(mssa));
+					tc.append(Assets.convertLegacy(mssa));
 					lastColor.append(mssa);
 				} catch (NullPointerException e) {
 					DeathMessages.getInstance().getLogger().severe("Could not parse %block%. Please check your config for a wrong value." +
@@ -290,12 +287,11 @@ public class Assets {
 
 			} else if (splitMessage.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
 				try {
-					String material;
-					material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
+					String material = XMaterial.matchXMaterial(pm.getLastClimbing()).parseMaterial().toString().toLowerCase();
 					String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 					String mssa = splitMessage.replaceAll("%climbable%", configValue +
 							(splitMessage.endsWith(".") ? "" : " "));
-					tc.append(Component.text(mssa));
+					tc.append(Assets.convertLegacy(mssa));
                     lastColor = new StringBuilder(lastColor + mssa);
 				} catch (NullPointerException e) {
 					DeathMessages.getInstance().getLogger().severe("Could not parse %climbable%. Please check your config for a wrong value." +
@@ -338,9 +334,9 @@ public class Assets {
 					displayName = displayName + spl[1];
 				}
 				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Component.text(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
 			} else {
-				TextComponent tx = Component.text(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, null) + " ");
+				TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, null) + " ");
 				tc.append(tx);
 
 //				for (BaseComponent bs : tx.getExtra()) {
@@ -352,7 +348,7 @@ public class Assets {
 			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(playerDeathPlaceholders(sec[1], pm, null))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, null))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -375,8 +371,7 @@ public class Assets {
 
 		//Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
 		List<String> msgs;
-		if (DeathMessages.getInstance().mythicmobsEnabled
-				&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			//Bukkit.broadcastMessage("is myth - " + internalMobType);
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
@@ -388,7 +383,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		String[] sec = msg.split("::");
@@ -408,7 +403,7 @@ public class Assets {
 			if (splitMessage.contains("%weapon%")) {
 				ItemStack i = mob.getEquipment().getItemInMainHand();
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
 					if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
 							if (i.getEnchantments().isEmpty()) {
@@ -422,7 +417,7 @@ public class Assets {
 					}
 					displayName = Assets.convertString(i.getType().name());
 				} else {
-					displayName = i.getItemMeta().getDisplayName();
+					displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.getItemMeta().displayName());
 				}
 				String[] spl = splitMessage.split("%weapon%");
 				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -432,9 +427,9 @@ public class Assets {
 					displayName = displayName + spl[1];
 				}
 				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Component.text(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
 			} else {
-				TextComponent tx = Component.text(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
+				TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
 				tc.append(tx);
 //				for (BaseComponent bs : tx.getExtra()) {
 //					if (!(bs.getColor() == null)) {
@@ -445,7 +440,7 @@ public class Assets {
 			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(playerDeathPlaceholders(sec[1], pm, mob))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -464,8 +459,7 @@ public class Assets {
 		List<String> msgs;
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
-			if (DeathMessages.getInstance().mythicmobsEnabled
-					&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
+			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
 				internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
 			} else {
 				// reserved
@@ -484,7 +478,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		String[] sec = msg.split("::");
@@ -504,7 +498,7 @@ public class Assets {
 			if (splitMessage.contains("%weapon%")) {
 				ItemStack i = p.getEquipment().getItemInMainHand();
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
 							if (i.getEnchantments().isEmpty()) {
@@ -518,7 +512,7 @@ public class Assets {
 					}
 					displayName = Assets.convertString(i.getType().name());
 				} else {
-					displayName = i.getItemMeta().getDisplayName();
+					displayName = LegacyComponentSerializer.legacySection().serialize(i.getItemMeta().displayName());
 				}
 				String[] spl = splitMessage.split("%weapon%");
 				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -528,9 +522,9 @@ public class Assets {
 					displayName = displayName + spl[1];
 				}
 				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Component.text(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
 			} else {
-				TextComponent tx = Component.text(entityDeathPlaceholders(lastColor + lastFont + splitMessage, p, e, hasOwner) + " ");
+				TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(lastColor + lastFont + splitMessage, p, e, hasOwner) + " ");
 				tc.append(tx);
 //				for (BaseComponent bs : tx.getExtra()) {
 //					if (!(bs.getColor() == null)) {
@@ -541,7 +535,7 @@ public class Assets {
 			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -564,8 +558,7 @@ public class Assets {
 		// List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer());
 
 		List<String> msgs;
-		if (DeathMessages.getInstance().mythicmobsEnabled
-				&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			//Bukkit.broadcastMessage("is myth - " + internalMobType);
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
@@ -584,7 +577,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		String[] sec = msg.split("::");
@@ -601,7 +594,7 @@ public class Assets {
 		String lastColor = "";
 		String lastFont = "";
 		for (String splitMessage : firstSection.split(" ")) {
-			TextComponent tx = Component.text(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
+			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
 			tc.append(tx);
 //			for (BaseComponent bs : tx.getExtra()) {
 //				if (!(bs.getColor() == null)) {
@@ -611,7 +604,7 @@ public class Assets {
 //			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(playerDeathPlaceholders(sec[1], pm, mob))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -634,8 +627,7 @@ public class Assets {
 		//List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
 
 		List<String> msgs;
-		if (DeathMessages.getInstance().mythicmobsEnabled
-				&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		} else {
@@ -647,7 +639,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		String[] sec = msg.split("::");
@@ -667,7 +659,7 @@ public class Assets {
 			if (splitMessage.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
 				ItemStack i = mob.getEquipment().getItemInMainHand();
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 								.equals(projectileDamage)) {
@@ -676,7 +668,7 @@ public class Assets {
 					}
 					displayName = Assets.convertString(i.getType().name());
 				} else {
-					displayName = i.getItemMeta().getDisplayName();
+					displayName = LegacyComponentSerializer.legacySection().serialize(i.getItemMeta().displayName());
 				}
 				String[] spl = splitMessage.split("%weapon%");
 				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -686,9 +678,9 @@ public class Assets {
 					displayName = displayName + "&r" + spl[1];
 				}
 				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Component.text(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
 			} else {
-				TextComponent tx = Component.text(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
+				TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
 				tc.append(tx);
 //				for (BaseComponent bs : tx.getExtra()) {
 //					if (!(bs.getColor() == null)) {
@@ -699,7 +691,7 @@ public class Assets {
 			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(playerDeathPlaceholders(sec[1], pm, mob))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -718,8 +710,7 @@ public class Assets {
 		List<String> msgs;
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
-			if (DeathMessages.getInstance().mythicmobsEnabled
-					&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
+			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
 				internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
 			}
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
@@ -739,7 +730,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		String[] sec = msg.split("::");
@@ -759,7 +750,7 @@ public class Assets {
 			if (splitMessage.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
 				ItemStack i = p.getEquipment().getItemInMainHand();
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 								.equals(projectileDamage)) {
@@ -769,7 +760,7 @@ public class Assets {
 					}
 					displayName = Assets.convertString(i.getType().name());
 				} else {
-					displayName = i.getItemMeta().getDisplayName();
+					displayName = LegacyComponentSerializer.legacySection().serialize(i.getItemMeta().displayName());
 				}
 				String[] spl = splitMessage.split("%weapon%");
 				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -779,9 +770,9 @@ public class Assets {
 					displayName = displayName + "&r" + spl[1];
 				}
 				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Component.text(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
 			} else {
-				TextComponent tx = Component.text(entityDeathPlaceholders(lastColor + lastFont + splitMessage, p, em.getEntity(), hasOwner) + " ");
+				TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(lastColor + lastFont + splitMessage, p, em.getEntity(), hasOwner) + " ");
 				tc.append(tx);
 //				for (BaseComponent bs : tx) {
 //					if (!(bs.getColor() == null)) {
@@ -792,7 +783,7 @@ public class Assets {
 			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -818,8 +809,7 @@ public class Assets {
 		} else {
 			if (mobType.equals(MobType.MYTHIC_MOB)) {
 				String internalMobType = null;
-				if (DeathMessages.getInstance().mythicmobsEnabled
-						&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
+				if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
 					internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(entity).getMobType();
 				} else {
 					// reserved
@@ -835,7 +825,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Component.text(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		String[] sec = msg.split("::");
@@ -852,7 +842,7 @@ public class Assets {
 		String lastColor = "";
 		String lastFont = "";
 		for (String splitMessage : firstSection.split(" ")) {
-			TextComponent tx = Component.text(entityDeathPlaceholders(lastColor + lastFont + splitMessage, player, entity, hasOwner) + " ");
+			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(lastColor + lastFont + splitMessage, player, entity, hasOwner) + " ");
 			tc.append(tx);
 //			for (BaseComponent bs : tx.getExtra()) {
 //				if (!(bs.getColor() == null)) {
@@ -862,7 +852,7 @@ public class Assets {
 //			}
 		}
 		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Component.text(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
+			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
 		}
 		if (sec.length == 3) {
 			if (sec[2].startsWith("COMMAND:")) {
@@ -925,10 +915,10 @@ public class Assets {
 		msg = msg
 				.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()))
-				.replaceAll("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
-						+ entity.getType().toString().toLowerCase()) : entity.getCustomName())
+				.replaceAll("%entity_display%", entity.customName() == null ? Messages.getInstance().getConfig().getString("Mobs."
+						+ entity.getType().toString().toLowerCase()) : LegacyComponentSerializer.legacySection().serialize(entity.customName()))
 				.replaceAll("%killer%", player.getName())
-				.replaceAll("%killer_display%", player.getDisplayName())
+				.replaceAll("%killer_display%", LegacyComponentSerializer.legacySection().serialize(player.displayName()))
 				.replaceAll("%world%", entity.getLocation().getWorld().getName())
 				.replaceAll("%world_environment%", getEnvironment(entity.getLocation().getWorld().getEnvironment()))
 				.replaceAll("%x%", String.valueOf(entity.getLocation().getBlock().getX()))
@@ -958,7 +948,7 @@ public class Assets {
 		if (mob == null) {
 			msg = msg
 					.replaceAll("%player%", pm.getName())
-					.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
+					.replaceAll("%player_display%", LegacyComponentSerializer.legacySection().serialize(pm.getPlayer().displayName()))
 					.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
 					.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
 					.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
@@ -987,7 +977,7 @@ public class Assets {
 			}
 			msg = msg
 					.replaceAll("%player%", pm.getName())
-					.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
+					.replaceAll("%player_display%", LegacyComponentSerializer.legacySection().serialize(pm.getPlayer().displayName()))
 					.replaceAll("%killer%", mobName)
 					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs."
 							+ mob.getType().toString().toLowerCase()))
@@ -1005,7 +995,7 @@ public class Assets {
 			}
 
 			if (mob instanceof Player p) {
-				msg = msg.replaceAll("%killer_display%", p.getDisplayName());
+				msg = msg.replaceAll("%killer_display%", LegacyComponentSerializer.legacySection().serialize(p.displayName()));
 			}
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
@@ -1077,8 +1067,11 @@ public class Assets {
 
 	public static String getSimpleCause(EntityDamageEvent.DamageCause damageCause) {
 		return switch (damageCause) {
+//			case KILL -> "Kill";
+//			case WORLD_BORDER -> "World-Border";
 			case CONTACT -> "Contact";
 			case ENTITY_ATTACK -> "Melee";
+//			case ENTITY_SWEEP_ATTACK -> "Entity-Sweep-Attack";
 			case PROJECTILE -> "Projectile";
 			case SUFFOCATION -> "Suffocation";
 			case FALL -> "Fall";
