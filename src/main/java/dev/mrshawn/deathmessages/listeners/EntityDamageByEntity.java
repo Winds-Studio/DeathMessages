@@ -70,11 +70,9 @@ public class EntityDamageByEntity implements Listener {
 				pm.setLastEntityDamager(e.getDamager());
 			} else if (e.getDamager().getType().isAlive()) {
 				pm.setLastEntityDamager(e.getDamager());
-			} else if (DeathMessages.majorVersion() >= 11) {
-				if (e.getDamager() instanceof EvokerFangs) {
-					EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
-					pm.setLastEntityDamager(evokerFangs.getOwner());
-				}
+			} else if (e.getDamager() instanceof EvokerFangs) {
+				EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
+				pm.setLastEntityDamager(evokerFangs.getOwner());
 			}
 		} else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;

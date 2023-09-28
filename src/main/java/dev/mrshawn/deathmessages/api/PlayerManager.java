@@ -116,7 +116,7 @@ public class PlayerManager {
 		setLastExplosiveEntity(null);
 		setLastProjectileEntity(null);
 		this.lastEntityDamager = e;
-		if (e == null) return;
+		if (e == null) return; // Dreeam - No NPE
 		if (lastEntityTask != null) {
 			lastEntityTask.cancel();
 		}

@@ -26,7 +26,7 @@ Hooks:
     Enabled: true
 
   # If CombatLogX is found, enable the hook
-  # Enable/Disable
+  # Enable/Disable CombatLogX hook
   CombatLogX:
     Enabled: true
 

@@ -18,12 +18,12 @@ public final class WorldGuard7Extension implements WorldGuardExtension {
 		final Location loc = new Location(BukkitAdapter.adapt(p.getLocation().getWorld()), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ());
 		final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
 		final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
-		final LocalPlayer lp = WorldGuardPlugin.inst().wrapPlayer(p);
+		final LocalPlayer player = WorldGuardPlugin.inst().wrapPlayer(p);
 		return switch (type) {
-			case "player" -> set.queryState(lp, BROADCAST_PLAYER);
-			case "mob" -> set.queryState(lp, BROADCAST_MOBS);
-			case "natural" -> set.queryState(lp, BROADCAST_NATURAL);
-			case "entity" -> set.queryState(lp, BROADCAST_ENTITY);
+			case "player" -> set.queryState(player, BROADCAST_PLAYER);
+			case "mob" -> set.queryState(player, BROADCAST_MOBS);
+			case "natural" -> set.queryState(player, BROADCAST_NATURAL);
+			case "entity" -> set.queryState(player, BROADCAST_ENTITY);
 			default -> StateFlag.State.ALLOW;
 		};
 	}

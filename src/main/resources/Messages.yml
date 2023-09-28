@@ -30,7 +30,7 @@ Commands:
         Username-None-Existent: "%prefix% &cCould not find the player with the username &e%player%"
         Blacklist-Add: "%prefix% &aBlacklisted &e%player%&a!"
         Blacklist-Remove: "%prefix% &aRemoved &e%player% &afrom being blacklisted."
-      Version: "%prefix% &aRunning DeathMessages %version% by Joshb_"
+      Version: "%prefix% &aRunning DeathMessages %version% by %authors%"
       Edit:
         Usage: "%prefix% &a/dm edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
         Invalid-Mob-Type: "%prefix% &cThe mob name you specified does not exist."

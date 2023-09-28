@@ -6,6 +6,10 @@ Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessa
  
 Original Contact: [Discord](https://discord.gg/dhJnq7R), if you are urged to join it.
 
+## Requirements
+
+Minecraft version: 1.17.1
+
 ## Contact
 
 - 📫 Discord: `dreeam___` | QQ: `2682173972`
@@ -16,3 +20,10 @@ For Developers:
 
 - The plugin uses a mix of kotlin and java and as such you must compile kotlin as well
 - Compile the plugin with `mvn clean kotlin:compile install`
+
+## TODOs
+
+- Adventure - To replace Bungee-chat and bukkit chatcolor
+- FoliaLib - For server software without folia-api
+- Refactor som code
+- Optimize Imports or code style

@@ -267,7 +267,7 @@ public class DiscordBotAPIExtension {
 				String colorString = getMessages().getString("Discord.DeathMessage.Color");
 				try {
 					return Color.decode(colorString).getRGB();
-				} catch (Exception ignored) {
+				} catch (Exception e) {
 					org.bukkit.Color c = (org.bukkit.Color) Class.forName("org.bukkit.Color").getField(colorString).get(null);
 					return c.asRGB();
 				}

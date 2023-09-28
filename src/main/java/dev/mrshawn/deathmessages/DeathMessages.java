@@ -149,8 +149,7 @@ public class DeathMessages extends JavaPlugin {
 			Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
 			getLogger().info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
 			try {
-				List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins")
-						.invoke(plugMan);
+				List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
 				if (!ignoredPlugins.contains("DeathMessages")) {
 					ignoredPlugins.add("DeathMessages");
 				}
@@ -212,7 +211,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void checkGameRules() {
-		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES) && majorVersion() >= 13) {
+		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
 			for (World world : Bukkit.getWorlds()) {
 				if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
 					Bukkit.getGlobalRegionScheduler().run(instance, task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));

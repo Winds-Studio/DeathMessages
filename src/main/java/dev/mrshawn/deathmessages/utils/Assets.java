@@ -14,7 +14,6 @@ import dev.mrshawn.deathmessages.enums.PDMode;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
-import java.util.concurrent.ThreadLocalRandom;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -28,32 +27,14 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.DragonFireball;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.EnderCrystal;
-import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.FishHook;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.LlamaSpit;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.ShulkerBullet;
-import org.bukkit.entity.Snowball;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Trident;
-import org.bukkit.entity.WitherSkull;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,11 +93,12 @@ public class Assets {
 		if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
 			return false;
 		}
-		String displayName = itemStack.getItemMeta().getDisplayName();
+		Component displayName = itemStack.getItemMeta().displayName();
 
 		for (String s : config.getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON)) {
+			assert displayName != null;
 			Pattern pattern = Pattern.compile(s);
-			Matcher matcher = pattern.matcher(displayName);
+            Matcher matcher = pattern.matcher(LegacyComponentSerializer.legacyAmpersand().serialize(displayName));
 			if (matcher.find()) {
 				return true;
 			}
@@ -125,21 +107,18 @@ public class Assets {
 	}
 
 	public static boolean itemMaterialIsWeapon(ItemStack itemStack) {
-		if (itemStack == null) {
-			return false;
-		}
+		if (itemStack == null) return false; // Dreeam - No NPE
 		for (String s : config.getStringList(Config.CUSTOM_ITEM_MATERIAL_IS_WEAPON)) {
-			Material mat = Material.getMaterial(s);
-			if (mat == null) {
-				return false;
-			}
-			if (itemStack.getType().equals(mat)) {
+			Material material = Material.getMaterial(s);
+			if (material == null) return false; // Dreeam - No NPE
+			if (itemStack.getType().equals(material)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	// Dreeam start - need check the !
 	public static boolean isWeapon(ItemStack itemStack) {
 		return isWeapon(itemStack.getType())
 				&& !itemNameIsWeapon(itemStack)
@@ -157,20 +136,14 @@ public class Assets {
 	}
 
 	public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
-		if (DeathMessages.majorVersion() < 9) {
-			if (mob.getEquipment() == null) {
-				return false;
-			} else if (isWeapon(mob.getEquipment().getItemInHand())) {
-				return false;
-			} else return !damageCause.equals(EntityDamageEvent.DamageCause.THORNS);
-		} else {
-			if (mob.getEquipment() == null) {
-				return false;
-			} else if (isWeapon(mob.getEquipment().getItemInMainHand())) {
-				return false;
-			} else return !damageCause.equals(EntityDamageEvent.DamageCause.THORNS);
-		}
+		if (mob.getEquipment() == null) {
+			return false;
+		} else if (isWeapon(mob.getEquipment().getItemInMainHand())) {
+			return false;
+		} else return !damageCause.equals(EntityDamageEvent.DamageCause.THORNS);
+
 	}
+	// Dreeam end
 
 	public static TextComponent playerDeathMessage(PlayerManager pm, boolean gang) {
 		LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
@@ -301,12 +274,7 @@ public class Assets {
 			if (splitMessage.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
 				try {
 					FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-					String material;
-					if (DeathMessages.majorVersion() < 13) {
-						material = XMaterial.matchXMaterial(fb.getMaterial()).parseMaterial().toString().toLowerCase();
-					} else {
-						material = XMaterial.matchXMaterial(fb.getBlockData().getMaterial()).parseMaterial().toString().toLowerCase();
-					}
+					String material = XMaterial.matchXMaterial(fb.getBlockData().getMaterial()).parseMaterial().toString().toLowerCase();
 					String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 					String mssa = splitMessage.replaceAll("%block%", configValue +
 							(splitMessage.endsWith(".") ? "" : " "));
@@ -337,12 +305,8 @@ public class Assets {
 					return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
 				}
 			} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && splitMessage.contains("%weapon%")) {
-				ItemStack i;
-				if (DeathMessages.majorVersion() <= 9) {
-					i = pm.getPlayer().getEquipment().getItemInHand();
-				} else {
-					i = pm.getPlayer().getEquipment().getItemInMainHand();
-				}
+				ItemStack i = pm.getPlayer().getEquipment().getItemInMainHand();
+
 				if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
 					return getNaturalDeath(pm, "Projectile-Unknown");
 				}
@@ -352,7 +316,7 @@ public class Assets {
 					}
 				}
 				String displayName;
-				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 						if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
 							if (i.getEnchantments().isEmpty()) {
@@ -364,7 +328,7 @@ public class Assets {
 					}
 					displayName = Assets.convertString(i.getType().name());
 				} else {
-					displayName = i.getItemMeta().getDisplayName();
+					displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.getItemMeta().displayName());
 				}
 				String[] spl = splitMessage.split("%weapon%");
 				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -442,12 +406,7 @@ public class Assets {
 		String lastFont = "";
 		for (String splitMessage : firstSection.split(" ")) {
 			if (splitMessage.contains("%weapon%")) {
-				ItemStack i;
-				if (DeathMessages.majorVersion() <= 9) {
-					i = mob.getEquipment().getItemInHand();
-				} else {
-					i = mob.getEquipment().getItemInMainHand();
-				}
+				ItemStack i = mob.getEquipment().getItemInMainHand();
 				String displayName;
 				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
@@ -543,12 +502,7 @@ public class Assets {
 		String lastFont = "";
 		for (String splitMessage : firstSection.split(" ")) {
 			if (splitMessage.contains("%weapon%")) {
-				ItemStack i;
-				if (DeathMessages.majorVersion() <= 9) {
-					i = p.getEquipment().getItemInHand();
-				} else {
-					i = p.getEquipment().getItemInMainHand();
-				}
+				ItemStack i = p.getEquipment().getItemInMainHand();
 				String displayName;
 				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
@@ -677,7 +631,7 @@ public class Assets {
 				+ "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
 
-		//  List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
+		//List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
 
 		List<String> msgs;
 		if (DeathMessages.getInstance().mythicmobsEnabled
@@ -711,12 +665,7 @@ public class Assets {
 		String lastFont = "";
 		for (String splitMessage : firstSection.split(" ")) {
 			if (splitMessage.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
-				ItemStack i;
-				if (DeathMessages.majorVersion() < 9) {
-					i = mob.getEquipment().getItemInHand();
-				} else {
-					i = mob.getEquipment().getItemInMainHand();
-				}
+				ItemStack i = mob.getEquipment().getItemInMainHand();
 				String displayName;
 				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
@@ -808,12 +757,7 @@ public class Assets {
 		String lastFont = "";
 		for (String splitMessage : firstSection.split(" ")) {
 			if (splitMessage.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
-				ItemStack i;
-				if (DeathMessages.majorVersion() < 9) {
-					i = p.getEquipment().getItemInHand();
-				} else {
-					i = p.getEquipment().getItemInMainHand();
-				}
+				ItemStack i = p.getEquipment().getItemInMainHand();
 				String displayName;
 				if (!(i.getItemMeta() == null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {

@@ -22,7 +22,9 @@ public class CommandVersion extends DeathMessagesCommand {
 			return;
 		}
 		String message = Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Version");
-		message = message.replaceAll("%version%", DeathMessages.getInstance().getDescription().getVersion());
+		message = message
+				.replaceAll("%version%", DeathMessages.getInstance().getDescription().getVersion())
+				.replaceAll("%authors%", DeathMessages.getInstance().getDescription().getAuthors().toString());
 		sender.sendMessage(Assets.convertLegacy(message));
 	}
 }

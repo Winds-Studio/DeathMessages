@@ -67,8 +67,8 @@ public class PlayerDeathMessages {
 		config = CommentedConfiguration.loadConfiguration(file);
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "Mobs");
-		} catch (Exception ignored) {
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

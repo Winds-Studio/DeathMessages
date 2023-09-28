@@ -2,8 +2,6 @@ package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.utils.Assets;
-import java.util.logging.Level;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

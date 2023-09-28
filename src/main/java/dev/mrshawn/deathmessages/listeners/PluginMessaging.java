@@ -9,15 +9,16 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.util.List;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.util.List;
 
 public class PluginMessaging implements PluginMessageListener {
 
@@ -26,26 +27,27 @@ public class PluginMessaging implements PluginMessageListener {
 	public void onPluginMessageReceived(String channel, @NotNull Player player, byte[] messageBytes) {
 		if (!channel.equals("BungeeCord")) return;
 
-		DataInputStream in = new DataInputStream(new ByteArrayInputStream(messageBytes));
+		DataInputStream stream = new DataInputStream(new ByteArrayInputStream(messageBytes));
 		try {
-			String subChannel = in.readUTF();
+			String subChannel = stream.readUTF();
 
 			if (subChannel.equals("GetServer")) {
-				String serverName = in.readUTF();
+				String serverName = stream.readUTF();
 				DeathMessages.getInstance().getLogger().info("Server-Name successfully initialized from Bungee! (" + serverName + ")");
 				DeathMessages.bungeeServerName = serverName;
 				config.set(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName);
 				config.save();
 				DeathMessages.bungeeServerNameRequest = false;
 			} else if (subChannel.equals("DeathMessages")) {
-				String[] data = in.readUTF().split("######");
+				String[] data = stream.readUTF().split("######");
 				String serverName = data[0];
 				String rawMsg = data[1];
-				TextComponent prefix = Component.text(Messages.getInstance().getConfig().getString("Bungee.Message").replaceAll("%server_name%", serverName));
-				TextComponent message = Component.text(rawMsg);
+				TextComponent prefix = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Bungee.Message").replaceAll("%server_name%", serverName));
+				TextComponent message = Assets.convertLegacy(rawMsg);
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					PlayerManager pm = PlayerManager.getPlayer(p);
-					if (pm.getMessagesEnabled()) {
+                    assert pm != null;
+                    if (pm.getMessagesEnabled()) {
 						p.sendMessage(Component.text().append(prefix).append(message).build());
 					}
 				}

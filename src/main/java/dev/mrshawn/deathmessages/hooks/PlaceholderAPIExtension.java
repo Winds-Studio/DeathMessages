@@ -97,11 +97,11 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	@Override
 	public String onPlaceholderRequest(Player player, @NotNull String identifier) {
 
-		if (player == null) return null;
+		if (player == null) return null; // Dreeam - No NPE
 
 		PlayerManager pm = PlayerManager.getPlayer(player);
 
-		if (pm == null) return null;
+		if (pm == null) return null; // Dreeam - No NPE
 
 		switch (identifier) {
 			case "messages_enabled":
@@ -113,12 +113,12 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 			case "victim_display_name":
 				return LegacyComponentSerializer.legacyAmpersand().serialize(pm.getPlayer().displayName());
 			case "killer_name":
-				if (pm.getLastEntityDamager() == null) return null;
+				if (pm.getLastEntityDamager() == null) return null; // Dreeam - No NPE
 				return pm.getLastEntityDamager().getName();
 			case "killer_display_name":
-				if (pm.getLastEntityDamager() == null) return null;
+				if (pm.getLastEntityDamager() == null) return null; // Dreeam - No NPE
 				Component customname = pm.getLastEntityDamager().customName();
-				if (customname == null) return null;
+				if (customname == null) return null; // Dreeam - No NPE
 				return LegacyComponentSerializer.legacyAmpersand().serialize(customname);
 			default:
 				return null;

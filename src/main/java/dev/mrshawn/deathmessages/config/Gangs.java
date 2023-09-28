@@ -66,8 +66,8 @@ public class Gangs {
 		config = CommentedConfiguration.loadConfiguration(file);
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
-		} catch (Exception ignored) {
-
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

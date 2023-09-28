@@ -3,17 +3,18 @@ package dev.mrshawn.deathmessages.listeners;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
 import dev.mrshawn.deathmessages.utils.Assets;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.List;
 
 public class OnChat implements Listener {
 
 	@EventHandler
-	public void onChat(AsyncPlayerChatEvent e) {
+	public void onChat(AsyncChatEvent e) {
 		Player p = e.getPlayer();
 		if (Assets.addingMessage.containsKey(p.getName())) {
 			e.setCancelled(true);
@@ -25,12 +26,12 @@ public class OnChat implements Listener {
 				String mobName = spl[1];
 				String damageType = spl[2];
 				List<String> list = PlayerDeathMessages.getInstance().getConfig().getStringList("Mobs." + mobName + "." + mode + "." + damageType);
-				list.add(e.getMessage());
+				list.add(LegacyComponentSerializer.legacyAmpersand().serialize(e.message()));
 				PlayerDeathMessages.getInstance().getConfig().set("Mobs." + mobName + "." + mode + "." + damageType, list);
 				PlayerDeathMessages.getInstance().save();
 				PlayerDeathMessages.getInstance().reload();
 				p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
-						.replaceAll("%message%", e.getMessage())
+						.replaceAll("%message%", LegacyComponentSerializer.legacyAmpersand().serialize(e.message()))
 						.replaceAll("%mob_name%", mobName)
 						.replaceAll("%mode%", mode)
 						.replaceAll("%damage_type%", damageType)));
@@ -38,12 +39,12 @@ public class OnChat implements Listener {
 				String mobName = spl[0];
 				String damageType = spl[1];
 				List<String> list = EntityDeathMessages.getInstance().getConfig().getStringList("Entities." + mobName + "." + damageType);
-				list.add(e.getMessage());
+				list.add(LegacyComponentSerializer.legacyAmpersand().serialize(e.message()));
 				EntityDeathMessages.getInstance().getConfig().set("Entities." + mobName + "." + damageType, list);
 				EntityDeathMessages.getInstance().save();
 				EntityDeathMessages.getInstance().reload();
 				p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
-						.replaceAll("%message%", e.getMessage())
+						.replaceAll("%message%", LegacyComponentSerializer.legacyAmpersand().serialize(e.message()))
 						.replaceAll("%mob_name%", mobName)
 						.replaceAll("%damage_type%", damageType)));
 			}

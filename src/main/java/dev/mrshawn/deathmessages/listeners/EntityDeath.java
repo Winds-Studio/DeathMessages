@@ -38,8 +38,7 @@ public class EntityDeath implements Listener {
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	synchronized void onEntityDeath(EntityDeathEvent e) {
-		if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-			Player p = (Player) e.getEntity();
+		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
 			PlayerManager pm = PlayerManager.getPlayer(p);
 			if (pm == null) {
 				pm = new PlayerManager(p);
@@ -50,33 +49,33 @@ public class EntityDeath implements Listener {
 			} else {
 				pm.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
 			}
-			if (pm.isBlacklisted()) return;
+			if (pm.isBlacklisted()) return; // Dreeam - No NPE
 
 			if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
 				//Natural Death
 				if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
 					TextComponent tx = Assets.getNaturalDeath(pm, "End-Crystal");
-					if (tx == null) return;
+					if (tx == null) return; // Dreeam - No NPE
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
 					Bukkit.getPluginManager().callEvent(event);
 				} else if (pm.getLastExplosiveEntity() instanceof TNTPrimed) {
 					TextComponent tx = Assets.getNaturalDeath(pm, "TNT");
-					if (tx == null) return;
+					if (tx == null) return; // Dreeam - No NPE
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
 					Bukkit.getPluginManager().callEvent(event);
 				} else if (pm.getLastExplosiveEntity() instanceof Firework) {
 					TextComponent tx = Assets.getNaturalDeath(pm, "Firework");
-					if (tx == null) return;
+					if (tx == null) return; // Dreeam - No NPE
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
 					Bukkit.getPluginManager().callEvent(event);
 				} else if (pm.getLastClimbing() != null && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
 					TextComponent tx = Assets.getNaturalDeath(pm, "Climbable");
-					if (tx == null) return;
+					if (tx == null) return; // Dreeam - No NPE
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
 					Bukkit.getPluginManager().callEvent(event);
 				} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
 					ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(p.getUniqueId());
-					if (explosionManager == null) return;
+					if (explosionManager == null) return; // Dreeam - No NPE
 					TextComponent tx = null;
 					if (explosionManager.getMaterial().name().contains("BED")) {
 						tx = Assets.getNaturalDeath(pm, "Bed");
@@ -84,7 +83,7 @@ public class EntityDeath implements Listener {
 					if (DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
 						tx = Assets.getNaturalDeath(pm, "Respawn-Anchor");
 					}
-					if (tx == null) return;
+					if (tx == null) return; // Dreeam - No NPE
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
 					Bukkit.getPluginManager().callEvent(event);
 				} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
@@ -93,7 +92,7 @@ public class EntityDeath implements Listener {
 					Bukkit.getPluginManager().callEvent(event);
 				} else {
 					TextComponent tx = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
-					if (tx == null) return;
+					if (tx == null) return; // Dreeam - No NPE
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, tx, getWorlds(p), false);
 					Bukkit.getPluginManager().callEvent(event);
 				}
@@ -118,7 +117,7 @@ public class EntityDeath implements Listener {
 					}
 				}
 				TextComponent tx = Assets.playerDeathMessage(pm, gangKill);
-				if (tx == null) return;
+				if (tx == null) return; // Dreeam - No NPE
 				if (ent instanceof Player) {
 					BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p,
 							(LivingEntity) pm.getLastEntityDamager(), MessageType.PLAYER, tx, getWorlds(p), gangKill);
@@ -137,15 +136,15 @@ public class EntityDeath implements Listener {
 					mobType = MobType.MYTHIC_MOB;
 				}
 			}
-			if (EntityManager.getEntity(e.getEntity().getUniqueId()) == null) return;
+			if (EntityManager.getEntity(e.getEntity().getUniqueId()) == null) return; // Dreeam - No NPE
 			EntityManager em = EntityManager.getEntity(e.getEntity().getUniqueId());
 
-			if (em == null || em.getLastPlayerDamager() == null) return;
+			if (em == null || em.getLastPlayerDamager() == null) return; // Dreeam - No NPE
 
 			PlayerManager damager = em.getLastPlayerDamager();
 
 			TextComponent tx = Assets.entityDeathMessage(em, mobType);
-			if (tx == null) return;
+			if (tx == null) return; // Dreeam - No NPE
 			BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, tx, getWorlds(e.getEntity()));
 			Bukkit.getPluginManager().callEvent(event);
 		}
