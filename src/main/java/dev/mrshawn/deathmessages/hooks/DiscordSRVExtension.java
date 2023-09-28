@@ -56,7 +56,7 @@ public class DiscordSRVExtension {
 			TextChannel textChannel = g.getTextChannelById(channelID);
 			if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
 					&& config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
-				String prefix = Assets.colorize(getMessages().getString("Prefix"));
+				String prefix = getMessages().getString("Prefix");
 				prefix = ChatColor.stripColor(prefix);
 				message = message.substring(prefix.length());
 			}
@@ -101,7 +101,7 @@ public class DiscordSRVExtension {
 			}
 			TextChannel textChannel = g.getTextChannelById(channelID);
 			if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
-				String prefix = Assets.colorize(getMessages().getString("Prefix"));
+				String prefix = getMessages().getString("Prefix");
 				prefix = ChatColor.stripColor(prefix);
 				message = message.substring(prefix.length());
 			}
@@ -251,7 +251,7 @@ public class DiscordSRVExtension {
 		return eb.build();
 	}
 
-	//Suggested by kuu#3050
+	// Suggested by kuu#3050
 	private int getDeathMessageColor() {
 		final int color = org.bukkit.Color.BLACK.asRGB();
 		try {

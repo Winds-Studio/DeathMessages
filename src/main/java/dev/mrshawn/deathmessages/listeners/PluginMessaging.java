@@ -9,16 +9,15 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.util.List;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.util.List;
 
 public class PluginMessaging implements PluginMessageListener {
 
@@ -42,12 +41,12 @@ public class PluginMessaging implements PluginMessageListener {
 				String[] data = in.readUTF().split("######");
 				String serverName = data[0];
 				String rawMsg = data[1];
-				TextComponent prefix = new TextComponent(Assets.colorize(Messages.getInstance().getConfig().getString("Bungee.Message").replaceAll("%server_name%", serverName)));
-				TextComponent message = new TextComponent(ComponentSerializer.parse(rawMsg));
-				for (Player pls : Bukkit.getOnlinePlayers()) {
-					PlayerManager pms = PlayerManager.getPlayer(pls);
-					if (pms.getMessagesEnabled()) {
-						pls.spigot().sendMessage(prefix, message);
+				TextComponent prefix = Component.text(Messages.getInstance().getConfig().getString("Bungee.Message").replaceAll("%server_name%", serverName));
+				TextComponent message = Component.text(rawMsg);
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					PlayerManager pm = PlayerManager.getPlayer(p);
+					if (pm.getMessagesEnabled()) {
+						p.sendMessage(Component.text().append(prefix).append(message).build());
 					}
 				}
 			}

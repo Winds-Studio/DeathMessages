@@ -3,6 +3,8 @@ package dev.mrshawn.deathmessages.hooks;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,37 +97,31 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	@Override
 	public String onPlaceholderRequest(Player player, @NotNull String identifier) {
 
-		if (player == null) {
-			return "";
-		}
+		if (player == null) return null;
 
 		PlayerManager pm = PlayerManager.getPlayer(player);
 
-		if (identifier.equals("messages_enabled")) {
-			return String.valueOf(pm.getMessagesEnabled());
-		}
-		if (identifier.equals("is_blacklisted")) {
-			return String.valueOf(pm.isBlacklisted());
-		}
-		if (identifier.equals("victim_name")) {
-			return pm.getPlayer().getName();
-		}
-		if (identifier.equals("victim_display_name")) {
-			return pm.getPlayer().getDisplayName();
-		}
-		if (identifier.equals("killer_name")) {
-			if (pm.getLastEntityDamager() == null) {
-				return "null";
-			}
-			return pm.getLastEntityDamager().getName();
-		}
-		if (identifier.equals("killer_display_name")) {
-			if (pm.getLastEntityDamager() == null) {
-				return "null";
-			}
-			return pm.getLastEntityDamager().getCustomName();
-		}
+		if (pm == null) return null;
 
-		return null;
+		switch (identifier) {
+			case "messages_enabled":
+				return String.valueOf(pm.getMessagesEnabled());
+			case "is_blacklisted":
+				return String.valueOf(pm.isBlacklisted());
+			case "victim_name":
+				return pm.getName();
+			case "victim_display_name":
+				return LegacyComponentSerializer.legacyAmpersand().serialize(pm.getPlayer().displayName());
+			case "killer_name":
+				if (pm.getLastEntityDamager() == null) return null;
+				return pm.getLastEntityDamager().getName();
+			case "killer_display_name":
+				if (pm.getLastEntityDamager() == null) return null;
+				Component customname = pm.getLastEntityDamager().customName();
+				if (customname == null) return null;
+				return LegacyComponentSerializer.legacyAmpersand().serialize(customname);
+			default:
+				return null;
+		}
 	}
 }

@@ -9,6 +9,7 @@ import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import github.scarsz.discordsrv.DiscordSRV;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_DISCORDLOG.getValue())) {
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		List<String> discordLog = Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog");
@@ -48,35 +49,35 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 		}
 		for (String log : discordLog) {
 			if (log.equals("%discordConfig%")) {
-				sender.sendMessage(Assets.colorize("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
-				sender.sendMessage(Assets.colorize("  &aChannels:"));
-				//Player
-				sender.sendMessage(Assets.colorize("    &aPlayer-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED)));
-				sender.sendMessage(Assets.colorize("    &aPlayer-Channels:"));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("  &aChannels:"));
+				// Player
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aPlayer-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED)));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aPlayer-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS)) {
-					sender.sendMessage("      - " + channels);
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("      - " + channels));
 				}
-				//Mob
-				sender.sendMessage(Assets.colorize("    &aMob-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED)));
-				sender.sendMessage(Assets.colorize("    &aMob-Channels:"));
+				// Mob
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aMob-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED)));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aMob-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS)) {
-					sender.sendMessage("      - " + channels);
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("      - " + channels));
 				}
-				//Player
-				sender.sendMessage(Assets.colorize("    &aNatural-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED)));
-				sender.sendMessage(Assets.colorize("    &aNatural-Channels:"));
+				// Player
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aNatural-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED)));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aNatural-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS)) {
-					sender.sendMessage("      - " + channels);
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("      - " + channels));
 				}
-				//Player
-				sender.sendMessage(Assets.colorize("    &aEntity-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED)));
-				sender.sendMessage(Assets.colorize("    &aEntity-Channels:"));
+				// Player
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aEntity-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED)));
+				sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("    &aEntity-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS)) {
-					sender.sendMessage("      - " + channels);
+					sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("      - " + channels));
 				}
 				continue;
 			}
-			sender.sendMessage(Assets.colorize(log
+			sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(log
 					.replaceAll("%discordJar%", discordJar)
 					.replaceAll("%discordToken%", discordToken)
 					.replace("%prefix%", Messages.getInstance().getConfig().getString("Prefix"))));

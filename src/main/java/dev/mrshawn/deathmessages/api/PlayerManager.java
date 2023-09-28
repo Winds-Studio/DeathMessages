@@ -5,6 +5,7 @@ import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,8 +25,8 @@ public class PlayerManager {
 
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
-	private final UUID uuid;
-	private final String name;
+	private final UUID playerUUID;
+	private final String playerName;
 	private boolean messagesEnabled;
 	private boolean isBlacklisted;
 	private DamageCause damageCause;
@@ -38,7 +39,7 @@ public class PlayerManager {
 	private int cooldown = 0;
 	private Inventory cachedInventory;
 
-	private BukkitTask lastEntityTask;
+	private ScheduledTask lastEntityTask;
 
 	private static final List<PlayerManager> players = new ArrayList<>();
 
@@ -47,18 +48,18 @@ public class PlayerManager {
 	public PlayerManager(Player p) {
 
 
-		this.uuid = p.getUniqueId();
-		this.name = p.getName();
+		this.playerUUID = p.getUniqueId();
+		this.playerName = p.getName();
 
-		if (saveUserData && !UserData.getInstance().getConfig().contains(uuid.toString())) {
-			UserData.getInstance().getConfig().set(uuid + ".username", name);
-			UserData.getInstance().getConfig().set(uuid + ".messages-enabled", true);
-			UserData.getInstance().getConfig().set(uuid + ".is-blacklisted", false);
+		if (saveUserData && !UserData.getInstance().getConfig().contains(playerUUID.toString())) {
+			UserData.getInstance().getConfig().set(playerUUID + ".username", playerName);
+			UserData.getInstance().getConfig().set(playerUUID + ".messages-enabled", true);
+			UserData.getInstance().getConfig().set(playerUUID + ".is-blacklisted", false);
 			UserData.getInstance().save();
 		}
 		if (saveUserData) {
-			messagesEnabled = UserData.getInstance().getConfig().getBoolean(uuid + ".messages-enabled");
-			isBlacklisted = UserData.getInstance().getConfig().getBoolean(uuid + ".is-blacklisted");
+			messagesEnabled = UserData.getInstance().getConfig().getBoolean(playerUUID + ".messages-enabled");
+			isBlacklisted = UserData.getInstance().getConfig().getBoolean(playerUUID + ".is-blacklisted");
 		} else {
 			messagesEnabled = true;
 			isBlacklisted = false;
@@ -68,15 +69,15 @@ public class PlayerManager {
 	}
 
 	public Player getPlayer() {
-		return Bukkit.getPlayer(uuid);
+		return Bukkit.getPlayer(playerUUID);
 	}
 
 	public UUID getUUID() {
-		return uuid;
+		return playerUUID;
 	}
 
 	public String getName() {
-		return name;
+		return playerName;
 	}
 
 	public boolean getMessagesEnabled() {
@@ -86,7 +87,7 @@ public class PlayerManager {
 	public void setMessagesEnabled(boolean b) {
 		this.messagesEnabled = b;
 		if (saveUserData) {
-			UserData.getInstance().getConfig().set(uuid.toString() + ".messages-enabled", b);
+			UserData.getInstance().getConfig().set(playerUUID.toString() + ".messages-enabled", b);
 			UserData.getInstance().save();
 		}
 	}
@@ -98,7 +99,7 @@ public class PlayerManager {
 	public void setBlacklisted(boolean b) {
 		this.isBlacklisted = b;
 		if (saveUserData) {
-			UserData.getInstance().getConfig().set(uuid.toString() + ".is-blacklisted", b);
+			UserData.getInstance().getConfig().set(playerUUID.toString() + ".is-blacklisted", b);
 			UserData.getInstance().save();
 		}
 	}
@@ -119,12 +120,8 @@ public class PlayerManager {
 		if (lastEntityTask != null) {
 			lastEntityTask.cancel();
 		}
-		lastEntityTask = new BukkitRunnable() {
-			@Override
-			public void run() {
-				setLastEntityDamager(null);
-			}
-		}.runTaskLater(DeathMessages.getInstance(), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
+		lastEntityTask = Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessages.getInstance(),
+				task -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
 	}
 
 	public Entity getLastEntityDamager() {
@@ -182,6 +179,14 @@ public class PlayerManager {
 				cooldown--;
 			}
 		}.runTaskTimer(DeathMessages.getInstance(), 0, 20);
+		// For Folia
+		// java.lang.IllegalArgumentException: Initial delay ticks may not be <= 0
+//		ScheduledTask cooldownTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(DeathMessages.getInstance(), task -> {
+//				if (cooldown <= 0) {
+//					task.cancel();
+//				}
+//				cooldown--;
+//			}, 0L, 20L);
 	}
 
 	public void setCachedInventory(Inventory inventory) {

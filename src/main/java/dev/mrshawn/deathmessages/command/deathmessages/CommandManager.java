@@ -31,13 +31,13 @@ public class CommandManager implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
 		if (sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())) {
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return false;
 		}
 		if (args.length == 0) {
 			for (String s : Assets.formatMessage(
 					Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))) {
-				sender.sendMessage(s);
+				sender.sendMessage(Assets.convertLegacy(s));
 			}
 		} else {
 			DeathMessagesCommand cmd = get(args[0]);
@@ -50,7 +50,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			for (String s : Assets.formatMessage(
 					Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))) {
-				sender.sendMessage(s);
+				sender.sendMessage(Assets.convertLegacy(s));
 			}
 		}
 		return false;

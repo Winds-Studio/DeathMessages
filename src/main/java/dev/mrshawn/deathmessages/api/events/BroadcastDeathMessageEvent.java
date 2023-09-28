@@ -1,15 +1,14 @@
 package dev.mrshawn.deathmessages.api.events;
 
 import dev.mrshawn.deathmessages.enums.MessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.List;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 

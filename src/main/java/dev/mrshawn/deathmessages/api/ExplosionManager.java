@@ -1,9 +1,9 @@
 package dev.mrshawn.deathmessages.api;
 
 import dev.mrshawn.deathmessages.DeathMessages;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,9 @@ public class ExplosionManager {
 		this.effected = effected;
 		explosions.add(this);
 
-		//Destroys class. Wont need the info anymore
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				destroy();
-			}
-		}.runTaskLater(DeathMessages.getInstance(), 5 * 20);
+		//  Destroys class. Won't need the info anymore
+		Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessages.getInstance(),
+				task -> destroy(), 5L * 20L);
 	}
 
 	public UUID getPyro() {

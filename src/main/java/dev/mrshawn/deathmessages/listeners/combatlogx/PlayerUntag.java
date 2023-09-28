@@ -8,7 +8,7 @@ import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.listeners.EntityDeath;
 import dev.mrshawn.deathmessages.utils.Assets;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

@@ -11,16 +11,15 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
-import net.md_5.bungee.chat.ComponentSerializer;
+import java.util.List;
+import java.util.regex.Matcher;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.List;
-import java.util.regex.Matcher;
 
 public class BroadcastPlayerDeathListener implements Listener {
 
@@ -34,8 +33,8 @@ public class BroadcastPlayerDeathListener implements Listener {
 		if (!e.isCancelled()) {
 			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 				String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getLivingEntity());
-				message = message.replaceAll("%message%", Matcher.quoteReplacement(e.getTextComponent().toLegacyText()));
-				Bukkit.getConsoleSender().sendMessage(message);
+				message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
+				Bukkit.getConsoleSender().sendMessage(Assets.convertLegacy(message));
 			}
 
 			PlayerManager pm = PlayerManager.getPlayer(e.getPlayer());
@@ -83,20 +82,20 @@ public class BroadcastPlayerDeathListener implements Listener {
 					}
 				}
 			}
-			PluginMessaging.sendPluginMSG(e.getPlayer(), ComponentSerializer.toString(e.getTextComponent()));
+			PluginMessaging.sendPluginMSG(e.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
 		}
 	}
 
-	private void normal(BroadcastDeathMessageEvent e, PlayerManager pms, Player pls, List<World> worlds) {
+	private void normal(BroadcastDeathMessageEvent e, PlayerManager pm, Player player, List<World> worlds) {
 		if (DeathMessages.worldGuardExtension != null) {
-			if (DeathMessages.worldGuardExtension.getRegionState(pls, e.getMessageType().getValue()).equals(StateFlag.State.DENY)
+			if (DeathMessages.worldGuardExtension.getRegionState(player, e.getMessageType().getValue()).equals(StateFlag.State.DENY)
 					|| DeathMessages.worldGuardExtension.getRegionState(e.getPlayer(), e.getMessageType().getValue()).equals(StateFlag.State.DENY)) {
 				return;
 			}
 		}
 		try {
-			if (pms.getMessagesEnabled()) {
-				pls.spigot().sendMessage(e.getTextComponent());
+			if (pm.getMessagesEnabled()) {
+				player.sendMessage(e.getTextComponent());
 			}
 			if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
 				List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
@@ -113,11 +112,11 @@ public class BroadcastPlayerDeathListener implements Listener {
 				//Will reach the discord broadcast
 			}
 			if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
+				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
 				discordSent = true;
 			}
 			if (DeathMessages.discordSRVExtension != null && !discordSent) {
-				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(e.getTextComponent().toLegacyText()));
+				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
 				discordSent = true;
 			}
 		} catch (NullPointerException e1) {

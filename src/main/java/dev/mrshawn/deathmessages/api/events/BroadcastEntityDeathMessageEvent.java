@@ -2,22 +2,21 @@ package dev.mrshawn.deathmessages.api.events;
 
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.enums.MessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.List;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 
 public class BroadcastEntityDeathMessageEvent extends Event implements Cancellable {
 
-	//The killer
+	// The killer
 	private final PlayerManager player;
-	//The entity that was killed by a player
+	// The entity that was killed by a player
 	private final Entity entity;
 	private final MessageType messageType;
 	private final TextComponent textComponent;

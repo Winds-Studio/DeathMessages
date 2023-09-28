@@ -21,11 +21,11 @@ public class CommandBlacklist extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_BLACKLIST.getValue())) {
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		if (args.length == 0) {
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help"));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help")));
 		} else {
 			for (Map.Entry<String, Object> entry : UserData.getInstance().getConfig().getValues(false).entrySet()) {
 				String username = UserData.getInstance().getConfig().getString(entry.getKey() + ".username");
@@ -40,8 +40,8 @@ public class CommandBlacklist extends DeathMessagesCommand {
 						}
 						UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
 						UserData.getInstance().save();
-						sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
-								.replaceAll("%player%", args[0]));
+						sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
+								.replaceAll("%player%", args[0])));
 					} else {
 						if (Bukkit.getPlayer(UUID.fromString(entry.getKey())) != null) {
 							PlayerManager pm = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
@@ -51,14 +51,14 @@ public class CommandBlacklist extends DeathMessagesCommand {
 						}
 						UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
 						UserData.getInstance().save();
-						sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
-								.replaceAll("%player%", args[0]));
+						sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
+								.replaceAll("%player%", args[0])));
 					}
 					return;
 				}
 			}
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
-					.replaceAll("%player%", args[0]));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
+					.replaceAll("%player%", args[0])));
 		}
 
 	}

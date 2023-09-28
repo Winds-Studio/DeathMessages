@@ -25,6 +25,11 @@ Hooks:
   WorldGuard:
     Enabled: true
 
+  # If CombatLogX is found, enable the hook
+  # Enable/Disable
+  CombatLogX:
+    Enabled: true
+
   # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) or DiscordSRV
   # (https://www.spigotmc.org/resources/discordsrv.18494/)is installed, and enabled here.
   # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right-click the

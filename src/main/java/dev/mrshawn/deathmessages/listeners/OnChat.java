@@ -29,11 +29,11 @@ public class OnChat implements Listener {
 				PlayerDeathMessages.getInstance().getConfig().set("Mobs." + mobName + "." + mode + "." + damageType, list);
 				PlayerDeathMessages.getInstance().save();
 				PlayerDeathMessages.getInstance().reload();
-				p.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
+				p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
 						.replaceAll("%message%", e.getMessage())
 						.replaceAll("%mob_name%", mobName)
 						.replaceAll("%mode%", mode)
-						.replaceAll("%damage_type%", damageType));
+						.replaceAll("%damage_type%", damageType)));
 			} else {
 				String mobName = spl[0];
 				String damageType = spl[1];
@@ -42,10 +42,10 @@ public class OnChat implements Listener {
 				EntityDeathMessages.getInstance().getConfig().set("Entities." + mobName + "." + damageType, list);
 				EntityDeathMessages.getInstance().save();
 				EntityDeathMessages.getInstance().reload();
-				p.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
+				p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
 						.replaceAll("%message%", e.getMessage())
 						.replaceAll("%mob_name%", mobName)
-						.replaceAll("%damage_type%", damageType));
+						.replaceAll("%damage_type%", damageType)));
 			}
 		}
 	}

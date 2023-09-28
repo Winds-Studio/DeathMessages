@@ -1,21 +1,21 @@
 package dev.mrshawn.deathmessages.utils;
 
-/*******************************************************************************
- *
- *     CommentedConfiguration
- *     Developed by Ome_R
- *
- *     You may use the resource and/or modify it - but not
- *     claiming it as your own work. You are not allowed
- *     to remove this message, unless being permitted by
- *     the developer of the resource.
- *
- *     Spigot: https://www.spigotmc.org/resources/authors/ome_r.25629/
- *     MC-Market: https://www.mc-market.org/resources/authors/40228/
- *     Github: https://github.com/OmerBenGera?tab=repositories
- *     Website: https://bg-software.com/
- *
- *******************************************************************************/
+/*
+
+ 	CommentedConfiguration
+ 	Developed by Ome_R
+
+ 	You may use the resource and/or modify it - but not
+ 	claiming it as your own work. You are not allowed
+ 	to remove this message, unless being permitted by
+ 	the developer of the resource.
+
+ 	Spigot: https://www.spigotmc.org/resources/authors/ome_r.25629/
+ 	MC-Market: https://www.mc-market.org/resources/authors/40228/
+ 	Github: https://github.com/OmerBenGera?tab=repositories
+ 	Website: https://bg-software.com/
+
+ */
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -131,39 +131,39 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 */
 	@Override
 	public void loadFromString(@NotNull String contents) throws InvalidConfigurationException {
-		//Load data of the base yaml (keys and values).
+		// Load data of the base yaml (keys and values).
 		super.loadFromString(contents);
 
-		//Parse the contents into lines.
+		// Parse the contents into lines.
 		String[] lines = contents.split("\n");
 		int currentIndex = 0;
 
-		//Variables that are used to track progress.
+		// Variables that are used to track progress.
 		StringBuilder comments = new StringBuilder();
 		String currentSection = "";
 
 		while (currentIndex < lines.length) {
-			//Checking if the current line is a comment.
+			// Checking if the current line is a comment.
 			if (isComment(lines[currentIndex])) {
-				//Adding the comment to the builder with an enter at the end.
+				// Adding the comment to the builder with an enter at the end.
 				comments.append(lines[currentIndex]).append("\n");
 			}
 
-			//Checking if the current line is a valid new section.
+			// Checking if the current line is a valid new section.
 			else if (isNewSection(lines[currentIndex])) {
-				//Parsing the line into a full-path.
+				// Parsing the line into a full-path.
 				currentSection = getSectionPath(this, lines[currentIndex], currentSection);
 
-				//If there is a valid comment for the section.
+				// If there is a valid comment for the section.
 				if (comments.length() > 1)
-					//Adding the comment.
+					// Adding the comment.
 					setComment(currentSection, comments.substring(0, comments.length() - 1));
 
-				//Reseting the comment variable for further usage.
+				// Reseting the comment variable for further usage.
 				comments = new StringBuilder();
 			}
 
-			//Skipping to the next line.
+			// Skipping to the next line.
 			currentIndex++;
 		}
 	}
@@ -175,36 +175,36 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 */
 	@Override
 	public @NotNull String saveToString() {
-		//First, we set headers to null - as we will handle all comments, including headers, in this method.
-		this.options().header(null);
-		//Get the string of the data (keys and values) and parse it into an array of lines.
+		// First, we set headers to null - as we will handle all comments, including headers, in this method.
+		this.options().setHeader(null);
+		// Get the string of the data (keys and values) and parse it into an array of lines.
 		List<String> lines = new ArrayList<>(Arrays.asList(super.saveToString().split("\n")));
 
-		//Variables that are used to track progress.
+		// Variables that are used to track progress.
 		int currentIndex = 0;
 		String currentSection = "";
 
 		while (currentIndex < lines.size()) {
 			String line = lines.get(currentIndex);
 
-			//Checking if the line is a new section.
+			// Checking if the line is a new section.
 			if (isNewSection(line)) {
-				//Parsing the line into a full-path.
+				// Parsing the line into a full-path.
 				currentSection = getSectionPath(this, line, currentSection);
-				//Checking if that path contains a comment
+				// Checking if that path contains a comment
 				if (containsComment(currentSection)) {
-					//Adding the comment to the lines array at that index (adding it one line before the actual line)
+					// Adding the comment to the lines array at that index (adding it one line before the actual line)
 					lines.add(currentIndex, getComment(currentSection));
-					//Skipping one line so the pointer will point to the line we checked again.
+					// Skipping one line so the pointer will point to the line we checked again.
 					currentIndex++;
 				}
 			}
 
-			//Skipping to the next line.
+			// Skipping to the next line.
 			currentIndex++;
 		}
 
-		//Parsing the array of lines into a one single string.
+		// Parsing the array of lines into a one single string.
 		StringBuilder contents = new StringBuilder();
 		for (String line : lines)
 			contents.append("\n").append(line);
@@ -221,40 +221,41 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	 * @return Returns true if there were any changes, otherwise false.
 	 */
 	private boolean syncConfigurationSection(CommentedConfiguration commentedConfig, ConfigurationSection section, List<String> ignoredSections) {
-		//Variables that are used to track progress.
+		// Variables that are used to track progress.
 		boolean changed = false;
+		if (section != null) return false;
 
-		//Going through all the keys of the section.
+		// Going through all the keys of the section.
 		for (String key : section.getKeys(false)) {
-			//Parsing the key into a full-path.
+			// Parsing the key into a full-path.
 			String path = section.getCurrentPath().isEmpty() ? key : section.getCurrentPath() + "." + key;
 
-			//Checking if the key is also a section.
+			// Checking if the key is also a section.
 			if (section.isConfigurationSection(key)) {
-				//Checking if the section is ignored.
+				// Checking if the section is ignored.
 				boolean isIgnored = ignoredSections.stream().anyMatch(path::contains);
-				//Checking if the config contains the section.
+				// Checking if the config contains the section.
 				boolean containsSection = contains(path);
-				//If the config doesn't contain the section, or it's not ignored - we will sync data.
+				// If the config doesn't contain the section, or it's not ignored - we will sync data.
 				if (!containsSection || !isIgnored) {
-					//Syncing data and updating the changed variable.
+					// Syncing data and updating the changed variable.
 					changed = syncConfigurationSection(commentedConfig, section.getConfigurationSection(key), ignoredSections) || changed;
 				}
 			}
 
-			//Checking if the config contains the path (not a section).
+			// Checking if the config contains the path (not a section).
 			else if (!contains(path)) {
-				//Saving the value of the key into the config.
+				// Saving the value of the key into the config.
 				set(path, section.get(key));
-				//Updating variables.
+				// Updating variables.
 				changed = true;
 			}
 
-			//Checking if there is a valid comment for the path, and also making sure the comments are not the same.
+			// Checking if there is a valid comment for the path, and also making sure the comments are not the same.
 			if (commentedConfig.containsComment(path) && !commentedConfig.getComment(path).equals(getComment(path))) {
-				//Saving the comment of the key into the config.
+				// Saving the comment of the key into the config.
 				setComment(path, commentedConfig.getComment(path));
-				//Updating variable.
+				// Updating variable.
 				changed = true;
 			}
 
@@ -325,9 +326,9 @@ public final class CommentedConfiguration extends YamlConfiguration {
 			}
 
 			config.loadFromString(contents.toString());
-		} catch (IOException | InvalidConfigurationException ex) {
+		} catch (IOException | InvalidConfigurationException e) {
 			config.flagAsFailed();
-			ex.printStackTrace();
+			e.printStackTrace();
 		}
 
 		return config;
@@ -377,8 +378,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
             /*Getting the parent of the new section. The loop will stop in one of the following situations:
             1) The parent is empty - which means we have no where to go, as that's the root section.
             2) The config contains a valid path that was built with <parent-section>.<new-section>.*/
-			while (!parentSection.isEmpty() &&
-					!commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection)) ;
+			while (!parentSection.isEmpty() && !commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection));
 
 			//Parsing and building the new full path.
 			newSection = parentSection.trim().isEmpty() ? newSection : parentSection + "." + newSection;

@@ -10,11 +10,11 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
-import dev.mrshawn.deathmessages.hooks.Metrics;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.kotlin.utils.EventUtils;
 import dev.mrshawn.deathmessages.listeners.*;
+import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
@@ -22,15 +22,15 @@ import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.worldguard.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.worldguard.WorldGuardExtension;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 public class DeathMessages extends JavaPlugin {
 
@@ -78,16 +78,14 @@ public class DeathMessages extends JavaPlugin {
 		instance = null;
 	}
 
-	public static String serverVersion() {
-		return Bukkit.getServer().getClass().getPackage().getName()
-				.replace(".", ",")
-				.split(",")[3];
-	}
-
 	public static int majorVersion() {
-		return Integer.parseInt(serverVersion()
+		System.out.println(Bukkit.getServer().getBukkitVersion()
 				.replace("1_", "")
-				.replaceAll("_R\\d", "")
+				.replaceAll("_R\\d+", "")
+				.replaceAll("v", ""));
+		return Integer.parseInt(Bukkit.getServer().getBukkitVersion()
+				.replace("1_", "")
+				.replaceAll("_R\\d+", "")
 				.replaceAll("v", ""));
 	}
 
@@ -139,14 +137,12 @@ public class DeathMessages extends JavaPlugin {
 			getLogger().info("WorldGuard Hook Enabled!");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null
-				&& config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
+		if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordBotAPIExtension = new DiscordBotAPIExtension();
 			getLogger().info("DiscordBotAPI Hook Enabled!");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null
-				&& config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
+		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordSRVExtension = new DiscordSRVExtension();
 			getLogger().info("DiscordSRV Hook Enabled!");
 		}
@@ -166,15 +162,13 @@ public class DeathMessages extends JavaPlugin {
 			}
 		}
 
-//
-//        if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null) {
-//            combatLogXAPIEnabled = true;
-//            Bukkit.getPluginManager().registerEvents(new PlayerUntag(), this);
-//            getLogger().info("CombatLogX Hook Enabled!");
-//        }
+		if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
+			combatLogXAPIEnabled = true;
+			Bukkit.getPluginManager().registerEvents(new PlayerUntag(), this);
+			getLogger().info("CombatLogX Hook Enabled!");
+		}
 
-		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null
-				&& config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
+		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
 			mythicMobs = MythicBukkit.inst();
 			mythicmobsEnabled = true;
 			getLogger().info("MythicMobs Hook Enabled!");
@@ -195,8 +189,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initializeHooksOnLoad() {
-		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null
-				&& config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
+		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
 			try {
 				final WorldGuardPlugin worldGuardPlugin = WorldGuardPlugin.inst();
 				if (worldGuardPlugin == null) throw new Exception();
@@ -224,7 +217,7 @@ public class DeathMessages extends JavaPlugin {
 		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES) && majorVersion() >= 13) {
 			for (World world : Bukkit.getWorlds()) {
 				if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
-					instance.getServer().getGlobalRegionScheduler().run(instance, run -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
+					Bukkit.getGlobalRegionScheduler().run(instance, task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
 				}
 			}
 		}

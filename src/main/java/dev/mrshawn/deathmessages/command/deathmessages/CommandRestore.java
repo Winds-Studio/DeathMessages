@@ -16,19 +16,19 @@ public class CommandRestore extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_RESTORE.getValue())) {
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		if (args.length <= 1) {
-			sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Usage"));
+			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Usage")));
 		} else {
 			String code = args[0];
 			boolean excludeUserData = Boolean.parseBoolean(args[1]);
 			if (ConfigManager.getInstance().restore(code, excludeUserData)) {
-				sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
-						.replaceAll("%backup-code%", code));
+				sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
+						.replaceAll("%backup-code%", code)));
 			} else {
-				sender.sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
+				sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found")));
 			}
 		}
 	}

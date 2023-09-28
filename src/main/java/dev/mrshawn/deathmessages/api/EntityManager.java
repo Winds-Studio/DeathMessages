@@ -5,18 +5,18 @@ import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//Class designed to keep track of damage and data to mobs that were damaged by players
+// Class designed to keep track of damage and data to mobs that were damaged by players
 
 public class EntityManager {
 
@@ -31,7 +31,7 @@ public class EntityManager {
 	private Projectile lastPlayerProjectile;
 	private Location lastLocation;
 
-	private BukkitTask lastPlayerTask;
+	private ScheduledTask lastPlayerTask;
 
 	private static final List<EntityManager> entities = new ArrayList<>();
 
@@ -54,8 +54,8 @@ public class EntityManager {
 		return mobType;
 	}
 
-	public void setLastDamageCause(DamageCause dc) {
-		this.damageCause = dc;
+	public void setLastDamageCause(DamageCause damageCause) {
+		this.damageCause = damageCause;
 	}
 
 	public DamageCause getLastDamage() {
@@ -70,12 +70,8 @@ public class EntityManager {
 		if (lastPlayerTask != null) {
 			lastPlayerTask.cancel();
 		}
-		lastPlayerTask = new BukkitRunnable() {
-			@Override
-			public void run() {
-				destroy();
-			}
-		}.runTaskLater(DeathMessages.getInstance(), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+		lastPlayerTask = Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessages.getInstance(),
+				task -> destroy(), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
 		this.damageCause = DamageCause.CUSTOM;
 	}
 
