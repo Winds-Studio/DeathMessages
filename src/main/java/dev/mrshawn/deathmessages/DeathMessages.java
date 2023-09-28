@@ -22,8 +22,6 @@ import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.worldguard.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.worldguard.WorldGuardExtension;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -31,6 +29,9 @@ import org.bukkit.World;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class DeathMessages extends JavaPlugin {
 
@@ -79,14 +80,11 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public static int majorVersion() {
-		System.out.println(Bukkit.getServer().getBukkitVersion()
-				.replace("1_", "")
-				.replaceAll("_R\\d+", "")
-				.replaceAll("v", ""));
+		// Dreeam - eg. 1.20.2-R0.1-SNAPSHOT, replace string before first decimal point, then replace all string after the decimal point
 		return Integer.parseInt(Bukkit.getServer().getBukkitVersion()
-				.replace("1_", "")
-				.replaceAll("_R\\d+", "")
-				.replaceAll("v", ""));
+				.replaceFirst("^(\\d+)\\.", "")
+				.replaceAll("\\.(.+)", "")
+		);
 	}
 
 	private void initializeConfigs() {
@@ -100,7 +98,7 @@ public class DeathMessages extends JavaPlugin {
 
 	private void initializeListeners() {
 		EventUtils.INSTANCE.registerEvents(
-				// Self
+				// DeathMessages
 				new BroadcastPlayerDeathListener(),
 				new BroadcastEntityDeathListener(),
 				// Bukkit
