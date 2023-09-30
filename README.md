@@ -32,7 +32,7 @@ For Developers:
 
 ## Special Thanks To:
 
-<a href="https://cloud.swordsman.com.cn/"><img src="JiankeServer.jpg" alt="Jianke Cloud Host" align="left" hspace="10"></a>
+<a href="https://cloud.swordsman.com.cn/"><img src="JiankeServer.jpg" alt="Jianke Cloud Host" align="left" hspace="8"></a>
 Jianke Cloud Host | 剑客云
 
 If you want to find a cheaper, high performance, stable with lower latency, then Jianke Cloud Host is a good choice! Registers and purchases in [here](https://cloud.swordsman.com.cn/?i8ab42c).
