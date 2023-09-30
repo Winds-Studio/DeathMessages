@@ -31,9 +31,8 @@ For Developers:
 - Optimize Imports or code style
 
 ## Special Thanks To:
-<a href="https://cloud.swordsman.com.cn/"><img src="JiankeServer.jpg" alt="Jianke Cloud Host" align="left" hspace="10" width="300"></a>
-Jianke Cloud Host | 剑客云
+<a href="https://cloud.swordsman.com.cn/"><img src="JiankeServer.jpg" alt="Jianke Cloud Host" align="left" hspace="6" width="300"></a>
 
-If you want to find a cheaper, high performance, stable with lower latency, then Jianke Cloud Host is a good choice! You can register and purchase in [here](https://cloud.swordsman.com.cn/?i8ab42c)
+If you want to find a cheaper, high performance, stable with lower latency, then Jianke Cloud Host is a good choice! Registers and purchases in [here](https://cloud.swordsman.com.cn/?i8ab42c)
 
 如果你想找一个低价高性能, 低延迟的云服务商，剑客云是个不错的选择! 你可以在[这里](https://cloud.swordsman.com.cn/?i8ab42c)注册
