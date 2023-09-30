@@ -8,7 +8,9 @@ Original Contact: [Discord](https://discord.gg/dhJnq7R), if you are urged to joi
 
 ## Requirements
 
-Minecraft version: 1.17.1
+Supporting 1.17.1 - Latest Minecraft version (1.20.2)
+
+Paper & Paper forks, 
 
 ## Contact
 
