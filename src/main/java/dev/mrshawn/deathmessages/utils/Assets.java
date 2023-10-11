@@ -15,7 +15,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -89,15 +89,12 @@ public class Assets {
 	}
 
 	public static boolean itemNameIsWeapon(ItemStack itemStack) {
-		if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) {
-			return false;
-		}
-		Component displayName = itemStack.getItemMeta().displayName();
+		if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return false;
+		String displayName = LegacyComponentSerializer.legacyAmpersand().serialize(itemStack.getItemMeta().displayName());
 
 		for (String s : config.getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON)) {
-			assert displayName != null;
 			Pattern pattern = Pattern.compile(s);
-            Matcher matcher = pattern.matcher(LegacyComponentSerializer.legacyAmpersand().serialize(displayName));
+			Matcher matcher = pattern.matcher(displayName);
 			if (matcher.find()) {
 				return true;
 			}
@@ -106,10 +103,8 @@ public class Assets {
 	}
 
 	public static boolean itemMaterialIsWeapon(ItemStack itemStack) {
-		if (itemStack == null) return false; // Dreeam - No NPE
 		for (String s : config.getStringList(Config.CUSTOM_ITEM_MATERIAL_IS_WEAPON)) {
 			Material material = Material.getMaterial(s);
-			if (material == null) return false; // Dreeam - No NPE
 			if (itemStack.getType().equals(material)) {
 				return true;
 			}
@@ -117,32 +112,26 @@ public class Assets {
 		return false;
 	}
 
-	// Dreeam start - need check the !
 	public static boolean isWeapon(ItemStack itemStack) {
 		return isWeapon(itemStack.getType())
-				&& !itemNameIsWeapon(itemStack)
-				&& !itemMaterialIsWeapon(itemStack);
+				|| itemNameIsWeapon(itemStack)
+				|| itemMaterialIsWeapon(itemStack);
 	}
 
 	public static boolean isWeapon(Material material) {
 		String materialName = material.toString();
-		return !materialName.contains("SHOVEL")
-				&& !materialName.contains("PICKAXE")
-				&& !materialName.contains("AXE")
-				&& !materialName.contains("HOE")
-				&& !materialName.contains("SWORD")
-				&& !materialName.contains("BOW");
+		return materialName.contains("SHOVEL")
+				|| materialName.contains("PICKAXE")
+				|| materialName.contains("AXE")
+				|| materialName.contains("HOE")
+				|| materialName.contains("SWORD")
+				|| materialName.contains("BOW");
 	}
 
 	public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
-		if (mob.getEquipment() == null) {
-			return false;
-		} else if (isWeapon(mob.getEquipment().getItemInMainHand())) {
-			return false;
-		} else return !damageCause.equals(EntityDamageEvent.DamageCause.THORNS);
-
+		if (mob.getEquipment() == null || damageCause.equals(EntityDamageEvent.DamageCause.THORNS)) return false;
+		return isWeapon(mob.getEquipment().getItemInMainHand());
 	}
-	// Dreeam end
 
 	public static TextComponent playerDeathMessage(PlayerManager pm, boolean gang) {
 		LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
@@ -162,14 +151,13 @@ public class Assets {
 		if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
 			// Bed kill
 			ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
+			PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
 			if (explosionManager.getMaterial().name().contains("BED")) {
-				PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-				return get(gang, pm, pyro.getPlayer(), "Bed");
+				if (pyro != null) return get(gang, pm, pyro.getPlayer(), "Bed");
 			}
 			// Respawn Anchor kill
 			if (DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-				PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-				return get(gang, pm, pyro.getPlayer(), "Respawn-Anchor");
+				if (pyro != null) return get(gang, pm, pyro.getPlayer(), "Respawn-Anchor");
 			}
 		}
 		if (hasWeapon) {
@@ -246,115 +234,88 @@ public class Assets {
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
-		System.out.println(msg);
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
 			TextComponent prefix = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(prefix);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
+		if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
+			try {
+				FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
+				String material = fb.getBlockData().getMaterial().toString().toLowerCase();
+				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
+				String mssa = msg.replaceAll("%block%", configValue);
+				tc.append(Assets.convertLegacy(mssa));
+			} catch (NullPointerException e) {
+				DeathMessages.getInstance().getLogger().severe("Could not parse %block%. Please check your config for a wrong value." +
+						" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
+						" on the discord https://discord.gg/dhJnq7R");
+				pm.setLastEntityDamager(null);
+				return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
 			}
-		} else {
-			firstSection = msg;
-		}
-		StringBuilder lastColor = new StringBuilder();
-		for (String splitMessage : firstSection.split(" ")) {
+		} else if (msg.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
+			try {
+				String material = pm.getLastClimbing().toString().toLowerCase();
+				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
+				String mssa = msg.replaceAll("%climbable%", configValue);
+				tc.append(Assets.convertLegacy(mssa));
+			} catch (NullPointerException e) {
+				DeathMessages.getInstance().getLogger().severe("Could not parse %climbable%. Please check your config for a wrong value." +
+						" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
+						" on the discord https://discord.gg/dhJnq7R - Parsed block: " + pm.getLastClimbing().toString());
+				pm.setLastClimbing(null);
+				return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
+			}
+		} else if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+			ItemStack i = pm.getPlayer().getEquipment().getItemInMainHand();
 
-			if (splitMessage.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
-				try {
-					FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-					String material = fb.getBlockData().getMaterial().toString().toLowerCase();
-					String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
-					String mssa = splitMessage.replaceAll("%block%", configValue);
-					tc.append(Assets.convertLegacy(mssa));
-					lastColor.append(mssa);
-				} catch (NullPointerException e) {
-					DeathMessages.getInstance().getLogger().severe("Could not parse %block%. Please check your config for a wrong value." +
-							" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
-							" on the discord https://discord.gg/dhJnq7R");
-					pm.setLastEntityDamager(null);
-					return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
-				}
-
-			} else if (splitMessage.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
-				try {
-					String material = pm.getLastClimbing().toString().toLowerCase();
-					String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
-					String mssa = splitMessage.replaceAll("%climbable%", configValue);
-					tc.append(Assets.convertLegacy(mssa));
-                    lastColor = new StringBuilder(lastColor + mssa);
-				} catch (NullPointerException e) {
-					DeathMessages.getInstance().getLogger().severe("Could not parse %climbable%. Please check your config for a wrong value." +
-							" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
-							" on the discord https://discord.gg/dhJnq7R - Parsed block: " + pm.getLastClimbing().toString());
-					pm.setLastClimbing(null);
-					return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
-				}
-			} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && splitMessage.contains("%weapon%")) {
-				ItemStack i = pm.getPlayer().getEquipment().getItemInMainHand();
-
-				if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
-					return getNaturalDeath(pm, "Projectile-Unknown");
-				}
-				if (DeathMessages.majorVersion() >= 14) {
-					if (!i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
+			if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
+				return getNaturalDeath(pm, "Projectile-Unknown");
+			}
+			if (DeathMessages.majorVersion() >= 14 && !i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
+				return getNaturalDeath(pm, "Projectile-Unknown");
+			}
+			String displayName;
+			if (i.getItemMeta() != null && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+					if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
+						if (i.getEnchantments().isEmpty()) {
+							return getNaturalDeath(pm, "Projectile-Unknown");
+						}
+					} else {
 						return getNaturalDeath(pm, "Projectile-Unknown");
 					}
 				}
-				String displayName;
-				if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
-					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-						if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
-							if (i.getEnchantments().isEmpty()) {
-								return getNaturalDeath(pm, "Projectile-Unknown");
-							}
-						} else {
-							return getNaturalDeath(pm, "Projectile-Unknown");
-						}
-					}
-					displayName = Assets.convertString(i.getType().name());
-				} else {
-					displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.displayName());
-				}
-				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-					displayName = spl[0] + displayName;
-				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-					displayName = displayName + spl[1];
-				}
-				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				displayName = Assets.convertString(i.getType().name());
 			} else {
-				TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + splitMessage, pm, null) + " ");
-				tc.append(tx);
-
-//				for (BaseComponent bs : tx.getExtra()) {
-//					if (!(bs.getColor() == null)) {
-//						lastColor = bs.getColor().toString();
-//					}
-//					lastFont = formatting(bs);
-//				}
+				displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.displayName());
 			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, null))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand( "/" + playerDeathPlaceholders(cmd, pm, null)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, null)));
+			String[] spl = msg.split("%weapon%");
+			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
+				displayName = spl[0] + displayName;
 			}
+			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
+				displayName = displayName + spl[1];
+			}
+			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+		} else {
+			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, null) + " ");
+			tc.append(tx);
 		}
+		// TODO: need to re-write the logic of death message click event & hover text.
+//		if (msg.length() >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(msg[1], pm, null))));
+//		}
+//		if (msg.length() == 3) {
+//			if (msg[2].startsWith("COMMAND:")) {
+//				String cmd = msg[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand( "/" + playerDeathPlaceholders(cmd, pm, null)));
+//			} else if (msg[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = msg[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, null)));
+//			}
+//		}
 		return tc.build();
 	}
 
@@ -382,71 +343,50 @@ public class Assets {
 			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
-			}
-		} else {
-			firstSection = msg;
-		}
-		String lastColor = "";
-		String lastFont = "";
-		for (String splitMessage : firstSection.split(" ")) {
-			if (splitMessage.contains("%weapon%")) {
-				ItemStack i = mob.getEquipment().getItemInMainHand();
-				String displayName;
-				if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
-					if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-						if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
-							if (i.getEnchantments().isEmpty()) {
-								return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
-										.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
-							}
-						} else {
+		if (msg.contains("%weapon%")) {
+			ItemStack i = mob.getEquipment().getItemInMainHand();
+			String displayName;
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+				if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+					if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
+						if (i.getEnchantments().isEmpty()) {
 							return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
 									.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
 						}
+					} else {
+						return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
+								.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
 					}
-					displayName = Assets.convertString(i.getType().name());
-				} else {
-					displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.displayName());
 				}
-				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-					displayName = spl[0] + displayName;
-				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-					displayName = displayName + spl[1];
-				}
-				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				displayName = Assets.convertString(i.getType().name());
 			} else {
-				TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
-				tc.append(tx);
-//				for (BaseComponent bs : tx.getExtra()) {
-//					if (!(bs.getColor() == null)) {
-//						lastColor = bs.getColor().toString();
-//					}
-//					lastFont = formatting(bs);
-//				}
+				displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.displayName());
 			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+			String[] spl = msg.split("%weapon%");
+			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
+				displayName = spl[0] + displayName;
 			}
+			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
+				displayName = displayName + spl[1];
+			}
+			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+		} else {
+			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
+			tc.append(tx);
 		}
+//		if (sec.length >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//		}
+//		if (sec.length == 3) {
+//			if (sec[2].startsWith("COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+//			}
+//		}
 		return tc.build();
 	}
 
@@ -477,71 +417,49 @@ public class Assets {
 			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
-			}
-		} else {
-			firstSection = msg;
-		}
-		String lastColor = "";
-		String lastFont = "";
-		for (String splitMessage : firstSection.split(" ")) {
-			if (splitMessage.contains("%weapon%")) {
-				ItemStack i = p.getEquipment().getItemInMainHand();
-				String displayName;
-				if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
-					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-						if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
-							if (i.getEnchantments().isEmpty()) {
-								return getEntityDeath(p, e,
-										config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
-							}
-						} else {
+		if (msg.contains("%weapon%")) {
+			ItemStack i = p.getEquipment().getItemInMainHand();
+			String displayName;
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+					if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
+						if (i.getEnchantments().isEmpty()) {
 							return getEntityDeath(p, e,
 									config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
 						}
+					} else {
+						return getEntityDeath(p, e,
+								config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
 					}
-					displayName = Assets.convertString(i.getType().name());
-				} else {
-					displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
 				}
-				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-					displayName = spl[0] + displayName;
-				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-					displayName = displayName + spl[1];
-				}
-				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				displayName = Assets.convertString(i.getType().name());
 			} else {
-				TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(lastColor + lastFont + splitMessage, p, e, hasOwner) + " ");
-				tc.append(tx);
-//				for (BaseComponent bs : tx.getExtra()) {
-//					if (!(bs.getColor() == null)) {
-//						lastColor = bs.getColor().toString();
-//					}
-//					lastFont = formatting(bs);
-//				}
+				displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
 			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
+			String[] spl = msg.split("%weapon%");
+			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
+				displayName = spl[0] + displayName;
 			}
+			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
+				displayName = displayName + spl[1];
+			}
+			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+		} else {
+			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, p, e, hasOwner) + " ");
+			tc.append(tx);
 		}
+//		if (sec.length >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
+//		}
+//		if (sec.length == 3) {
+//			if (sec[2].startsWith("COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
+//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
+//			}
 		return tc.build();
 	}
 
@@ -576,48 +494,26 @@ public class Assets {
 			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
-			}
-		} else {
-			firstSection = msg;
-		}
-		String lastColor = "";
-		String lastFont = "";
-		for (String splitMessage : firstSection.split(" ")) {
-			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
-			tc.append(tx);
-//			for (BaseComponent bs : tx.getExtra()) {
-//				if (!(bs.getColor() == null)) {
-//					lastColor = bs.getColor().toString();
-//				}
-//				lastFont = formatting(bs);
+		TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
+		tc.append(tx);
+//		if (sec.length >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//		}
+//		if (sec.length == 3) {
+//			if (sec[2].startsWith("COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
 //			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-			}
-		}
+//		}
 		return tc.build();
 	}
 
 	public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
 		final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
-		final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue()
-				+ "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
+		final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue() + "." + LegacyComponentSerializer.legacyAmpersand().serialize(mob.customName()).toLowerCase();
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
 
 		//List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
@@ -638,66 +534,45 @@ public class Assets {
 			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
-			}
-		} else {
-			firstSection = msg;
-		}
-		String lastColor = "";
-		String lastFont = "";
-		for (String splitMessage : firstSection.split(" ")) {
-			if (splitMessage.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
-				ItemStack i = mob.getEquipment().getItemInMainHand();
-				String displayName;
-				if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
-					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-						if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
-								.equals(projectileDamage)) {
-							return getProjectile(gang, pm, mob, config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO));
-						}
+		if (msg.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
+			ItemStack i = mob.getEquipment().getItemInMainHand();
+			String displayName;
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
+							.equals(projectileDamage)) {
+						return getProjectile(gang, pm, mob, config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO));
 					}
-					displayName = Assets.convertString(i.getType().name());
-				} else {
-					displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
 				}
-				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-					displayName = spl[0] + "&r" + displayName;
-				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-					displayName = displayName + "&r" + spl[1];
-				}
-				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				displayName = Assets.convertString(i.getType().name());
 			} else {
-				TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(lastColor + lastFont + splitMessage, pm, mob) + " ");
-				tc.append(tx);
-//				for (BaseComponent bs : tx.getExtra()) {
-//					if (!(bs.getColor() == null)) {
-//						lastColor = bs.getColor().toString();
-//					}
-//					lastFont = formatting(bs);
-//				}
+				displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
 			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+			String[] spl = msg.split("%weapon%");
+			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
+				displayName = spl[0] + "&r" + displayName;
 			}
+			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
+				displayName = displayName + "&r" + spl[1];
+			}
+			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+		} else {
+			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
+			tc.append(tx);
 		}
+//		if (sec.length >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//		}
+//		if (sec.length == 3) {
+//			if (sec[2].startsWith("COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
+//			}
+//		}
 		return tc.build();
 	}
 
@@ -729,67 +604,46 @@ public class Assets {
 			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
-			}
-		} else {
-			firstSection = msg;
-		}
-		String lastColor = "";
-		String lastFont = "";
-		for (String splitMessage : firstSection.split(" ")) {
-			if (splitMessage.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
-				ItemStack i = p.getEquipment().getItemInMainHand();
-				String displayName;
-				if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
-					if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-						if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
-								.equals(projectileDamage)) {
-							return getEntityDeathProjectile(p, em,
-									config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO), mobType);
-						}
+		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
+			ItemStack i = p.getEquipment().getItemInMainHand();
+			String displayName;
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
+							.equals(projectileDamage)) {
+						return getEntityDeathProjectile(p, em,
+								config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO), mobType);
 					}
-					displayName = Assets.convertString(i.getType().name());
-				} else {
-					displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
 				}
-				String[] spl = splitMessage.split("%weapon%");
-				if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-					displayName = spl[0] + "&r" + displayName;
-				}
-				if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-					displayName = displayName + "&r" + spl[1];
-				}
-				HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(Key.key(i.translationKey()), i.getAmount());
-				tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+				displayName = Assets.convertString(i.getType().name());
 			} else {
-				TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(lastColor + lastFont + splitMessage, p, em.getEntity(), hasOwner) + " ");
-				tc.append(tx);
-//				for (BaseComponent bs : tx) {
-//					if (!(bs.getColor() == null)) {
-//						lastColor = bs.getColor().toString();
-//					}
-//					lastFont = formatting(bs);
-//				}
+				displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
 			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
+			String[] spl = msg.split("%weapon%");
+			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
+				displayName = spl[0] + "&r" + displayName;
 			}
+			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
+				displayName = displayName + "&r" + spl[1];
+			}
+			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+		} else {
+			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner) + " ");
+			tc.append(tx);
 		}
+//		if (sec.length >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
+//		}
+//		if (sec.length == 3) {
+//			if (sec[2].startsWith("COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
+//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
+//			}
+//		}
 		return tc.build();
 	}
 
@@ -824,41 +678,20 @@ public class Assets {
 			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		String[] sec = msg.split("::");
-		String firstSection;
-		if (msg.contains("::")) {
-			if (sec.length == 0) {
-				firstSection = msg;
-			} else {
-				firstSection = sec[0];
-			}
-		} else {
-			firstSection = msg;
-		}
-		String lastColor = "";
-		String lastFont = "";
-		for (String splitMessage : firstSection.split(" ")) {
-			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(lastColor + lastFont + splitMessage, player, entity, hasOwner) + " ");
-			tc.append(tx);
-//			for (BaseComponent bs : tx.getExtra()) {
-//				if (!(bs.getColor() == null)) {
-//					lastColor = bs.getColor().toString();
-//				}
-//				lastFont = formatting(bs);
+		TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, player, entity, hasOwner) + " ");
+		tc.append(tx);
+//		if (sec.length >= 2) {
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
+//		}
+//		if (sec.length == 3) {
+//			if (sec[2].startsWith("COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
+//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
+//				String cmd = sec[2].split(":")[1];
+//				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
 //			}
-		}
-		if (sec.length >= 2) {
-			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
-		}
-		if (sec.length == 3) {
-			if (sec[2].startsWith("COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
-			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-				String cmd = sec[2].split(":")[1];
-				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
-			}
-		}
+//		}
 		return tc.build();
 	}
 

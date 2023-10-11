@@ -85,9 +85,6 @@
                 <version>3.3.0</version>
                 <configuration>
                     <archive>
-                        <manifestEntries>
-                            <Built-By/>
-                        </manifestEntries>
                         <addMavenDescriptor>false</addMavenDescriptor>
                     </archive>
                 </configuration>
@@ -111,11 +108,11 @@
                     <relocations>
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>${project.groupId}.acf</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.acf</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>${project.groupId}.locales</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.locales</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
@@ -131,11 +128,11 @@
                         </relocation>
                         <relocation>
                             <pattern>net.dv8tion.jda</pattern>
-                            <shadedPattern>github.scarsz.discordsrv.dependencies.jda</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.jda</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>ev.mrshawn.deathmessages.shade.bstats</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -158,10 +155,6 @@
     </build>
 
     <repositories>
-<!--        <repository>-->
-<!--            <id>local</id>-->
-<!--            <url>file://${project.basedir}/libs</url>-->
-<!--        </repository>-->
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -227,16 +220,19 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
             <version>2.11.3</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>9.5.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
@@ -297,6 +293,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.13.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>

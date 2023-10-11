@@ -10,7 +10,7 @@ Original Contact: [Discord](https://discord.gg/dhJnq7R), if you are urged to joi
 
 Supporting 1.17.1 - Latest Minecraft version (1.20.2)
 
-Paper & Paper forks, 
+Compatible with Paper & Paper forks, Forge & Bukkit Hybrid Server 
 
 ## Contact
 
@@ -25,10 +25,10 @@ For Developers:
 
 ## TODOs
 
-- Adventure - To replace Bungee-chat and bukkit chatcolor
+- Adventure - To replace BungeeChat API and bukkit ChatColor
 - FoliaLib - For server software without folia-api
-- Refactor som code
-- Optimize Imports or code style
+- Refactor some code
+- Optimize the Imports or code style
 
 ## Special Thanks To:
 
