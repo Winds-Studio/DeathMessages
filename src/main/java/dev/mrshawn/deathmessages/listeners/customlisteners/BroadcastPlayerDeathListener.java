@@ -14,8 +14,8 @@ import dev.mrshawn.deathmessages.utils.Assets;
 import java.util.List;
 import java.util.regex.Matcher;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,11 +112,11 @@ public class BroadcastPlayerDeathListener implements Listener {
 				//Will reach the discord broadcast
 			}
 			if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
+				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;
 			}
 			if (DeathMessages.discordSRVExtension != null && !discordSent) {
-				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), ChatColor.stripColor(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
+				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;
 			}
 		} catch (NullPointerException e1) {

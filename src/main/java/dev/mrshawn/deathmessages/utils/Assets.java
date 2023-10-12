@@ -298,7 +298,9 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
-			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+			tc.append(Component.text()
+					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.build());
 		} else {
 			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, null) + " ");
 			tc.append(tx);
@@ -370,7 +372,9 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
-			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+			tc.append(Component.text()
+					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.build());
 		} else {
 			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
 			tc.append(tx);
@@ -444,7 +448,9 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
-			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+			tc.append(Component.text().
+					append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.build());
 		} else {
 			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, p, e, hasOwner) + " ");
 			tc.append(tx);
@@ -556,7 +562,9 @@ public class Assets {
 				displayName = displayName + "&r" + spl[1];
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
-			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+			tc.append(Component.text()
+					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.build());
 		} else {
 			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
 			tc.append(tx);
@@ -627,7 +635,9 @@ public class Assets {
 				displayName = displayName + "&r" + spl[1];
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
-			tc.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)));
+			tc.append(Component.text()
+					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.build());
 		} else {
 			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner) + " ");
 			tc.append(tx);
@@ -753,12 +763,8 @@ public class Assets {
 				.replaceAll("%x%", String.valueOf(entity.getLocation().getBlock().getX()))
 				.replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
 				.replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ()));
-		if (owner) {
-			if (entity instanceof Tameable tameable) {
-				if (tameable.getOwner() != null && tameable.getOwner().getName() != null) {
-					msg = msg.replaceAll("%owner%", tameable.getOwner().getName());
-				}
-			}
+		if (owner && entity instanceof Tameable tameable && tameable.getOwner() != null && tameable.getOwner().getName() != null) {
+			msg = msg.replaceAll("%owner%", tameable.getOwner().getName());
 		}
 		try {
 			msg = msg.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());

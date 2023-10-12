@@ -14,8 +14,8 @@ import dev.mrshawn.deathmessages.utils.Assets;
 import java.util.List;
 import java.util.regex.Matcher;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -84,11 +84,11 @@ public class BroadcastEntityDeathListener implements Listener {
 							//Will reach the discord broadcast
 						}
 						if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-							DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(ChatColor.stripColor(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())), pm, e.getEntity(), hasOwner, e.getMessageType());
+							DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm, e.getEntity(), hasOwner, e.getMessageType());
 							discordSent = true;
 						}
 						if (DeathMessages.discordSRVExtension != null && !discordSent) {
-							DeathMessages.discordSRVExtension.sendEntityDiscordMessage(ChatColor.stripColor(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())), pm, e.getEntity(), hasOwner, e.getMessageType());
+							DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm, e.getEntity(), hasOwner, e.getMessageType());
 							discordSent = true;
 						}
 					}

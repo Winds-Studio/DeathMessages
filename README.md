@@ -29,6 +29,7 @@ For Developers:
 - FoliaLib - For server software without folia-api
 - Refactor some code
 - Optimize the Imports or code style
+- Command system, tab complete and some refactor
 
 ## Special Thanks To:
 

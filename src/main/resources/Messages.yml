@@ -18,7 +18,6 @@ Commands:
       - "&a/deathmessages toggle &7- Toggle death messages on or off."
       - "&a/deathmessages reload &7- Reload plugin configs."
       - "&a/deathmessages edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
-      - ""
     Sub-Commands:
       Reload:
         Reloaded: "%prefix%&aReloaded all plugin configs."
