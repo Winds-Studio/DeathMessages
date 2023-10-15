@@ -17,14 +17,14 @@ object ItemEditor {
 
 	fun rename(item: ItemStack, name: String): ItemStack {
 		val meta = getItemMeta(item)
-		meta.setDisplayName(Chat.colorize(name))
+		meta.setDisplayName(name)
 		item.itemMeta = meta
 		return item
 	}
 
 	fun relore(item: ItemStack, lore: Array<String>): ItemStack {
 		val meta = getItemMeta(item)
-		meta.lore = lore.map { Chat.colorize(it) }.toMutableList()
+		meta.lore = lore.map { it }.toMutableList()
 		item.itemMeta = meta
 		return item
 	}

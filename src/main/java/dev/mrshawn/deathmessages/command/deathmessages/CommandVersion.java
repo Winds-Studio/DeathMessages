@@ -3,9 +3,7 @@ package dev.mrshawn.deathmessages.command.deathmessages;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
-import org.minidns.record.A;
 
 public class CommandVersion extends DeathMessagesCommand {
 

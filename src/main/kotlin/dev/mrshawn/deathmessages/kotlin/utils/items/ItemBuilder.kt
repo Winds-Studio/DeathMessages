@@ -25,7 +25,7 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 	}
 
 	fun name(name: String): ItemBuilder {
-		meta?.setDisplayName(Chat.colorize(name))
+		meta?.setDisplayName(name)
 		return this
 	}
 
@@ -35,17 +35,17 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 	}
 
 	fun addLoreLine(line: String): ItemBuilder {
-		lore.add(Chat.colorize(line))
+		lore.add(line)
 		return this
 	}
 
 	fun addLoreLines(lines: Array<String>): ItemBuilder {
-		lore.addAll(lines.map { Chat.colorize(it) })
+		lore.addAll(lines.map { it })
 		return this
 	}
 
 	fun addLoreLines(lines: MutableList<String>): ItemBuilder {
-		lore.addAll(lines.map { Chat.colorize(it) })
+		lore.addAll(lines.map { it })
 		return this
 	}
 
