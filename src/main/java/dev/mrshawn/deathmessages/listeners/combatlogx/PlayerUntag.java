@@ -44,9 +44,9 @@ public class PlayerUntag implements Listener {
 				gangKill = true;
 			}
 		}
-		TextComponent tx = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
-		if (tx == null) return; // Dreeam - No NPE
-		BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, tx, EntityDeath.getWorlds(p), gangKill);
+		TextComponent deathMessage = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
+		if (deathMessage == null) return; // Dreeam - No NPE
+		BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, deathMessage, EntityDeath.getWorlds(p), gangKill);
 		Bukkit.getPluginManager().callEvent(event);
 	}
 }

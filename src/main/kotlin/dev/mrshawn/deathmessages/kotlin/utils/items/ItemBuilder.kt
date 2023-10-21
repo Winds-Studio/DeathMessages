@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.kotlin.utils.items
 
-import dev.mrshawn.deathmessages.kotlin.utils.messages.Chat
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
@@ -49,12 +48,12 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 		return this
 	}
 
-	fun addEnchantment(enchantment: Enchantment, level: Int): ItemBuilder {
+	private fun addEnchantment(enchantment: Enchantment, level: Int): ItemBuilder {
 		meta?.addEnchant(enchantment, level, true)
 		return this
 	}
 
-	fun glow(): ItemBuilder {
+	private fun glow(): ItemBuilder {
 		if (meta?.hasEnchants() == false) {
 			hideAttributes()
 			addEnchantment(Enchantment.DURABILITY, 1)
@@ -84,12 +83,12 @@ class ItemBuilder(material: Material, amount: Int = 1) {
 		return this
 	}
 
-	fun addItemFlag(flag: ItemFlag): ItemBuilder {
+	private fun addItemFlag(flag: ItemFlag): ItemBuilder {
 		meta?.addItemFlags(flag)
 		return this
 	}
 
-	fun hideAttributes(): ItemBuilder = addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+	private fun hideAttributes(): ItemBuilder = addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
 
 	fun build(): ItemStack {
 		meta?.lore = lore

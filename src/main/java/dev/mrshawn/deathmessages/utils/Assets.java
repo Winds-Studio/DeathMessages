@@ -14,6 +14,7 @@ import dev.mrshawn.deathmessages.enums.PDMode;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import java.util.Objects;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
@@ -58,8 +59,8 @@ public class Assets {
 				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
 	}
 
-	public static String formatString(String string) {
-		return string
+	public static String formatString(String s) {
+		return s
 				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
 	}
 
@@ -72,7 +73,7 @@ public class Assets {
 		return newList;
 	}
 
-	public static TextComponent convertLegacy(String string) {
+	public static TextComponent convertFromLegacy(String string) {
 		return LegacyComponentSerializer.legacyAmpersand().deserialize(string);
 	}
 
@@ -234,18 +235,18 @@ public class Assets {
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
-		TextComponent.Builder tc = Component.text();
+		TextComponent.Builder naturalDeath = Component.text();
 		if (addPrefix) {
-			TextComponent prefix = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-			tc.append(prefix);
+			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			naturalDeath.append(prefix);
 		}
 		if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
 			try {
 				FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
 				String material = fb.getBlockData().getMaterial().toString().toLowerCase();
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
-				String mssa = msg.replaceAll("%block%", configValue);
-				tc.append(Assets.convertLegacy(mssa));
+				String mssa = msg.replaceAll("%block%", Objects.requireNonNull(configValue));
+				naturalDeath.append(Assets.convertFromLegacy(mssa));
 			} catch (NullPointerException e) {
 				DeathMessages.getInstance().getLogger().severe("Could not parse %block%. Please check your config for a wrong value." +
 						" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
@@ -258,7 +259,7 @@ public class Assets {
 				String material = pm.getLastClimbing().toString().toLowerCase();
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 				String mssa = msg.replaceAll("%climbable%", configValue);
-				tc.append(Assets.convertLegacy(mssa));
+				naturalDeath.append(Assets.convertFromLegacy(mssa));
 			} catch (NullPointerException e) {
 				DeathMessages.getInstance().getLogger().severe("Could not parse %climbable%. Please check your config for a wrong value." +
 						" Your materials could be spelt wrong or it does not exists in the config. If this problem persist, contact support" +
@@ -298,16 +299,16 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
-			tc.append(Component.text()
-					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+			naturalDeath.append(Component.text()
+					.append(Assets.convertFromLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
 					.build());
 		} else {
-			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, null) + " ");
-			tc.append(tx);
+			TextComponent tx = Assets.convertFromLegacy(playerDeathPlaceholders(msg, pm, null) + " ");
+			naturalDeath.append(tx);
 		}
 		// TODO: need to re-write the logic of death message click event & hover text.
 //		if (msg.length() >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(msg[1], pm, null))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(msg[1], pm, null))));
 //		}
 //		if (msg.length() == 3) {
 //			if (msg[2].startsWith("COMMAND:")) {
@@ -318,7 +319,7 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, null)));
 //			}
 //		}
-		return tc.build();
+		return naturalDeath.build();
 	}
 
 	public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
@@ -342,7 +343,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		if (msg.contains("%weapon%")) {
@@ -373,14 +374,14 @@ public class Assets {
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			tc.append(Component.text()
-					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.append(Assets.convertFromLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
 					.build());
 		} else {
-			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
+			TextComponent tx = Assets.convertFromLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
 			tc.append(tx);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -418,7 +419,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		if (msg.contains("%weapon%")) {
@@ -449,14 +450,14 @@ public class Assets {
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			tc.append(Component.text().
-					append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					append(Assets.convertFromLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
 					.build());
 		} else {
-			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, p, e, hasOwner) + " ");
+			TextComponent tx = Assets.convertFromLegacy(entityDeathPlaceholders(msg, p, e, hasOwner) + " ");
 			tc.append(tx);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -497,13 +498,13 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
+		TextComponent tx = Assets.convertFromLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
 		tc.append(tx);
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -537,7 +538,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		if (msg.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
@@ -563,14 +564,14 @@ public class Assets {
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			tc.append(Component.text()
-					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.append(Assets.convertFromLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
 					.build());
 		} else {
-			TextComponent tx = Assets.convertLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
+			TextComponent tx = Assets.convertFromLegacy(playerDeathPlaceholders(msg, pm, mob) + " ");
 			tc.append(tx);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -609,7 +610,7 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
@@ -636,14 +637,14 @@ public class Assets {
 			}
 			HoverEvent.ShowItem hoverEventComponents = HoverEvent.ShowItem.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			tc.append(Component.text()
-					.append(Assets.convertLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
+					.append(Assets.convertFromLegacy(displayName).hoverEvent(HoverEvent.showItem(hoverEventComponents)))
 					.build());
 		} else {
-			TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner) + " ");
+			TextComponent tx = Assets.convertFromLegacy(entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner) + " ");
 			tc.append(tx);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -685,13 +686,13 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		TextComponent tx = Assets.convertLegacy(entityDeathPlaceholders(msg, player, entity, hasOwner) + " ");
+		TextComponent tx = Assets.convertFromLegacy(entityDeathPlaceholders(msg, player, entity, hasOwner) + " ");
 		tc.append(tx);
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
+//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {

@@ -17,6 +17,7 @@ package dev.mrshawn.deathmessages.utils;
 
  */
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +32,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -290,7 +290,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 			FileInputStream stream = new FileInputStream(file);
 			return loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		} catch (FileNotFoundException ex) {
-			Bukkit.getLogger().warning("File " + file.getName() + " doesn't exist.");
+			DeathMessages.getInstance().getLogger().warning("File " + file.getName() + " doesn't exist.");
 			return new CommentedConfiguration().flagAsFailed();
 		}
 	}

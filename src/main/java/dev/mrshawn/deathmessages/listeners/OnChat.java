@@ -30,7 +30,7 @@ public class OnChat implements Listener {
 				PlayerDeathMessages.getInstance().getConfig().set("Mobs." + mobName + "." + mode + "." + damageType, list);
 				PlayerDeathMessages.getInstance().save();
 				PlayerDeathMessages.getInstance().reload();
-				p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
+				p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
 						.replaceAll("%message%", LegacyComponentSerializer.legacyAmpersand().serialize(e.message()))
 						.replaceAll("%mob_name%", mobName)
 						.replaceAll("%mode%", mode)
@@ -43,7 +43,7 @@ public class OnChat implements Listener {
 				EntityDeathMessages.getInstance().getConfig().set("Entities." + mobName + "." + damageType, list);
 				EntityDeathMessages.getInstance().save();
 				EntityDeathMessages.getInstance().reload();
-				p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
+				p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
 						.replaceAll("%message%", LegacyComponentSerializer.legacyAmpersand().serialize(e.message()))
 						.replaceAll("%mob_name%", mobName)
 						.replaceAll("%damage_type%", damageType)));

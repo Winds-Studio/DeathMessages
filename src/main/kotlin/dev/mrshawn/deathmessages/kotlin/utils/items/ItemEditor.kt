@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.kotlin.utils.items
 
-import dev.mrshawn.deathmessages.kotlin.utils.messages.Chat
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
@@ -55,6 +54,6 @@ object ItemEditor {
 			.get(key, PersistentDataType.STRING)
 	}
 
-	fun getAllKeys(item: ItemStack) = item.itemMeta?.persistentDataContainer?.keys
+	fun getAllKeys(item: ItemStack): MutableSet<NamespacedKey>? = item.itemMeta?.persistentDataContainer?.keys
 
 }

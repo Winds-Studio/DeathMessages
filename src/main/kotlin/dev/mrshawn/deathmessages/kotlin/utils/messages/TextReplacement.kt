@@ -19,12 +19,12 @@ class TextReplacement {
 		return this
 	}
 
-	fun addReplacement(key: String, value: String): TextReplacement {
+	private fun addReplacement(key: String, value: String): TextReplacement {
 		replacements[key] = value
 		return this
 	}
 
-	fun addReplacement(replacement: Pair<String, String>): TextReplacement {
+	private fun addReplacement(replacement: Pair<String, String>): TextReplacement {
 		replacements[replacement.first] = replacement.second
 		return this
 	}

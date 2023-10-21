@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public class ExplosionManager {
 
@@ -30,6 +31,7 @@ public class ExplosionManager {
 				task -> destroy(), 5L * 20L);
 	}
 
+	@NotNull
 	public UUID getPyro() {
 		return this.pyro;
 	}

@@ -16,15 +16,15 @@ public class CommandBackup extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_BACKUP.getValue())) {
-			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		if (args.length == 0) {
-			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Usage")));
+			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Usage")));
 		} else {
 			boolean b = Boolean.parseBoolean(args[0]);
 			String code = ConfigManager.getInstance().backup(b);
-			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Backed-Up")
+			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Backed-Up")
 					.replaceAll("%backup-code%", code)));
 		}
 	}

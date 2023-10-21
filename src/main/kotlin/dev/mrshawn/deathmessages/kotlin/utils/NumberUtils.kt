@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.kotlin.utils
 
-import java.util.*
+import java.util.TreeMap
 
 
 object NumberUtils {
@@ -29,7 +29,7 @@ object NumberUtils {
 		}
 	}
 
-	fun toRomanNumeral(number: Int): String? {
+	private fun toRomanNumeral(number: Int): String? {
 		val l = numeralMap.floorKey(number)
 		return if (number == l) {
 			numeralMap[number]

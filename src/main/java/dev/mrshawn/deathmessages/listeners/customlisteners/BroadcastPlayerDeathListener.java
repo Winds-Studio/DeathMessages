@@ -34,7 +34,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 				String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getLivingEntity());
 				message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-				Bukkit.getConsoleSender().sendMessage(Assets.convertLegacy(message));
+				Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
 			}
 
 			PlayerManager pm = PlayerManager.getPlayer(e.getPlayer());

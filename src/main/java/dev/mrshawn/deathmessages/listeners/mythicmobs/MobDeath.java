@@ -36,9 +36,9 @@ public class MobDeath implements Listener {
 				if (em == null || em.getLastPlayerDamager() == null) return; // Dreeam - No NPE
 
 				PlayerManager damager = em.getLastPlayerDamager();
-				TextComponent tx = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
-				if (tx == null) return; // Dreeam - No NPE
-				BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, tx, getWorlds(e.getEntity()));
+				TextComponent deathMessage = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
+				if (deathMessage == null) return; // Dreeam - No NPE
+				BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, deathMessage, getWorlds(e.getEntity()));
 				Bukkit.getPluginManager().callEvent(event);
 			}
 		}

@@ -17,22 +17,22 @@ public class CommandToggle extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
+			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
 			return;
 		}
 		Player p = (Player) sender;
 		if (!p.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
-			p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		PlayerManager pm = PlayerManager.getPlayer(p);
 		boolean b = pm.getMessagesEnabled();
 		if (b) {
 			pm.setMessagesEnabled(false);
-			p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
+			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
 		} else {
 			pm.setMessagesEnabled(true);
-			p.sendMessage(Assets.convertLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
+			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
 		}
 	}
 }
