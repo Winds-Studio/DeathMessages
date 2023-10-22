@@ -26,7 +26,7 @@ public class OnMove implements Listener {
 		} else {
 			if (p.getFallDistance() > 0) {
 				message = true;
-				if (!falling && message) {
+				if (!falling) {
 					falling = true;
 					message = false;
 				}

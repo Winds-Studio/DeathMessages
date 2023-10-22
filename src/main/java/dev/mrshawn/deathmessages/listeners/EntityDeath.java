@@ -53,7 +53,7 @@ public class EntityDeath implements Listener {
 			if (pm.isBlacklisted()) return; // Dreeam - No NPE
 
 			if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
-				//Natural Death
+				// Natural Death
 				if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
 					TextComponent naturalDeath = Assets.getNaturalDeath(pm, "End-Crystal");
 					if (naturalDeath == null) return; // Dreeam - No NPE
@@ -98,7 +98,7 @@ public class EntityDeath implements Listener {
 					Bukkit.getPluginManager().callEvent(event);
 				}
 			} else {
-				//Killed by mob
+				// Killed by mob
 				Entity ent = pm.getLastEntityDamager();
 				String mobName = ent.getType().getEntityClass().getSimpleName().toLowerCase();
 				int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Radius");
@@ -130,7 +130,7 @@ public class EntityDeath implements Listener {
 				Bukkit.getPluginManager().callEvent(event);
 			}
 		} else {
-			//Player killing mob
+			// Player killing mob
 			MobType mobType = MobType.VANILLA;
 			if (DeathMessages.getInstance().mythicmobsEnabled) {
 				if (DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
@@ -145,7 +145,6 @@ public class EntityDeath implements Listener {
 			PlayerManager damager = em.getLastPlayerDamager();
 
 			TextComponent entityDeath = Assets.entityDeathMessage(em, mobType);
-			if (entityDeath == null) return; // Dreeam - No NPE
 			BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, entityDeath, getWorlds(e.getEntity()));
 			Bukkit.getPluginManager().callEvent(event);
 		}

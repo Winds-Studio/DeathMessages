@@ -35,6 +35,7 @@ public class InteractEvent implements Listener {
 				List<UUID> effected = new ArrayList<>();
 				for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
 					PlayerManager effect = PlayerManager.getPlayer(p);
+					if (effect == null) return;
 					if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
 						effected.add(p.getUniqueId());
 						effect.setLastEntityDamager(e.getPlayer());
@@ -51,6 +52,7 @@ public class InteractEvent implements Listener {
 					for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
 						if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
 							PlayerManager effect = PlayerManager.getPlayer(p);
+							if (effect == null) return;
 							effected.add(p.getUniqueId());
 							effect.setLastEntityDamager(e.getPlayer());
 						}

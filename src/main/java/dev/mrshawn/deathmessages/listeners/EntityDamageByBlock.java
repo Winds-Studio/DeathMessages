@@ -18,9 +18,8 @@ public class EntityDamageByBlock implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDamageByBlockEvent e) {
-		if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-			Player p = (Player) e.getEntity();
-			PlayerManager pm = PlayerManager.getPlayer(p);
+		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
+            PlayerManager pm = PlayerManager.getPlayer(p);
 			if (pm != null) {
 				pm.setLastDamageCause(e.getCause());
 			}

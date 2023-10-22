@@ -41,13 +41,17 @@ public class PluginMessaging implements PluginMessageListener {
 				String[] data = stream.readUTF().split("######");
 				String serverName = data[0];
 				String rawMsg = data[1];
-				TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message").replaceAll("%server_name%", serverName));
+				TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message")
+						.replaceAll("%server_name%", serverName));
 				TextComponent message = Assets.convertFromLegacy(rawMsg);
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					PlayerManager pm = PlayerManager.getPlayer(p);
-                    assert pm != null;
+					if (pm == null) return;
                     if (pm.getMessagesEnabled()) {
-						p.sendMessage(Component.text().append(prefix).append(message).build());
+						p.sendMessage(Component.text()
+								.append(prefix)
+								.append(message)
+								.build());
 					}
 				}
 			}

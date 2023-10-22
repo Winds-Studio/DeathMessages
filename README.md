@@ -30,6 +30,9 @@ For Developers:
 - Refactor some code
 - Optimize the Imports or code style
 - Command system, tab complete and some refactor
+- Use optional to prevent nullable?
+- Compatibility
+- look into get entity name
 
 ## Special Thanks To:
 

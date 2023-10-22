@@ -5,7 +5,6 @@ import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -40,15 +39,13 @@ public class EntityDamageByEntity implements Listener {
 				if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager().getUniqueId())) {
 					pm.setLastEntityDamager(explosions.get(e.getDamager().getUniqueId()));
 					pm.setLastExplosiveEntity(e.getDamager());
-				} else if (e.getDamager() instanceof TNTPrimed) {
-					TNTPrimed tnt = (TNTPrimed) e.getDamager();
-					if (tnt.getSource() instanceof LivingEntity) {
+				} else if (e.getDamager() instanceof TNTPrimed tnt) {
+                    if (tnt.getSource() instanceof LivingEntity) {
 						pm.setLastEntityDamager(tnt.getSource());
 					}
 					pm.setLastExplosiveEntity(e.getDamager());
-				} else if (e.getDamager() instanceof Firework) {
-					Firework firework = (Firework) e.getDamager();
-					try {
+				} else if (e.getDamager() instanceof Firework firework) {
+                    try {
 						if (firework.getShooter() instanceof LivingEntity) {
 							pm.setLastEntityDamager((LivingEntity) firework.getShooter());
 						}
@@ -60,9 +57,8 @@ public class EntityDamageByEntity implements Listener {
 					pm.setLastEntityDamager(e.getDamager());
 					pm.setLastExplosiveEntity(e.getDamager());
 				}
-			} else if (e.getDamager() instanceof Projectile) {
-				Projectile projectile = (Projectile) e.getDamager();
-				if (projectile.getShooter() instanceof LivingEntity) {
+			} else if (e.getDamager() instanceof Projectile projectile) {
+                if (projectile.getShooter() instanceof LivingEntity) {
 					pm.setLastEntityDamager((LivingEntity) projectile.getShooter());
 				}
 				pm.setLastProjectileEntity(projectile);
@@ -70,9 +66,8 @@ public class EntityDamageByEntity implements Listener {
 				pm.setLastEntityDamager(e.getDamager());
 			} else if (e.getDamager().getType().isAlive()) {
 				pm.setLastEntityDamager(e.getDamager());
-			} else if (e.getDamager() instanceof EvokerFangs) {
-				EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
-				pm.setLastEntityDamager(evokerFangs.getOwner());
+			} else if (e.getDamager() instanceof EvokerFangs evokerFangs) {
+                pm.setLastEntityDamager(evokerFangs.getOwner());
 			}
 		} else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
@@ -110,9 +105,8 @@ public class EntityDamageByEntity implements Listener {
 								em.setLastPlayerDamager(PlayerManager.getPlayer((Player) tnt.getSource()));
 							}
 							em.setLastExplosiveEntity(e.getDamager());
-						} else if (e.getDamager() instanceof Firework) {
-							Firework firework = (Firework) e.getDamager();
-							try {
+						} else if (e.getDamager() instanceof Firework firework) {
+                            try {
 								if (firework.getShooter() instanceof Player) {
 									em.setLastPlayerDamager(PlayerManager.getPlayer((Player) firework.getShooter()));
 								}
@@ -124,9 +118,8 @@ public class EntityDamageByEntity implements Listener {
 							em.setLastPlayerDamager(PlayerManager.getPlayer((Player) e.getDamager()));
 							em.setLastExplosiveEntity(e.getDamager());
 						}
-					} else if (e.getDamager() instanceof Projectile) {
-						Projectile projectile = (Projectile) e.getDamager();
-						if (projectile.getShooter() instanceof Player) {
+					} else if (e.getDamager() instanceof Projectile projectile) {
+                        if (projectile.getShooter() instanceof Player) {
 							em.setLastPlayerDamager(PlayerManager.getPlayer((Player) projectile.getShooter()));
 						}
 						em.setLastProjectileEntity(projectile);
@@ -139,9 +132,8 @@ public class EntityDamageByEntity implements Listener {
 		if (e.getEntity() instanceof EnderCrystal) {
 			if (e.getDamager().getType().isAlive()) {
 				explosions.put(e.getEntity().getUniqueId(), e.getDamager());
-			} else if (e.getDamager() instanceof Projectile) {
-				Projectile projectile = (Projectile) e.getDamager();
-				if (projectile.getShooter() instanceof LivingEntity) {
+			} else if (e.getDamager() instanceof Projectile projectile) {
+                if (projectile.getShooter() instanceof LivingEntity) {
 					explosions.put(e.getEntity().getUniqueId(), (LivingEntity) projectile.getShooter());
 				}
 			}
