@@ -4,7 +4,7 @@
 
     <groupId>dev.mrshawn</groupId>
     <artifactId>DeathMessages</artifactId>
-    <version>1.4.17</version>
+    <version>1.4.18-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DeathMessages</name>
@@ -99,6 +99,18 @@
                     <minimizeJar>true</minimizeJar>
                     <relocations>
                         <relocation>
+                            <pattern>kotlin</pattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.kotlin</shadedPattern>
+                        </relocation>
+<!--                        <relocation>-->
+<!--                            <pattern>net.kyori.adventure</pattern>-->
+<!--                            <shadedPattern>dev.mrshawn.deathmessages.shade.adventure</shadedPattern>-->
+<!--                        </relocation>-->
+<!--                        <relocation>-->
+<!--                            <pattern>net.kyori.examination</pattern>-->
+<!--                            <shadedPattern>dev.mrshawn.deathmessages.shade.examination</shadedPattern>-->
+<!--                        </relocation>-->
+                        <relocation>
                             <pattern>co.aikar.commands</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.shade.acf</shadedPattern>
                         </relocation>
@@ -111,20 +123,16 @@
                             <shadedPattern>dev.mrshawn.deathmessages.shade.xseries</shadedPattern>
                         </relocation>
                         <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.shade.nbtapi</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>kotlin</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.kotlin</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>net.dv8tion.jda</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.shade.jda</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -208,6 +216,12 @@
             <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.kyori</groupId>-->
+<!--            <artifactId>adventure-api</artifactId>-->
+<!--            <version>4.14.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
