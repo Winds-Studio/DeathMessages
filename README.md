@@ -26,7 +26,6 @@ For Developers:
 ## TODOs
 
 - Adventure - To replace BungeeChat API and bukkit ChatColor
-- FoliaLib - For server software without folia-api
 - Refactor some code
 - Command system, tab complete and some refactor
 - Use optional to prevent nullable?

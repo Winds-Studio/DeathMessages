@@ -1,6 +1,7 @@
 package dev.mrshawn.deathmessages;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.tcoded.folialib.FoliaLib;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.command.deathmessages.CommandManager;
 import dev.mrshawn.deathmessages.command.deathmessages.TabCompleter;
@@ -46,6 +47,7 @@ import java.util.List;
 public class DeathMessages extends JavaPlugin {
 
 	private static DeathMessages instance;
+	public FoliaLib foliaLib = new FoliaLib(this);
 
 	public boolean placeholderAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
@@ -224,7 +226,7 @@ public class DeathMessages extends JavaPlugin {
 		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
 			for (World world : Bukkit.getWorlds()) {
 				if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
-					Bukkit.getGlobalRegionScheduler().run(instance, task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
+					foliaLib.getImpl().runAsync(() -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
 				}
 			}
 		}

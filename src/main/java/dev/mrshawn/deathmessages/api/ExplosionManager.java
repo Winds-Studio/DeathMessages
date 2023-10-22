@@ -27,8 +27,7 @@ public class ExplosionManager {
 		explosions.add(this);
 
 		//  Destroys class. Won't need the info anymore
-		Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessages.getInstance(),
-				task -> destroy(), 5L * 20L);
+		DeathMessages.getInstance().foliaLib.getImpl().runLaterAsync(this::destroy, 5 * 20L);
 	}
 
 	@NotNull

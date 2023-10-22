@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.api;
 
+import com.tcoded.folialib.wrapper.task.WrappedTask;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
@@ -31,7 +32,7 @@ public class EntityManager {
 	private Projectile lastPlayerProjectile;
 	private Location lastLocation;
 
-	private ScheduledTask lastPlayerTask;
+	private WrappedTask lastPlayerTask;
 
 	private static final List<EntityManager> entities = new ArrayList<>();
 
@@ -70,8 +71,7 @@ public class EntityManager {
 		if (lastPlayerTask != null) {
 			lastPlayerTask.cancel();
 		}
-		lastPlayerTask = Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessages.getInstance(),
-				task -> destroy(), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+		lastPlayerTask = DeathMessages.getInstance().foliaLib.getImpl().runLaterAsync(this::destroy, config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
 		this.damageCause = DamageCause.CUSTOM;
 	}
 

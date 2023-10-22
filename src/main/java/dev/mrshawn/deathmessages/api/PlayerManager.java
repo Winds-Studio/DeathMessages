@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.api;
 
+import com.tcoded.folialib.wrapper.task.WrappedTask;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.files.Config;
@@ -37,9 +38,10 @@ public class PlayerManager {
 	private Location explosionCauser;
 	private Location location;
 	private int cooldown = 0;
+	private WrappedTask cooldownTask;
 	private Inventory cachedInventory;
 
-	private ScheduledTask lastEntityTask;
+	private WrappedTask lastEntityTask;
 
 	private static final List<PlayerManager> players = new ArrayList<>();
 
@@ -120,8 +122,7 @@ public class PlayerManager {
 		if (lastEntityTask != null) {
 			lastEntityTask.cancel();
 		}
-		lastEntityTask = Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessages.getInstance(),
-				task -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
+		lastEntityTask = DeathMessages.getInstance().foliaLib.getImpl().runLaterAsync(() -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
 	}
 
 	public Entity getLastEntityDamager() {
@@ -170,23 +171,12 @@ public class PlayerManager {
 
 	public void setCooldown() {
 		cooldown = config.getInt(Config.COOLDOWN);
-		BukkitTask cooldownTask = new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (cooldown <= 0) {
-					this.cancel();
-				}
-				cooldown--;
+		cooldownTask = DeathMessages.getInstance().foliaLib.getImpl().runTimerAsync(() -> {
+			if (cooldown <= 0) {
+				cooldownTask.cancel();
 			}
-		}.runTaskTimer(DeathMessages.getInstance(), 0, 20);
-		// For Folia
-		// java.lang.IllegalArgumentException: Initial delay ticks may not be <= 0
-//		ScheduledTask cooldownTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(DeathMessages.getInstance(), task -> {
-//				if (cooldown <= 0) {
-//					task.cancel();
-//				}
-//				cooldown--;
-//			}, 0L, 20L);
+			cooldown--;
+		}, 0, 20);
 	}
 
 	public void setCachedInventory(Inventory inventory) {

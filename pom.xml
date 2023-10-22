@@ -127,6 +127,10 @@
                             <shadedPattern>dev.mrshawn.deathmessages.shade.bstats</shadedPattern>
                         </relocation>
                         <relocation>
+                            <pattern>com.tcoded.folialib</pattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.shade.folialib</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.shade.nbtapi</shadedPattern>
                         </relocation>
@@ -201,6 +205,11 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
+        <!-- FoliaLib -->
+        <repository>
+            <id>devmart-other</id>
+            <url>https://nexuslite.gcnt.net/repos/other/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -249,6 +258,12 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tcoded</groupId>
+            <artifactId>FoliaLib</artifactId>
+            <version>0.2.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
