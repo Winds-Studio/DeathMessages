@@ -28,7 +28,6 @@ For Developers:
 - Adventure - To replace BungeeChat API and bukkit ChatColor
 - FoliaLib - For server software without folia-api
 - Refactor some code
-- Optimize the Imports or code style
 - Command system, tab complete and some refactor
 - Use optional to prevent nullable?
 - Compatibility

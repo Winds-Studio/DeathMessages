@@ -1,7 +1,6 @@
 package dev.mrshawn.deathmessages.api.events;
 
 import dev.mrshawn.deathmessages.enums.MessageType;
-import java.util.List;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
@@ -10,6 +9,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 public class BroadcastDeathMessageEvent extends Event implements Cancellable {

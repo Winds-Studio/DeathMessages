@@ -25,7 +25,26 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.DragonFireball;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.FishHook;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.LlamaSpit;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ShulkerBullet;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Tameable;
+import org.bukkit.entity.Trident;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -337,13 +356,12 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		}
 
-		if (msgs.isEmpty()) return null;
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
-		TextComponent.Builder tc = Component.text();
+		TextComponent.Builder weaponMessage = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-			tc.append(tx);
+			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			weaponMessage.append(prefix);
 		}
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
@@ -378,10 +396,10 @@ public class Assets {
 					.build()
 					.hoverEvent(hoverEventComponents);
 
-			tc.append(showitem);
+			weaponMessage.append(showitem);
 		} else {
 			TextComponent deathMessage = Assets.convertFromLegacy(msg);
-			tc.append(deathMessage);
+			weaponMessage.append(deathMessage);
 		}
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
@@ -395,7 +413,7 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
 //			}
 //		}
-		return tc.build();
+		return weaponMessage.build();
 	}
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
@@ -413,7 +431,6 @@ public class Assets {
 			msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
 		}
 
-		if (msgs.isEmpty()) return null;
 		boolean hasOwner = false;
 		if (e instanceof Tameable tameable) {
 			if (tameable.getOwner() != null) hasOwner = true;
@@ -423,8 +440,8 @@ public class Assets {
 		msg = entityDeathPlaceholders(msg, p, e, hasOwner);
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-			tc.append(tx);
+			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			tc.append(prefix);
 		}
 		if (msg.contains("%weapon%")) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
@@ -506,8 +523,8 @@ public class Assets {
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-			tc.append(tx);
+			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			tc.append(prefix);
 		}
 		TextComponent deathMessage = Assets.convertFromLegacy(playerDeathPlaceholders(msg, pm, mob));
 		tc.append(deathMessage);
@@ -540,9 +557,7 @@ public class Assets {
 		} else {
 			msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
-		if (msgs.isEmpty()) {
-			return null;
-		}
+
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 		TextComponent.Builder tc = Component.text();
@@ -624,8 +639,8 @@ public class Assets {
 		msg = entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner);
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-			tc.append(tx);
+			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			tc.append(prefix);
 		}
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
@@ -699,13 +714,12 @@ public class Assets {
 						entity.getType().getEntityClass().getSimpleName().toLowerCase() + "." + damageCause), player, entity);
 			}
 		}
-		if (msgs.isEmpty()) return null;
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {
-			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-			tc.append(tx);
+			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			tc.append(prefix);
 		}
 		TextComponent tx = Assets.convertFromLegacy(entityDeathPlaceholders(msg, player, entity, hasOwner));
 		tc.append(tx);
