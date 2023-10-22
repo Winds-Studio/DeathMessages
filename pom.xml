@@ -96,7 +96,6 @@
                 <configuration>
                     <finalName>${project.artifactId}-${project.version}</finalName>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <minimizeJar>true</minimizeJar>
                     <relocations>
                         <relocation>
                             <pattern>kotlin</pattern>
@@ -264,7 +263,7 @@
         <dependency>
             <groupId>com.tcoded</groupId>
             <artifactId>FoliaLib</artifactId>
-            <version>0.2.5</version>
+            <version>0.3.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
