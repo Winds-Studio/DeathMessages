@@ -25,12 +25,13 @@ For Developers:
 
 ## TODOs
 
-- Adventure - To replace BungeeChat API and bukkit ChatColor
+- Adventure - To replace the replaceAll and bukkit ChatColor
 - Refactor some code
 - Command system, tab complete and some refactor
 - Use optional to prevent nullable?
 - Compatibility
 - look into get entity name
+- Fix HoverEvent
 
 ## Special Thanks To:
 

@@ -766,9 +766,6 @@ public class Assets {
 				Matcher m = Pattern.compile("REGION\\[([^)]+)]").matcher(s);
 				while (m.find()) {
 					String regionID = m.group(1);
-					if (DeathMessages.worldGuardExtension == null) {
-						continue;
-					}
 					if (DeathMessages.worldGuardExtension.isInRegion(player.getPlayer(), regionID)) {
 						returnList.add(s.replace("REGION[" + regionID + "]", ""));
 					}
