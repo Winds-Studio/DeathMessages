@@ -122,7 +122,7 @@ public class PlayerManager {
 		if (lastEntityTask != null) {
 			lastEntityTask.cancel();
 		}
-		lastEntityTask = DeathMessages.getInstance().foliaLib.getImpl().runLaterAsync(() -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
+		lastEntityTask = DeathMessages.getInstance().foliaLib.getImpl().runLater(() -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
 	}
 
 	public Entity getLastEntityDamager() {
