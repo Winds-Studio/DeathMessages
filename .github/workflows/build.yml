@@ -15,9 +15,12 @@ jobs:
           distribution: temurin
           cache: maven
       - name: Build with Maven
-        run: mvn clean kotlin:compile install
-      - name: Upload DeathMessages
-        uses: actions/upload-artifact@main
+        run: mvn clean kotlin:compile package
+      - name: Release DeathMessages
+        uses: marvinpinto/action-automatic-releases@master
         with:
-          name: DeathMessages
-          path: target/DeathMessages-*.jar
+          title: "DeathMessages v1.4.18-SNAPSHOT"
+          automatic_release_tag: "1.4.18-SNAPSHOT"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          files: "target/*.jar"
+          prerelease: true

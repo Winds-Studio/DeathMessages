@@ -21,7 +21,7 @@ Compatible with Paper & Paper forks, Forge & Bukkit Hybrid Server
 For Developers:
 
 - The plugin uses a mix of kotlin and java and as such you must compile kotlin as well
-- Compile the plugin with `mvn clean kotlin:compile install`
+- Compile the plugin with `mvn clean kotlin:compile package`
 
 ## TODOs
 
