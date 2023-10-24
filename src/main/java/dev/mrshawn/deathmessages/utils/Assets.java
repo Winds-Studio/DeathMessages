@@ -199,6 +199,7 @@ public class Assets {
 
 	public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
 		PlayerManager pm = em.getLastPlayerDamager();
+		if (pm == null) return null;
 		Player p = pm.getPlayer();
 		boolean hasWeapon = hasWeapon(p, pm.getLastDamage());
 

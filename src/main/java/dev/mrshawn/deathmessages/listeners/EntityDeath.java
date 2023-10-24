@@ -132,8 +132,7 @@ public class EntityDeath implements Listener {
 			}
 
 			EntityManager em = EntityManager.getEntity(e.getEntity().getUniqueId());
-			if (em == null) new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
-
+			if (em == null) return;
 			PlayerManager damager = em.getLastPlayerDamager();
 
 			TextComponent entityDeath = Assets.entityDeathMessage(em, mobType);
