@@ -282,9 +282,6 @@ public class Assets {
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 				naturalDeath.append(Assets.convertFromLegacy(msg.replaceAll("%climbable%", configValue)));
 			} catch (NullPointerException e) {
-				DeathMessages.getInstance().getLogger().severe("Could not parse %climbable%. Please check your config for a wrong value." +
-						" Your materials could be spelt wrong or it does not exists in the config. Open a issue if you need help, " +
-						"https://github.com/Winds-Studio/DeathMessages/issues - Parsed block: " + pm.getLastClimbing().toString());
 				pm.setLastClimbing(null);
 				return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
 			}
