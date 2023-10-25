@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CommandBlacklist extends DeathMessagesCommand {
@@ -33,10 +34,8 @@ public class CommandBlacklist extends DeathMessagesCommand {
 					boolean blacklisted = UserData.getInstance().getConfig().getBoolean(entry.getKey() + ".is-blacklisted");
 					if (blacklisted) {
 						if (Bukkit.getPlayer(UUID.fromString(entry.getKey())) != null) {
-							PlayerManager pm = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
-							if (pm != null) {
-								pm.setBlacklisted(false);
-							}
+							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
+							getPlayer.ifPresent(pm -> pm.setBlacklisted(false));
 						}
 						UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
 						UserData.getInstance().save();
@@ -44,10 +43,8 @@ public class CommandBlacklist extends DeathMessagesCommand {
 								.replaceAll("%player%", args[0])));
 					} else {
 						if (Bukkit.getPlayer(UUID.fromString(entry.getKey())) != null) {
-							PlayerManager pm = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
-							if (pm != null) {
-								pm.setBlacklisted(true);
-							}
+							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
+							getPlayer.ifPresent(pm -> pm.setBlacklisted(true));
 						}
 						UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
 						UserData.getInstance().save();

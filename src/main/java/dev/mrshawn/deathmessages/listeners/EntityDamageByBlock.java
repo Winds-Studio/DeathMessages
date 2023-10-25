@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 
+import java.util.Optional;
 import java.util.Set;
 
 public class EntityDamageByBlock implements Listener {
@@ -19,10 +20,8 @@ public class EntityDamageByBlock implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDamageByBlockEvent e) {
 		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-            PlayerManager pm = PlayerManager.getPlayer(p);
-			if (pm != null) {
-				pm.setLastDamageCause(e.getCause());
-			}
+			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
 		} else {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
@@ -35,24 +34,18 @@ public class EntityDamageByBlock implements Listener {
 			if (listenedMobs.isEmpty()) return;
 			for (String listened : listenedMobs) {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
-					EntityManager em;
-					if (EntityManager.getEntity(e.getEntity().getUniqueId()) == null) {
+					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+					getEntity.ifPresentOrElse(em -> em.setLastDamageCause(e.getCause()), () -> {
 						MobType mobType = MobType.VANILLA;
 						if (DeathMessages.getInstance().mythicmobsEnabled
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
-						em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
-					} else {
-						em = EntityManager.getEntity(e.getEntity().getUniqueId());
-					}
-					if (em != null) {
-						em.setLastDamageCause(e.getCause());
-					}
+						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
+					});
 				}
 			}
 		}
 	}
-
 }
 

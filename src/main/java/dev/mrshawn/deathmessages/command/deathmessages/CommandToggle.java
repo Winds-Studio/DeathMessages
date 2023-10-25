@@ -6,6 +6,8 @@ import dev.mrshawn.deathmessages.utils.Assets;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 public class CommandToggle extends DeathMessagesCommand {
 
 
@@ -25,14 +27,16 @@ public class CommandToggle extends DeathMessagesCommand {
 			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
-		PlayerManager pm = PlayerManager.getPlayer(p);
-		boolean b = pm.getMessagesEnabled();
-		if (b) {
-			pm.setMessagesEnabled(false);
-			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
-		} else {
-			pm.setMessagesEnabled(true);
-			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
-		}
+		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+		getPlayer.ifPresent(pm -> {
+			boolean b = pm.getMessagesEnabled();
+			if (b) {
+				pm.setMessagesEnabled(false);
+				p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
+			} else {
+				pm.setMessagesEnabled(true);
+				p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
+			}
+		});
 	}
 }

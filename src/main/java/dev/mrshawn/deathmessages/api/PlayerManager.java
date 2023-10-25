@@ -6,7 +6,6 @@ import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,11 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerManager {
@@ -187,22 +185,16 @@ public class PlayerManager {
 		return cachedInventory;
 	}
 
-	public static PlayerManager getPlayer(Player p) {
-		for (PlayerManager pm : players) {
-			if (pm.getUUID().equals(p.getUniqueId())) {
-				return pm;
-			}
-		}
-		return null;
+	public static Optional<PlayerManager> getPlayer(Player p) {
+		return players.stream()
+				.filter(pm -> pm.getUUID().equals(p.getUniqueId()))
+				.findFirst();
 	}
 
-	public static PlayerManager getPlayer(UUID uuid) {
-		for (PlayerManager pm : players) {
-			if (pm.getUUID().equals(uuid)) {
-				return pm;
-			}
-		}
-		return null;
+	public static Optional<PlayerManager> getPlayer(UUID uuid) {
+		return players.stream()
+				.filter(pm -> pm.getUUID().equals(uuid))
+				.findFirst();
 	}
 
 	public void removePlayer() {

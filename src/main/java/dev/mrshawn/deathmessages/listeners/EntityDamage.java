@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.Optional;
 import java.util.Set;
 
 public class EntityDamage implements Listener {
@@ -20,8 +21,8 @@ public class EntityDamage implements Listener {
 	public void onEntityDamage(EntityDamageEvent e) {
 		if (e.isCancelled()) return;
 		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-            PlayerManager pm = PlayerManager.getPlayer(p);
-			pm.setLastDamageCause(e.getCause());
+			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
 			// for fall large if ppl want it float dist = e.getEntity().getFallDistance();
 		} else if (!(e.getEntity() instanceof Player)) {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
@@ -35,21 +36,17 @@ public class EntityDamage implements Listener {
 			if (listenedMobs.isEmpty()) return;
 			for (String listened : listenedMobs) {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
-					EntityManager em;
-					if (EntityManager.getEntity(e.getEntity().getUniqueId()) == null) {
+					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+					getEntity.ifPresentOrElse(em -> em.setLastDamageCause(e.getCause()), () -> {
 						MobType mobType = MobType.VANILLA;
 						if (DeathMessages.getInstance().mythicmobsEnabled
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
-						em = new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
-					} else {
-						em = EntityManager.getEntity(e.getEntity().getUniqueId());
-					}
-					em.setLastDamageCause(e.getCause());
+						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
+					});
 				}
 			}
 		}
 	}
-
 }

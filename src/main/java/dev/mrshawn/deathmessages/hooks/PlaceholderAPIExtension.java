@@ -8,6 +8,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class PlaceholderAPIExtension extends PlaceholderExpansion {
 
 	private final DeathMessages plugin;
@@ -96,32 +98,16 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 */
 	@Override
 	public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
 
-		if (player == null) return null; // Dreeam - No NPE
-
-		PlayerManager pm = PlayerManager.getPlayer(player);
-
-		if (pm == null) return null; // Dreeam - No NPE
-
-		switch (identifier) {
-			case "messages_enabled":
-				return String.valueOf(pm.getMessagesEnabled());
-			case "is_blacklisted":
-				return String.valueOf(pm.isBlacklisted());
-			case "victim_name":
-				return pm.getName();
-			case "victim_display_name":
-				return LegacyComponentSerializer.legacyAmpersand().serialize(pm.getPlayer().displayName());
-			case "killer_name":
-				if (pm.getLastEntityDamager() == null) return null; // Dreeam - No NPE
-				return pm.getLastEntityDamager().getName();
-			case "killer_display_name":
-				if (pm.getLastEntityDamager() == null) return null; // Dreeam - No NPE
-				Component customname = pm.getLastEntityDamager().customName();
-				if (customname == null) return null; // Dreeam - No NPE
-				return LegacyComponentSerializer.legacyAmpersand().serialize(customname);
-			default:
-				return null;
-		}
+		return getPlayer.map(pm -> switch (identifier) {
+			case "messages_enabled" -> String.valueOf(pm.getMessagesEnabled());
+			case "is_blacklisted" -> String.valueOf(pm.isBlacklisted());
+			case "victim_name" -> pm.getName();
+			case "victim_display_name" -> pm.getPlayer().getDisplayName();
+			case "killer_name" -> pm.getLastEntityDamager().getName();
+			case "killer_display_name" -> pm.getLastEntityDamager().getCustomName();
+			default -> null;
+		}).orElse(null);
 	}
 }

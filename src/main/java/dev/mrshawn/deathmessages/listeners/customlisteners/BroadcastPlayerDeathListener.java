@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 public class BroadcastPlayerDeathListener implements Listener {
@@ -30,37 +31,34 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 	@EventHandler
 	public void broadcastListener(BroadcastDeathMessageEvent e) {
+		if (e.isCancelled()) return;
+		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
+			String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()).get(), e.getLivingEntity());
+			message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
+			Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
+		}
 
-		if (!e.isCancelled()) {
-			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-				String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()), e.getLivingEntity());
-				message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-				Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
-			}
-
-			PlayerManager pm = PlayerManager.getPlayer(e.getPlayer());
-			if (pm.isInCooldown()) {
-				return;
-			} else {
+		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+		getPlayer.ifPresent(pm -> {
+			if (!pm.isInCooldown()) {
 				pm.setCooldown();
 			}
+		});
 
-			boolean privatePlayer = config.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
-			boolean privateMobs = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
-			boolean privateNatural = config.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
+		boolean privatePlayer = config.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
+		boolean privateMobs = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
+		boolean privateNatural = config.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
 
-			//To reset for each death message
-			discordSent = false;
+		//To reset for each death message
+		discordSent = false;
 
-			for (World w : e.getBroadcastedWorlds()) {
-				if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
-					continue;
-				}
-				for (Player pls : w.getPlayers()) {
-					PlayerManager pms = PlayerManager.getPlayer(pls);
-					if (pms == null) {
-						pms = new PlayerManager(pls);
-					}
+		for (World w : e.getBroadcastedWorlds()) {
+			if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
+				continue;
+			}
+			for (Player pls : w.getPlayers()) {
+				Optional<PlayerManager> getPlayer2 = PlayerManager.getPlayer(pls);
+				getPlayer2.ifPresentOrElse(pms -> {
 					if (e.getMessageType().equals(MessageType.PLAYER)) {
 						if (privatePlayer && (e.getPlayer().getUniqueId().equals(pms.getUUID())
 								|| e.getLivingEntity().getUniqueId().equals(pms.getUUID()))) {
@@ -81,10 +79,10 @@ public class BroadcastPlayerDeathListener implements Listener {
 							normal(e, pms, pls, e.getBroadcastedWorlds());
 						}
 					}
-				}
+				}, () -> new PlayerManager(pls));
 			}
-			PluginMessaging.sendPluginMSG(e.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
 		}
+		PluginMessaging.sendPluginMSG(e.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
 	}
 
 	private void normal(BroadcastDeathMessageEvent e, PlayerManager pm, Player player, List<World> worlds) {
@@ -113,11 +111,11 @@ public class BroadcastPlayerDeathListener implements Listener {
 				//Will reach the discord broadcast
 			}
 			if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
+				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()).get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;
 			}
 			if (DeathMessages.discordSRVExtension != null && !discordSent) {
-				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
+				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()).get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;
 			}
 		} catch (NullPointerException e1) {

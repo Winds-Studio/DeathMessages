@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.List;
+import java.util.Optional;
 
 public class PluginMessaging implements PluginMessageListener {
 
@@ -46,14 +47,16 @@ public class PluginMessaging implements PluginMessageListener {
 						.replaceAll("%server_name%", serverName));
 				TextComponent message = Assets.convertFromLegacy(rawMsg);
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					PlayerManager pm = PlayerManager.getPlayer(p);
-					if (pm == null) return;
-                    if (pm.getMessagesEnabled()) {
-						p.sendMessage(Component.text()
-								.append(prefix)
-								.append(message)
-								.build());
-					}
+					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+
+					getPlayer.ifPresent(pm -> {
+						if (pm.getMessagesEnabled()) {
+							p.sendMessage(Component.text()
+									.append(prefix)
+									.append(message)
+									.build());
+						}
+					});
 				}
 			}
 		} catch (Exception e) {

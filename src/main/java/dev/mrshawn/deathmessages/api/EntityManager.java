@@ -6,8 +6,6 @@ import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -15,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // Class designed to keep track of damage and data to mobs that were damaged by players
@@ -104,13 +103,10 @@ public class EntityManager {
 		return lastLocation;
 	}
 
-	public static EntityManager getEntity(UUID uuid) {
-		for (EntityManager em : entities) {
-			if (em.getEntityUUID().equals(uuid)) {
-				return em;
-			}
-		}
-		return null;
+	public static Optional<EntityManager> getEntity(UUID uuid) {
+		return entities.stream()
+				.filter(em -> em.getEntityUUID().equals(uuid))
+				.findFirst();
 	}
 
 	public void destroy() {

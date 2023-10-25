@@ -1,13 +1,13 @@
 package dev.mrshawn.deathmessages.api;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ExplosionManager {
@@ -51,22 +51,16 @@ public class ExplosionManager {
 		return this.effected;
 	}
 
-	public static ExplosionManager getExplosion(Location location) {
-		for (ExplosionManager ex : explosions) {
-			if (ex.getLocation().equals(location)) {
-				return ex;
-			}
-		}
-		return null;
+	public static Optional<ExplosionManager> getExplosion(Location location) {
+		return explosions.stream()
+				.filter(ex -> ex.getLocation().equals(location))
+				.findFirst();
 	}
 
-	public static ExplosionManager getManagerIfEffected(UUID uuid) {
-		for (ExplosionManager ex : explosions) {
-			if (ex.getEffected().contains(uuid)) {
-				return ex;
-			}
-		}
-		return null;
+	public static Optional<ExplosionManager> getManagerIfEffected(UUID uuid) {
+		return explosions.stream()
+				.filter(ex -> ex.getEffected().contains(uuid))
+				.findFirst();
 	}
 
 	private void destroy() {

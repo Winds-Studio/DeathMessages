@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MobDeath implements Listener {
 
@@ -31,14 +32,13 @@ public class MobDeath implements Listener {
 		if (getEntityDeathMessages().getConfigurationSection("Mythic-Mobs-Entities").getKeys(false).isEmpty()) return;
 		for (String customMobs : getEntityDeathMessages().getConfigurationSection("Mythic-Mobs-Entities").getKeys(false)) {
 			if (e.getMob().getType().getInternalName().equals(customMobs)) {
-				EntityManager em = EntityManager.getEntity(e.getEntity().getUniqueId());
-
-				if (em == null || em.getLastPlayerDamager() == null) return; // Dreeam - No NPE
-
-				PlayerManager damager = em.getLastPlayerDamager();
-				TextComponent mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
-				BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, mythicDeath, getWorlds(e.getEntity()));
-				Bukkit.getPluginManager().callEvent(event);
+				Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+				getEntity.ifPresent(em -> {
+					PlayerManager damager = em.getLastPlayerDamager();
+					TextComponent mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
+					BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, mythicDeath, getWorlds(e.getEntity()));
+					Bukkit.getPluginManager().callEvent(event);
+				});
 			}
 		}
 	}

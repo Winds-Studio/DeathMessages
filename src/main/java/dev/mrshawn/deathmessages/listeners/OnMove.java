@@ -9,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.Optional;
+
 public class OnMove implements Listener {
 
 	boolean falling;
@@ -18,25 +20,26 @@ public class OnMove implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		PlayerManager pm = PlayerManager.getPlayer(p);
-		if (pm == null) return; // Dreeam - No NPE
-		if (Assets.isClimbable(e.getTo().getBlock())) {
-			pm.setLastClimbing(e.getTo().getBlock().getType());
-			lastBlock = e.getTo().getBlock().getType();
-		} else {
-			if (p.getFallDistance() > 0) {
-				message = true;
-				if (!falling) {
-					falling = true;
-					message = false;
-				}
+		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+		getPlayer.ifPresent(pm -> {
+			if (Assets.isClimbable(e.getTo().getBlock())) {
+				pm.setLastClimbing(e.getTo().getBlock().getType());
+				lastBlock = e.getTo().getBlock().getType();
 			} else {
-				if (message) {
-					pm.setLastClimbing(null);
-					falling = false;
-					message = false;
+				if (p.getFallDistance() > 0) {
+					message = true;
+					if (!falling) {
+						falling = true;
+						message = false;
+					}
+				} else {
+					if (message) {
+						pm.setLastClimbing(null);
+						falling = false;
+						message = false;
+					}
 				}
 			}
-		}
+		});
 	}
 }

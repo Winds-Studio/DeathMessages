@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class InteractEvent implements Listener {
@@ -28,17 +29,19 @@ public class InteractEvent implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInteract(PlayerInteractEvent e) {
 		Block b = e.getClickedBlock();
-		if (b == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || b.getType().equals(Material.AIR)) return; // Dreeam - No NPE
+		if (b == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || b.getType().equals(Material.AIR))
+			return; // Dreeam - No NPE
 		World.Environment environment = b.getWorld().getEnvironment();
 		if (environment.equals(World.Environment.NETHER) || environment.equals(World.Environment.THE_END)) {
 			if (b.getType().name().contains("BED") && !b.getType().equals(Material.BEDROCK)) {
 				List<UUID> effected = new ArrayList<>();
 				for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
-					PlayerManager effect = PlayerManager.getPlayer(p);
-					if (effect == null) return;
 					if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
-						effected.add(p.getUniqueId());
-						effect.setLastEntityDamager(e.getPlayer());
+						Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+						getPlayer.ifPresent(effect -> {
+							effected.add(p.getUniqueId());
+							effect.setLastEntityDamager(e.getPlayer());
+						});
 					}
 				}
 				callEvent(e, b, effected);
@@ -47,14 +50,16 @@ public class InteractEvent implements Listener {
 			if (DeathMessages.majorVersion() >= 16) {
 				if (b.getType().equals(Material.RESPAWN_ANCHOR)) {
 					RespawnAnchor anchor = (RespawnAnchor) b.getBlockData();
-					if (!(anchor.getCharges() == anchor.getMaximumCharges()) && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE)) return;
+					if (!(anchor.getCharges() == anchor.getMaximumCharges()) && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE))
+						return;
 					List<UUID> effected = new ArrayList<>();
 					for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
 						if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
-							PlayerManager effect = PlayerManager.getPlayer(p);
-							if (effect == null) return;
-							effected.add(p.getUniqueId());
-							effect.setLastEntityDamager(e.getPlayer());
+							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+							getPlayer.ifPresent(effect -> {
+								effected.add(p.getUniqueId());
+								effect.setLastEntityDamager(e.getPlayer());
+							});
 						}
 					}
 					callEvent(e, b, effected);
@@ -67,18 +72,17 @@ public class InteractEvent implements Listener {
 		for (Entity ent : e.getClickedBlock().getWorld().getEntities()) {
 			if (ent instanceof Player) continue;
 			if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
-				EntityManager em;
-				if (EntityManager.getEntity(ent.getUniqueId()) == null) {
-					em = new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
-				} else {
-					em = EntityManager.getEntity(ent.getUniqueId());
-				}
-				effected.add(ent.getUniqueId());
-				em.setLastPlayerDamager(PlayerManager.getPlayer(e.getPlayer()));
+				Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
+				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+
+				getEntity.ifPresentOrElse(em -> {
+					effected.add(ent.getUniqueId());
+					getPlayer.ifPresent(em::setLastPlayerDamager);
+				}, () -> new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA));
 			}
+			new ExplosionManager(e.getPlayer().getUniqueId(), b.getType(), b.getLocation(), effected);
+			DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(e.getPlayer(), b);
+			Bukkit.getPluginManager().callEvent(explodeEvent);
 		}
-		new ExplosionManager(e.getPlayer().getUniqueId(), b.getType(), b.getLocation(), effected);
-		DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(e.getPlayer(), b);
-		Bukkit.getPluginManager().callEvent(explodeEvent);
 	}
 }

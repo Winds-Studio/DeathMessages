@@ -51,6 +51,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -165,15 +166,19 @@ public class Assets {
 			}
 		}
 		if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-			// Bed kill
-			ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
-			PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-			if (explosionManager.getMaterial().name().contains("BED")) {
-				if (pyro != null) return get(gang, pm, pyro.getPlayer(), "Bed");
-			}
-			// Respawn Anchor kill
-			if (DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-				if (pyro != null) return get(gang, pm, pyro.getPlayer(), "Respawn-Anchor");
+			Optional<ExplosionManager> explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
+			if (explosionManager.isPresent()) {
+				Optional<PlayerManager> pyro = PlayerManager.getPlayer(explosionManager.get().getPyro());
+				if (pyro.isPresent()) {
+					// Bed kill
+					if (explosionManager.get().getMaterial().name().contains("BED")) {
+						return get(gang, pm, pyro.get().getPlayer(), "Bed");
+					}
+					// Respawn Anchor kill
+					if (DeathMessages.majorVersion() >= 16 && explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+						return get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
+					}
+				}
 			}
 		}
 		if (hasWeapon) {
@@ -199,7 +204,6 @@ public class Assets {
 
 	public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
 		PlayerManager pm = em.getLastPlayerDamager();
-		if (pm == null) return null;
 		Player p = pm.getPlayer();
 		boolean hasWeapon = hasWeapon(p, pm.getLastDamage());
 
@@ -215,16 +219,19 @@ public class Assets {
 			}
 		}
 		if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-			// Bed kill
-			ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
-			if (explosionManager.getMaterial().name().contains("BED")) {
-				PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-				return getEntityDeath(pyro.getPlayer(), em.getEntity(), "Bed", mobType);
-			}
-			// Respawn Anchor kill
-			if (DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-				PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-				return getEntityDeath(pyro.getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+			Optional<ExplosionManager> explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
+			if (explosionManager.isPresent()) {
+				Optional<PlayerManager> pyro = PlayerManager.getPlayer(explosionManager.get().getPyro());
+				if (pyro.isPresent()) {
+					// Bed kill
+					if (explosionManager.get().getMaterial().name().contains("BED")) {
+						return getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Bed", mobType);
+					}
+					// Respawn Anchor kill
+					if (DeathMessages.majorVersion() >= 16 && explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+						return getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+					}
+				}
 			}
 		}
 		if (hasWeapon) {
