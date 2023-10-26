@@ -30,19 +30,22 @@ public class BroadcastEntityDeathListener implements Listener {
 
 	@EventHandler
 	public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-		PlayerManager pm = e.getPlayer();
+		Optional<PlayerManager> pm = Optional.ofNullable(e.getPlayer());
+
+		if (pm.isEmpty()) return;
+
 		boolean hasOwner = e.getEntity() instanceof Tameable;
         if (e.isCancelled()) return;
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.getPlayer(), e.getEntity(), hasOwner);
+			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.get().getPlayer(), e.getEntity(), hasOwner);
 			message = message
 					.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
 			Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
 		}
-		if (pm.isInCooldown()) {
+		if (pm.get().isInCooldown()) {
 			return;
 		} else {
-			pm.setCooldown();
+			pm.get().setCooldown();
 		}
 
 		boolean discordSent = false;
@@ -57,7 +60,7 @@ public class BroadcastEntityDeathListener implements Listener {
 				if (privateTameable) {
 					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
 					getPlayer.ifPresent(pms -> {
-						if (pms.getUUID().equals(pm.getPlayer().getUniqueId())) {
+						if (pms.getUUID().equals(pm.get().getPlayer().getUniqueId())) {
 							if (pms.getMessagesEnabled()) {
 								player.sendMessage(e.getTextComponent());
 							}
@@ -91,11 +94,11 @@ public class BroadcastEntityDeathListener implements Listener {
 						//Will reach the discord broadcast
 					}
 					if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-						DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm, e.getEntity(), hasOwner, e.getMessageType());
+						DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), e.getEntity(), hasOwner, e.getMessageType());
 						discordSent = true;
 					}
 					if (DeathMessages.discordSRVExtension != null && !discordSent) {
-						DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm, e.getEntity(), hasOwner, e.getMessageType());
+						DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), e.getEntity(), hasOwner, e.getMessageType());
 						discordSent = true;
 					}
 				}

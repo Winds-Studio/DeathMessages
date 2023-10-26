@@ -203,9 +203,12 @@ public class Assets {
 	}
 
 	public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
-		PlayerManager pm = em.getLastPlayerDamager();
-		Player p = pm.getPlayer();
-		boolean hasWeapon = hasWeapon(p, pm.getLastDamage());
+		Optional<PlayerManager> pm = Optional.ofNullable(em.getLastPlayerDamager());
+
+		if (pm.isEmpty()) return null;
+
+		Player p = pm.get().getPlayer();
+		boolean hasWeapon = hasWeapon(p, pm.get().getLastDamage());
 
 		if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 			if (em.getLastExplosiveEntity() instanceof EnderCrystal) {
