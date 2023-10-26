@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.9.20-RC</kotlin.version>
+        <kotlin.version>1.9.20-RC2</kotlin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
@@ -99,43 +99,43 @@
                     <relocations>
                         <relocation>
                             <pattern>kotlin</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.kotlin</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.kotlin</shadedPattern>
                         </relocation>
 <!--                        <relocation>-->
 <!--                            <pattern>net.kyori.adventure</pattern>-->
-<!--                            <shadedPattern>dev.mrshawn.deathmessages.shade.adventure</shadedPattern>-->
+<!--                            <shadedPattern>dev.mrshawn.deathmessages.libs.adventure</shadedPattern>-->
 <!--                        </relocation>-->
 <!--                        <relocation>-->
 <!--                            <pattern>net.kyori.examination</pattern>-->
-<!--                            <shadedPattern>dev.mrshawn.deathmessages.shade.examination</shadedPattern>-->
+<!--                            <shadedPattern>dev.mrshawn.deathmessages.libs.examination</shadedPattern>-->
 <!--                        </relocation>-->
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.acf</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.acf</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.locales</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.locales</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.xseries</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.xseries</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.bstats</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.bstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.tcoded.folialib</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.folialib</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.folialib</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.nbtapi</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.nbtapi</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.dv8tion.jda</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.shade.jda</shadedPattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.jda</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
