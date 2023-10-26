@@ -169,7 +169,7 @@ public class PlayerManager {
 
 	public void setCooldown() {
 		cooldown = config.getInt(Config.COOLDOWN);
-		cooldownTask = DeathMessages.getInstance().foliaLib.getImpl().runTimerAsync(() -> {
+		cooldownTask = DeathMessages.getInstance().foliaLib.getImpl().runTimer(() -> {
 			if (cooldown <= 0) {
 				cooldownTask.cancel();
 			}

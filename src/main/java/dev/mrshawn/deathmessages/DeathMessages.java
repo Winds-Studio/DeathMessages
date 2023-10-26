@@ -226,7 +226,7 @@ public class DeathMessages extends JavaPlugin {
 		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
 			for (World world : Bukkit.getWorlds()) {
 				if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
-					foliaLib.getImpl().runAsync(task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
+					foliaLib.getImpl().runNextTick(task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
 				}
 			}
 		}

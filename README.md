@@ -2,15 +2,15 @@
 ![GitHub](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=flat-square)
 ![Building Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=flat-square)
 
-Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) 
- 
-Original Contact: [Discord](https://discord.gg/dhJnq7R), if you are urged to join it.
+Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Outdated)
 
-## Requirements
+## Features
 
-Supporting 1.17.1 - Latest Minecraft version (1.20.2)
-
-Compatible with Paper & Paper forks, Forge & Bukkit Hybrid Server 
+- Supporting 1.17.1 - Latest Minecraft version (1.20.2)
+- Compatible with Paper & Paper forks, Forge & Bukkit Hybrid Server
+- Folia support
+- Fix a bunch of errors from original DeathMessages
+- Highly optimized
 
 ## Contact
 

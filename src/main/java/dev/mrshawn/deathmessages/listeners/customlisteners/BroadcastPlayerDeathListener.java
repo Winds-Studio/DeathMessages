@@ -32,14 +32,14 @@ public class BroadcastPlayerDeathListener implements Listener {
 	@EventHandler
 	public void broadcastListener(BroadcastDeathMessageEvent e) {
 		if (e.isCancelled()) return;
-		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-			String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), PlayerManager.getPlayer(e.getPlayer()).get(), e.getLivingEntity());
-			message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-			Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
-		}
-
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 		getPlayer.ifPresent(pm -> {
+			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
+				String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
+				message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
+				Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
+			}
+
 			if (!pm.isInCooldown()) {
 				pm.setCooldown();
 			}
@@ -92,34 +92,33 @@ public class BroadcastPlayerDeathListener implements Listener {
 				return;
 			}
 		}
-		try {
-			if (pm.getMessagesEnabled()) {
-				player.sendMessage(e.getTextComponent());
-			}
-			if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
-				List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
-				boolean broadcastToDiscord = false;
-				for (World world : worlds) {
-					if (discordWorldWhitelist.contains(world.getName())) {
-						broadcastToDiscord = true;
-					}
+		if (pm.getMessagesEnabled()) {
+			player.sendMessage(e.getTextComponent());
+		}
+		if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
+			List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
+			boolean broadcastToDiscord = false;
+			for (World world : worlds) {
+				if (discordWorldWhitelist.contains(world.getName())) {
+					broadcastToDiscord = true;
 				}
-				if (!broadcastToDiscord) {
-					//Wont reach the discord broadcast
-					return;
-				}
-				//Will reach the discord broadcast
 			}
+			if (!broadcastToDiscord) {
+				//Wont reach the discord broadcast
+				return;
+			}
+			//Will reach the discord broadcast
+		}
+		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+		if (getPlayer.isPresent()) {
 			if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-				DeathMessages.discordBotAPIExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()).get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
+				DeathMessages.discordBotAPIExtension.sendDiscordMessage(getPlayer.get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;
 			}
 			if (DeathMessages.discordSRVExtension != null && !discordSent) {
-				DeathMessages.discordSRVExtension.sendDiscordMessage(PlayerManager.getPlayer(e.getPlayer()).get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
+				DeathMessages.discordSRVExtension.sendDiscordMessage(getPlayer.get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;
 			}
-		} catch (NullPointerException e1) {
-			e1.printStackTrace();
 		}
 	}
 }

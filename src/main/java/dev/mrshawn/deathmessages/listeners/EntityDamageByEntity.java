@@ -32,10 +32,8 @@ public class EntityDamageByEntity implements Listener {
 
 	@EventHandler
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-			Player p = (Player) e.getEntity();
-			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-
+		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
+            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 			getPlayer.ifPresent(pm -> {
 				if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 					if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager().getUniqueId())) {
@@ -90,34 +88,40 @@ public class EntityDamageByEntity implements Listener {
 						if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 							if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
 								if (explosions.get(e.getDamager().getUniqueId()) instanceof Player) {
-									em.setLastPlayerDamager(PlayerManager.getPlayer((Player) explosions.get(e.getDamager().getUniqueId())).get());
+									Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) explosions.get(e.getDamager().getUniqueId()));
+									getPlayer.ifPresent(em::setLastPlayerDamager);
 									em.setLastExplosiveEntity(e.getDamager());
 								}
 							} else if (e.getDamager() instanceof TNTPrimed tnt) {
 								if (tnt.getSource() instanceof Player) {
-									em.setLastPlayerDamager(PlayerManager.getPlayer((Player) tnt.getSource()).get());
+									Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) tnt.getSource());
+									getPlayer.ifPresent(em::setLastPlayerDamager);
 								}
 								em.setLastExplosiveEntity(e.getDamager());
 							} else if (e.getDamager() instanceof Firework firework) {
 								try {
 									if (firework.getShooter() instanceof Player) {
-										em.setLastPlayerDamager(PlayerManager.getPlayer((Player) firework.getShooter()).get());
+										Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) firework.getShooter());
+										getPlayer.ifPresent(em::setLastPlayerDamager);
 									}
 									em.setLastExplosiveEntity(e.getDamager());
 								} catch (NoSuchMethodError ignored) {
 									//McMMO ability
 								}
 							} else {
-								em.setLastPlayerDamager(PlayerManager.getPlayer((Player) e.getDamager()).get());
+								Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
+								getPlayer.ifPresent(em::setLastPlayerDamager);
 								em.setLastExplosiveEntity(e.getDamager());
 							}
 						} else if (e.getDamager() instanceof Projectile projectile) {
 							if (projectile.getShooter() instanceof Player) {
-								em.setLastPlayerDamager(PlayerManager.getPlayer((Player) projectile.getShooter()).get());
+								Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) projectile.getShooter());
+								getPlayer.ifPresent(em::setLastPlayerDamager);
 							}
 							em.setLastProjectileEntity(projectile);
 						} else if (e.getDamager() instanceof Player) {
-							em.setLastPlayerDamager(PlayerManager.getPlayer((Player) e.getDamager()).get());
+							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
+							getPlayer.ifPresent(em::setLastPlayerDamager);
 						}
 					}, () -> {
 						MobType mobType = MobType.VANILLA;
