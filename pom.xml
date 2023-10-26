@@ -158,48 +158,47 @@
     </build>
 
     <repositories>
+        <!-- PaperMC -->
         <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
+        <!-- PlaceholderAPI -->
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <!-- NBT-API -->
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>enginehub-maven</id>
-            <url>https://maven.enginehub.org/repo/</url>
-        </repository>
+        <!-- JitPack -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <!-- acf-paper -->
         <repository>
             <id>aikar</id>
             <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
+        <!-- DiscordSTV -->
         <repository>
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
         </repository>
-        <!-- CombatLogX  -->
+        <!-- CombatLogX -->
 <!--        <repository>-->
 <!--            <id>sirblobman-public</id>-->
 <!--            <url>https://nexus.sirblobman.xyz/repository/public/</url>-->
 <!--        </repository>-->
+        <!-- Lumine's -->
         <repository>
-            <id>nexus</id>
-            <name>Lumine Releases</name>
+            <id>Lumine Releases</id>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <!-- sk89q's -->
         <repository>
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
@@ -290,13 +289,6 @@
             <version>1.27.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.ghostchu.plugins.kooksrv</groupId>-->
-<!--            <artifactId>KookSRV</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/libs/KookSRV-1.0-SNAPSHOT.jar</systemPath>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-core</artifactId>
