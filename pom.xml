@@ -130,6 +130,7 @@
                     </relocations>
                     <filters>
                         <filter>
+                            <!-- Avoid to include META-INF/maven in Jar -->
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/**</exclude>
