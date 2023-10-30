@@ -36,13 +36,13 @@ public class InteractEvent implements Listener {
 			if (b.getType().name().contains("BED") && !b.getType().equals(Material.BEDROCK)) {
 				List<UUID> effected = new ArrayList<>();
 				for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
-					if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
-						Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-						getPlayer.ifPresent(effect -> {
+					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+					getPlayer.ifPresent(effect -> {
+						if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
 							effected.add(p.getUniqueId());
 							effect.setLastEntityDamager(e.getPlayer());
-						});
-					}
+						}
+					});
 				}
 				callEvent(e, b, effected);
 			}
@@ -54,13 +54,13 @@ public class InteractEvent implements Listener {
 						return;
 					List<UUID> effected = new ArrayList<>();
 					for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
-						if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
-							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-							getPlayer.ifPresent(effect -> {
+						Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+						getPlayer.ifPresent(effect -> {
+							if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
 								effected.add(p.getUniqueId());
 								effect.setLastEntityDamager(e.getPlayer());
-							});
-						}
+							}
+						});
 					}
 					callEvent(e, b, effected);
 				}
