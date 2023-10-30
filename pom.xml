@@ -91,14 +91,6 @@
                             <pattern>kotlin</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.libs.kotlin</shadedPattern>
                         </relocation>
-<!--                        <relocation>-->
-<!--                            <pattern>net.kyori.adventure</pattern>-->
-<!--                            <shadedPattern>dev.mrshawn.deathmessages.libs.adventure</shadedPattern>-->
-<!--                        </relocation>-->
-<!--                        <relocation>-->
-<!--                            <pattern>net.kyori.examination</pattern>-->
-<!--                            <shadedPattern>dev.mrshawn.deathmessages.libs.examination</shadedPattern>-->
-<!--                        </relocation>-->
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.libs.acf</shadedPattern>
@@ -222,12 +214,6 @@
             <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>net.kyori</groupId>-->
-<!--            <artifactId>adventure-api</artifactId>-->
-<!--            <version>4.14.0</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

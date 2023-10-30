@@ -7,7 +7,7 @@ Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessa
 ## Features
 
 - Supporting 1.17.1 - Latest Minecraft version (1.20.2)
-- Compatible with Paper & Paper forks, Forge & Bukkit Hybrid Server
+- Compatible with Paper & Paper forks
 - Folia support
 - Fix a bunch of errors from original DeathMessages
 - Highly optimized
@@ -28,7 +28,7 @@ For Developers:
 - Adventure - To replace the replaceAll and bukkit ChatColor
 - Refactor some code
 - Command system, tab complete and some refactor
-- Compatibility
+- lower version Compatibility
 - look into get entity name
 - Fix HoverEvent
 
