@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.kotlin.utils.messages
 
+import dev.mrshawn.deathmessages.DeathMessages
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -31,12 +32,12 @@ object Chat {
 	}
 
 	fun broadcast(message: Component?) {
-		if (message != null) Bukkit.broadcast(message)
+		if (message != null) DeathMessages.getInstance().adventure().all().sendMessage((message))
 	}
 
 	fun clearChat() = run {
 		for (i in 0..100) {
-			Bukkit.broadcast(Component.text(" "))
+			DeathMessages.getInstance().adventure().all().sendMessage(Component.text(" "))
 		}
 	}
 }

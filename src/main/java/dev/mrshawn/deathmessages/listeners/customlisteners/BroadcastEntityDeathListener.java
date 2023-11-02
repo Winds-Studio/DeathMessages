@@ -40,7 +40,7 @@ public class BroadcastEntityDeathListener implements Listener {
 			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.get().getPlayer(), e.getEntity(), hasOwner);
 			message = message
 					.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-			Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
+			DeathMessages.getInstance().adventure().sender(Bukkit.getConsoleSender()).sendMessage(Assets.convertFromLegacy(message));
 		}
 		if (pm.get().isInCooldown()) {
 			return;
@@ -62,7 +62,7 @@ public class BroadcastEntityDeathListener implements Listener {
 					getPlayer.ifPresent(pms -> {
 						if (pms.getUUID().equals(pm.get().getPlayer().getUniqueId())) {
 							if (pms.getMessagesEnabled()) {
-								player.sendMessage(e.getTextComponent());
+								DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
 							}
 						}
 					});
@@ -75,7 +75,7 @@ public class BroadcastEntityDeathListener implements Listener {
 									return;
 								}
 							}
-							player.sendMessage(e.getTextComponent());
+							DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
 							PluginMessaging.sendPluginMSG(pms.getPlayer(), e.getTextComponent().toString());
 						}
 					});

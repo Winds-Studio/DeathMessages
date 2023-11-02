@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.kotlin.utils
 
-import java.util.TreeMap
+import java.util.*
 
 
 object NumberUtils {

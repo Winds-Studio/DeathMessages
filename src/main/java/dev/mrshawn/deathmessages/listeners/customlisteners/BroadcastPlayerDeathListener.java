@@ -13,7 +13,6 @@ import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,7 +36,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 				String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
 				message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-				Bukkit.getConsoleSender().sendMessage(Assets.convertFromLegacy(message));
+				DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message));
 			}
 
 			if (!pm.isInCooldown()) {
@@ -93,7 +92,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 			}
 		}
 		if (pm.getMessagesEnabled()) {
-			player.sendMessage(e.getTextComponent());
+			DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
 		}
 		if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
 			List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);

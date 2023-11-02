@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
@@ -31,13 +32,13 @@ public class CommandManager implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
 		if (sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return false;
 		}
 		if (args.length == 0) {
 			for (String s : Assets.formatMessage(
 					Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))) {
-				sender.sendMessage(Assets.convertFromLegacy(s));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(s));
 			}
 		} else {
 			DeathMessagesCommand cmd = get(args[0]);
@@ -50,7 +51,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			for (String s : Assets.formatMessage(
 					Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))) {
-				sender.sendMessage(Assets.convertFromLegacy(s));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(s));
 			}
 		}
 		return false;

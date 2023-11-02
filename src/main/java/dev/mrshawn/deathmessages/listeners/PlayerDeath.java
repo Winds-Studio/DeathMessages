@@ -3,7 +3,6 @@ package dev.mrshawn.deathmessages.listeners;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
-import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,7 +14,7 @@ public class PlayerDeath implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
-			event.deathMessage(Component.empty());
+			event.setDeathMessage(null);
 		}
 	}
 }

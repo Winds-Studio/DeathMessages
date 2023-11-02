@@ -6,8 +6,8 @@ Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessa
 
 ## Features
 
-- Supporting 1.17.1 - Latest Minecraft version (1.20.2)
-- Compatible with Paper & Paper forks
+- Supporting 1.12.2 - Latest Minecraft version (1.20.2)
+- Compatible with Spigot/Paper/Paper forks, Forge/Bukkit Hybrid Server
 - Folia support
 - Fix a bunch of errors from original DeathMessages
 - Highly optimized
@@ -31,6 +31,7 @@ For Developers:
 - lower version Compatibility
 - look into get entity name
 - Fix HoverEvent
+- More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:
 

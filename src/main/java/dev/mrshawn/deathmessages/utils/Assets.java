@@ -15,6 +15,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -107,7 +108,7 @@ public class Assets {
 
 	public static boolean itemNameIsWeapon(ItemStack itemStack) {
 		if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return false;
-		String displayName = LegacyComponentSerializer.legacyAmpersand().serialize(itemStack.getItemMeta().displayName());
+		String displayName = itemStack.getItemMeta().getDisplayName();
 
 		for (String s : config.getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON)) {
 			Pattern pattern = Pattern.compile(s);
@@ -298,7 +299,7 @@ public class Assets {
 				return getNaturalDeath(pm, "Projectile-Unknown");
 			}
 			String displayName;
-			if (i.getItemMeta() != null && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+			if (i.getItemMeta() != null && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
 						if (i.getEnchantments().isEmpty()) {
@@ -310,7 +311,7 @@ public class Assets {
 				}
 				displayName = Assets.convertString(i.getType().name());
 			} else {
-				displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.displayName());
+				displayName = i.getItemMeta().getDisplayName();
 			}
 			String[] spl = msg.split("%weapon%");
 			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -320,7 +321,7 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -374,7 +375,7 @@ public class Assets {
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
-			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
 						if (i.getEnchantments().isEmpty()) {
@@ -388,7 +389,7 @@ public class Assets {
 				}
 				displayName = Assets.convertString(i.getType().name());
 			} else {
-				displayName = LegacyComponentSerializer.legacyAmpersand().serialize(i.displayName());
+				displayName = i.getItemMeta().getDisplayName();
 			}
 			String[] spl = msg.split("%weapon%");
 			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -398,7 +399,7 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -454,7 +455,7 @@ public class Assets {
 		if (msg.contains("%weapon%")) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			String displayName;
-			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
 						if (i.getEnchantments().isEmpty()) {
@@ -468,7 +469,7 @@ public class Assets {
 				}
 				displayName = Assets.convertString(i.getType().name());
 			} else {
-				displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
+				displayName = i.getItemMeta().getDisplayName();
 			}
 			String[] spl = msg.split("%weapon%");
 			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -478,7 +479,7 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -576,7 +577,7 @@ public class Assets {
 		if (msg.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
-			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 							.equals(projectileDamage)) {
@@ -585,7 +586,7 @@ public class Assets {
 				}
 				displayName = Assets.convertString(i.getType().name());
 			} else {
-				displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
+				displayName = i.getItemMeta().getDisplayName();
 			}
 			String[] spl = msg.split("%weapon%");
 			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -595,7 +596,7 @@ public class Assets {
 				displayName = displayName + "&r" + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -653,7 +654,7 @@ public class Assets {
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			String displayName;
-			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().displayName() == Component.empty()) {
+			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 							.equals(projectileDamage)) {
@@ -663,7 +664,7 @@ public class Assets {
 				}
 				displayName = Assets.convertString(i.getType().name());
 			} else {
-				displayName = LegacyComponentSerializer.legacySection().serialize(i.displayName());
+				displayName = i.getItemMeta().getDisplayName();
 			}
 			String[] spl = msg.split("%weapon%");
 			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -673,7 +674,7 @@ public class Assets {
 				displayName = displayName + "&r" + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(i.getType().key(), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -795,7 +796,7 @@ public class Assets {
 				.replaceAll("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()) : entity.getCustomName())
 				.replaceAll("%killer%", player.getName())
-				.replaceAll("%killer_display%", LegacyComponentSerializer.legacySection().serialize(player.displayName()))
+				.replaceAll("%killer_display%", player.getDisplayName())
 				.replaceAll("%world%", entity.getLocation().getWorld().getName())
 				.replaceAll("%world_environment%", getEnvironment(entity.getLocation().getWorld().getEnvironment()))
 				.replaceAll("%x%", String.valueOf(entity.getLocation().getBlock().getX()))
@@ -821,7 +822,7 @@ public class Assets {
 		if (mob == null) {
 			msg = msg
 					.replaceAll("%player%", pm.getName())
-					.replaceAll("%player_display%", LegacyComponentSerializer.legacySection().serialize(pm.getPlayer().displayName()))
+					.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
 					.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
 					.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
 					.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
@@ -850,7 +851,7 @@ public class Assets {
 			}
 			msg = msg
 					.replaceAll("%player%", pm.getName())
-					.replaceAll("%player_display%", LegacyComponentSerializer.legacySection().serialize(pm.getPlayer().displayName()))
+					.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
 					.replaceAll("%killer%", mobName)
 					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs."
 							+ mob.getType().toString().toLowerCase()))
@@ -868,7 +869,7 @@ public class Assets {
 			}
 
 			if (mob instanceof Player p) {
-				msg = msg.replaceAll("%killer_display%", LegacyComponentSerializer.legacySection().serialize(p.displayName()));
+				msg = msg.replaceAll("%killer_display%", p.getDisplayName());
 			}
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {

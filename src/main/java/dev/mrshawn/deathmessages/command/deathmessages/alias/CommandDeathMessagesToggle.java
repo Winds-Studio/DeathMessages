@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.command.deathmessages.alias;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
@@ -17,15 +18,15 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
 		if (sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return false;
 		}
 		if (!(sender instanceof Player player)) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
 			return false;
 		}
 		if (!player.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
-			player.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().player(player).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return false;
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
@@ -33,10 +34,10 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
 		getPlayer.ifPresent(pm -> {
 			if (b) {
 				pm.setMessagesEnabled(false);
-				player.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
+				DeathMessages.getInstance().adventure().player(player).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
 			} else {
 				pm.setMessagesEnabled(true);
-				player.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
+				DeathMessages.getInstance().adventure().player(player).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
 			}
 		});
 		return false;

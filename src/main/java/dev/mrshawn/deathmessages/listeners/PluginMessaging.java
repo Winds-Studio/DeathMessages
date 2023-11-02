@@ -51,7 +51,7 @@ public class PluginMessaging implements PluginMessageListener {
 
 					getPlayer.ifPresent(pm -> {
 						if (pm.getMessagesEnabled()) {
-							p.sendMessage(Component.text()
+							DeathMessages.getInstance().adventure().player(p).sendMessage(Component.text()
 									.append(prefix)
 									.append(message)
 									.build());

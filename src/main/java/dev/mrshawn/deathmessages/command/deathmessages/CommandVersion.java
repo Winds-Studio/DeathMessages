@@ -16,13 +16,13 @@ public class CommandVersion extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_VERSION.getValue())) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		String message = Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Version");
 		message = message
 				.replaceAll("%version%", DeathMessages.getInstance().getDescription().getVersion())
 				.replaceAll("%authors%", DeathMessages.getInstance().getDescription().getAuthors().toString());
-		sender.sendMessage(Assets.convertFromLegacy(message));
+		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(message));
 	}
 }

@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
@@ -16,10 +17,10 @@ public class CommandReload extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_RELOAD.getValue())) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		ConfigManager.getInstance().reload();
-		sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Reload.Reloaded")));
+		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Reload.Reloaded")));
 	}
 }

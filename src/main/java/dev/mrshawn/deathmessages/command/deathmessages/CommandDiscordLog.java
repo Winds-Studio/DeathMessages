@@ -26,7 +26,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_DISCORDLOG.getValue())) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		List<String> discordLog = Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog");
@@ -48,35 +48,35 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 		}
 		for (String log : discordLog) {
 			if (log.equals("%discordConfig%")) {
-				sender.sendMessage(Assets.convertFromLegacy("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
-				sender.sendMessage(Assets.convertFromLegacy("  &aChannels:"));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("  &aChannels:"));
 				// Player
-				sender.sendMessage(Assets.convertFromLegacy("    &aPlayer-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED)));
-				sender.sendMessage(Assets.convertFromLegacy("    &aPlayer-Channels:"));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aPlayer-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED)));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aPlayer-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS)) {
-					sender.sendMessage(Assets.convertFromLegacy("      - " + channels));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
 				}
 				// Mob
-				sender.sendMessage(Assets.convertFromLegacy("    &aMob-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED)));
-				sender.sendMessage(Assets.convertFromLegacy("    &aMob-Channels:"));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aMob-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED)));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aMob-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS)) {
-					sender.sendMessage(Assets.convertFromLegacy("      - " + channels));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
 				}
 				// Player
-				sender.sendMessage(Assets.convertFromLegacy("    &aNatural-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED)));
-				sender.sendMessage(Assets.convertFromLegacy("    &aNatural-Channels:"));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aNatural-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED)));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aNatural-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS)) {
-					sender.sendMessage(Assets.convertFromLegacy("      - " + channels));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
 				}
 				// Player
-				sender.sendMessage(Assets.convertFromLegacy("    &aEntity-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED)));
-				sender.sendMessage(Assets.convertFromLegacy("    &aEntity-Channels:"));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aEntity-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED)));
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aEntity-Channels:"));
 				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS)) {
-					sender.sendMessage(Assets.convertFromLegacy("      - " + channels));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
 				}
 				continue;
 			}
-			sender.sendMessage(Assets.convertFromLegacy(log
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(log
 					.replaceAll("%discordJar%", discordJar)
 					.replaceAll("%discordToken%", discordToken)
 					.replace("%prefix%", Messages.getInstance().getConfig().getString("Prefix"))));

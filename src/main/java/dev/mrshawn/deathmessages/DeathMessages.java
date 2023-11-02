@@ -33,6 +33,7 @@ import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.worldguard.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.worldguard.WorldGuardExtension;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -40,6 +41,7 @@ import org.bukkit.World;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -72,6 +74,7 @@ public class DeathMessages extends JavaPlugin {
 	private static FileSettings<Config> config;
 
 	public void onEnable() {
+		this.adventure = BukkitAudiences.create(this);
 		initializeListeners();
 		initializeCommands();
 		initializeHooks();
@@ -88,7 +91,20 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public void onDisable() {
+		if(this.adventure != null) {
+			this.adventure.close();
+			this.adventure = null;
+		}
 		instance = null;
+	}
+
+	private BukkitAudiences adventure;
+
+	public @NotNull BukkitAudiences adventure() {
+		if(this.adventure == null) {
+			throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+		}
+		return this.adventure;
 	}
 
 	public static int majorVersion() {

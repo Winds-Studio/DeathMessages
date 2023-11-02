@@ -17,7 +17,7 @@ public class OnJoin implements Listener {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if (PlayerManager.getPlayer(p) == null) new PlayerManager(p);
+				if (PlayerManager.getPlayer(p).isEmpty()) new PlayerManager(p);
 			}
 		}.runTaskAsynchronously(DeathMessages.getInstance());
 

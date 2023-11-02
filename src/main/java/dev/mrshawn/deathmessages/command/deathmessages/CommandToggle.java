@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.command.deathmessages;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
@@ -19,12 +20,12 @@ public class CommandToggle extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
 			return;
 		}
 		Player p = (Player) sender;
 		if (!p.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
-			p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
@@ -32,10 +33,10 @@ public class CommandToggle extends DeathMessagesCommand {
 			boolean b = pm.getMessagesEnabled();
 			if (b) {
 				pm.setMessagesEnabled(false);
-				p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
+				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
 			} else {
 				pm.setMessagesEnabled(true);
-				p.sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
+				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On")));
 			}
 		});
 	}
