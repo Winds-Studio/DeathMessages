@@ -176,7 +176,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	@Override
 	public @NotNull String saveToString() {
 		// First, we set headers to null - as we will handle all comments, including headers, in this method.
-		this.options().setHeader(null);
+		this.options().header(null); // Dreeam - For lower version compatibility.
 		// Get the string of the data (keys and values) and parse it into an array of lines.
 		List<String> lines = new ArrayList<>(Arrays.asList(super.saveToString().split("\n")));
 

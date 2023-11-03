@@ -353,16 +353,13 @@ public class Assets {
 		final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue()
 				+ "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
-		//List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer());
 
 		//Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
-		List<String> msgs;
+		List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			//Bukkit.broadcastMessage("is myth - " + internalMobType);
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
-		} else {
-			msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
@@ -427,7 +424,7 @@ public class Assets {
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
 		String entityName = e.getType().getEntityClass().getSimpleName().toLowerCase();
-		List<String> msgs;
+		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
 			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
@@ -436,8 +433,6 @@ public class Assets {
 				// reserved
 			}
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + ".Weapon"), p, e);
-		} else {
-			msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
 		}
 
 		boolean hasOwner = false;
@@ -510,15 +505,11 @@ public class Assets {
 				+ "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
 
-		// List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer());
-
-		List<String> msgs;
+		List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			//Bukkit.broadcastMessage("is myth - " + internalMobType);
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
-		} else {
-			msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		}
 
 		if (msgs.isEmpty()) {
@@ -554,19 +545,18 @@ public class Assets {
 
 	public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
 		final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
-		final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue() + "." + mob.getName().toLowerCase();
+		final String cMode = basicMode ? PDMode.BASIC_MODE.getValue() : PDMode.MOBS.getValue() + "." + mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
 
-		//List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer());
-
-		List<String> msgs;
+		List<String> msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
-		} else {
-			msgs = sortList(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
 
+		System.out.println("看看这里" + msgs);
+		System.out.println(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage));
+		System.out.println(cMode + "." + affiliation + "." + projectileDamage);
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 		TextComponent.Builder tc = Component.text();
@@ -574,7 +564,7 @@ public class Assets {
 			TextComponent tx = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			tc.append(tx);
 		}
-		if (msg.contains("%weapon%") && pm.getLastProjectileEntity() instanceof Arrow) {
+		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
 			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
@@ -624,16 +614,15 @@ public class Assets {
 
 	public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
 		String entityName = em.getEntity().getType().getEntityClass().getSimpleName().toLowerCase();
-		List<String> msgs;
+		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
 			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
 				internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
 			}
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
-		} else {
-			msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
 		}
+
 		if (msgs.isEmpty()) {
 			if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED)) {
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
@@ -705,23 +694,19 @@ public class Assets {
 		if (entity instanceof Tameable tameable) {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
-		List<String> msgs;
+		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
+				entity.getType().getEntityClass().getSimpleName().toLowerCase() + "." + damageCause), player, entity);
 		if (hasOwner) {
 			msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
 					entity.getName().toLowerCase() + ".Tamed"), player, entity);
-		} else {
-			if (mobType.equals(MobType.MYTHIC_MOB)) {
-				String internalMobType = null;
-				if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
-					internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(entity).getMobType();
-				} else {
-					// reserved
-				}
-				msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, entity);
+		} else if (mobType.equals(MobType.MYTHIC_MOB)) {
+			String internalMobType = null;
+			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(entity.getUniqueId())) {
+				internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(entity).getMobType();
 			} else {
-				msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
-						entity.getType().getEntityClass().getSimpleName().toLowerCase() + "." + damageCause), player, entity);
+				// reserved
 			}
+			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, entity);
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
@@ -920,10 +905,10 @@ public class Assets {
 			return "Projectile-LlamaSpit";
 		} else if (projectile instanceof Snowball) {
 			return "Projectile-Snowball";
-		} else if (projectile instanceof Trident) {
-			return "Projectile-Trident";
 		} else if (projectile instanceof ShulkerBullet) {
 			return "Projectile-ShulkerBullet";
+		} else if (projectile instanceof Trident) {
+			return "Projectile-Trident";
 		} else {
 			return "Projectile-Arrow";
 		}
