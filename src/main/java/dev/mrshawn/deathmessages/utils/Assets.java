@@ -554,9 +554,6 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
 
-		System.out.println("看看这里" + msgs);
-		System.out.println(getPlayerDeathMessages().getStringList(cMode + "." + affiliation + "." + projectileDamage));
-		System.out.println(cMode + "." + affiliation + "." + projectileDamage);
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 		TextComponent.Builder tc = Component.text();
@@ -567,7 +564,8 @@ public class Assets {
 		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
-			if ((i.getItemMeta() != null) && !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents;
+			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
 							.equals(projectileDamage)) {
@@ -575,8 +573,10 @@ public class Assets {
 					}
 				}
 				displayName = Assets.convertString(i.getType().name());
+				hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+				hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			}
 			String[] spl = msg.split("%weapon%");
 			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
@@ -586,7 +586,6 @@ public class Assets {
 				displayName = displayName + "&r" + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()

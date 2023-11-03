@@ -677,14 +677,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   shulker:
     Solo:
-      Projectile-Arrow:
+      Projectile-ShulkerBullet:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile-Arrow:
+      Projectile-ShulkerBullet:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
