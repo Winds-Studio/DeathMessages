@@ -184,3 +184,6 @@ Custom-Item-Display-Names-Is-Weapon:
 # Material names are listed here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 Custom-Item-Material-Is-Weapon:
   - 'ACACIA_FENCE'
+
+# Debug toggle for developer, don't touch!
+Debug: true

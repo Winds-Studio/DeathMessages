@@ -261,6 +261,7 @@ public class Assets {
 
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
+		if (config.getBoolean(Config.DEBUG)) System.out.println("Natural-Cause." + damageCause); // Dreeam - debug
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, null);
 		TextComponent.Builder naturalDeath = Component.text();
@@ -321,7 +322,7 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -362,6 +363,7 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		}
 
+		if (config.getBoolean(Config.DEBUG)) System.out.println(cMode + "." + affiliation + ".Weapon"); // Dreeam - debug
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 		TextComponent.Builder weaponMessage = Component.text();
@@ -396,7 +398,7 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -440,6 +442,7 @@ public class Assets {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
+		if (config.getBoolean(Config.DEBUG)) System.out.println("Entities." + entityName + ".Weapon"); // Dreeam - debug
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = entityDeathPlaceholders(msg, p, e, hasOwner);
 		TextComponent.Builder tc = Component.text();
@@ -474,7 +477,7 @@ public class Assets {
 				displayName = displayName + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -513,6 +516,7 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
+			if (config.getBoolean(Config.DEBUG)) System.out.println(cMode + "." + affiliation + "." + damageCause); // Dreeam - debug
 			if (config.getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED))
 				return getNaturalDeath(pm, damageCause);
 			if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED))
@@ -554,6 +558,7 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
 
+		if (config.getBoolean(Config.DEBUG)) System.out.println(cMode + "." + affiliation + "." + projectileDamage); // Dreeam - debug
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 		TextComponent.Builder tc = Component.text();
@@ -623,6 +628,7 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
+			if (config.getBoolean(Config.DEBUG)) System.out.println("Entities." + entityName + "." + projectileDamage); // Dreeam - debug
 			if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED)) {
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
 			}
@@ -632,6 +638,7 @@ public class Assets {
 		if (em.getEntity() instanceof Tameable tameable) {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
+
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner);
 		TextComponent.Builder tc = Component.text();
@@ -662,7 +669,7 @@ public class Assets {
 				displayName = displayName + "&r" + spl[1];
 			}
 
-			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().getKey().getNamespace()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
@@ -708,6 +715,7 @@ public class Assets {
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, entity);
 		}
 
+		if (config.getBoolean(Config.DEBUG)) System.out.println("Entities." + entity.getType().getEntityClass().getSimpleName().toLowerCase() + "." + damageCause); // Dreeam - debug
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		TextComponent.Builder tc = Component.text();
 		if (addPrefix) {

@@ -28,9 +28,11 @@ For Developers:
 - Adventure - To replace the replaceAll and bukkit ChatColor
 - Refactor some code
 - Command system, tab complete and some refactor
-- lower version Compatibility
-- look into get entity name
+- Lower version Compatibility
+- Look into get entity name
 - Fix HoverEvent
+- Add version comment in config
+- Config
 - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:

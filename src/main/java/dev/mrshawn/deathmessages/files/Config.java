@@ -74,7 +74,9 @@ public enum Config implements ConfigEnum {
 	CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON
 			("Custom-Item-Display-Names-Is-Weapon", List.of("&6SUPER COOL GOLDEN APPLE", "SICKNAME")),
 
-	CUSTOM_ITEM_MATERIAL_IS_WEAPON("Custom-Item-Material-Is-Weapon", List.of("ACACIA_FENCE"));
+	CUSTOM_ITEM_MATERIAL_IS_WEAPON("Custom-Item-Material-Is-Weapon", List.of("ACACIA_FENCE")),
+
+	DEBUG("Debug", false);
 
 	private final String path;
 	private final Object defaultValue;
