@@ -171,6 +171,7 @@ Natural-Cause:
     - "%player% did not put their snow suit on before they went to play."
   Unknown:
     - "%player% died"
+
 Mobs:
   elderguardian:
     Solo:
@@ -1289,7 +1290,7 @@ Mobs:
         - "%player% tried playing with %killer%'s armor with thorns"
       # Hook related deaths
       CombatLogX-Kill:
-        - '%player% logged out during combat fighting %killer%, they died still -.-'
+        - "%player% logged out during combat fighting %killer%, they died still -.-"
     Gang:
       Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"

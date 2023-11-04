@@ -66,8 +66,8 @@ Entities:
 Mythic-Mobs-Entities:
   SkeletalMinion:
     Melee:
-      - '%killer% killed skele boss %entity_display% with their bare hands'
+      - "%killer% killed skele boss %entity_display% with their bare hands"
     Weapon:
-      - '%killer% destroyed the boss mob %entity_display% with %weapon%'
+      - "%killer% destroyed the boss mob %entity_display% with %weapon%"
     TNT:
-      - '%killer% blew up the boss mob %entity_display% with TNT'
+      - "%killer% blew up the boss mob %entity_display% with TNT"

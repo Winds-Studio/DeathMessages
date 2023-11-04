@@ -8,7 +8,7 @@ Console:
 Bungee:
   # Configure how bungee messages look from other servers.
   # Only available placeholder is %server_name%
-  Message: '&a%server_name%&7> '
+  Message: "&a%server_name%&7> "
 Commands:
   DeathMessages:
     Player-Only-Command: "&cOnly players can run this command."
@@ -77,22 +77,22 @@ Discord:
     # NEW: this was how the old DMP had messages formatted (Playerhead - IconURL, Name - the death message)
     Author:
       # The message of the author
-      Name: '%message%'
+      Name: "%message%"
       # The clickable link
       URL: ""
       # The picture that shows up in the author name
       # Placeholders: %uuid%, %username%
       Icon-URL: "https://crafatar.com/avatars/%uuid%"
-    Title: DeathMessage
-    Description: '%message%'
-    Image: https://crafatar.com/avatars/%uuid%
+    Title: "DeathMessage"
+    Description: "%message%"
+    Image: "https://crafatar.com/avatars/%uuid%"
     # Block title|Block value|inline boolean
     # To have no content, set content to 'Content: []'
     Content:
       - "Location:|World: %world%, X: %x%, Y: %y%, Z: %z%|false"
     Footer:
       Text: "Footer text here"
-      Icon-URL: https://crafatar.com/avatars/%uuid%
+      Icon-URL: "https://crafatar.com/avatars/%uuid%"
     Timestamp: true
     # Defining the message below will ignore all above embed values and just return regular text.
     # Meaning if you change Text: "" to anything else, the plugin will send regular text.

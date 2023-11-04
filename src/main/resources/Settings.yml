@@ -178,12 +178,12 @@ Cooldown: 0
 # REGEX is required here.
 Custom-Item-Display-Names-Is-Weapon:
   - '&6SUPER\sCOOL\sGOLDEN\sAPPLE'
-  - 'SICKNAME'
+  - "SICKNAME"
 
 # Any item materials you list here will return a weapon kill. Not a melee kill
 # Material names are listed here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 Custom-Item-Material-Is-Weapon:
-  - 'ACACIA_FENCE'
+  - "ACACIA_FENCE"
 
 # Debug toggle for developer, don't touch!
 Debug: true
