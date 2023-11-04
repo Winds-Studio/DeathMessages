@@ -1,4 +1,7 @@
 # DeathMessages
+
+**_！Active testing - report any bugs or give suggestions_**
+
 ![GitHub](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=flat-square)
 ![Building Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=flat-square)
 
