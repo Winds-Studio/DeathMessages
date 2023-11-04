@@ -308,7 +308,7 @@
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>Mythic-Dist</artifactId>
-            <version>5.4.0</version>
+            <version>5.4.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
