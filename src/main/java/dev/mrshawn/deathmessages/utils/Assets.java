@@ -19,6 +19,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang3.StringUtils;
@@ -314,21 +315,23 @@ public class Assets {
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
-			String[] spl = msg.split("%weapon%");
-			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-				displayName = spl[0] + displayName;
-			}
-			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-				displayName = displayName + spl[1];
-			}
 
 			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(hoverEventComponents);
 
-			naturalDeath.append(showitem);
+			Component deathMessage = Component.text()
+					.append(convertFromLegacy(msg))
+					.build()
+					.replaceText(TextReplacementConfig.builder()
+							.match("%weapon%")
+							.replacement(showitem)
+							.build());
+
+			naturalDeath.append(deathMessage);
 		} else {
 			TextComponent deathMessage = Assets.convertFromLegacy(msg);
 			naturalDeath.append(deathMessage);
@@ -390,21 +393,23 @@ public class Assets {
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
-			String[] spl = msg.split("%weapon%");
-			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-				displayName = spl[0] + displayName;
-			}
-			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-				displayName = displayName + spl[1];
-			}
 
 			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(hoverEventComponents);
 
-			weaponMessage.append(showitem);
+			Component deathMessage = Component.text()
+					.append(convertFromLegacy(msg))
+					.build()
+					.replaceText(TextReplacementConfig.builder()
+							.match("%weapon%")
+							.replacement(showitem)
+							.build());
+
+			weaponMessage.append(deathMessage);
 		} else {
 			TextComponent deathMessage = Assets.convertFromLegacy(msg);
 			weaponMessage.append(deathMessage);
@@ -469,21 +474,23 @@ public class Assets {
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
-			String[] spl = msg.split("%weapon%");
-			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-				displayName = spl[0] + displayName;
-			}
-			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-				displayName = displayName + spl[1];
-			}
 
 			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(hoverEventComponents);
 
-			tc.append(showitem);
+			Component deathMessage = Component.text()
+					.append(convertFromLegacy(msg))
+					.build()
+					.replaceText(TextReplacementConfig.builder()
+							.match("%weapon%")
+							.replacement(showitem)
+							.build());
+
+			tc.append(deathMessage);
 		} else {
 			TextComponent deathMessage = Assets.convertFromLegacy(msg);
 			tc.append(deathMessage);
@@ -583,20 +590,21 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 				hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
 			}
-			String[] spl = msg.split("%weapon%");
-			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-				displayName = spl[0] + "&r" + displayName;
-			}
-			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-				displayName = displayName + "&r" + spl[1];
-			}
 
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(hoverEventComponents);
 
-			tc.append(showitem);
+			Component deathMessage = Component.text()
+					.append(convertFromLegacy(msg))
+					.build()
+					.replaceText(TextReplacementConfig.builder()
+							.match("%weapon%")
+							.replacement(showitem)
+							.build());
+
+			tc.append(deathMessage);
 		} else {
 			TextComponent deathMessage = Assets.convertFromLegacy(msg);
 			tc.append(deathMessage);
@@ -661,21 +669,23 @@ public class Assets {
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
-			String[] spl = msg.split("%weapon%");
-			if (spl.length != 0 && spl[0] != null && !spl[0].isEmpty()) {
-				displayName = spl[0] + "&r" + displayName;
-			}
-			if (spl.length != 0 && spl.length != 1 && spl[1] != null && !spl[1].isEmpty()) {
-				displayName = displayName + "&r" + spl[1];
-			}
 
 			HoverEvent<HoverEvent.ShowItem> hoverEventComponents = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+
 			Component showitem = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(hoverEventComponents);
 
-			tc.append(showitem);
+			Component deathMessage = Component.text()
+					.append(convertFromLegacy(msg))
+					.build()
+					.replaceText(TextReplacementConfig.builder()
+							.match("%weapon%")
+							.replacement(showitem)
+							.build());
+
+			tc.append(deathMessage);
 		} else {
 			TextComponent deathMessage = Assets.convertFromLegacy(msg);
 			tc.append(deathMessage);

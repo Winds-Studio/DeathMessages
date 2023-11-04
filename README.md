@@ -33,9 +33,10 @@ For Developers:
 - Command system, tab complete and some refactor
 - Lower version Compatibility
 - Look into get entity name
-- Fix HoverEvent
 - Add version comment in config
 - Config
+- Improve method naming
+- Improve hoverEvent
 - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:
