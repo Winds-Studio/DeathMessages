@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.command.deathmessages;
+package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;

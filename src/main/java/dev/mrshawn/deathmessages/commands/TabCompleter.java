@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.command.deathmessages;
+package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.enums.DamageTypes;
 import org.bukkit.command.Command;

@@ -1,8 +1,7 @@
-package dev.mrshawn.deathmessages.command.deathmessages.alias;
+package dev.mrshawn.deathmessages.commands.alias;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
 import org.bukkit.command.Command;
@@ -30,8 +29,8 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
 			return false;
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-		boolean msg = UserData.getInstance().getConfig().getBoolean(player.getUniqueId() + ".messages-enabled");
 		getPlayer.ifPresent(pm -> {
+			boolean msg = pm.getMessagesEnabled();
 			if (msg) {
 				pm.setMessagesEnabled(false);
 				DeathMessages.getInstance().adventure().player(player).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));

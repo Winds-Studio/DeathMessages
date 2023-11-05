@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.command.deathmessages;
+package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
@@ -14,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 public class CommandDiscordLog extends DeathMessagesCommand {
-
 
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 

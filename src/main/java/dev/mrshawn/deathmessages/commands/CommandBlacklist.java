@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.command.deathmessages;
+package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class CommandBlacklist extends DeathMessagesCommand {
-
 
 	@Override
 	public String command() {

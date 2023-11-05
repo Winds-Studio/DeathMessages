@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.command.deathmessages;
+package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.ConfigManager;
@@ -7,7 +7,6 @@ import dev.mrshawn.deathmessages.utils.Assets;
 import org.bukkit.command.CommandSender;
 
 public class CommandBackup extends DeathMessagesCommand {
-
 
 	@Override
 	public String command() {
