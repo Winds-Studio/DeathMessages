@@ -19,12 +19,11 @@ public class CommandToggle extends DeathMessagesCommand {
 
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player p)) {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
 			return;
 		}
-		Player p = (Player) sender;
-		if (!p.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
+        if (!p.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
 			DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}

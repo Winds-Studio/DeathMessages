@@ -62,7 +62,7 @@ public class DiscordBotAPIExtension {
 				String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
 				StringBuilder sb = new StringBuilder();
 				for (String s : spl) {
-					sb.append(s + "\n");
+					sb.append(s).append("\n");
 				}
 				if (pm.getLastEntityDamager() instanceof FallingBlock) {
 					textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,
@@ -108,7 +108,7 @@ public class DiscordBotAPIExtension {
 				String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
 				StringBuilder sb = new StringBuilder();
 				for (String s : spl) {
-					sb.append(s + "\n");
+					sb.append(s).append("\n");
 				}
 				if (pm.getLastEntityDamager() instanceof FallingBlock) {
 					textChannel.sendMessage(Assets.playerDeathPlaceholders(sb.toString(), pm,

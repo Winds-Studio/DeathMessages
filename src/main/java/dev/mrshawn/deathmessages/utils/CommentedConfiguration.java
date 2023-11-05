@@ -379,8 +379,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
             /*Getting the parent of the new section. The loop will stop in one of the following situations:
             1) The parent is empty - which means we have nowhere to go, as that's the root section.
             2) The config contains a valid path that was built with <parent-section>.<new-section>.*/
-			while (!parentSection.isEmpty() && !commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection))
-				;
+			while (!parentSection.isEmpty() && !commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection)) ;
 
 			// Parsing and building the new full path.
 			newSection = parentSection.trim().isEmpty() ? newSection : parentSection + "." + newSection;

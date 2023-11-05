@@ -50,8 +50,9 @@ public class EntityDamageByEntity implements Listener {
 								pm.setLastEntityDamager((LivingEntity) firework.getShooter());
 							}
 							pm.setLastExplosiveEntity(e.getDamager());
-						} catch (NoSuchMethodError ignored) {
+						} catch (NoSuchMethodError e2) {
 							//McMMO ability
+							e2.printStackTrace();
 						}
 					} else {
 						pm.setLastEntityDamager(e.getDamager());
@@ -108,8 +109,9 @@ public class EntityDamageByEntity implements Listener {
 										getPlayer.ifPresent(em::setLastPlayerDamager);
 									}
 									em.setLastExplosiveEntity(e.getDamager());
-								} catch (NoSuchMethodError ignored) {
+								} catch (NoSuchMethodError e3) {
 									//McMMO ability
+									e3.printStackTrace();
 								}
 							} else {
 								Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());

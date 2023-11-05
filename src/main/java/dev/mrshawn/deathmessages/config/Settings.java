@@ -64,7 +64,7 @@ public class Settings {
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
 		} catch (Exception e) {
-			// Ignored
+			e.printStackTrace();
 		}
 	}
 

@@ -50,7 +50,7 @@ public class DeathMessages extends JavaPlugin {
 
 	private static DeathMessages instance;
 	private BukkitAudiences adventure;
-	public FoliaLib foliaLib = new FoliaLib(this);
+	public final FoliaLib foliaLib = new FoliaLib(this);
 
 	public boolean placeholderAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;

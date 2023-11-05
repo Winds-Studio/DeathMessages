@@ -36,9 +36,10 @@ public class CommandEdit extends DeathMessagesCommand {
 				boolean exists = false;
 				for (EntityType entityType : EntityType.values()) {
 					// Check isAlive as getSimpleName could be null if the entity is not living
-					if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().equalsIgnoreCase(mobName)) {
-						exists = true;
-					}
+                    if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().equalsIgnoreCase(mobName)) {
+                        exists = true;
+                        break;
+                    }
 				}
 				if (!exists) {
 					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type")));
@@ -119,9 +120,10 @@ public class CommandEdit extends DeathMessagesCommand {
 				boolean exists = false;
 				for (EntityType entityType : EntityType.values()) {
 					// Check isAlive as getSimpleName could be null if the entity is not living
-					if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().equalsIgnoreCase(mobName)) {
-						exists = true;
-					}
+                    if (entityType.isAlive() && entityType.getEntityClass().getSimpleName().equalsIgnoreCase(mobName)) {
+                        exists = true;
+                        break;
+                    }
 				}
 				if (!exists) {
 					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type")));
