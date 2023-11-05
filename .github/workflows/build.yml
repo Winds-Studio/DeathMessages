@@ -1,7 +1,9 @@
 name: Build DeathMessages
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - nextgen
 jobs:
   build:
     name: Build
@@ -18,10 +20,21 @@ jobs:
         run: mvn clean kotlin:compile package
 
       - name: Release DeathMessages
+        if: "!contains(github.event.commits[0].message, '[Release]')"
         uses: marvinpinto/action-automatic-releases@master
         with:
           title: "DeathMessages v1.4.18"
           automatic_release_tag: "1.4.18"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          files: "target/*.jar"
+          prerelease: false
+
+      - name: Upload DeathMessages DevBuild
+        if: github.ref_name == 'nextgen'
+        uses: marvinpinto/action-automatic-releases@master
+        with:
+          title: "DeathMessages v1.4.18-SNAPSHOT"
+          automatic_release_tag: "dev"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "target/*.jar"
           prerelease: true
