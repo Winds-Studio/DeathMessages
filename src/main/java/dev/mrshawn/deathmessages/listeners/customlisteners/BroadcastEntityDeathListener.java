@@ -35,7 +35,9 @@ public class BroadcastEntityDeathListener implements Listener {
 		if (pm.isEmpty()) return;
 
 		boolean hasOwner = e.getEntity() instanceof Tameable;
+
         if (e.isCancelled()) return;
+
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.get().getPlayer(), e.getEntity(), hasOwner);
 			message = message

@@ -30,9 +30,9 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
 			return false;
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-		boolean b = UserData.getInstance().getConfig().getBoolean(player.getUniqueId() + ".messages-enabled");
+		boolean msg = UserData.getInstance().getConfig().getBoolean(player.getUniqueId() + ".messages-enabled");
 		getPlayer.ifPresent(pm -> {
-			if (b) {
+			if (msg) {
 				pm.setMessagesEnabled(false);
 				DeathMessages.getInstance().adventure().player(player).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
 			} else {

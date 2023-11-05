@@ -29,8 +29,10 @@ public class InteractEvent implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInteract(PlayerInteractEvent e) {
 		Block b = e.getClickedBlock();
+
 		if (b == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || b.getType().equals(Material.AIR))
 			return; // Dreeam - No NPE
+
 		World.Environment environment = b.getWorld().getEnvironment();
 		if (environment.equals(World.Environment.NETHER) || environment.equals(World.Environment.THE_END)) {
 			if (b.getType().name().contains("BED") && !b.getType().equals(Material.BEDROCK)) {
@@ -74,7 +76,6 @@ public class InteractEvent implements Listener {
 			if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
 				Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
 				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
-
 				getEntity.ifPresentOrElse(em -> {
 					effected.add(ent.getUniqueId());
 					getPlayer.ifPresent(em::setLastPlayerDamager);

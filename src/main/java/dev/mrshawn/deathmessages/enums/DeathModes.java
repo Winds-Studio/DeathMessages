@@ -1,12 +1,12 @@
 package dev.mrshawn.deathmessages.enums;
 
-public enum PDMode {
+public enum DeathModes {
 	BASIC_MODE("Basic-Mode"),
 	MOBS("Mobs");
 
 	private final String value;
 
-	PDMode(String value) {
+	DeathModes(String value) {
 		this.value = value;
 	}
 

@@ -30,9 +30,7 @@ public class DiscordSRVExtension {
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public DiscordSRVExtension() {
-
 	}
-
 
 	public void sendDiscordMessage(PlayerManager pm, MessageType messageType, String message) {
 		List<String> channels = DiscordAssets.getInstance().getIDs(messageType);

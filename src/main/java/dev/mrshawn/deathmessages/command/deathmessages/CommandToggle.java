@@ -30,8 +30,8 @@ public class CommandToggle extends DeathMessagesCommand {
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 		getPlayer.ifPresent(pm -> {
-			boolean b = pm.getMessagesEnabled();
-			if (b) {
+			boolean msg = pm.getMessagesEnabled();
+			if (msg) {
 				pm.setMessagesEnabled(false);
 				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off")));
 			} else {

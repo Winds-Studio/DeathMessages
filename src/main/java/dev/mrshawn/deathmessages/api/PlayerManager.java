@@ -46,8 +46,6 @@ public class PlayerManager {
 	public final boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
 
 	public PlayerManager(Player p) {
-
-
 		this.playerUUID = p.getUniqueId();
 		this.playerName = p.getName();
 

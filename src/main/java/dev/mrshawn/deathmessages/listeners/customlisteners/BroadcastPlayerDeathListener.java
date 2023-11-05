@@ -25,12 +25,12 @@ import java.util.regex.Matcher;
 public class BroadcastPlayerDeathListener implements Listener {
 
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
-
 	private boolean discordSent = false;
 
 	@EventHandler
 	public void broadcastListener(BroadcastDeathMessageEvent e) {
 		if (e.isCancelled()) return;
+
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 		getPlayer.ifPresent(pm -> {
 			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {

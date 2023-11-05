@@ -2,18 +2,19 @@
 
 **_！Active testing - report any bugs or give suggestions_**
 
-![GitHub](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=flat-square)
-![Building Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=flat-square)
+![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=flat-square)
+![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=flat-square)
 
 Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Outdated)
 
 ## Features
 
 - Supporting 1.12.2 - Latest Minecraft version (1.20.2)
-- Compatible with Spigot/Paper/Paper forks, Forge/Bukkit Hybrid Server
-- Folia support
-- Fix a bunch of errors from original DeathMessages
-- Highly optimized
+- Compatible with Spigot / Paper / Paper forks / Forge&Bukkit Hybrid Servers
+- Folia Support
+- Fix a bunch of errors or issues from original DeathMessages
+- Highly Optimized
+- Active Development
 
 ## Contact
 
@@ -24,19 +25,16 @@ Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessa
 For Developers:
 
 - The plugin uses a mix of kotlin and java and as such you must compile kotlin as well
-- Compile the plugin with `mvn clean kotlin:compile package`
+- Compile the plugin with: `mvn clean kotlin:compile package`
 
 ## TODOs
 
 - Adventure - To replace the replaceAll and bukkit ChatColor
-- Refactor some code
 - Command system, tab complete and some refactor
-- Lower version Compatibility
 - Look into get entity name
 - Add version comment in config
 - Config
-- Improve method naming
-- Improve hoverEvent
+- Improve hoverEvent(opt code/showItem or showEntity)
 - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:

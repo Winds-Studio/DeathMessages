@@ -11,7 +11,11 @@ softdepend:
   - DiscordBotAPI
   - DiscordSRV
   - CombatLogX
-authors: [ CosmoConsole, Joshb_, MrShawn, Dreeam ]
+authors:
+  - CosmoConsole
+  - Joshb_
+  - MrShawn
+  - Dreeam-qwq
 commands:
   deathmessages:
     description: Main plugin command

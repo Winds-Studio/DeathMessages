@@ -11,6 +11,8 @@ import org.bukkit.entity.EntityType;
 
 import java.util.List;
 
+// Dreeam - Really useless
+@Deprecated
 public class CommandEdit extends DeathMessagesCommand {
 
 	@Override

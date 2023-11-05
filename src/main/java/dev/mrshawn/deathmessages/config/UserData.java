@@ -105,6 +105,7 @@ public class UserData {
 	}
 
 	private enum IOOperation {
-		SAVE, LOAD
+		SAVE,
+		LOAD
 	}
 }

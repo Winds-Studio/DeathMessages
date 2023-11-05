@@ -27,5 +27,4 @@ public class DiscordAssets {
 			case ENTITY -> config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS);
 		};
 	}
-
 }

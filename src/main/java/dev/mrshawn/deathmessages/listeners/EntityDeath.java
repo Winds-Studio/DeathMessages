@@ -42,14 +42,14 @@ public class EntityDeath implements Listener {
 	synchronized void onEntityDeath(EntityDeathEvent e) {
 		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
 			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-
 			getPlayer.ifPresentOrElse(pm -> {
 				if (e.getEntity().getLastDamageCause() == null) {
 					pm.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
 				} else {
 					pm.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
 				}
-				if (pm.isBlacklisted()) return; // Dreeam - No NPE
+
+				if (pm.isBlacklisted()) return;
 
 				if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
 					// Natural Death
@@ -202,5 +202,4 @@ public class EntityDeath implements Listener {
 			onEntityDeath(e);
 		}
 	}
-
 }

@@ -92,6 +92,10 @@
                             <shadedPattern>dev.mrshawn.deathmessages.libs.kotlin</shadedPattern>
                         </relocation>
                         <relocation>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>dev.mrshawn.deathmessages.libs.kyori</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>co.aikar.commands</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.libs.acf</shadedPattern>
                         </relocation>

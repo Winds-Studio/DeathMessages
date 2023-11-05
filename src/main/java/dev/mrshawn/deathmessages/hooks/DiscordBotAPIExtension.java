@@ -29,9 +29,7 @@ public class DiscordBotAPIExtension {
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public DiscordBotAPIExtension() {
-
 	}
-
 
 	public void sendDiscordMessage(PlayerManager pm, MessageType messageType, String message) {
 		List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
@@ -283,5 +281,4 @@ public class DiscordBotAPIExtension {
 	private FileConfiguration getMessages() {
 		return Messages.getInstance().getConfig();
 	}
-
 }

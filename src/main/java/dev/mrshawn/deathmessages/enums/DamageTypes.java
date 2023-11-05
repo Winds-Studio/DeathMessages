@@ -61,5 +61,4 @@ public enum DamageTypes {
 				.map(type -> type.name)
 				.collect(Collectors.toList());
 	}
-
 }

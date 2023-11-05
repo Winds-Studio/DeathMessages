@@ -21,5 +21,4 @@ public enum Permission {
 	public String getValue() {
 		return value;
 	}
-
 }

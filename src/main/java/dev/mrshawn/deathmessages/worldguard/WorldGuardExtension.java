@@ -14,32 +14,19 @@ public interface WorldGuardExtension {
 	StateFlag BROADCAST_ENTITY = new StateFlag("broadcast-deathmessage-entity", true);
 
 	default void registerFlags() {
-
 		final FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
-		try {
-			registry.register(BROADCAST_PLAYER);
-		} catch (FlagConflictException e) {
-			e.printStackTrace();
-		}
-		try {
-			registry.register(BROADCAST_MOBS);
-		} catch (FlagConflictException e) {
-			e.printStackTrace();
-		}
-		try {
-			registry.register(BROADCAST_NATURAL);
-		} catch (FlagConflictException e) {
-			e.printStackTrace();
-		}
-		try {
-			registry.register(BROADCAST_ENTITY);
-		} catch (FlagConflictException e) {
-			e.printStackTrace();
+		final StateFlag[] stateFlags = {BROADCAST_PLAYER, BROADCAST_MOBS, BROADCAST_NATURAL, BROADCAST_ENTITY};
+
+		for (StateFlag flag : stateFlags) {
+			try {
+				registry.register(flag);
+			} catch (FlagConflictException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	StateFlag.State getRegionState(final Player p, String type);
 
 	boolean isInRegion(Player p, String regionID);
-
 }

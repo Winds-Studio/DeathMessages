@@ -49,6 +49,7 @@ import java.util.List;
 public class DeathMessages extends JavaPlugin {
 
 	private static DeathMessages instance;
+	private BukkitAudiences adventure;
 	public FoliaLib foliaLib = new FoliaLib(this);
 
 	public boolean placeholderAPIEnabled = false;
@@ -57,14 +58,12 @@ public class DeathMessages extends JavaPlugin {
 	public MythicBukkit mythicMobs = null;
 	public boolean mythicmobsEnabled = false;
 
+	public static WorldGuardExtension worldGuardExtension;
+	public static boolean worldGuardEnabled;
 
 	public static String bungeeServerName;
 	public static boolean bungeeServerNameRequest = true;
 	public static boolean bungeeInit = false;
-
-
-	public static WorldGuardExtension worldGuardExtension;
-	public static boolean worldGuardEnabled;
 
 	public static DiscordBotAPIExtension discordBotAPIExtension;
 	public static DiscordSRVExtension discordSRVExtension;
@@ -96,15 +95,6 @@ public class DeathMessages extends JavaPlugin {
 			this.adventure = null;
 		}
 		instance = null;
-	}
-
-	private BukkitAudiences adventure;
-
-	public @NotNull BukkitAudiences adventure() {
-		if(this.adventure == null) {
-			throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
-		}
-		return this.adventure;
 	}
 
 	public static int majorVersion() {
@@ -252,12 +242,16 @@ public class DeathMessages extends JavaPlugin {
 		}
 	}
 
-	public static EventPriority getEventPriority() {
-		return eventPriority;
-	}
-
 	public static DeathMessages getInstance() {
 		return instance;
 	}
-
+	public static EventPriority getEventPriority() {
+		return eventPriority;
+	}
+	public @NotNull BukkitAudiences adventure() {
+		if(this.adventure == null) {
+			throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+		}
+		return this.adventure;
+	}
 }

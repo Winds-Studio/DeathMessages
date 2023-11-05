@@ -1,5 +1,3 @@
-package dev.mrshawn.deathmessages.utils;
-
 /*
 
  	CommentedConfiguration
@@ -16,6 +14,7 @@ package dev.mrshawn.deathmessages.utils;
  	Website: https://bg-software.com/
 
  */
+package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import org.bukkit.configuration.ConfigurationSection;
@@ -261,9 +260,11 @@ public final class CommentedConfiguration extends YamlConfiguration {
 
 		}
 
-        /*Keys cannot be ordered easily, so we need to do some tricks to make sure
-        all of the keys are ordered correctly (and the new config will look the same
-        as the resource that was provided).*/
+        /*
+        Keys cannot be ordered easily, so we need to do some tricks to make sure
+        all the keys are ordered correctly (and the new config will look the same
+        as the resource that was provided).
+        */
 
 		// Checking if there was a value that had been added into the config
 		if (changed)
@@ -378,7 +379,8 @@ public final class CommentedConfiguration extends YamlConfiguration {
             /*Getting the parent of the new section. The loop will stop in one of the following situations:
             1) The parent is empty - which means we have nowhere to go, as that's the root section.
             2) The config contains a valid path that was built with <parent-section>.<new-section>.*/
-			while (!parentSection.isEmpty() && !commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection));
+			while (!parentSection.isEmpty() && !commentedConfig.contains((parentSection = getParentPath(parentSection)) + "." + newSection))
+				;
 
 			// Parsing and building the new full path.
 			newSection = parentSection.trim().isEmpty() ? newSection : parentSection + "." + newSection;
@@ -467,17 +469,16 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	/**
 	 * A class that is used as a way of representing a map's entry (which is not implemented).
 	 */
-		private record Pair<K, V>(K key, V value) {
+	private record Pair<K, V>(K key, V value) {
 
 		@Override
-			public boolean equals(Object obj) {
-				return obj instanceof Pair && key.equals(((Pair<?, ?>) obj).key) && value.equals(((Pair<?, ?>) obj).value);
-			}
-
-			@Override
-			public int hashCode() {
-				return key.hashCode();
-			}
+		public boolean equals(Object obj) {
+			return obj instanceof Pair && key.equals(((Pair<?, ?>) obj).key) && value.equals(((Pair<?, ?>) obj).value);
 		}
 
+		@Override
+		public int hashCode() {
+			return key.hashCode();
+		}
+	}
 }

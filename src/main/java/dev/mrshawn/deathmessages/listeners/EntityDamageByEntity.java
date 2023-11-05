@@ -72,6 +72,7 @@ public class EntityDamageByEntity implements Listener {
 			});
 		} else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
+
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
 					.getKeys(false);
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null
@@ -79,7 +80,9 @@ public class EntityDamageByEntity implements Listener {
 				listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
 						.getKeys(false));
 			}
+
 			if (listenedMobs.isEmpty()) return;
+
 			for (String listened : listenedMobs) {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())
 						|| (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
