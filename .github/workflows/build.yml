@@ -20,7 +20,7 @@ jobs:
         run: mvn clean kotlin:compile package
 
       - name: Release DeathMessages
-        if: "!contains(github.event.commits[0].message, '[Release]')"
+        if: "contains(github.event.commits[0].message, '[Release]')"
         uses: marvinpinto/action-automatic-releases@master
         with:
           title: "DeathMessages v1.4.18"
