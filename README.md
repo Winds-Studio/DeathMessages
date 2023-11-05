@@ -2,8 +2,7 @@
 
 **_！Active testing - report any bugs or give suggestions_**
 
-![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=flat-square)
-![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=flat-square)
+![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=for-the-badge)![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=for-the-badge)![Github Stars](https://img.shields.io/github/stars/Winds-Studio/DeathMessages?style=for-the-badge)
 
 Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Outdated)
 

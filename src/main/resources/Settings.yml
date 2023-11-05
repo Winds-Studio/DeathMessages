@@ -186,4 +186,4 @@ Custom-Item-Material-Is-Weapon:
   - "ACACIA_FENCE"
 
 # Debug toggle for developer, don't touch!
-Debug: true
+Debug: false

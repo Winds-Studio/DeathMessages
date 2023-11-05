@@ -2,7 +2,6 @@ package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import org.apache.logging.log4j.LogManager;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -35,12 +34,14 @@ public class UserData {
 	private IOOperation ioRunning = null;
 	private final Stack<IOOperation> ioOperations = new Stack<>();
 
-	public void save() {this.save(false);}
+	public void save() {
+		this.save(false);
+	}
 	public void save(boolean sync) {
 		if (ioRunning != null) ioOperations.push(IOOperation.SAVE);
 		// We should not halt the main server thread
 		if (!sync) {
-			Bukkit.getScheduler().runTaskAsynchronously(DeathMessages.getInstance(), this::saveFile);
+			DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> saveFile());
 		} else {
 			saveFile();
 		}
@@ -62,12 +63,14 @@ public class UserData {
 		}
 	}
 
-	public void reload() {this.reload(false);}
+	public void reload() {
+		this.reload(false);
+	}
 	public void reload(boolean sync) {
 		if (ioRunning != null) ioOperations.push(IOOperation.LOAD);
 		// We should not halt the main server thread
 		if (!sync) {
-			Bukkit.getScheduler().runTaskAsynchronously(DeathMessages.getInstance(), this::reloadFile);
+			DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> reloadFile());
 		} else {
 			saveFile();
 		}
