@@ -5,6 +5,7 @@ import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -52,7 +53,7 @@ public class EntityDamageByEntity implements Listener {
 							pm.setLastExplosiveEntity(e.getDamager());
 						} catch (NoSuchMethodError e2) {
 							//McMMO ability
-							e2.printStackTrace();
+							LogManager.getLogger().error(e2);
 						}
 					} else {
 						pm.setLastEntityDamager(e.getDamager());
@@ -111,7 +112,7 @@ public class EntityDamageByEntity implements Listener {
 									em.setLastExplosiveEntity(e.getDamager());
 								} catch (NoSuchMethodError e3) {
 									//McMMO ability
-									e3.printStackTrace();
+									LogManager.getLogger().error(e3);
 								}
 							} else {
 								Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());

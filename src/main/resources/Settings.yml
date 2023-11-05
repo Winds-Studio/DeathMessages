@@ -30,7 +30,7 @@ Hooks:
   CombatLogX:
     Enabled: true
 
-  # If DiscordBotAPI (https://www.spigotmc.org/resources/discordbotapi.86518/) or DiscordSRV
+  # If DiscordBotAPI (https://github.com/HMJosh/DiscordBotAPI/) or DiscordSRV
   # (https://www.spigotmc.org/resources/discordsrv.18494/)is installed, and enabled here.
   # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right-click the
   # guild and click on "Copy ID". Then, you will right-click the channel you want to send the messages to and again, click

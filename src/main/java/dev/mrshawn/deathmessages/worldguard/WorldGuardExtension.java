@@ -4,6 +4,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.entity.Player;
 
 public interface WorldGuardExtension {
@@ -21,7 +22,7 @@ public interface WorldGuardExtension {
 			try {
 				registry.register(flag);
 			} catch (FlagConflictException e) {
-				e.printStackTrace();
+				LogManager.getLogger().error(e);
 			}
 		}
 	}

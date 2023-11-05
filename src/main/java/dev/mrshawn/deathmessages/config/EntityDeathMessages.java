@@ -2,6 +2,7 @@ package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,9 +36,9 @@ public class EntityDeathMessages {
 			config.save(file);
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			DeathMessages.getInstance().getLogger().severe("Could not save: " + fileName + ".yml");
-			DeathMessages.getInstance().getLogger().severe("Regenerating file and renaming the current file to: " + f.getName());
-			DeathMessages.getInstance().getLogger().severe("You can try fixing the file with a yaml parser online!");
+			LogManager.getLogger().error("Could not save: " + fileName + ".yml");
+			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
+			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -48,9 +49,9 @@ public class EntityDeathMessages {
 			config = CommentedConfiguration.loadConfiguration(file);
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			DeathMessages.getInstance().getLogger().severe("Could not reload: " + fileName + ".yml");
-			DeathMessages.getInstance().getLogger().severe("Regenerating file and renaming the current file to: " + f.getName());
-			DeathMessages.getInstance().getLogger().severe("You can try fixing the file with a yaml parser online!");
+			LogManager.getLogger().error("Could not reload: " + fileName + ".yml");
+			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
+			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -67,7 +68,7 @@ public class EntityDeathMessages {
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "Entities", "Mythic-Mobs-Entities");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogManager.getLogger().error(e);
 		}
 	}
 
@@ -82,7 +83,7 @@ public class EntityDeathMessages {
 			out.close();
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogManager.getLogger().error(e);
 		}
 	}
 }

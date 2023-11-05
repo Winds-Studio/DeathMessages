@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.files;
 
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,7 +36,7 @@ public class FileSettings<C extends Enum<C>> {
         try {
             yamlConfig.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogManager.getLogger().error(e);
         }
     }
 

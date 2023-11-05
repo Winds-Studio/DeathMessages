@@ -23,6 +23,7 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -289,7 +290,7 @@ public class Assets {
 
 				base.append(Assets.convertFromLegacy(msg.replaceAll("%block%", configValue)));
 			} catch (NullPointerException e) {
-				DeathMessages.getInstance().getLogger().severe("Could not parse %block%. Please check your config for a wrong value." +
+				LogManager.getLogger().error("Could not parse %block%. Please check your config for a wrong value." +
 						" Your materials could be spelt wrong or it does not exists in the config. Open a issue if you need help, " + "https://github.com/Winds-Studio/DeathMessages/issues");
 				pm.setLastEntityDamager(null);
 				return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
@@ -856,8 +857,8 @@ public class Assets {
 			msg = msg
 					.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
 		} catch (NullPointerException e) {
-			DeathMessages.getInstance().getLogger().severe("Custom Biome detected. Using 'Unknown' for a biome name.");
-			DeathMessages.getInstance().getLogger().severe("Custom Biomes are not supported yet.'");
+			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
 			msg = msg
 					.replaceAll("%biome%", "Unknown");
 		}
@@ -881,8 +882,8 @@ public class Assets {
 				msg = msg
 						.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
 			} catch (NullPointerException e) {
-				DeathMessages.getInstance().getLogger().severe("Custom Biome detected. Using 'Unknown' for a biome name.");
-				DeathMessages.getInstance().getLogger().severe("Custom Biomes are not supported yet.'");
+				LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
+				LogManager.getLogger().error("Custom Biomes are not supported yet.'");
 				msg = msg
 						.replaceAll("%biome%", "Unknown");
 			}
@@ -915,8 +916,8 @@ public class Assets {
 				msg = msg
 						.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
 			} catch (NullPointerException e) {
-				DeathMessages.getInstance().getLogger().severe("Custom Biome detected. Using 'Unknown' for a biome name.");
-				DeathMessages.getInstance().getLogger().severe("Custom Biomes are not supported yet.'");
+				LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
+				LogManager.getLogger().error("Custom Biomes are not supported yet.'");
 				msg = msg
 						.replaceAll("%biome%", "Unknown");
 			}

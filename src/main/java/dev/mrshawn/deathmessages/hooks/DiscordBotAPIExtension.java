@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.hooks;
 
-import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
@@ -13,6 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -41,12 +41,12 @@ public class DiscordBotAPIExtension {
 			String guildID = groupSplit[0];
 			String channelID = groupSplit[1];
 			if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
-				DeathMessages.getInstance().getLogger().severe("Could not find the discord guild with ID: " + guildID);
+				LogManager.getLogger().error("Could not find the discord guild with ID: " + guildID);
 				continue;
 			}
 			Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
 			if (g.getTextChannelById(channelID) == null) {
-				DeathMessages.getInstance().getLogger().severe("Could not find the discord text channel with ID: "
+				LogManager.getLogger().error("Could not find the discord text channel with ID: "
 						+ channelID + " in guild: " + g.getName());
 				continue;
 			}
@@ -86,12 +86,12 @@ public class DiscordBotAPIExtension {
 			String guildID = groupSplit[0];
 			String channelID = groupSplit[1];
 			if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
-				DeathMessages.getInstance().getLogger().severe("Could not find the discord guild with ID: " + guildID);
+				LogManager.getLogger().error("Could not find the discord guild with ID: " + guildID);
 				continue;
 			}
 			Guild g = DiscordBotAPI.getJDA().getGuildById(guildID);
 			if (g.getTextChannelById(channelID) == null) {
-				DeathMessages.getInstance().getLogger().severe("Could not find the discord text channel with ID: "
+				LogManager.getLogger().error("Could not find the discord text channel with ID: "
 						+ channelID + " in guild: " + g.getName());
 				continue;
 			}
@@ -272,8 +272,8 @@ public class DiscordBotAPIExtension {
 			}
 			return getMessages().getInt("Discord.DeathMessage.Color", color);
 		} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-			DeathMessages.getInstance().getLogger().severe("Error while parsing " + getMessages().getString("Discord.DeathMessage.Color") + " as a color!");
-			DeathMessages.getInstance().getLogger().severe("Make sure your using spigot for your server!");
+			LogManager.getLogger().error("Error while parsing " + getMessages().getString("Discord.DeathMessage.Color") + " as a color!");
+			LogManager.getLogger().error(e);
 			return color;
 		}
 	}

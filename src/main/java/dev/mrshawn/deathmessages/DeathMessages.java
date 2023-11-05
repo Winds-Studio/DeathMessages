@@ -34,6 +34,7 @@ import dev.mrshawn.deathmessages.worldguard.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.worldguard.WorldGuardExtension;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.apache.logging.log4j.LogManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -80,7 +81,7 @@ public class DeathMessages extends JavaPlugin {
 		initializeOnlinePlayers();
 		checkGameRules();
 		new Metrics(this, 12365);
-		getLogger().info("bStats Hook Enabled!");
+		LogManager.getLogger().info("bStats Hook Enabled!");
 	}
 
 	public void onLoad() {
@@ -146,54 +147,53 @@ public class DeathMessages extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new PlaceholderAPIExtension(this).register();
 			placeholderAPIEnabled = true;
-			getLogger().info("PlaceholderAPI Hook Enabled!");
+			LogManager.getLogger().info("PlaceholderAPI Hook Enabled!");
 		}
 
 		if (worldGuardEnabled) {
-			getLogger().info("WorldGuard Hook Enabled!");
+			LogManager.getLogger().info("WorldGuard Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordBotAPIExtension = new DiscordBotAPIExtension();
-			getLogger().info("DiscordBotAPI Hook Enabled!");
+			LogManager.getLogger().info("DiscordBotAPI Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordSRVExtension = new DiscordSRVExtension();
-			getLogger().info("DiscordSRV Hook Enabled!");
+			LogManager.getLogger().info("DiscordSRV Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
 			Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
-			getLogger().info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
+			LogManager.getLogger().info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
 			try {
 				List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
 				if (!ignoredPlugins.contains("DeathMessages")) {
 					ignoredPlugins.add("DeathMessages");
 				}
 			} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
-				getLogger().severe("Error adding plugin to ignored plugins list: " +
-						exception.getMessage());
+				LogManager.getLogger().error("Error adding plugin to ignored plugins list: ", exception);
 			}
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
 			combatLogXAPIEnabled = true;
 			Bukkit.getPluginManager().registerEvents(new PlayerUntag(), this);
-			getLogger().info("CombatLogX Hook Enabled!");
+			LogManager.getLogger().info("CombatLogX Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
 			mythicMobs = MythicBukkit.inst();
 			mythicmobsEnabled = true;
-			getLogger().info("MythicMobs Hook Enabled!");
+			LogManager.getLogger().info("MythicMobs Hook Enabled!");
 			Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
 		}
 
 		if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
 			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
-			getLogger().info("Bungee Hook enabled!");
+			LogManager.getLogger().info("Bungee Hook enabled!");
 			if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
 				bungeeInit = true;
 			} else {
@@ -218,7 +218,7 @@ public class DeathMessages extends JavaPlugin {
 				} else throw new Exception();
 				worldGuardEnabled = true;
 			} catch (final Throwable e) {
-				getLogger().severe("Error loading WorldGuardHook. Error: " + e.getMessage());
+				LogManager.getLogger().error("Error loading WorldGuardHook. Error: " + e);
 				worldGuardEnabled = false;
 			}
 		}
