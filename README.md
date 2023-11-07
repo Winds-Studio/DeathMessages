@@ -44,6 +44,7 @@ For Developers:
 > - Config
 > - Improve hoverEvent(opt code/showItem or showEntity)
 > - VersionChecker & Custom bstats charts
+> - Fix discordSRV msg player profile img
 > - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:

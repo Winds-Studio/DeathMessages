@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-      - nextgen
+
 jobs:
   build:
     name: Build
@@ -30,7 +30,7 @@ jobs:
           prerelease: false
 
       - name: Upload DeathMessages DevBuild
-        if: github.ref_name == 'nextgen'
+        #if: github.ref_name == 'nextgen'
         uses: marvinpinto/action-automatic-releases@master
         with:
           title: "DeathMessages v1.4.18-SNAPSHOT"

@@ -30,13 +30,8 @@ public class BroadcastEntityDeathListener implements Listener {
 
 	@EventHandler
 	public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-		Optional<PlayerManager> pm = Optional.ofNullable(e.getPlayer());
-
-		if (pm.isEmpty()) return;
-
-		boolean hasOwner = e.getEntity() instanceof Tameable;
-
-        if (e.isCancelled()) return;
+		Optional<PlayerManager> pm = Optional.of(e.getPlayer());
+        boolean hasOwner = e.getEntity() instanceof Tameable;
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.get().getPlayer(), e.getEntity(), hasOwner);
@@ -44,15 +39,15 @@ public class BroadcastEntityDeathListener implements Listener {
 					.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
 			DeathMessages.getInstance().adventure().sender(Bukkit.getConsoleSender()).sendMessage(Assets.convertFromLegacy(message));
 		}
+
 		if (pm.get().isInCooldown()) {
 			return;
 		} else {
 			pm.get().setCooldown();
 		}
 
-		boolean discordSent = false;
-
 		boolean privateTameable = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
+		boolean discordSent = false;
 
 		for (World w : e.getBroadcastedWorlds()) {
 			for (Player player : w.getPlayers()) {
@@ -90,10 +85,10 @@ public class BroadcastEntityDeathListener implements Listener {
 							}
 						}
 						if (!broadcastToDiscord) {
-							//Wont reach the discord broadcast
+							// Wont reach the discord broadcast
 							return;
 						}
-						//Will reach the discord broadcast
+						// Will reach the discord broadcast
 					}
 					if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
 						DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), e.getEntity(), hasOwner, e.getMessageType());

@@ -29,26 +29,27 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 	@EventHandler
 	public void broadcastListener(BroadcastDeathMessageEvent e) {
-		if (e.isCancelled()) return;
-
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
-		getPlayer.ifPresent(pm -> {
-			if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-				String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
-				message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-				DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message));
-			}
 
-			if (!pm.isInCooldown()) {
-				pm.setCooldown();
-			}
-		});
+		if (getPlayer.isEmpty()) return;
+
+		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
+			String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
+			message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
+			DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message));
+		}
+
+		if (getPlayer.get().isInCooldown()) {
+			return;
+		} else {
+			getPlayer.get().setCooldown();
+		}
 
 		boolean privatePlayer = config.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
 		boolean privateMobs = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
 		boolean privateNatural = config.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
 
-		//To reset for each death message
+		// To reset for each death message
 		discordSent = false;
 
 		for (World w : e.getBroadcastedWorlds()) {
