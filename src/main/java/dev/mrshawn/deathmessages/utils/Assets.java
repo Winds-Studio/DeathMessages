@@ -333,7 +333,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
@@ -415,7 +415,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
@@ -500,7 +500,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(Assets.convertFromLegacy(displayName))
@@ -622,7 +622,7 @@ public class Assets {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 			}
 
 			Component weapon = Component.text()
@@ -708,7 +708,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().getAsString()));
+			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(Assets.convertFromLegacy(displayName))

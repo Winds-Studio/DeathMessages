@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.worldguard;
+package dev.mrshawn.deathmessages.hooks;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.util.Location;

@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.worldguard;
+package dev.mrshawn.deathmessages.hooks;
 
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.StateFlag;

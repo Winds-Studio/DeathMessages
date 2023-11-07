@@ -30,8 +30,8 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
-import dev.mrshawn.deathmessages.worldguard.WorldGuard7Extension;
-import dev.mrshawn.deathmessages.worldguard.WorldGuardExtension;
+import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
+import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.apache.logging.log4j.LogManager;
@@ -81,7 +81,7 @@ public class DeathMessages extends JavaPlugin {
 		initializeOnlinePlayers();
 		checkGameRules();
 		new Metrics(this, 12365);
-		LogManager.getLogger().info("bStats Hook Enabled!");
+		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
 	}
 
 	public void onLoad() {
@@ -147,26 +147,27 @@ public class DeathMessages extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new PlaceholderAPIExtension(this).register();
 			placeholderAPIEnabled = true;
-			LogManager.getLogger().info("PlaceholderAPI Hook Enabled!");
+			LogManager.getLogger(getName()).info("PlaceholderAPI Hook Enabled!");
 		}
 
 		if (worldGuardEnabled) {
-			LogManager.getLogger().info("WorldGuard Hook Enabled!");
+			LogManager.getLogger(getName()).info("WorldGuard Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordBotAPIExtension = new DiscordBotAPIExtension();
-			LogManager.getLogger().info("DiscordBotAPI Hook Enabled!");
+			LogManager.getLogger(getName()).info("DiscordBotAPI Hook Enabled!");
+			LogManager.getLogger(getName()).warn("WARNING: You are using a outdated plugin! DiscordBotAPI support will be removed in DeathMessages 1.4.19, use DiscordSRV instead!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordSRVExtension = new DiscordSRVExtension();
-			LogManager.getLogger().info("DiscordSRV Hook Enabled!");
+			LogManager.getLogger(getName()).info("DiscordSRV Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
 			Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
-			LogManager.getLogger().info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
+			LogManager.getLogger(getName()).info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
 			try {
 				List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
 				if (!ignoredPlugins.contains("DeathMessages")) {
@@ -180,20 +181,20 @@ public class DeathMessages extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
 			combatLogXAPIEnabled = true;
 			Bukkit.getPluginManager().registerEvents(new PlayerUntag(), this);
-			LogManager.getLogger().info("CombatLogX Hook Enabled!");
+			LogManager.getLogger(getName()).info("CombatLogX Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
 			mythicMobs = MythicBukkit.inst();
 			mythicmobsEnabled = true;
-			LogManager.getLogger().info("MythicMobs Hook Enabled!");
+			LogManager.getLogger(getName()).info("MythicMobs Hook Enabled!");
 			Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
 		}
 
 		if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
 			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
-			LogManager.getLogger().info("Bungee Hook enabled!");
+			LogManager.getLogger(getName()).info("Bungee Hook enabled!");
 			if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
 				bungeeInit = true;
 			} else {
@@ -248,6 +249,7 @@ public class DeathMessages extends JavaPlugin {
 	public static EventPriority getEventPriority() {
 		return eventPriority;
 	}
+
 	public @NotNull BukkitAudiences adventure() {
 		if(this.adventure == null) {
 			throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");

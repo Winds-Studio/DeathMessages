@@ -1,19 +1,28 @@
 # DeathMessages
 
-**_！Active testing - report any bugs or give suggestions_**
-
 ![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=for-the-badge)![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=for-the-badge)![Github Stars](https://img.shields.io/github/stars/Winds-Studio/DeathMessages?style=for-the-badge)
 
-Original Download Link: [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Outdated)
+**_！Active testing - report any bugs or give suggestions_**
+
+
 
 ## Features
 
-- Supporting 1.12.2 - Latest Minecraft version (1.20.2)
-- Compatible with Spigot / Paper / Paper forks / Forge&Bukkit Hybrid Servers
-- Folia Support
 - Fix a bunch of errors or issues from original DeathMessages
 - Highly Optimized
 - Active Development
+
+Compatibility
+
+- Support Java 17 and higher
+- Support 1.12.2 - Latest Minecraft version (1.20.2)
+- Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
+- Folia Support
+
+## Portals
+
+- [Github Releases](https://github.com/Winds-Studio/DeathMessages/releases) (Latest DEV Version)
+- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Original DM and Outdated)
 
 ## Contact
 
@@ -28,13 +37,14 @@ For Developers:
 
 ## TODOs
 
-- Adventure - To replace the replaceAll and bukkit ChatColor
-- Command system, tab complete and some refactor
-- Look into get entity name
-- Add version comment in config
-- Config
-- Improve hoverEvent(opt code/showItem or showEntity)
-- More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
+> - Adventure - To replace the replaceAll and bukkit ChatColor
+> - Command system, tab complete and some refactor
+> - Look into get entity name
+> - Add version comment ins config
+> - Config
+> - Improve hoverEvent(opt code/showItem or showEntity)
+> - VersionChecker & Custom bstats charts
+> - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:
 
