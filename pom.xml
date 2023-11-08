@@ -96,14 +96,6 @@
                             <shadedPattern>dev.mrshawn.deathmessages.libs.kyori</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.libs.acf</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.libs.locales</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.libs.xseries</shadedPattern>
                         </relocation>
@@ -235,12 +227,6 @@
             <artifactId>log4j-api</artifactId>
             <version>2.21.1</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>co.aikar</groupId>
-            <artifactId>acf-paper</artifactId>
-            <version>0.5.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
