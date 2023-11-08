@@ -39,9 +39,9 @@ For Developers:
 
 > - Adventure - To replace the replaceAll and bukkit ChatColor
 > - Command system, tab complete and some refactor
+> - Config system refactor
 > - Look into get entity name
 > - Add version comment ins config
-> - Config
 > - Improve hoverEvent(opt code/showItem or showEntity)
 > - VersionChecker & Custom bstats charts
 > - Fix discordSRV msg player profile img

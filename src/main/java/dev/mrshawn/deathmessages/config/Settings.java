@@ -14,9 +14,9 @@ public class Settings {
 
 	public final String fileName = "Settings";
 
-	private CommentedConfiguration config;
+	CommentedConfiguration config;
 
-	private File file;
+	File file;
 
 	public Settings() {
 	}
@@ -25,6 +25,14 @@ public class Settings {
 
 	public static Settings getInstance() {
 		return instance;
+	}
+
+	public CommentedConfiguration getConfig() {
+		return config;
+	}
+
+	public File getFile() {
+		return file;
 	}
 
 	public void save() {
@@ -81,13 +89,5 @@ public class Settings {
 		} catch (Exception e) {
 			LogManager.getLogger().error(e);
 		}
-	}
-
-	public CommentedConfiguration getConfig() {
-		return config;
-	}
-
-	public File getFile() {
-		return file;
 	}
 }

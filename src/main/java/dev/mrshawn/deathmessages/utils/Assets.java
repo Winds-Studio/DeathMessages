@@ -370,7 +370,7 @@ public class Assets {
 	}
 
 	public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
-		final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
+		final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
 		String entityName = mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
 				+ "." + entityName;
@@ -535,7 +535,7 @@ public class Assets {
 	}
 
 	public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
-		final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
+		final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
 		String entityName = mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
 				+ "." + entityName;
@@ -584,7 +584,7 @@ public class Assets {
 	}
 
 	public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
-		final boolean basicMode = PlayerDeathMessages.getInstance().getConfig().getBoolean("Basic-Mode.Enabled");
+		final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
 		String entityName = mob.getType().getEntityClass().getSimpleName().toLowerCase();
 		final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
 				+ "." + entityName;

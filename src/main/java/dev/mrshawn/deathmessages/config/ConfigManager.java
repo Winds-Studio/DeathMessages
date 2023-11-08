@@ -39,6 +39,7 @@ public class ConfigManager {
 		Messages.getInstance().reload();
 		PlayerDeathMessages.getInstance().reload();
 		Settings.getInstance().reload();
+		UserData.getInstance().reload();
 	}
 
 	public String backup(boolean excludeUserData) {

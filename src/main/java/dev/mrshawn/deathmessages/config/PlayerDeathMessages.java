@@ -49,7 +49,7 @@ public class PlayerDeathMessages {
 			config = CommentedConfiguration.loadConfiguration(file);
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			LogManager.getLogger().error("Could not save: " + fileName + ".yml");
+			LogManager.getLogger().error("Could not reload: " + fileName + ".yml");
 			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
 			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
