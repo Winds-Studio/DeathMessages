@@ -36,5 +36,5 @@ jobs:
           title: "DeathMessages v1.4.18-SNAPSHOT"
           automatic_release_tag: "dev"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "target/*.jar"
+          files: "target/DeathMessages-*.jar"
           prerelease: true

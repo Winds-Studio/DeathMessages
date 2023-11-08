@@ -6,6 +6,8 @@ import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
 import dev.mrshawn.deathmessages.enums.DamageTypes;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
@@ -27,6 +29,9 @@ public class CommandEdit extends DeathMessagesCommand {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
+
+		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("You are trying to use a deprecated command. Command edit will be removed since DeathMessages 1.4.19", NamedTextColor.RED));
+
 		if (args.length <= 3) {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Usage")));
 		} else {

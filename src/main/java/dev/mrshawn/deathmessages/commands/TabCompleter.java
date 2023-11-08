@@ -52,7 +52,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 			return arguments;
 		}
 
-		// Dreeam TODO - Command edit Will be removed in since DeathMessages 1.4.19
+		// Dreeam TODO - Command edit Will be removed since DeathMessages 1.4.19
 		if (args[0].equalsIgnoreCase("edit")) {
 			if (args.length == 3) {
 				// /dm edit <player> <mobName>
