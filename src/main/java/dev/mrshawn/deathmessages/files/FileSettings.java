@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.files;
 
-import dev.mrshawn.deathmessages.DeathMessages;
 import org.apache.logging.log4j.LogManager;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,20 +13,22 @@ import java.util.List;
 import java.util.Map;
 
 public class FileSettings<C extends Enum<C>> {
+    private final JavaPlugin plugin;
     private final String fileName;
     private final File file;
     private YamlConfiguration yamlConfig;
     private final Map<Enum<C>, Object> values = new HashMap<>();
 
-    public FileSettings(String fileName) {
+    public FileSettings(JavaPlugin plugin, String fileName) {
+        this.plugin = plugin;
         this.fileName = fileName;
-        this.file = new File(DeathMessages.getInstance().getDataFolder(), fileName);
+        this.file = new File(plugin.getDataFolder(), fileName);
         loadFile();
     }
 
     private void loadFile() {
         if (!file.exists()) {
-            DeathMessages.getInstance().saveResource(fileName, false);
+            plugin.saveResource(fileName, false);
         }
     }
 
