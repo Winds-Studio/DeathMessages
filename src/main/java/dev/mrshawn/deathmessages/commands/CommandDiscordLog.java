@@ -11,9 +11,9 @@ import github.scarsz.discordsrv.DiscordSRV;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
-
-import java.util.List;
 
 public class CommandDiscordLog extends DeathMessagesCommand {
 
@@ -30,7 +30,6 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return;
 		}
-		List<String> discordLog = Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog");
 		String discordJar;
 		if (DeathMessages.discordBotAPIExtension != null) {
 			discordJar = "DiscordBotAPI";
@@ -47,44 +46,51 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 		} else {
 			discordToken = "Discord Jar Not Installed";
 		}
-		for (String log : discordLog) {
-			if (log.equals("%discordConfig%")) {
 
-				TextComponent msg = Component.text()
-								.append().build();
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("  &aChannels:"));
+		TextComponent discordConfig = Component.text()
+				.append(Component.newline())
+				.append(Component.text("  Enabled: ", NamedTextColor.GREEN))
+				.append(Component.text(config.getBoolean(Config.HOOKS_DISCORD_ENABLED), NamedTextColor.RED)).append(Component.newline())
+				.append(Component.text("  Channels:", NamedTextColor.GREEN)).append(Component.newline())
 				// Player
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aPlayer-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED)));
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aPlayer-Channels:"));
-				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS)) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
-				}
+				.append(Component.text("    Player-Enabled: ", NamedTextColor.GREEN))
+				.append(Component.text(config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED), NamedTextColor.RED)).append(Component.newline())
+				.append(Component.text("    Player-Channels:", NamedTextColor.GREEN)).append(Component.newline())
+				.append(Component.text("      - " + String.join("\n      - ", config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS)))).append(Component.newline())
 				// Mob
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aMob-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED)));
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aMob-Channels:"));
-				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS)) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
-				}
+				.append(Component.text("    Mob-Enabled: ", NamedTextColor.GREEN))
+				.append(Component.text(config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_MOB_ENABLED), NamedTextColor.RED)).append(Component.newline())
+				.append(Component.text("    Mob-Channels:", NamedTextColor.GREEN)).append(Component.newline())
+				.append(Component.text("      - " + String.join("\n      - ", config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS)))).append(Component.newline())
 				// Player
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aNatural-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED)));
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aNatural-Channels:"));
-				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS)) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
-				}
+				.append(Component.text("    Natural-Enabled: ", NamedTextColor.GREEN))
+				.append(Component.text(config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED), NamedTextColor.RED)).append(Component.newline())
+				.append(Component.text("    Natural-Channels:", NamedTextColor.GREEN)).append(Component.newline())
+				.append(Component.text("      - " + String.join("\n      - ", config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS)))).append(Component.newline())
 				// Player
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aEntity-Enabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED)));
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("    &aEntity-Channels:"));
-				for (String channels : config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS)) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("      - " + channels));
-				}
-				continue;
-			}
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(log
-					.replaceAll("%discordJar%", discordJar)
-					.replaceAll("%discordToken%", discordToken)
-					.replace("%prefix%", Messages.getInstance().getConfig().getString("Prefix"))));
-		}
-		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("log"));
+				.append(Component.text("    Entity-Enabled: ", NamedTextColor.GREEN))
+				.append(Component.text(config.getBoolean(Config.HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED), NamedTextColor.RED)).append(Component.newline())
+				.append(Component.text("    Entity-Channels:", NamedTextColor.GREEN)).append(Component.newline())
+				.append(Component.text("      - " + String.join("\n      - ", config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS))))
+				.build();
+
+		Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog")
+				.stream()
+				.map(Assets::convertFromLegacy)
+				.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+						.replaceText(Assets.prefix)
+						.replaceText(TextReplacementConfig.builder()
+								.match("%discordJar%")
+								.replacement(discordJar)
+								.build())
+						.replaceText(TextReplacementConfig.builder()
+								.match("%discordToken%")
+								.replacement(discordToken)
+								.build())
+						.replaceText(TextReplacementConfig.builder()
+								.match("%discordConfig%")
+								.replacement(discordConfig)
+								.build())
+				));
 	}
 }
