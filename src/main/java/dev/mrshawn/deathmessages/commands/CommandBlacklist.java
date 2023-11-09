@@ -5,6 +5,7 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -28,6 +29,11 @@ public class CommandBlacklist extends DeathMessagesCommand {
 		if (args.length == 0) {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help")));
 		} else {
+			TextReplacementConfig player = TextReplacementConfig.builder()
+					.match("%player%")
+					.replacement(args[0])
+					.build();
+
 			for (Map.Entry<String, Object> entry : UserData.getInstance().getConfig().getValues(false).entrySet()) {
 				String username = UserData.getInstance().getConfig().getString(entry.getKey() + ".username");
 				if (username.equalsIgnoreCase(args[0])) {
@@ -39,8 +45,8 @@ public class CommandBlacklist extends DeathMessagesCommand {
 						}
 						UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
 						UserData.getInstance().save();
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
-								.replaceAll("%player%", args[0])));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove"))
+								.replaceText(player));
 					} else {
 						if (Bukkit.getPlayer(UUID.fromString(entry.getKey())) != null) {
 							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
@@ -48,14 +54,14 @@ public class CommandBlacklist extends DeathMessagesCommand {
 						}
 						UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
 						UserData.getInstance().save();
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
-								.replaceAll("%player%", args[0])));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add"))
+								.replaceText(player));
 					}
 					return;
 				}
 			}
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
-					.replaceAll("%player%", args[0])));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent"))
+					.replaceText(player));
 		}
 
 	}

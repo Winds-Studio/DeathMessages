@@ -73,6 +73,11 @@ public class Assets {
 		return false;
 	}
 
+	public static TextReplacementConfig prefix = TextReplacementConfig.builder()
+			.match("%prefix%")
+			.replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
+			.build();
+
 	public static String formatMessage(String path) {
 		return Messages.getInstance().getConfig().getString(path)
 				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
@@ -81,15 +86,6 @@ public class Assets {
 	public static String formatString(String s) {
 		return s
 				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
-	}
-
-	public static List<String> formatMessage(List<String> list) {
-		List<String> newList = new ArrayList<>();
-		for (String s : list) {
-			newList.add(s
-					.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix")));
-		}
-		return newList;
 	}
 
 	public static TextComponent convertFromLegacy(String s) {

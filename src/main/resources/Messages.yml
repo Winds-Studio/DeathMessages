@@ -16,10 +16,14 @@ Commands:
     Help:
       - "%prefix%&aDeathMessages Command Help List:"
       - ""
-      - "&a/deathmessages blacklist <username> &7- blacklists the user from death messages. They will still see other players' death messages, but not send them."
-      - "&a/deathmessages toggle &7- Toggle death messages on or off."
+      - "&a/deathmessages backup &7- Backup DeathMessages configs."
+      - "&a/deathmessages blacklist <username> &7- Blacklists the user from death messages. They will still see other players' death messages, but not send them."
+      - "&a/deathmessages discordlog &7- Show DiscordSRV <-> DeathMessages configuration."
+      - "&a/deathmessages edit <entity, player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
       - "&a/deathmessages reload &7- Reload plugin configs."
-      - "&a/deathmessages edit <player> <mobName> <solo, gang> <damage-type> <add, remove, list> (remove only=Placeholder) &7- Edits the death messages."
+      - "&a/deathmessages restore &7- Restore configs from your backup."
+      - "&a/deathmessages toggle &7- Toggle death messages on or off."
+      - "&a/deathmessages version &7- Show plugin info and check updates."
     Sub-Commands:
       Reload:
         Reloaded: "%prefix%&aReloaded all plugin configs."
@@ -49,7 +53,6 @@ Commands:
         Usage: "%prefix%&a/dm restore <backup-code> <true, false> &7- True will not restore user-data, false will restore user-data."
         Restored: "%prefix%&aPlugin files restored from backup &e#%backup-code%"
         Backup-Not-Found: "%prefix%&cThe backup with that code does not exist."
-      # Do not touch this section. If you do. Leave the last line alone.
       DiscordLog:
         - "%prefix%&3Discord Status Log for support:"
         - "&7Take a picture of this and send it to the support chat if you created a ticket regarding discord issues:"

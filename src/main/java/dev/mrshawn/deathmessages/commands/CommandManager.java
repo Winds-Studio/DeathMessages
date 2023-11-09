@@ -36,23 +36,23 @@ public class CommandManager implements CommandExecutor {
 			return false;
 		}
 		if (args.length == 0) {
-			for (String s : Assets.formatMessage(
-					Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))) {
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(s));
-			}
+			Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
+					.stream()
+					.map(Assets::convertFromLegacy)
+					.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+							.replaceText(Assets.prefix)));
 		} else {
 			DeathMessagesCommand cmd = get(args[0]);
 			if (cmd != null) {
-				ArrayList<String> a = new ArrayList<>(Arrays.asList(args));
-				a.remove(0);
-				args = a.toArray(new String[0]);
-				cmd.onCommand(sender, args);
+				String[] trimmedArgs = Arrays.copyOfRange(args, 1, args.length);
+				cmd.onCommand(sender, trimmedArgs);
 				return false;
 			}
-			for (String s : Assets.formatMessage(
-					Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help"))) {
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(s));
-			}
+			Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
+					.stream()
+					.map(Assets::convertFromLegacy)
+					.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+							.replaceText(Assets.prefix)));
 		}
 		return false;
 	}

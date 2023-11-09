@@ -38,12 +38,11 @@ For Developers:
 ## TODOs
 
 > - Adventure - To replace the replaceAll and bukkit ChatColor
-> - Command system, tab complete and some refactor
-> - Config system refactor
+> - Config system refactor (keep comment, update config key, auto reload? maybe)
 > - Look into get entity name
 > - Add version comment ins config
 > - Improve hoverEvent(opt code/showItem or showEntity)
-> - VersionChecker & Custom bstats charts
+> - VersionChecker(onLoad & version command) & Custom bstats charts
 > - Fix discordSRV msg player profile img
 > - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 

@@ -4,6 +4,8 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.command.CommandSender;
 
 public class CommandRestore extends DeathMessagesCommand {
@@ -25,8 +27,14 @@ public class CommandRestore extends DeathMessagesCommand {
 			String code = args[0];
 			boolean excludeUserData = Boolean.parseBoolean(args[1]);
 			if (ConfigManager.getInstance().restore(code, excludeUserData)) {
-				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
-						.replaceAll("%backup-code%", code)));
+
+				Component message = Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored"))
+						.replaceText(TextReplacementConfig.builder()
+								.match("%backup-code%")
+								.replacement(code)
+								.build());
+
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(message);
 			} else {
 				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found")));
 			}

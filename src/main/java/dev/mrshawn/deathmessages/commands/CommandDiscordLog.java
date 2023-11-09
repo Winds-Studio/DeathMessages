@@ -9,6 +9,8 @@ import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import github.scarsz.discordsrv.DiscordSRV;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -47,6 +49,9 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 		}
 		for (String log : discordLog) {
 			if (log.equals("%discordConfig%")) {
+
+				TextComponent msg = Component.text()
+								.append().build();
 				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("  &aEnabled: &c" + config.getBoolean(Config.HOOKS_DISCORD_ENABLED)));
 				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("  &aChannels:"));
 				// Player
@@ -80,5 +85,6 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 					.replaceAll("%discordToken%", discordToken)
 					.replace("%prefix%", Messages.getInstance().getConfig().getString("Prefix"))));
 		}
+		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("log"));
 	}
 }
