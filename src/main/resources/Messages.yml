@@ -31,7 +31,7 @@ Commands:
         Toggle-On: "%prefix%&aYou have toggled your death messages &lON"
         Toggle-Off: "%prefix%&aYou have toggled your death messages &c&lOFF"
       Blacklist:
-        Help: "%prefix%&cUsage: /dm blacklist <username> - blacklists the user from death messages. They will still see death messages, but not send them."
+        Help: "%prefix%&aUsage: /dm blacklist <username> &7- blacklists the user from death messages. They will still see death messages, but not send them."
         Username-None-Existent: "%prefix%&cCould not find the player with the username &e%player%"
         Blacklist-Add: "%prefix%&aBlacklisted &e%player%&a!"
         Blacklist-Remove: "%prefix%&aRemoved &e%player% &afrom being blacklisted."
