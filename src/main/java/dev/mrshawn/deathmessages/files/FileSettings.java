@@ -51,6 +51,7 @@ public class FileSettings<C extends Enum<C>> {
 
             String configPath = configEnum.getPath();
             if (yamlConfig.contains(configPath)) {
+                // Dreeam TODO - will not reach here when reload configs
                 values.put(value, yamlConfig.get(configPath));
             } else {
                 Object defaultValue = configEnum.getDefault();

@@ -28,7 +28,7 @@ public class CommandVersion extends DeathMessagesCommand {
 						.build())
 				.replaceText(TextReplacementConfig.builder()
 						.match("%authors%")
-						.replacement(DeathMessages.getInstance().getDescription().getAuthors().toString()) // Dreeam TODO - remove []
+						.replacement(String.join(", ", DeathMessages.getInstance().getDescription().getAuthors()))
 						.build());
 
 		DeathMessages.getInstance().adventure().sender(sender).sendMessage(message);
