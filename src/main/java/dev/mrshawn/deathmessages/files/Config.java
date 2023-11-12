@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public enum Config implements ConfigEnum {
+public enum Config {
 
 	DISABLE_DEFAULT_MESSAGES("Disable-Default-Messages", true),
 	ADD_PREFIX_TO_ALL_MESSAGES("Add-Prefix-To-All-Messages", true),

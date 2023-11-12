@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.files;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import org.apache.logging.log4j.LogManager;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,22 +13,20 @@ import java.util.List;
 import java.util.Map;
 
 public class FileSettings<C extends Enum<C>> {
-    private final JavaPlugin plugin;
     private final String fileName;
     private final File file;
     private YamlConfiguration yamlConfig;
     private final Map<Enum<C>, Object> values = new HashMap<>();
 
-    public FileSettings(JavaPlugin plugin, String fileName) {
-        this.plugin = plugin;
+    public FileSettings(String fileName) {
         this.fileName = fileName;
-        this.file = new File(plugin.getDataFolder(), fileName);
+        this.file = new File(DeathMessages.getInstance().getDataFolder(), fileName);
         loadFile();
     }
 
     private void loadFile() {
         if (!file.exists()) {
-            plugin.saveResource(fileName, false);
+            DeathMessages.getInstance().saveResource(fileName, false);
         }
     }
 
@@ -45,16 +43,16 @@ public class FileSettings<C extends Enum<C>> {
 
         EnumSet<C> enumSet = EnumSet.allOf(enumClass);
         for (C value : enumSet) {
-            if (!(value instanceof ConfigEnum configEnum)) {
+            if (!(value instanceof Config config)) {
                 throw new IllegalArgumentException("Enum " + enumClass.getName() + " must implement ConfigEnum");
             }
 
-            String configPath = configEnum.getPath();
+            String configPath = config.getPath();
             if (yamlConfig.contains(configPath)) {
                 // Dreeam TODO - will not reach here when reload configs
                 values.put(value, yamlConfig.get(configPath));
             } else {
-                Object defaultValue = configEnum.getDefault();
+                Object defaultValue = config.getDefault();
                 if (defaultValue != null) {
                     yamlConfig.set(configPath, defaultValue);
                     values.put(value, defaultValue);
@@ -93,8 +91,8 @@ public class FileSettings<C extends Enum<C>> {
         return clazz.cast(values.get(value));
     }
 
-    public void set(Enum<C> enumValue, ConfigEnum configEnum, Object setValue) {
+    public void set(Enum<C> enumValue, Config config, Object setValue) {
         values.put(enumValue, setValue);
-        yamlConfig.set(configEnum.getPath(), setValue);
+        yamlConfig.set(config.getPath(), setValue);
     }
 }

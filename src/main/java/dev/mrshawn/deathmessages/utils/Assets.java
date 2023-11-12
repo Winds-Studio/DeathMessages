@@ -8,11 +8,11 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.DeathAffiliation;
 import dev.mrshawn.deathmessages.enums.DeathModes;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.key.Key;
@@ -61,8 +61,9 @@ import java.util.regex.Pattern;
 
 public class Assets {
 
-	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
-	private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES);
+	// Dreeam TODO - to figure out why the value defined in private static field will not change with the change of the config value
+	//private static final CommentedConfiguration config = Settings.getInstance().getConfig();
+	//private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath());
 	public static final HashMap<String, String> addingMessage = new HashMap<>();
 
 	public static boolean isNumeric(String s) {
@@ -109,7 +110,7 @@ public class Assets {
 
 		String displayName = itemStack.getItemMeta().getDisplayName();
 
-		for (String s : config.getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON)) {
+		for (String s : Settings.getInstance().getConfig().getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON.getPath())) {
 			Pattern pattern = Pattern.compile(s);
 			Matcher matcher = pattern.matcher(displayName);
 			if (matcher.find()) {
@@ -120,7 +121,7 @@ public class Assets {
 	}
 
 	public static boolean itemMaterialIsWeapon(ItemStack itemStack) {
-		for (String s : config.getStringList(Config.CUSTOM_ITEM_MATERIAL_IS_WEAPON)) {
+		for (String s : Settings.getInstance().getConfig().getStringList(Config.CUSTOM_ITEM_MATERIAL_IS_WEAPON.getPath())) {
 			Material material = Material.getMaterial(s);
 			if (itemStack.getType().equals(material)) {
 				return true;
@@ -266,14 +267,16 @@ public class Assets {
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 
-		if (config.getBoolean(Config.DEBUG)) System.out.println("Natural-Cause." + damageCause); // Dreeam - debug
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Natural-Cause." + damageCause); // Dreeam - debug
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, null);
 
 		TextComponent.Builder base = Component.text();
-
-		if (addPrefix) {
+		// Dreeam - For debug
+		//System.out.println(Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath()));
+		//System.out.println(FileStore.INSTANCE.getCONFIG().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES));
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -315,8 +318,8 @@ public class Assets {
 
 			String displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-					if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
+				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
+					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
 						if (i.getEnchantments().isEmpty()) {
 							return getNaturalDeath(pm, "Projectile-Unknown");
 						}
@@ -379,14 +382,14 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		}
 
-		if (config.getBoolean(Config.DEBUG)) System.out.println(mode + "." + affiliation + ".Weapon"); // Dreeam - debug
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(mode + "." + affiliation + ".Weapon"); // Dreeam - debug
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 
 		TextComponent.Builder base = Component.text();
 
-		if (addPrefix) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -464,14 +467,14 @@ public class Assets {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
-		if (config.getBoolean(Config.DEBUG)) System.out.println("Entities." + entityName + ".Weapon"); // Dreeam - debug
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Entities." + entityName + ".Weapon"); // Dreeam - debug
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = entityDeathPlaceholders(msg, p, e, hasOwner);
 
 		TextComponent.Builder base = Component.text();
 
-		if (addPrefix) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -480,15 +483,15 @@ public class Assets {
 			String displayName;
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-					if (!config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
+				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
+					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
 						if (i.getEnchantments().isEmpty()) {
 							return getEntityDeath(p, e,
-									config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
+									Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO.getPath()), mobType);
 						}
 					} else {
 						return getEntityDeath(p, e,
-								config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO), mobType);
+								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO.getPath()), mobType);
 					}
 				}
 				displayName = Assets.convertString(i.getType().name());
@@ -543,12 +546,12 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		}
 
-		if (config.getBoolean(Config.DEBUG)) System.out.println(mode + "." + affiliation + "." + damageCause); // Dreeam - debug
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(mode + "." + affiliation + "." + damageCause); // Dreeam - debug
 
 		if (msgs.isEmpty()) {
-			if (config.getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED))
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
 				return getNaturalDeath(pm, damageCause);
-			if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED))
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath()))
 				return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
 			return null;
 		}
@@ -557,7 +560,7 @@ public class Assets {
 
 		TextComponent.Builder base = Component.text();
 
-		if (addPrefix) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -591,14 +594,14 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
 
-		if (config.getBoolean(Config.DEBUG)) System.out.println(mode + "." + affiliation + "." + projectileDamage); // Dreeam - debug
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(mode + "." + affiliation + "." + projectileDamage); // Dreeam - debug
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
 
 		TextComponent.Builder base = Component.text();
 
-		if (addPrefix) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -608,10 +611,10 @@ public class Assets {
 			String displayName;
 			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
+				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
+					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
 							.equals(projectileDamage)) {
-						return getProjectile(gang, pm, mob, config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO));
+						return getProjectile(gang, pm, mob, Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()));
 					}
 				}
 				displayName = Assets.convertString(i.getType().name());
@@ -666,8 +669,8 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			if (config.getBoolean(Config.DEBUG)) System.out.println("Entities." + entityName + "." + projectileDamage); // Dreeam - debug
-			if (config.getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED)) {
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Entities." + entityName + "." + projectileDamage); // Dreeam - debug
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath())) {
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
 			}
 			return null;
@@ -683,7 +686,7 @@ public class Assets {
 
 		TextComponent.Builder base = Component.text();
 
-		if (addPrefix) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -692,11 +695,11 @@ public class Assets {
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			String displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-				if (config.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-					if (!config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO)
+				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
+					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
 							.equals(projectileDamage)) {
 						return getEntityDeathProjectile(p, em,
-								config.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO), mobType);
+								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()), mobType);
 					}
 				}
 				displayName = Assets.convertString(i.getType().name());
@@ -762,13 +765,13 @@ public class Assets {
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, e);
 		}
 
-		if (config.getBoolean(Config.DEBUG)) System.out.println("Entities." + entityName + "." + damageCause); // Dreeam - debug
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Entities." + entityName + "." + damageCause); // Dreeam - debug
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 
 		TextComponent.Builder base = Component.text();
 
-		if (addPrefix) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
@@ -885,8 +888,8 @@ public class Assets {
 			}
 		} else {
 			String mobName = mob.getName();
-			if (config.getBoolean(Config.RENAME_MOBS_ENABLED)) {
-				String[] chars = config.getString(Config.RENAME_MOBS_IF_CONTAINS).split("(?!^)");
+			if (Settings.getInstance().getConfig().getBoolean(Config.RENAME_MOBS_ENABLED.getPath())) {
+				String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
 				for (String ch : chars) {
 					if (mobName.contains(ch)) {
 						mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
@@ -894,7 +897,7 @@ public class Assets {
 					}
 				}
 			}
-			if (!(mob instanceof Player) && config.getBoolean(Config.DISABLE_NAMED_MOBS)) {
+			if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
 				mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
 			}
 			msg = msg
