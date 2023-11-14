@@ -2,13 +2,24 @@
 
 ![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=for-the-badge)![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=for-the-badge)![Github Stars](https://img.shields.io/github/stars/Winds-Studio/DeathMessages?style=for-the-badge)
 
-**_！Active testing - report any bugs or give suggestions_**
+**_🔔 Active Testing - Report any bugs or give suggestions_**
 
-
+<details>
+    <summary>✎ Why this fork came out?</summary>
+    <p>
+        The original maintainer of DeathMessages, MrShawn, cleared his repo commits and began his rewritten version of DeathMessages.
+        And on SpigotMC, the last update of DeathMessages stagnated on July 20, 2022, almost around 1 year ago! 
+        Since the rewritten version has incomplete functions with slow update progress and 
+        the original one had so many issues, Then this fork came out.
+    <p>
+        This fork based on DeathMessages 1.4.15. I will continue to maintain this fork to fix issues left in the original plugin, 
+        and add some new features maybe.
+    </p>
+</details>
 
 ## Features
 
-- Fix a bunch of errors or issues from original DeathMessages
+- Fix a bunch of errors and issues from original DeathMessages
 - Highly Optimized
 - Active Development
 
@@ -22,7 +33,7 @@ Compatibility
 ## Portals
 
 - [Github Releases](https://github.com/Winds-Studio/DeathMessages/releases) (Latest DEV Version)
-- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Original DM and Outdated)
+- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Original DeathMessages)
 
 ## Contact
 
@@ -33,6 +44,7 @@ Compatibility
 For Developers:
 
 - The plugin uses a mix of kotlin and java and as such you must compile kotlin as well
+- Use Java 17
 - Compile the plugin with: `mvn clean kotlin:compile package`
 
 ## TODOs
@@ -40,10 +52,10 @@ For Developers:
 > - Adventure - To replace the replaceAll and bukkit ChatColor
 > - Config system refactor (keep comment, update config key, auto reload? maybe)
 > - Look into get entity name
-> - Add version comment ins config
 > - Improve hoverEvent(opt code/showItem or showEntity)
 > - VersionChecker(onLoad & version command) & Custom bstats charts
 > - Fix discordSRV msg player profile img
+> - Mod support
 > - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:

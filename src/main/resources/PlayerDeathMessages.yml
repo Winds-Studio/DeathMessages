@@ -1248,6 +1248,26 @@ Mobs:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
       Melee:
         - "%player% was slain by a bunch of %killer%'s"
+  # 1.17
+  goat:
+    Solo:
+      Melee:
+        - "%player% was knocked by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was knocked by a bunch of %killer%'s"
+  # 1.19
+  warden:
+    Solo:
+      Melee:
+        - "%player% was slain by %killer%"
+      Sonic-Boom:
+        - "%player% was obliterated by a sonically-charged shriek"
+    Gang:
+      Melee:
+        - "%player% was slain by a bunch of %killer%'s"
+      Sonic-Boom:
+        - "%player% was obliterated by a bunch of sonically-charged shrieks"
   player:
     Solo:
       Bed:
@@ -1298,24 +1318,6 @@ Mobs:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
       Melee:
         - "%player% was slain by a bunch of %killer%'s"
-  goat:
-    Solo:
-      Melee:
-        - "%player% was knocked by a %killer%"
-    Gang:
-      Melee:
-        - "%player% was knocked by a bunch of %killer%'s"
-  warden:
-    Solo:
-      Melee:
-        - "%player% was slain by %killer%"
-      Sonic-Boom:
-        - "%player% was obliterated by a sonically-charged shriek"
-    Gang:
-      Melee:
-        - "%player% was slain by a bunch of %killer%'s"
-      Sonic-Boom:
-        - "%player% was obliterated by a bunch of sonically-charged shrieks"
 
 Custom-Mobs:
   Mythic-Mobs:

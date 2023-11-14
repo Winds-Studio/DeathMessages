@@ -99,7 +99,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public static int majorVersion() {
-		// Dreeam - eg. 1.20.2-R0.1-SNAPSHOT, replace string before first decimal point, then replace all string after the decimal point
+		// Dreeam - eg. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
 		return Integer.parseInt(Bukkit.getServer().getBukkitVersion()
 				.replaceFirst("^(\\d+)\\.", "")
 				.replaceAll("\\.(.+)", "")

@@ -276,6 +276,7 @@ public class Assets {
 		// Dreeam - For debug
 		//System.out.println(Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath()));
 		//System.out.println(FileStore.INSTANCE.getCONFIG().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES));
+		//System.out.println(config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath()));
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
 			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
