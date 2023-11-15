@@ -124,9 +124,9 @@ public class EntityDeath implements Listener {
 				}
 			}, () -> new PlayerManager(p));
 		} else {
+			// TODO: maybe remove below, unnecessary
 			Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 			getEntity.ifPresent(em -> {
-
 				// Player killing mob
 				MobType mobType = MobType.VANILLA;
 				if (DeathMessages.getInstance().mythicmobsEnabled) {
@@ -136,6 +136,7 @@ public class EntityDeath implements Listener {
 				}
 
 				PlayerManager damager = em.getLastPlayerDamager();
+				if (damager == null) return; // Entity killed by Entity should not include in DM
 
 				TextComponent entityDeath = Assets.entityDeathMessage(em, mobType);
 				BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, entityDeath, getWorlds(e.getEntity()));

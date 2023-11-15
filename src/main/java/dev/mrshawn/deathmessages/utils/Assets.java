@@ -278,7 +278,7 @@ public class Assets {
 		//System.out.println(FileStore.INSTANCE.getCONFIG().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES));
 		//System.out.println(config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath()));
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
@@ -288,7 +288,7 @@ public class Assets {
 				String material = fb.getBlockData().getMaterial().toString().toLowerCase();
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 
-				base.append(Assets.convertFromLegacy(msg.replaceAll("%block%", configValue)));
+				base.append(convertFromLegacy(msg.replaceAll("%block%", configValue)));
 			} catch (NullPointerException e) {
 				LogManager.getLogger().error("Could not parse %block%. Please check your config for a wrong value." +
 						" Your materials could be spelt wrong or it does not exists in the config. Open a issue if you need help, " + "https://github.com/Winds-Studio/DeathMessages/issues");
@@ -300,7 +300,7 @@ public class Assets {
 				String material = pm.getLastClimbing().toString().toLowerCase();
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 
-				base.append(Assets.convertFromLegacy(msg.replaceAll("%climbable%", configValue)));
+				base.append(convertFromLegacy(msg.replaceAll("%climbable%", configValue)));
 			} catch (NullPointerException e) {
 				pm.setLastClimbing(null);
 				return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
@@ -328,7 +328,7 @@ public class Assets {
 						return getNaturalDeath(pm, "Projectile-Unknown");
 					}
 				}
-				displayName = Assets.convertString(i.getType().name());
+				displayName = convertString(i.getType().name());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
@@ -336,7 +336,7 @@ public class Assets {
 			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
-					.append(Assets.convertFromLegacy(displayName))
+					.append(convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(showItem);
 
@@ -350,12 +350,12 @@ public class Assets {
 
 			base.append(deathMessage);
 		} else {
-			TextComponent deathMessage = Assets.convertFromLegacy(msg);
+			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
 		// TODO: need to re-write the logic of death message click event & hover text.
 //		if (msg.length() >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(msg[1], pm, null))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(msg[1], pm, null))));
 //		}
 //		if (msg.length() == 3) {
 //			if (msg[2].startsWith("COMMAND:")) {
@@ -391,7 +391,7 @@ public class Assets {
 		TextComponent.Builder base = Component.text();
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
@@ -410,7 +410,7 @@ public class Assets {
 								.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
 					}
 				}
-				displayName = Assets.convertString(i.getType().name());
+				displayName = convertString(i.getType().name());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
@@ -418,7 +418,7 @@ public class Assets {
 			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
-					.append(Assets.convertFromLegacy(displayName))
+					.append(convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(showItem);
 
@@ -432,11 +432,11 @@ public class Assets {
 
 			base.append(deathMessage);
 		} else {
-			TextComponent deathMessage = Assets.convertFromLegacy(msg);
+			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -476,7 +476,7 @@ public class Assets {
 		TextComponent.Builder base = Component.text();
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
@@ -495,7 +495,7 @@ public class Assets {
 								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO.getPath()), mobType);
 					}
 				}
-				displayName = Assets.convertString(i.getType().name());
+				displayName = convertString(i.getType().name());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
@@ -503,7 +503,7 @@ public class Assets {
 			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
-					.append(Assets.convertFromLegacy(displayName))
+					.append(convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(showItem);
 
@@ -517,11 +517,11 @@ public class Assets {
 
 			base.append(deathMessage);
 		} else {
-			TextComponent deathMessage = Assets.convertFromLegacy(msg);
+			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -562,14 +562,14 @@ public class Assets {
 		TextComponent.Builder base = Component.text();
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
-		TextComponent deathMessage = Assets.convertFromLegacy(playerDeathPlaceholders(msg, pm, mob));
+		TextComponent deathMessage = convertFromLegacy(playerDeathPlaceholders(msg, pm, mob));
 		base.append(deathMessage);
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -603,7 +603,7 @@ public class Assets {
 		TextComponent.Builder base = Component.text();
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
@@ -618,7 +618,7 @@ public class Assets {
 						return getProjectile(gang, pm, mob, Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()));
 					}
 				}
-				displayName = Assets.convertString(i.getType().name());
+				displayName = convertString(i.getType().name());
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
@@ -626,7 +626,7 @@ public class Assets {
 			}
 
 			Component weapon = Component.text()
-					.append(Assets.convertFromLegacy(displayName))
+					.append(convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(showItem);
 
@@ -640,11 +640,11 @@ public class Assets {
 
 			base.append(deathMessage);
 		} else {
-			TextComponent deathMessage = Assets.convertFromLegacy(msg);
+			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -688,7 +688,7 @@ public class Assets {
 		TextComponent.Builder base = Component.text();
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
@@ -703,7 +703,7 @@ public class Assets {
 								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()), mobType);
 					}
 				}
-				displayName = Assets.convertString(i.getType().name());
+				displayName = convertString(i.getType().name());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
 			}
@@ -711,7 +711,7 @@ public class Assets {
 			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
-					.append(Assets.convertFromLegacy(displayName))
+					.append(convertFromLegacy(displayName))
 					.build()
 					.hoverEvent(showItem);
 
@@ -725,11 +725,11 @@ public class Assets {
 
 			base.append(deathMessage);
 		} else {
-			TextComponent deathMessage = Assets.convertFromLegacy(msg);
+			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
@@ -773,14 +773,14 @@ public class Assets {
 		TextComponent.Builder base = Component.text();
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-			TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
 
-		TextComponent deathMessage = Assets.convertFromLegacy(entityDeathPlaceholders(msg, player, e, hasOwner));
+		TextComponent deathMessage = convertFromLegacy(entityDeathPlaceholders(msg, player, e, hasOwner));
 		base.append(deathMessage);
 //		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(Assets.convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
+//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
 //		}
 //		if (sec.length == 3) {
 //			if (sec[2].startsWith("COMMAND:")) {
