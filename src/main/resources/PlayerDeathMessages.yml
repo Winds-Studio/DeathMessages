@@ -328,7 +328,7 @@ Mobs:
       Projectile-Arrow:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Magic:
-        - "%player% was killed by a %killer% using da magic"
+        - "%player% was killed by a %killer% using magic"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
@@ -336,6 +336,8 @@ Mobs:
     Gang:
       Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
+      Magic:
+        - "%player% was killed by some %killer% using magic"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
       Melee:
@@ -479,14 +481,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   ghast:
     Solo:
-      Projectile-Arrow:
+      Projectile-Fireball:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile-Arrow:
+      Projectile-Fireball:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -554,14 +556,14 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   blaze:
     Solo:
-      Projectile-Arrow:
+      Projectile-Fireball:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
-      Projectile-Arrow:
+      Projectile-Fireball:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
@@ -614,6 +616,10 @@ Mobs:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
+      Explosion:
+        - "%player% stood too close to some %killer% while it was spawning"
+      Projectile-Fireball:
+        - "%player% died to some wither skulls"
       Melee:
         - "%player% was slain by a bunch of %killer%'s"
   bat:
@@ -637,6 +643,8 @@ Mobs:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
+      Magic:
+        - "%player% was killed by a %killer% using magic"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
@@ -644,6 +652,8 @@ Mobs:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
+      Magic:
+        - "%player% was killed by some %killer% using magic"
       Melee:
         - "%player% was slain by a bunch of %killer%'s"
   endermite:
