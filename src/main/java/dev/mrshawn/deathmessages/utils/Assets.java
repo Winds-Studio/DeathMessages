@@ -285,7 +285,7 @@ public class Assets {
 		if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
 			try {
 				FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-				String material = fb.getBlockData().getMaterial().toString().toLowerCase();
+				String material = (DeathMessages.majorVersion() > 12) ? fb.getBlockData().getMaterial().toString().toLowerCase() : fb.getMaterial().toString().toLowerCase();
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 
 				base.append(convertFromLegacy(msg.replaceAll("%block%", configValue)));
