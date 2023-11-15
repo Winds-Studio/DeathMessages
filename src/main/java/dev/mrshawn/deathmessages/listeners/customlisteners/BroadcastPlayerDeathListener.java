@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.World;
@@ -35,8 +36,11 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 			String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
-			message = message.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-			DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message));
+			DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message)
+					.replaceText(TextReplacementConfig.builder()
+							.match("%message%")
+							.replacement(e.getTextComponent())
+							.build()));
 		}
 
 		if (getPlayer.get().isInCooldown()) {

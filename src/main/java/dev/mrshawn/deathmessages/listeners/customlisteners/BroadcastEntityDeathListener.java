@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -35,9 +36,11 @@ public class BroadcastEntityDeathListener implements Listener {
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.get().getPlayer(), e.getEntity(), hasOwner);
-			message = message
-					.replaceAll("%message%", Matcher.quoteReplacement(LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent())));
-			DeathMessages.getInstance().adventure().sender(Bukkit.getConsoleSender()).sendMessage(Assets.convertFromLegacy(message));
+			DeathMessages.getInstance().adventure().sender(Bukkit.getConsoleSender()).sendMessage(Assets.convertFromLegacy(message)
+					.replaceText(TextReplacementConfig.builder()
+							.match("%message%")
+							.replacement(e.getTextComponent())
+							.build()));
 		}
 
 		if (pm.get().isInCooldown()) {
@@ -54,9 +57,9 @@ public class BroadcastEntityDeathListener implements Listener {
 				if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
 					continue;
 				}
-				if (privateTameable) {
-					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-					getPlayer.ifPresent(pms -> {
+                Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
+                if (privateTameable) {
+                    getPlayer.ifPresent(pms -> {
 						if (pms.getUUID().equals(pm.get().getPlayer().getUniqueId())) {
 							if (pms.getMessagesEnabled()) {
 								DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
@@ -64,8 +67,7 @@ public class BroadcastEntityDeathListener implements Listener {
 						}
 					});
 				} else {
-					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-					getPlayer.ifPresent(pms -> {
+                    getPlayer.ifPresent(pms -> {
 						if (pms.getMessagesEnabled()) {
 							if (DeathMessages.worldGuardExtension != null) {
 								if (DeathMessages.worldGuardExtension.getRegionState(player, e.getMessageType().getValue()).equals(StateFlag.State.DENY)) {
