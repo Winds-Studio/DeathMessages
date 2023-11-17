@@ -73,21 +73,43 @@ Basic-Mode:
       - "%player% was shot by a %killer% using %weapon%"
     Explosion:
       - "%player% was blown up by a %killer%"
+    Projectile-Fireball:
+      - "%player% was shot by a %killer% somehow using %weapon%"
+    Projectile-ShulkerBullet:
+      - "%player% was shot by a %killer% somehow using %weapon%"
+    Projectile-Trident:
+      - "%player% was shot by a %killer% somehow using %weapon%"
     Magic:
       - "%player% was killed by a %killer% using magic"
+    Sonic-Boom:
+      - "%player% was obliterated by a sonically-charged shriek"
     Weapon:
       - "%player% was slain by a %killer% using %weapon%"
     Melee:
       - "%player% was slain by a %killer%"
+    Contact:
+      - "%player% was pushed into a cactus by %killer%"
   Gang:
     Projectile-Arrow:
       - "%player% was shot by a group of %killer%'s using %weapon%"
+    Explosion:
+      - "%player% was blown up by a group of %killer%"
+    Projectile-Fireball:
+      - "%player% was shot by a group of %killer% somehow using %weapon%"
+    Projectile-ShulkerBullet:
+      - "%player% was shot by a group of %killer% somehow using %weapon%"
+    Projectile-Trident:
+      - "%player% was shot by a group of %killer% somehow using %weapon%"
     Magic:
       - "%player% was killed by a group of %killer%'s using magic"
+    Sonic-Boom:
+      - "%player% was obliterated by a sonically-charged shriek"
     Weapon:
       - "%player% was slain by a group of %killer%'s somehow using %weapon%"
     Melee:
       - "%player% was slain by a group of %killer%'s"
+    Contact:
+      - "%player% was pushed into a cactus by a group of %killer%"
 
 Natural-Cause:
   Bed:
@@ -402,6 +424,8 @@ Mobs:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was ganed up on by some %killer%'s! One wacked them with %weapon%"
+      Explosion:
+        - "%player% was blown up by some %killer%"
       Melee:
         - "%player% was slain by a bunch of %killer%'s"
   skeleton:
@@ -481,6 +505,8 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   ghast:
     Solo:
+      Projectile-Arrow:
+        - "%player% was shot by a %killer% somehow using %weapon%"
       Projectile-Fireball:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
@@ -488,6 +514,8 @@ Mobs:
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
+      Projectile-Arrow:
+        - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Projectile-Fireball:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
@@ -556,6 +584,8 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   blaze:
     Solo:
+      Projectile-Arrow:
+        - "%player% was shot by a %killer% somehow using %weapon%"
       Projectile-Fireball:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
@@ -563,6 +593,8 @@ Mobs:
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
+      Projectile-Arrow:
+        - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Projectile-Fireball:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
@@ -688,6 +720,8 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   shulker:
     Solo:
+      Projectile-Arrow:
+        - "%player% was shot by a %killer% somehow using %weapon%"
       Projectile-ShulkerBullet:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
@@ -695,6 +729,8 @@ Mobs:
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
+      Projectile-Arrow:
+        - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Projectile-ShulkerBullet:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
@@ -900,11 +936,15 @@ Mobs:
     Solo:
       Projectile-LlamaSpit:
         - "%player% was spat on by a %killer%"
+      Projectile-Arrow:
+        - "%player% was ganged up on by a %killer%! One shot them with %weapon%"
       Weapon:
         - "%player% was slain by a %killer% somehow using %weapon%"
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
+      Projectile-LlamaSpit:
+        - "%player% was spat on by some %killer%"
       Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
@@ -1033,6 +1073,8 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
   drowned:
     Solo:
+      Projectile-Arrow:
+        - "%player% was shot by a %killer% somehow using %weapon%"
       Projectile-Trident:
         - "%player% was shot by a %killer% somehow using %weapon%"
       Weapon:
@@ -1040,6 +1082,8 @@ Mobs:
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
+      Projectile-Arrow:
+        - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Projectile-Trident:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:
@@ -1102,6 +1146,8 @@ Mobs:
       Melee:
         - "%player% was slain by a %killer%"
     Gang:
+      Contact:
+        - "%player% was pushed into a cactus by some %killer%"
       Projectile-Arrow:
         - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
       Weapon:

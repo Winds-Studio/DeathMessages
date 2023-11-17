@@ -76,8 +76,10 @@ public class EntityDeath implements Listener {
 							if (explosionManager.getMaterial().name().contains("BED")) {
 								naturalDeath = Assets.getNaturalDeath(pm, "Bed");
 							}
-							if (DeathMessages.majorVersion() >= 16 && explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-								naturalDeath = Assets.getNaturalDeath(pm, "Respawn-Anchor");
+							if (DeathMessages.majorVersion() >= 16) {
+								if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+									naturalDeath = Assets.getNaturalDeath(pm, "Respawn-Anchor");
+								}
 							}
 							BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, null, MessageType.NATURAL, naturalDeath, getWorlds(p), false);
 							Bukkit.getPluginManager().callEvent(event);

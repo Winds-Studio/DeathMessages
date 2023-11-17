@@ -48,8 +48,8 @@ public class InteractEvent implements Listener {
 				}
 				callEvent(e, b, effected);
 			}
-		} else if (!b.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
-			if (DeathMessages.majorVersion() >= 16) {
+		} else if (DeathMessages.majorVersion() >= 16) {
+			if (!b.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
 				if (b.getType().equals(Material.RESPAWN_ANCHOR)) {
 					RespawnAnchor anchor = (RespawnAnchor) b.getBlockData();
 					if (!(anchor.getCharges() == anchor.getMaximumCharges()) && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE))

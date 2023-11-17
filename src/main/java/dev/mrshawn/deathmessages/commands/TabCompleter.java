@@ -35,7 +35,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 				return arguments;
 			} else if (args[0].equalsIgnoreCase("blacklist")) {
 				arguments.clear();
-				for (Player player : Bukkit.getOnlinePlayers()) {
+				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 					arguments.add(player.getName());
 				}
 				return arguments;

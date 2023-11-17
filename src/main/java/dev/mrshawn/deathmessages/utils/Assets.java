@@ -267,7 +267,12 @@ public class Assets {
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Natural-Cause." + damageCause); // Dreeam - debug
+		if (msgs.isEmpty()) {
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Natural-Cause." + damageCause + "] in PlayerDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report issue on Github");
+			msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause.Unknown"), pm.getPlayer(), pm.getPlayer());
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to [Natural-Cause.Unknown] message node");
+		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, null);
@@ -383,7 +388,12 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(mode + "." + affiliation + ".Weapon"); // Dreeam - debug
+		if (msgs.isEmpty()) {
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + mode + "." + affiliation + ".Weapon" + "] in PlayerDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
+			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.BASIC_MODE.getValue() + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
+		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
@@ -468,7 +478,12 @@ public class Assets {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Entities." + entityName + ".Weapon"); // Dreeam - debug
+		if (msgs.isEmpty()) {
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + ".Weapon" + "] in EntityDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("The message for this death will not broadcast");
+			return null;
+		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = entityDeathPlaceholders(msg, p, e, hasOwner);
@@ -547,14 +562,17 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(mode + "." + affiliation + "." + damageCause); // Dreeam - debug
-
 		if (msgs.isEmpty()) {
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + mode + "." + affiliation + "." + damageCause + "] in PlayerDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
+
 			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
 				return getNaturalDeath(pm, damageCause);
 			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath()))
 				return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
-			return null;
+
+			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.BASIC_MODE.getValue() + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
@@ -595,7 +613,12 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(mode + "." + affiliation + "." + projectileDamage); // Dreeam - debug
+		if (msgs.isEmpty()) {
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + mode + "." + affiliation + "." + projectileDamage + "] in PlayerDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
+			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.BASIC_MODE.getValue() + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
+		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 		msg = playerDeathPlaceholders(msg, pm, mob);
@@ -670,10 +693,12 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Entities." + entityName + "." + projectileDamage); // Dreeam - debug
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + "." + projectileDamage + "] in EntityDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
 			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath())) {
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
 			}
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("The message for this death will not broadcast");
 			return null;
 		}
 
@@ -766,7 +791,12 @@ public class Assets {
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, e);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println("Entities." + entityName + "." + damageCause); // Dreeam - debug
+		if (msgs.isEmpty()) {
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + "." + damageCause + "] in EntityDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("The message for this death will not broadcast");
+			return null;
+		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
 
@@ -849,6 +879,7 @@ public class Assets {
 				.replaceAll("%x%", String.valueOf(entity.getLocation().getBlock().getX()))
 				.replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
 				.replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ()));
+
 		if (owner && entity instanceof Tameable tameable && tameable.getOwner() != null && tameable.getOwner().getName() != null) {
 			msg = msg
 					.replaceAll("%owner%", tameable.getOwner().getName());
@@ -869,25 +900,26 @@ public class Assets {
 	}
 
 	public static String playerDeathPlaceholders(String msg, PlayerManager pm, LivingEntity mob) {
-		if (mob == null) {
+		msg = msg
+				.replaceAll("%player%", pm.getName())
+				.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
+				.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
+				.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
+				.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
+				.replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
+				.replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
+
+		try {
 			msg = msg
-					.replaceAll("%player%", pm.getName())
-					.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
-					.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
-					.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
-					.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
-					.replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
-					.replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
-			try {
-				msg = msg
-						.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
-			} catch (NullPointerException e) {
-				LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
-				LogManager.getLogger().error("Custom Biomes are not supported yet.'");
-				msg = msg
-						.replaceAll("%biome%", "Unknown");
-			}
-		} else {
+					.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
+		} catch (NullPointerException e) {
+			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
+			msg = msg
+					.replaceAll("%biome%", "Unknown");
+		}
+
+		if (mob != null) {
 			String mobName = mob.getName();
 			if (Settings.getInstance().getConfig().getBoolean(Config.RENAME_MOBS_ENABLED.getPath())) {
 				String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
@@ -902,25 +934,8 @@ public class Assets {
 				mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
 			}
 			msg = msg
-					.replaceAll("%player%", pm.getName())
-					.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
 					.replaceAll("%killer%", mobName)
-					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs."
-							+ mob.getType().toString().toLowerCase()))
-					.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
-					.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
-					.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
-					.replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
-					.replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
-			try {
-				msg = msg
-						.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
-			} catch (NullPointerException e) {
-				LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
-				LogManager.getLogger().error("Custom Biomes are not supported yet.'");
-				msg = msg
-						.replaceAll("%biome%", "Unknown");
-			}
+					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase()));
 
 			if (mob instanceof Player p) {
 				msg = msg
