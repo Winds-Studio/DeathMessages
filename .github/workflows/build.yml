@@ -34,7 +34,7 @@ jobs:
         uses: marvinpinto/action-automatic-releases@master
         with:
           title: "DeathMessages v1.4.18-SNAPSHOT"
-          automatic_release_tag: "dev"
+          automatic_release_tag: "dev-build"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "target/DeathMessages-*.jar"
           prerelease: true
