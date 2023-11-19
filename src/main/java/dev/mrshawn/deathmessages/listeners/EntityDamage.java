@@ -38,7 +38,7 @@ public class EntityDamage implements Listener {
 			if (listenedMobs.isEmpty()) return;
 
 			for (String listened : listenedMobs) {
-				System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
+				//System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 					getEntity.ifPresentOrElse(em -> em.setLastDamageCause(e.getCause()), () -> {
