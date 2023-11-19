@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class PlayerManager {
 
 	private WrappedTask lastEntityTask;
 
-	private static final List<PlayerManager> players = new ArrayList<>();
+	private static final List<PlayerManager> players = Collections.synchronizedList(new ArrayList<>());
 
 	public final boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
 
