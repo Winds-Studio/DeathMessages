@@ -47,7 +47,7 @@ public class PluginMessaging implements PluginMessageListener {
 				TextComponent prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message")
 						.replaceAll("%server_name%", serverName));
 				TextComponent message = Assets.convertFromLegacy(rawMsg);
-				for (Player p : Bukkit.getOnlinePlayers()) {
+				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 					getPlayer.ifPresent(pm -> {
 						if (pm.getMessagesEnabled()) {

@@ -33,7 +33,7 @@ public class EntityDamageByEntity implements Listener {
 
 	@EventHandler
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
+		if (e.getEntity() instanceof Player p && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 			getPlayer.ifPresent(pm -> {
 				if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
@@ -52,7 +52,7 @@ public class EntityDamageByEntity implements Listener {
 							}
 							pm.setLastExplosiveEntity(e.getDamager());
 						} catch (NoSuchMethodError e2) {
-							//McMMO ability
+							// McMMO ability
 							LogManager.getLogger().error(e2);
 						}
 					} else {

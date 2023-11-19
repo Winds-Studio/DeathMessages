@@ -21,12 +21,10 @@ public class EntityDamage implements Listener {
 	public void onEntityDamage(EntityDamageEvent e) {
 		if (e.isCancelled()) return;
 
-		if (e.getEntity() instanceof Player p) {
-			if (Bukkit.getServer().getOnlinePlayers().contains(e.getEntity())) {
-				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-				getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
-				// for fall large if ppl want it float dist = e.getEntity().getFallDistance();
-			}
+		if (e.getEntity() instanceof Player p && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
+			// for fall large if ppl want it float dist = e.getEntity().getFallDistance();
 		} else {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
@@ -40,6 +38,7 @@ public class EntityDamage implements Listener {
 			if (listenedMobs.isEmpty()) return;
 
 			for (String listened : listenedMobs) {
+				System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 					getEntity.ifPresentOrElse(em -> em.setLastDamageCause(e.getCause()), () -> {

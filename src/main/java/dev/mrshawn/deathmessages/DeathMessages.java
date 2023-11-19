@@ -226,7 +226,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initializeOnlinePlayers() {
-		Bukkit.getOnlinePlayers().forEach(PlayerManager::new);
+		Bukkit.getServer().getOnlinePlayers().forEach(PlayerManager::new);
 	}
 
 	private void checkGameRules() {
