@@ -104,13 +104,13 @@ public class CommandEdit extends DeathMessagesCommand {
 					if (args[2].equalsIgnoreCase("solo")) {
 						List<String> list = PlayerDeathMessages.getInstance().getConfig().getStringList("Mobs." + mobName + ".Solo." + damageType);
 						for (String messages : list) {
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("[" + placeholder + "] " + Assets.formatString(messages)));
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("[" + placeholder + "] " + messages).replaceText(Assets.prefix));
 							placeholder++;
 						}
 					} else if (args[2].equalsIgnoreCase("gang")) {
 						List<String> list = PlayerDeathMessages.getInstance().getConfig().getStringList("Mobs." + mobName + ".Gang." + damageType);
 						for (String messages : list) {
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("[" + placeholder + "] " + Assets.formatString(messages)));
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("[" + placeholder + "] " + messages).replaceText(Assets.prefix));
 							placeholder++;
 						}
 					} else {
@@ -167,7 +167,7 @@ public class CommandEdit extends DeathMessagesCommand {
 					int placeholder = 1;
 					List<String> list = EntityDeathMessages.getInstance().getConfig().getStringList("Entities." + mobName + "." + damageType);
 					for (String messages : list) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("[" + placeholder + "] " + Assets.formatString(messages)));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy("[" + placeholder + "] " + messages).replaceText(Assets.prefix));
 						placeholder++;
 					}
 				} else {

@@ -84,17 +84,8 @@ public class Assets {
 				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
 	}
 
-	public static String formatString(String s) {
-		return s
-				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
-	}
-
 	public static TextComponent convertFromLegacy(String s) {
 		return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
-	}
-
-	public static boolean isClimbable(Block block) {
-		return isClimbable(block.getType());
 	}
 
 	public static boolean isClimbable(Material material) {
@@ -202,14 +193,14 @@ public class Assets {
 					return get(gang, pm, mob, getSimpleCause(dc));
 				}
 			}
-			return null;
+			return Component.empty();
 		}
 	}
 
 	public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
 		Optional<PlayerManager> pm = Optional.ofNullable(em.getLastPlayerDamager());
 
-		if (pm.isEmpty()) return null;
+		if (pm.isEmpty()) return Component.empty();
 
 		Player p = pm.get().getPlayer();
 		boolean hasWeapon = hasWeapon(p, pm.get().getLastDamage());
@@ -260,7 +251,7 @@ public class Assets {
 					return getEntityDeath(p, em.getEntity(), getSimpleCause(dc), mobType);
 				}
 			}
-			return null;
+			return Component.empty();
 		}
 	}
 
@@ -482,7 +473,7 @@ public class Assets {
 			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + ".Weapon" + "] in EntityDeathMessages.yml");
 			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("The message for this death will not broadcast");
-			return null;
+			return Component.empty();
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
@@ -699,7 +690,7 @@ public class Assets {
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
 			}
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("The message for this death will not broadcast");
-			return null;
+			return Component.empty();
 		}
 
 		boolean hasOwner = false;
@@ -795,7 +786,7 @@ public class Assets {
 			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + "." + damageCause + "] in EntityDeathMessages.yml");
 			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("The message for this death will not broadcast");
-			return null;
+			return Component.empty();
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));

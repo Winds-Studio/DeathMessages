@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -30,6 +31,8 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 	@EventHandler
 	public void broadcastListener(BroadcastDeathMessageEvent e) {
+		if (e.getTextComponent().equals(Component.empty())) return; // Dreeam - in Assets: return null -> renturn Component.empty()
+
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 
 		if (getPlayer.isEmpty()) return;
@@ -108,10 +111,10 @@ public class BroadcastPlayerDeathListener implements Listener {
 				}
 			}
 			if (!broadcastToDiscord) {
-				//Wont reach the discord broadcast
+				// Won't reach the discord broadcast
 				return;
 			}
-			//Will reach the discord broadcast
+			// Will reach the discord broadcast
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 		if (getPlayer.isPresent()) {

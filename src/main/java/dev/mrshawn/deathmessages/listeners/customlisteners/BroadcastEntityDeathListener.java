@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -31,6 +32,8 @@ public class BroadcastEntityDeathListener implements Listener {
 
 	@EventHandler
 	public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
+		if (e.getTextComponent().equals(Component.empty())) return; // Dreeam - in Assets: return null -> renturn Component.empty()
+
 		Optional<PlayerManager> pm = Optional.of(e.getPlayer());
 		boolean hasOwner = e.getEntity() instanceof Tameable;
 
@@ -75,7 +78,7 @@ public class BroadcastEntityDeathListener implements Listener {
 								}
 							}
 							DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
-							PluginMessaging.sendPluginMSG(pms.getPlayer(), e.getTextComponent().toString());
+							PluginMessaging.sendPluginMSG(pms.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
 						}
 					});
 					if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
@@ -87,7 +90,7 @@ public class BroadcastEntityDeathListener implements Listener {
 							}
 						}
 						if (!broadcastToDiscord) {
-							// Wont reach the discord broadcast
+							// Won't reach the discord broadcast
 							return;
 						}
 						// Will reach the discord broadcast

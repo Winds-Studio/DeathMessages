@@ -21,11 +21,13 @@ public class EntityDamage implements Listener {
 	public void onEntityDamage(EntityDamageEvent e) {
 		if (e.isCancelled()) return;
 
-		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
-			// for fall large if ppl want it float dist = e.getEntity().getFallDistance();
-		} else if (!(e.getEntity() instanceof Player)) {
+		if (e.getEntity() instanceof Player p) {
+			if (Bukkit.getServer().getOnlinePlayers().contains(e.getEntity())) {
+				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+				getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
+				// for fall large if ppl want it float dist = e.getEntity().getFallDistance();
+			}
+		} else {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
 					.getKeys(false);

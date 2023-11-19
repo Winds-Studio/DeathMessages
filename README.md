@@ -51,7 +51,6 @@ For Developers:
 
 > - Adventure - To replace the replaceAll and bukkit ChatColor
 > - Config system refactor (keep comment, auto update config key, auto reload? maybe)
-> - Fallback to basicMode msg if can't find node.
 > - Look into get entity name
 > - Improve hoverEvent(opt code/showItem or showEntity)
 > - VersionChecker(onLoad & version command) & Custom bstats charts

@@ -13,18 +13,18 @@ import java.util.Optional;
 
 public class OnMove implements Listener {
 
-	boolean falling;
-	Material lastBlock;
-	boolean message;
+	private boolean falling;
+	private Material lastBlock;
+	private boolean message;
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 		getPlayer.ifPresent(pm -> {
-			if (Assets.isClimbable(e.getTo().getBlock())) {
-				pm.setLastClimbing(e.getTo().getBlock().getType());
-				lastBlock = e.getTo().getBlock().getType();
+			lastBlock = e.getTo().getBlock().getType();
+			if (Assets.isClimbable(lastBlock)) {
+				pm.setLastClimbing(lastBlock);
 			} else {
 				if (p.getFallDistance() > 0) {
 					message = true;

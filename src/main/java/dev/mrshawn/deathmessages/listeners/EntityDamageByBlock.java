@@ -19,9 +19,11 @@ public class EntityDamageByBlock implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDamageByBlockEvent e) {
-		if (e.getEntity() instanceof Player p && Bukkit.getOnlinePlayers().contains(e.getEntity())) {
-			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
+		if (e.getEntity() instanceof Player p) {
+			if (Bukkit.getOnlinePlayers().contains(e.getEntity())) {
+				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+				getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
+			}
 		} else {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
@@ -31,7 +33,9 @@ public class EntityDamageByBlock implements Listener {
 				listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
 						.getKeys(false));
 			}
+
 			if (listenedMobs.isEmpty()) return;
+
 			for (String listened : listenedMobs) {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
