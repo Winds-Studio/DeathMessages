@@ -259,8 +259,8 @@ public class Assets {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 
 		if (msgs.isEmpty()) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Natural-Cause." + damageCause + "] in PlayerDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report issue on Github");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find message node: [" + "Natural-Cause." + damageCause + "] in PlayerDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This should not happen, please check your config or report issue on Github");
 			msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause.Unknown"), pm.getPlayer(), pm.getPlayer());
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to [Natural-Cause.Unknown] message node");
 		}
@@ -380,8 +380,8 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + mode + "." + affiliation + ".Weapon" + "] in PlayerDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("This should not happen, please check your config or report this issue on Github");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find message node: [" + mode + "." + affiliation + ".Weapon" + "] in PlayerDeathMessages.yml");
+			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This should not happen, please check your config or report this issue on Github");
 			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.BASIC_MODE.getValue() + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
 		}
@@ -470,8 +470,7 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + ".Weapon" + "] in EntityDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, since you have not set death message for this entity");
+			// This death message will not be broadcast, since user have not set death message for this entity
 			return Component.empty();
 		}
 
@@ -682,8 +681,7 @@ public class Assets {
 			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath())) {
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
 			}
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + "." + projectileDamage + "] in EntityDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, since you have not set death message for this entity");
+			// This death message will not be broadcast, since user have not set death message for this entity
 			return Component.empty();
 		}
 
@@ -777,8 +775,7 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).error("Can't find message node: [" + "Entities." + entityName + "." + damageCause + "] in EntityDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, since you have not set death message for this entity");
+			// This death message will not be broadcast, since user have not set death message for this entity
 			return Component.empty();
 		}
 

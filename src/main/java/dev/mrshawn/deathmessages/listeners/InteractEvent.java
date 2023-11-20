@@ -52,7 +52,7 @@ public class InteractEvent implements Listener {
 			if (!b.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
 				if (b.getType().equals(Material.RESPAWN_ANCHOR)) {
 					RespawnAnchor anchor = (RespawnAnchor) b.getBlockData();
-					if (!(anchor.getCharges() == anchor.getMaximumCharges()) && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE))
+					if (anchor.getCharges() != anchor.getMaximumCharges() && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE))
 						return;
 					List<UUID> effected = new ArrayList<>();
 					for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
