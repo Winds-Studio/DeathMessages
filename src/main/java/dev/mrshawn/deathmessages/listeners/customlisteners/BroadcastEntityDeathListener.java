@@ -15,7 +15,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -24,7 +23,6 @@ import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 
 public class BroadcastEntityDeathListener implements Listener {
 

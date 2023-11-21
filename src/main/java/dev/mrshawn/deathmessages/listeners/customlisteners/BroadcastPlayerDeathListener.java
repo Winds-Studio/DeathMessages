@@ -22,7 +22,6 @@ import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 
 public class BroadcastPlayerDeathListener implements Listener {
 

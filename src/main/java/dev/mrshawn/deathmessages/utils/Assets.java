@@ -26,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.DragonFireball;
@@ -552,12 +551,15 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
-				return getNaturalDeath(pm, damageCause);
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath()))
-				return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
-			return Component.empty();
+			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause), pm.getPlayer(), mob);
+			if (msgs.isEmpty()) {
+				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
+					return getNaturalDeath(pm, damageCause);
+				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath()))
+					return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+				LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
+				return Component.empty();
+			}
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
@@ -599,10 +601,13 @@ public class Assets {
 		}
 
 		if (msgs.isEmpty()) {
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
-				return getNaturalDeath(pm, projectileDamage);
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
-			return Component.empty();
+			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
+			if (msgs.isEmpty()) {
+				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
+					return getNaturalDeath(pm, projectileDamage);
+				LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
+				return Component.empty();
+			}
 		}
 
 		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
