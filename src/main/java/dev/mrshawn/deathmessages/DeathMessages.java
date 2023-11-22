@@ -34,6 +34,8 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathL
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -82,6 +84,8 @@ public class DeathMessages extends JavaPlugin {
 		checkGameRules();
 		new Metrics(this, 12365);
 		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
+		adventure.console().sendMessage(loadedLogo);
+		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!"));
 	}
 
 	public void onLoad() {
@@ -91,7 +95,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		if(this.adventure != null) {
+		if (this.adventure != null) {
 			this.adventure.close();
 			this.adventure = null;
 		}
@@ -243,6 +247,15 @@ public class DeathMessages extends JavaPlugin {
 		}
 	}
 
+	private final TextComponent loadedLogo = Component.text().appendNewline()
+			.append(Component.text("    ____             __  __    __  ___                                    ")).appendNewline()
+			.append(Component.text("   / __ \\___  ____ _/ /_/ /_  /  |/  /__  ______________ _____ ____  _____")).appendNewline()
+			.append(Component.text("  / / / / _ \\/ __ `/ __/ __ \\/ /|_/ / _ \\/ ___/ ___/ __ `/ __ `/ _ \\/ ___/")).appendNewline()
+			.append(Component.text(" / /_/ /  __/ /_/ / /_/ / / / /  / /  __(__  |__  ) /_/ / /_/ /  __(__  ) ")).appendNewline()
+			.append(Component.text("/_____/\\___/\\__,_/\\__/_/ /_/_/  /_/\\___/____/____/\\__,_/\\__, /\\___/____/  ")).appendNewline()
+			.append(Component.text("                                                       /____/             ")).appendNewline()
+			.build();
+
 	public static DeathMessages getInstance() {
 		return instance;
 	}
@@ -251,7 +264,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public @NotNull BukkitAudiences adventure() {
-		if(this.adventure == null) {
+		if (this.adventure == null) {
 			throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
 		}
 		return this.adventure;
