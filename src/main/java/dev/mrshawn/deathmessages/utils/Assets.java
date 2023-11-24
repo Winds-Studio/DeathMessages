@@ -313,6 +313,7 @@ public class Assets {
 			}
 
 			String displayName;
+			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
@@ -324,11 +325,11 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 			}
-
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -398,6 +399,7 @@ public class Assets {
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
+			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
@@ -411,11 +413,11 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 			}
-
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -485,6 +487,7 @@ public class Assets {
 
 		if (msg.contains("%weapon%")) {
 			String displayName;
+			HoverEvent<HoverEvent.ShowItem> showItem;
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
@@ -499,11 +502,11 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 			}
-
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -706,8 +709,9 @@ public class Assets {
 		}
 
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
-			ItemStack i = p.getEquipment().getItemInMainHand();
 			String displayName;
+			ItemStack i = p.getEquipment().getItemInMainHand();
+			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
@@ -717,11 +721,11 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 			}
-
-			HoverEvent<HoverEvent.ShowItem> showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
