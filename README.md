@@ -52,10 +52,9 @@ For Developers:
 > - Adventure - To replace the replaceAll and bukkit ChatColor
 > - Config system refactor (keep comment, auto update config key, auto reload? maybe)
 > - Look into get entity name
-> - Improve hoverEvent(opt code/showItem or showEntity)
-> - VersionChecker(onLoad & version command) & Custom bstats charts
-> - Fix discordSRV msg player profile img
-> - Mod support
+> - Improve hoverEvent (showEntity)
+> - VersionChecker (onLoad & version command) & Custom bstats charts
+> - Forge Mods support
 > - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:

@@ -85,17 +85,17 @@ Discord:
       URL: ""
       # The picture that shows up in the author name
       # Placeholders: %uuid%, %username%
-      Icon-URL: "https://crafatar.com/avatars/%uuid%"
+      Icon-URL: "https://cravatar.eu/helmavatar/%username%"
     Title: "DeathMessage"
     Description: "%message%"
-    Image: "https://crafatar.com/avatars/%uuid%"
+    Image: "https://cravatar.eu/helmavatar/%username%"
     # Block title|Block value|inline boolean
     # To have no content, set content to 'Content: []'
     Content:
       - "Location:|World: %world%, X: %x%, Y: %y%, Z: %z%|false"
     Footer:
       Text: "Footer text here"
-      Icon-URL: "https://crafatar.com/avatars/%uuid%"
+      Icon-URL: "https://cravatar.eu/helmavatar/%username%"
     Timestamp: true
     # Defining the message below will ignore all above embed values and just return regular text.
     # Meaning if you change Text: "" to anything else, the plugin will send regular text.
