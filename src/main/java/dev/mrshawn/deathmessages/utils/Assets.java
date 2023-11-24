@@ -313,7 +313,6 @@ public class Assets {
 			}
 
 			String displayName;
-			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
@@ -325,10 +324,15 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+			}
+
+			HoverEvent<HoverEvent.ShowItem> showItem;
+			try {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
+			} catch (Exception e) {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			}
 
 			Component weapon = Component.text()
@@ -399,7 +403,6 @@ public class Assets {
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
-			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
@@ -413,10 +416,15 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+			}
+
+			HoverEvent<HoverEvent.ShowItem> showItem;
+			try {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
+			} catch (Exception e) {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			}
 
 			Component weapon = Component.text()
@@ -486,9 +494,8 @@ public class Assets {
 		}
 
 		if (msg.contains("%weapon%")) {
-			String displayName;
-			HoverEvent<HoverEvent.ShowItem> showItem;
 			ItemStack i = p.getEquipment().getItemInMainHand();
+			String displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
@@ -502,10 +509,15 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+			}
+
+			HoverEvent<HoverEvent.ShowItem> showItem;
+			try {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
+			} catch (Exception e2) {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			}
 
 			Component weapon = Component.text()
@@ -626,7 +638,6 @@ public class Assets {
 		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			String displayName;
-			HoverEvent<HoverEvent.ShowItem> showItem;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
@@ -635,10 +646,15 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+			}
+
+			HoverEvent<HoverEvent.ShowItem> showItem;
+			try {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
+			} catch (Exception e) {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			}
 
 			Component weapon = Component.text()
@@ -709,9 +725,8 @@ public class Assets {
 		}
 
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
-			String displayName;
 			ItemStack i = p.getEquipment().getItemInMainHand();
-			HoverEvent<HoverEvent.ShowItem> showItem;
+			String displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
@@ -721,10 +736,15 @@ public class Assets {
 					}
 				}
 				displayName = convertString(i.getType().name());
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			} else {
 				displayName = i.getItemMeta().getDisplayName();
+			}
+
+			HoverEvent<HoverEvent.ShowItem> showItem;
+			try {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
+			} catch (Exception e) {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 			}
 
 			Component weapon = Component.text()
