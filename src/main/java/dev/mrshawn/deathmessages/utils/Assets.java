@@ -1,6 +1,7 @@
 package dev.mrshawn.deathmessages.utils;
 
 import com.cryptomorin.xseries.XMaterial;
+import de.tr7zw.changeme.nbtapi.NBT;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
@@ -328,12 +329,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem;
-			try {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
-			} catch (Exception e) {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-			}
+			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -420,12 +416,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem;
-			try {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
-			} catch (Exception e) {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-			}
+			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -513,12 +504,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem;
-			try {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
-			} catch (Exception e2) {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-			}
+			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -650,12 +636,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem;
-			try {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
-			} catch (Exception e) {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-			}
+			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))
@@ -740,12 +721,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem;
-			try {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(i.getItemMeta().toString()));
-			} catch (Exception e) {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-			}
+			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
 
 			Component weapon = Component.text()
 					.append(convertFromLegacy(displayName))

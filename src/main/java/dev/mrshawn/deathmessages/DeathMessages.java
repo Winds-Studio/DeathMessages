@@ -36,6 +36,7 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -56,6 +57,7 @@ public class DeathMessages extends JavaPlugin {
 	public final FoliaLib foliaLib = new FoliaLib(this);
 
 	public boolean placeholderAPIEnabled = false;
+    public boolean nbtAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
 
 	public MythicBukkit mythicMobs = null;
@@ -85,7 +87,7 @@ public class DeathMessages extends JavaPlugin {
 		new Metrics(this, 12365);
 		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
 		adventure.console().sendMessage(loadedLogo);
-		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!"));
+		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
 	}
 
 	public void onLoad() {
@@ -153,6 +155,11 @@ public class DeathMessages extends JavaPlugin {
 			placeholderAPIEnabled = true;
 			LogManager.getLogger(getName()).info("PlaceholderAPI Hook Enabled!");
 		}
+
+        if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+            nbtAPIEnabled = true;
+            LogManager.getLogger(getName()).info("Item-NBT-API Hook Enabled!");
+        }
 
 		if (worldGuardEnabled) {
 			LogManager.getLogger(getName()).info("WorldGuard Hook Enabled!");
