@@ -108,10 +108,6 @@
                             <shadedPattern>dev.mrshawn.deathmessages.libs.folialib</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>dev.mrshawn.deathmessages.libs.nbtapi</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>net.dv8tion.jda</pattern>
                             <shadedPattern>dev.mrshawn.deathmessages.libs.jda</shadedPattern>
                         </relocation>
@@ -250,7 +246,7 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
             <version>2.12.1</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
