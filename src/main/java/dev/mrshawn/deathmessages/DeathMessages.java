@@ -57,7 +57,7 @@ public class DeathMessages extends JavaPlugin {
 	public final FoliaLib foliaLib = new FoliaLib(this);
 
 	public boolean placeholderAPIEnabled = false;
-    public boolean nbtAPIEnabled = false;
+	public boolean nbtAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
 
 	public MythicBukkit mythicMobs = null;
@@ -156,10 +156,10 @@ public class DeathMessages extends JavaPlugin {
 			LogManager.getLogger(getName()).info("PlaceholderAPI Hook Enabled!");
 		}
 
-        if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
-            nbtAPIEnabled = true;
-            LogManager.getLogger(getName()).info("Item-NBT-API Hook Enabled!");
-        }
+		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+			nbtAPIEnabled = true;
+			LogManager.getLogger(getName()).info("Item-NBT-API Hook Enabled!");
+		}
 
 		if (worldGuardEnabled) {
 			LogManager.getLogger(getName()).info("WorldGuard Hook Enabled!");
