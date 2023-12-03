@@ -26,7 +26,10 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 			arguments.add("restore");
 			arguments.add("toggle");
 			arguments.add("version");
-			return arguments;
+			// Dreeam - refer to https://github.com/mrgeneralq/sleep-most/blob/5f2f7772c9715cf57530e2af3573652d17cd7420/src/main/java/me/mrgeneralq/sleepmost/commands/SleepmostCommand.java#L135
+			return arguments.stream()
+					.filter(arg -> sender.hasPermission("deathmessages.command." + arg))
+					.toList();
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("backup")) {
 				arguments.clear();
