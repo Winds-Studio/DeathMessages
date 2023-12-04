@@ -97,7 +97,7 @@ dependencies {
         exclude(group = "org.bstats")
     }
     compileOnly("com.github.sirblobman.combatlogx:CombatLogX:11.4.0.2.Beta-1212")
-    compileOnly("io.lumine:Mythic-Dist:5.4.1")
+    compileOnly("io.lumine:Mythic-Dist:5.5.0")
 
     api("net.kyori:adventure-platform-bukkit:4.3.1")
     api("net.kyori:adventure-api:$adventureVersion")
