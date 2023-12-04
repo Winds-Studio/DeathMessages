@@ -8,7 +8,6 @@ plugins {
 
 group = "dev.mrshawn"
 version = "1.4.18-SNAPSHOT"
-description = "DeathMessages"
 
 repositories {
     mavenCentral()
@@ -41,7 +40,7 @@ repositories {
         url = uri("https://jitpack.io")
     }
 
-    // DiscordSTV
+    // DiscordSRV
     maven {
         name = "Scarsz-Nexus"
         url = uri("https://nexus.scarsz.me/content/groups/public/")
@@ -77,11 +76,9 @@ repositories {
     }
 }
 
-val kotlinVersion = "1.9.21"
 val adventureVersion = "4.14.0"
 
 dependencies {
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.15.0")
