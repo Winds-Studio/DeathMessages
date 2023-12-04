@@ -191,6 +191,11 @@ Natural-Cause:
     - "%player% belonged in the water. Not land"
   Freeze:
     - "%player% did not put their snow suit on before they went to play."
+  Thorns:
+    - "%player% tried playing armor with thorns"
+  # Hook related deaths
+  CombatLogX-Kill:
+    - "%player% wants to escape reality, but was still sent to another dimension -.-"
   Unknown:
     - "%player% died"
 
