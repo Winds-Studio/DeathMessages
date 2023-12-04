@@ -1,7 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    `java-library`
     `maven-publish`
     kotlin("jvm") version "1.9.21"
     id("com.github.johnrengelman.shadow") version "8.1.1" apply true
