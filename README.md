@@ -41,11 +41,9 @@ Compatibility
 
 ## Building
 
-For Developers:
-
-- The plugin uses a mix of kotlin and java and as such you must compile kotlin as well
 - Use Java 17
-- Compile the plugin with: `mvn clean kotlin:compile package`
+- Open your IDE, recommended to use IDEA
+- Build the plugin with: `./gradlew clean build`
 
 ## TODOs
 

@@ -16,8 +16,10 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Build with Maven
-        run: mvn clean kotlin:compile package
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew clean build
 
       - name: Release DeathMessages
         if: "contains(github.event.commits[0].message, '[Release]')"
@@ -26,7 +28,7 @@ jobs:
           title: "DeathMessages v1.4.18"
           automatic_release_tag: "1.4.18"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "target/*.jar"
+          files: "target/DeathMessages-*.jar"
           prerelease: false
 
       - name: Upload DeathMessages DevBuild
