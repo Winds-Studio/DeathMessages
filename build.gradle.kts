@@ -139,7 +139,9 @@ tasks.withType<ShadowJar> {
 
 tasks {
     processResources {
-        expand("version" to project.version)
+        filesMatching("**/plugin.yml") {
+            expand("version" to project.version)
+        }
     }
 }
 
