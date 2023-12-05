@@ -47,7 +47,6 @@ Compatibility
 
 ## TODOs
 
-> - Adventure - To replace the replaceAll and bukkit ChatColor
 > - Auto reload config? maybe)
 > - Look into get entity name
 > - Improve hoverEvent (fix show itemNBT/showEntity/Re-add hoverText, commandSuggest)

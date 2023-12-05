@@ -13,8 +13,9 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.util.DiscordUtil;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.logging.log4j.LogManager;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
@@ -54,8 +55,7 @@ public class DiscordSRVExtension {
 			TextChannel textChannel = g.getTextChannelById(channelID);
 			if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
 					&& config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
-				String prefix = getMessages().getString("Prefix");
-				prefix = ChatColor.stripColor(prefix);
+				String prefix = LegacyComponentSerializer.legacyAmpersand().serialize(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
 				message = message.substring(prefix.length());
 			}
 			if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
@@ -101,8 +101,7 @@ public class DiscordSRVExtension {
 			}
 			TextChannel textChannel = g.getTextChannelById(channelID);
 			if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
-				String prefix = getMessages().getString("Prefix");
-				prefix = ChatColor.stripColor(prefix);
+				String prefix = LegacyComponentSerializer.legacyAmpersand().serialize(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
 				message = message.substring(prefix.length());
 			}
 			if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
