@@ -1,32 +1,8 @@
-# JVM crash related
-core.*
-hs_err_pid*
+.gradle
+**/build/
 
-# Intellij
-.idea/
+.idea
 *.iml
-*.ipr
-*.iws
-out/
 
-# Gradle
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-.gradle/
-build/
-*/build/
-
-# various other potential build files
-build/
-bin/
-dist/
-manifest.mf
-
-# Mac
-.DS_Store/
-.DS_Store
-
-# vim
-.*.sw[a-p]
-
-# Linux temp files
-*~

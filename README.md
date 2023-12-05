@@ -26,7 +26,7 @@
 Compatibility
 
 - Support Java 17 and higher
-- Support 1.12.2 - Latest Minecraft version (1.20.2)
+- Support 1.12.2 - Latest Minecraft version (1.20.3)
 - Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
 - Folia Support
 
