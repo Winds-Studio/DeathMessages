@@ -1,5 +1,10 @@
 # DeathMessages by Dreeam__ (Original by MrShawn/Joshb_/CosmoConsole[DeathMessagesPrime Author])
 #
+# Check plugin version update
+Check-Update:
+  Enabled: true
+  DEV-Version: false
+
 # Disable the default messages from minecraft
 Disable-Default-Messages: true
 

@@ -6,6 +6,9 @@ import java.util.Map;
 
 public enum Config {
 
+	CHECK_UPDATE("Check-Update.Enabled", true),
+	CHECK_DEV_VERSION("Check-Update.DEV-Version", false),
+
 	DISABLE_DEFAULT_MESSAGES("Disable-Default-Messages", true),
 	ADD_PREFIX_TO_ALL_MESSAGES("Add-Prefix-To-All-Messages", true),
 

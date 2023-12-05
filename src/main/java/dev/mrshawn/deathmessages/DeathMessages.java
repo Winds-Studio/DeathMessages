@@ -7,6 +7,7 @@ import dev.mrshawn.deathmessages.commands.CommandManager;
 import dev.mrshawn.deathmessages.commands.TabCompleter;
 import dev.mrshawn.deathmessages.commands.alias.CommandDeathMessagesToggle;
 import dev.mrshawn.deathmessages.config.ConfigManager;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
@@ -32,6 +33,7 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
+import dev.mrshawn.deathmessages.utils.Updater;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -88,6 +90,19 @@ public class DeathMessages extends JavaPlugin {
 		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
 		adventure.console().sendMessage(loadedLogo);
 		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
+
+		if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {
+			Updater.checkUpdate();
+			foliaLib.getImpl().runLaterAsync(() -> {
+				switch (Updater.shouldUpdate) {
+					case 1 -> {
+						LogManager.getLogger(getName()).warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
+						LogManager.getLogger(getName()).warn("Current Version: " + Updater.nowVersion + " | Latest Version: " + Updater.latestVersion);
+					}
+					case -1 -> LogManager.getLogger(getName()).warn("Failed to check update!");
+				}
+			}, 20);
+		}
 	}
 
 	public void onLoad() {
