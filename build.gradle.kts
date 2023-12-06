@@ -87,7 +87,7 @@ dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
     api("com.tcoded:FoliaLib:0.3.1")
 
-    compileOnly("de.tr7zw:item-nbt-api:2.12.1")
+    implementation("de.tr7zw:item-nbt-api:2.12.1")
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("com.github.HMJosh:DiscordBotAPI:v1.1.1")
     compileOnly("com.discordsrv:discordsrv:1.27.0-SNAPSHOT")
@@ -130,6 +130,7 @@ tasks.withType<ShadowJar> {
     relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
     relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
     relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")
+    relocate("de.tr7zw.changeme.nbtapi", "dev.mrshawn.deathmessages.libs.nbtapi")
     relocate("net.dv8tion.jda", "dev.mrshawn.deathmessages.libs.jda")
 }
 
