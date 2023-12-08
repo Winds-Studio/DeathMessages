@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     `maven-publish`
     kotlin("jvm") version "1.9.21"
@@ -46,6 +44,7 @@ repositories {
         url = uri("https://nexus.scarsz.me/content/groups/public/")
     }
 
+    // CombatLogX
 //    maven {
 //        name = "sirblobman-public"
 //        url = uri("https://nexus.sirblobman.xyz/repository/public/")
@@ -79,7 +78,7 @@ repositories {
 val adventureVersion = "4.14.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.3-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.15.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.22.0")
@@ -125,7 +124,8 @@ tasks.build.configure {
     dependsOn("shadowJar")
 }
 
-tasks.withType<ShadowJar> {
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    archiveFileName = "${project.name}-${project.version}.jar"
     exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
     minimize {
         exclude(dependency("com.tcoded.folialib:.*:.*"))
