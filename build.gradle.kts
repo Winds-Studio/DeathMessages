@@ -106,14 +106,19 @@ dependencies {
     api("net.kyori:adventure-key:$adventureVersion")
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
 
 configure<JavaPluginExtension> {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
-}
-
-tasks.withType<JavaCompile>() {
-    options.encoding = "UTF-8"
 }
 
 tasks.build.configure {
