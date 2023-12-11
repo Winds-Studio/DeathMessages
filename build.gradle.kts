@@ -125,7 +125,7 @@ tasks.build.configure {
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveFileName = "${project.name}-${project.version}.jar"
+    archiveFileName = "${project.name}-${project.version}.${archiveExtension.get()}"
     exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
     minimize {
         exclude(dependency("com.tcoded.folialib:.*:.*"))
