@@ -26,7 +26,7 @@
 Compatibility
 
 - Support Java 17 and higher
-- Support 1.12.2 - Latest Minecraft version (1.20.3)
+- Support 1.12.2 - Latest Minecraft version (1.20.4)
 - Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
 - Folia Support
 
@@ -52,6 +52,9 @@ Compatibility
 > - Improve hoverEvent (fix show itemNBT/showEntity/Re-add hoverText, commandSuggest)
 > - Custom bstats charts
 > - Forge Mods support
+> - WorldGuard6 support for lower version
+> - PVPManager support
+> - Actionbar message and private message
 > - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
 
 ## Special Thanks To:
