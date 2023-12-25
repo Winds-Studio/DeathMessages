@@ -329,22 +329,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-
-			Component weapon = Component.text()
-					.append(convertFromLegacy(displayName))
-					.build()
-					.hoverEvent(showItem);
-
-			Component deathMessage = Component.text()
-					.append(convertFromLegacy(msg))
-					.build()
-					.replaceText(TextReplacementConfig.builder()
-							.match("%weapon%")
-							.replacement(weapon)
-							.build());
-
-			base.append(deathMessage);
+			buildHover(msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -416,22 +401,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-
-			Component weapon = Component.text()
-					.append(convertFromLegacy(displayName))
-					.build()
-					.hoverEvent(showItem);
-
-			Component deathMessage = Component.text()
-					.append(convertFromLegacy(msg))
-					.build()
-					.replaceText(TextReplacementConfig.builder()
-							.match("%weapon%")
-							.replacement(weapon)
-							.build());
-
-			base.append(deathMessage);
+			buildHover(msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -504,22 +474,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-
-			Component weapon = Component.text()
-					.append(convertFromLegacy(displayName))
-					.build()
-					.hoverEvent(showItem);
-
-			Component deathMessage = Component.text()
-					.append(convertFromLegacy(msg))
-					.build()
-					.replaceText(TextReplacementConfig.builder()
-							.match("%weapon%")
-							.replacement(weapon)
-							.build());
-
-			base.append(deathMessage);
+			buildHover(msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -638,22 +593,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-
-			Component weapon = Component.text()
-					.append(convertFromLegacy(displayName))
-					.build()
-					.hoverEvent(showItem);
-
-			Component deathMessage = Component.text()
-					.append(convertFromLegacy(msg))
-					.build()
-					.replaceText(TextReplacementConfig.builder()
-							.match("%weapon%")
-							.replacement(weapon)
-							.build());
-
-			base.append(deathMessage);
+			buildHover(msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -723,22 +663,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-
-			Component weapon = Component.text()
-					.append(convertFromLegacy(displayName))
-					.build()
-					.hoverEvent(showItem);
-
-			Component deathMessage = Component.text()
-					.append(convertFromLegacy(msg))
-					.build()
-					.replaceText(TextReplacementConfig.builder()
-							.match("%weapon%")
-							.replacement(weapon)
-							.build());
-
-			base.append(deathMessage);
+			buildHover(msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -810,6 +735,26 @@ public class Assets {
 //			}
 //		}
 		return base.build();
+	}
+
+
+	private static void buildHover(String msg, TextComponent.Builder base, ItemStack i, String displayName) {
+		HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+
+		Component weapon = Component.text()
+				.append(convertFromLegacy(displayName))
+				.build()
+				.hoverEvent(showItem);
+
+		Component deathMessage = Component.text()
+				.append(convertFromLegacy(msg))
+				.build()
+				.replaceText(TextReplacementConfig.builder()
+						.match("%weapon%")
+						.replacement(weapon)
+						.build());
+
+		base.append(deathMessage);
 	}
 
 	public static List<String> sortList(List<String> list, Player player, Entity killer) {

@@ -49,7 +49,7 @@ Compatibility
 
 > - Auto reload config? maybe)
 > - Look into get entity name
-> - Improve hoverEvent (fix show itemNBT/showEntity/Re-add hoverText, commandSuggest)
+> - Improve hoverEvent (showEntity/Re-add hoverText, commandSuggest)
 > - Custom bstats charts
 > - Forge Mods support
 > - WorldGuard6 support for lower version
