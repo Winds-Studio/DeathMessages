@@ -1,6 +1,7 @@
 # User-specific stuff
 .idea/
 
+.idea
 *.iml
 *.ipr
 *.iws
@@ -96,7 +97,7 @@ $RECYCLE.BIN/
 *.lnk
 
 target/
-
+.gradle
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
