@@ -28,43 +28,43 @@ public class InteractEvent implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInteract(PlayerInteractEvent e) {
-		Block b = e.getClickedBlock();
+		Block getBlock = e.getClickedBlock();
 
-		if (b == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || b.getType().equals(Material.AIR))
+		if (getBlock == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || getBlock.getType().equals(Material.AIR))
 			return; // Dreeam - No NPE
 
-		World.Environment environment = b.getWorld().getEnvironment();
+		World.Environment environment = getBlock.getWorld().getEnvironment();
 		if (environment.equals(World.Environment.NETHER) || environment.equals(World.Environment.THE_END)) {
-			if (b.getType().name().contains("BED") && !b.getType().equals(Material.BEDROCK)) {
+			if (getBlock.getType().name().contains("BED") && !getBlock.getType().equals(Material.BEDROCK)) {
 				List<UUID> effected = new ArrayList<>();
 				for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
 					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 					getPlayer.ifPresent(effect -> {
-						if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
+						if (p.getLocation().distanceSquared(getBlock.getLocation()) < 100) {
 							effected.add(p.getUniqueId());
 							effect.setLastEntityDamager(e.getPlayer());
 						}
 					});
 				}
-				callEvent(e, b, effected);
+				callEvent(e, getBlock, effected);
 			}
 		} else if (DeathMessages.majorVersion() >= 16) {
-			if (!b.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
-				if (b.getType().equals(Material.RESPAWN_ANCHOR)) {
-					RespawnAnchor anchor = (RespawnAnchor) b.getBlockData();
+			if (!getBlock.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
+				if (getBlock.getType().equals(Material.RESPAWN_ANCHOR)) {
+					RespawnAnchor anchor = (RespawnAnchor) getBlock.getBlockData();
 					if (anchor.getCharges() != anchor.getMaximumCharges() && !e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GLOWSTONE))
 						return;
 					List<UUID> effected = new ArrayList<>();
 					for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
 						Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 						getPlayer.ifPresent(effect -> {
-							if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
+							if (p.getLocation().distanceSquared(getBlock.getLocation()) < 100) {
 								effected.add(p.getUniqueId());
 								effect.setLastEntityDamager(e.getPlayer());
 							}
 						});
 					}
-					callEvent(e, b, effected);
+					callEvent(e, getBlock, effected);
 				}
 			}
 		}
