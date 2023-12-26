@@ -5,4 +5,4 @@ pluginManagement {
 
 rootProject.name = "DeathMessages"
 
-include(":Core", ":WorldGuard", ":WorldGuard7")
+include(":Core", ":WorldGuard", ":WorldGuard6", ":WorldGuard7")
