@@ -98,7 +98,7 @@ dependencies {
     compileOnly("com.discordsrv:discordsrv:1.27.0-SNAPSHOT")
     compileOnly("io.lumine:Mythic-Dist:5.5.1")
 
-    api("net.kyori:adventure-platform-bukkit:4.3.1")
+    api("net.kyori:adventure-platform-bukkit:4.3.2")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
     api("net.kyori:adventure-text-serializer-plain:$adventureVersion")

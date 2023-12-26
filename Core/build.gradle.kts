@@ -1,6 +1,6 @@
 plugins {
     id("dev.mrshawn.deathmessages.wrapper")
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.22"
     id("com.github.johnrengelman.shadow") version "8.1.1" apply true
 }
 
