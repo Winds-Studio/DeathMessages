@@ -40,6 +40,7 @@ public class CommandVersion extends DeathMessagesCommand {
 		switch (Updater.shouldUpdate) {
 			case 0:
 				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Great! You are using the latest version.", NamedTextColor.GREEN));
+				break;
 			case 1:
 				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text().append(Component.text("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases", NamedTextColor.YELLOW))
 						.appendNewline()
@@ -49,8 +50,10 @@ public class CommandVersion extends DeathMessagesCommand {
 								.append(Component.text(" | Latest Version: ", NamedTextColor.YELLOW))
 								.append(Component.text(Updater.latestVersion))
 								.build()));
+				break;
 			case -1:
 				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Failed to check update!", NamedTextColor.RED));
+				break;
 		}
 	}
 }

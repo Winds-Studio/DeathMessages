@@ -94,12 +94,13 @@ public class DeathMessages extends JavaPlugin {
 			Updater.checkUpdate();
 			foliaLib.getImpl().runLaterAsync(() -> {
 				switch (Updater.shouldUpdate) {
-					case 1: {
+					case 1:
 						LogManager.getLogger(getName()).warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
 						LogManager.getLogger(getName()).warn("Current Version: " + Updater.nowVersion + " | Latest Version: " + Updater.latestVersion);
-					}
+						break;
 					case -1:
 						LogManager.getLogger(getName()).warn("Failed to check update!");
+						break;
 				}
 			}, 20);
 		}
