@@ -6,7 +6,6 @@ plugins {
 
 dependencies {
     compileOnly("com.github.sirblobman.combatlogx:CombatLogX:11.4.0.2.Beta-1212")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.1.0-SNAPSHOT")
     api(project(":WorldGuard6"))
     api(project(":WorldGuard7"))
 }

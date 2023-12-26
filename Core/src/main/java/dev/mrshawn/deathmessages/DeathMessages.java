@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.tcoded.folialib.FoliaLib;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.commands.CommandManager;
@@ -233,9 +232,7 @@ public class DeathMessages extends JavaPlugin {
 	private void initializeHooksOnLoad() {
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
 			try {
-				final WorldGuardPlugin worldGuardPlugin = WorldGuardPlugin.inst();
-				if (worldGuardPlugin == null) throw new Exception();
-				final String version = worldGuardPlugin.getDescription().getVersion();
+				final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
 				if (version.startsWith("7")) {
 					worldGuardExtension = new WorldGuard7Extension();
 					worldGuardExtension.registerFlags();
