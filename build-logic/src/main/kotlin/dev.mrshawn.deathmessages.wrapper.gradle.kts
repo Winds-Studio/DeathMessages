@@ -1,7 +1,6 @@
 plugins {
+    `java-library`
     `maven-publish`
-    kotlin("jvm") version "1.9.21"
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply true
 }
 
 group = "dev.mrshawn"
@@ -73,6 +72,13 @@ repositories {
         name = "aikar-repo"
         url = uri("https://repo.aikar.co/content/groups/aikar/")
     }
+
+    // worldguard-legacy
+    maven {
+        name = "minebench-repo"
+        url = uri("https://repo.minebench.de/")
+    }
+
 }
 
 val adventureVersion = "4.15.0"
@@ -90,12 +96,6 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("com.github.HMJosh:DiscordBotAPI:v1.1.1")
     compileOnly("com.discordsrv:discordsrv:1.27.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-core:7.1.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.1.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0-SNAPSHOT") {
-        exclude(group = "org.bstats")
-    }
-    compileOnly("com.github.sirblobman.combatlogx:CombatLogX:11.4.0.2.Beta-1212")
     compileOnly("io.lumine:Mythic-Dist:5.5.1")
 
     api("net.kyori:adventure-platform-bukkit:4.3.1")
@@ -109,12 +109,6 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
-
 configure<JavaPluginExtension> {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -122,21 +116,6 @@ configure<JavaPluginExtension> {
 
 tasks.build.configure {
     dependsOn("shadowJar")
-}
-
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    archiveFileName = "${project.name}-${project.version}.${archiveExtension.get()}"
-    exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
-    minimize {
-        exclude(dependency("com.tcoded.folialib:.*:.*"))
-    }
-    relocate("kotlin", "dev.mrshawn.deathmessages.libs.kotlin")
-    relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori")
-    relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
-    relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
-    relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")
-    relocate("de.tr7zw.changeme.nbtapi", "dev.mrshawn.deathmessages.libs.nbtapi")
-    relocate("net.dv8tion.jda", "dev.mrshawn.deathmessages.libs.jda")
 }
 
 tasks {
