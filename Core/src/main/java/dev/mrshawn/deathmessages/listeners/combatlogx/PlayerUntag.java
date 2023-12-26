@@ -25,7 +25,7 @@ public class PlayerUntag implements Listener {
 	public void untagPlayer(PlayerUntagEvent e) {
 		Player p = e.getPlayer();
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-		getPlayer.ifPresentOrElse(pm -> {
+		getPlayer.ifPresent(pm -> {
 			UntagReason reason = e.getUntagReason();
 
 			if (!reason.equals(UntagReason.QUIT)) return;
@@ -47,6 +47,9 @@ public class PlayerUntag implements Listener {
 			TextComponent deathMessage = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
 			BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, deathMessage, EntityDeath.getWorlds(p), gangKill);
 			Bukkit.getPluginManager().callEvent(event);
-		}, () -> new PlayerManager(p));
+		});
+		if (!getPlayer.isPresent()) {
+			new PlayerManager(p);
+		}
 	}
 }

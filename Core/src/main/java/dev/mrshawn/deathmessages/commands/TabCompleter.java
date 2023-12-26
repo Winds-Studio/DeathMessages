@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TabCompleter implements org.bukkit.command.TabCompleter {
 
@@ -29,7 +30,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 			// Dreeam - refer to https://github.com/mrgeneralq/sleep-most/blob/5f2f7772c9715cf57530e2af3573652d17cd7420/src/main/java/me/mrgeneralq/sleepmost/commands/SleepmostCommand.java#L135
 			return arguments.stream()
 					.filter(arg -> sender.hasPermission("deathmessages.command." + arg))
-					.toList();
+					.collect(Collectors.toList());
 		} else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("backup")) {
 				arguments.clear();

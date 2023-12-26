@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.files;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 
 public enum Config {
 
@@ -18,7 +18,7 @@ public enum Config {
 
 	HOOKS_DISCORD_ENABLED("Hooks.Discord.Enabled", true),
 	HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED("Hooks.Discord.Channels.Player.Enabled", true),
-	HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS("Hooks.Discord.Channels.Player.Channels", List.of("218258614192450048:827286062147837621")),
+	HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS("Hooks.Discord.Channels.Player.Channels", Arrays.asList("218258614192450048:827286062147837621")),
 	HOOKS_DISCORD_CHANNELS_MOB_ENABLED("Hooks.Discord.Channels.Mob.Enabled", true),
 	HOOKS_DISCORD_CHANNELS_MOB_CHANNELS("Hooks.Discord.Channels.Mob.Channels", new ArrayList<String>()),
 	HOOKS_DISCORD_CHANNELS_NATURAL_ENABLED("Hooks.Discord.Channels.Natural.Enabled", true),
@@ -26,13 +26,13 @@ public enum Config {
 	HOOKS_DISCORD_CHANNELS_ENTITY_ENABLED("Hooks.Discord.Channels.Entity.Enabled", true),
 	HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS("Hooks.Discord.Channels.Entity.Channels", new ArrayList<String>()),
 	HOOKS_DISCORD_WORLD_WHITELIST_ENABLED("Hooks.Discord.World-Whitelist.Enabled", false),
-	HOOKS_DISCORD_WORLD_WHITELIST_WORLDS("Hooks.Discord.World-Whitelist.Worlds", List.of("test1", "test2")),
+	HOOKS_DISCORD_WORLD_WHITELIST_WORLDS("Hooks.Discord.World-Whitelist.Worlds", Arrays.asList("test1", "test2")),
 
 	HOOKS_BUNGEE_ENABLED("Hooks.Bungee.Enabled", false),
 	HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE("Hooks.Bungee.Server-Name.Get-From-Bungee", false),
 	HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME("Hooks.Bungee.Server-Name.Display-Name", "lobby"),
 	HOOKS_BUNGEE_SERVER_GROUPS_ENABLED("Hooks.Bungee.Server-Groups.Enabled", false),
-	HOOKS_BUNGEE_SERVER_GROUPS_SERVERS("Hooks.Bungee.Server-Groups.Servers", List.of("lobby", "survival")),
+	HOOKS_BUNGEE_SERVER_GROUPS_SERVERS("Hooks.Bungee.Server-Groups.Servers", Arrays.asList("lobby", "survival")),
 
 	SAVED_USER_DATA("Saved-User-Data", true),
 
@@ -63,9 +63,11 @@ public enum Config {
 	PER_WORLD_MESSAGES("Per-World-Messages", false),
 
 	WORLD_GROUPS
-			("World-Groups", Map.of("1", List.of("world", "world_nether", "world_the_end"))),
+			("World-Groups", new ConcurrentHashMap<Object, Object>() {{
+				put("1", Arrays.asList("world", "world_nether", "world_the_end"));
+			}}),
 
-	DISABLED_WORLDS("Disabled-Worlds", List.of("someDisabledWorld", "someOtherDisabledWorld")),
+	DISABLED_WORLDS("Disabled-Worlds", Arrays.asList("someDisabledWorld", "someOtherDisabledWorld")),
 
 	PRIVATE_MESSAGES_PLAYER("Private-Messages.Player", false),
 	PRIVATE_MESSAGES_MOBS("Private-Messages.Mobs", false),
@@ -75,9 +77,9 @@ public enum Config {
 	COOLDOWN("Cooldown", 0),
 
 	CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON
-			("Custom-Item-Display-Names-Is-Weapon", List.of("&6SUPER COOL GOLDEN APPLE", "SICKNAME")),
+			("Custom-Item-Display-Names-Is-Weapon", Arrays.asList("&6SUPER COOL GOLDEN APPLE", "SICKNAME")),
 
-	CUSTOM_ITEM_MATERIAL_IS_WEAPON("Custom-Item-Material-Is-Weapon", List.of("ACACIA_FENCE")),
+	CUSTOM_ITEM_MATERIAL_IS_WEAPON("Custom-Item-Material-Is-Weapon", Arrays.asList("ACACIA_FENCE")),
 
 	DEBUG("Debug", false);
 

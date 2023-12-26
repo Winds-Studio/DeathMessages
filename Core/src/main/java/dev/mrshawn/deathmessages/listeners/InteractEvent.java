@@ -76,10 +76,13 @@ public class InteractEvent implements Listener {
 			if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
 				Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
 				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
-				getEntity.ifPresentOrElse(em -> {
+				getEntity.ifPresent(em -> {
 					effected.add(ent.getUniqueId());
 					getPlayer.ifPresent(em::setLastPlayerDamager);
-				}, () -> new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA));
+				});
+				if (!getEntity.isPresent()) {
+					new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
+				}
 			}
 			new ExplosionManager(e.getPlayer().getUniqueId(), b.getType(), b.getLocation(), effected);
 			DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(e.getPlayer(), b);

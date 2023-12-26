@@ -42,14 +42,15 @@ public class EntityDamage implements Listener {
 				//System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-					getEntity.ifPresentOrElse(em -> em.setLastDamageCause(e.getCause()), () -> {
+					getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
+					if (!getEntity.isPresent()) {
 						MobType mobType = MobType.VANILLA;
 						if (DeathMessages.getInstance().mythicmobsEnabled
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
 						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
-					});
+					}
 				}
 			}
 		}
