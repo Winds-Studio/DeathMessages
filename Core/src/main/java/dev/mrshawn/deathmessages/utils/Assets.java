@@ -200,7 +200,7 @@ public class Assets {
 	public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
 		Optional<PlayerManager> pm = Optional.ofNullable(em.getLastPlayerDamager());
 
-		if (pm.isEmpty()) return Component.empty();
+		if (!pm.isPresent()) return Component.empty();
 
 		Player p = pm.get().getPlayer();
 		boolean hasWeapon = hasWeapon(p, pm.get().getLastDamage());
@@ -435,7 +435,8 @@ public class Assets {
 		}
 
 		boolean hasOwner = false;
-		if (e instanceof Tameable tameable) {
+		if (e instanceof Tameable) {
+			Tameable tameable = (Tameable) e;
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
@@ -633,7 +634,8 @@ public class Assets {
 		}
 
 		boolean hasOwner = false;
-		if (em.getEntity() instanceof Tameable tameable) {
+		if (em.getEntity() instanceof Tameable) {
+			Tameable tameable = (Tameable) em.getEntity();
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
@@ -687,7 +689,8 @@ public class Assets {
 		String entityName = e.getType().getEntityClass().getSimpleName().toLowerCase();
 
 		boolean hasOwner = false;
-		if (e instanceof Tameable tameable) {
+		if (e instanceof Tameable) {
+			Tameable tameable = (Tameable) e;
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
@@ -813,7 +816,8 @@ public class Assets {
 				.replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
 				.replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ()));
 
-		if (owner && entity instanceof Tameable tameable && tameable.getOwner() != null && tameable.getOwner().getName() != null) {
+		if (owner && entity instanceof Tameable && ((Tameable) entity).getOwner() != null && ((Tameable) entity).getOwner().getName() != null) {
+			Tameable tameable = (Tameable) entity;
 			msg = msg
 					.replaceAll("%owner%", tameable.getOwner().getName());
 		}
@@ -870,7 +874,8 @@ public class Assets {
 					.replaceAll("%killer%", mobName)
 					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase()));
 
-			if (mob instanceof Player p) {
+			if (mob instanceof Player) {
+				Player p = (Player) mob;
 				msg = msg
 						.replaceAll("%killer_display%", p.getDisplayName());
 			}
@@ -896,12 +901,16 @@ public class Assets {
 	}
 
 	public static String getEnvironment(World.Environment environment) {
-		return switch (environment) {
-			case NORMAL -> Messages.getInstance().getConfig().getString("Environment.normal");
-			case NETHER -> Messages.getInstance().getConfig().getString("Environment.nether");
-			case THE_END -> Messages.getInstance().getConfig().getString("Environment.the_end");
-			default -> Messages.getInstance().getConfig().getString("Environment.unknown");
-		};
+		switch (environment) {
+			case NORMAL:
+				return Messages.getInstance().getConfig().getString("Environment.normal");
+			case NETHER:
+				return Messages.getInstance().getConfig().getString("Environment.nether");
+			case THE_END:
+				return Messages.getInstance().getConfig().getString("Environment.the_end");
+			default:
+				return Messages.getInstance().getConfig().getString("Environment.unknown");
+		}
 	}
 
 	public static String getSimpleProjectile(Projectile projectile) {
@@ -933,40 +942,70 @@ public class Assets {
 	}
 
 	public static String getSimpleCause(EntityDamageEvent.DamageCause damageCause) {
-		return switch (damageCause) {
-			//case KILL -> "Kill";
-			//case WORLD_BORDER -> "World-Border";
-			case CONTACT -> "Contact";
-			case ENTITY_ATTACK -> "Melee";
-			//case ENTITY_SWEEP_ATTACK -> "Entity-Sweep-Attack";
-			case PROJECTILE -> "Projectile";
-			case SUFFOCATION -> "Suffocation";
-			case FALL -> "Fall";
-			case FIRE -> "Fire";
-			case FIRE_TICK -> "Fire-Tick";
-			case MELTING -> "Melting";
-			case LAVA -> "Lava";
-			case DROWNING -> "Drowning";
-			case BLOCK_EXPLOSION, ENTITY_EXPLOSION -> "Explosion";
-			case VOID -> "Void";
-			case LIGHTNING -> "Lightning";
-			case SUICIDE -> "Suicide";
-			case STARVATION -> "Starvation";
-			case POISON -> "Poison";
-			case MAGIC -> "Magic";
-			case WITHER -> "Wither";
-			case FALLING_BLOCK -> "Falling-Block";
-			case THORNS -> "Thorns";
-			case DRAGON_BREATH -> "Dragon-Breath";
-			case CUSTOM -> "Custom";
-			case FLY_INTO_WALL -> "Fly-Into-Wall";
-			case HOT_FLOOR -> "Hot-Floor";
-			case CRAMMING -> "Cramming";
-			case DRYOUT -> "Dryout";
-			case FREEZE -> "Freeze";
-			case SONIC_BOOM -> "Sonic-Boom";
-			default -> "Unknown";
-		};
+		switch (damageCause) {
+			//case KILL: return "Kill";
+			//case WORLD_BORDER: return "World-Border";
+			case CONTACT:
+				return "Contact";
+			case ENTITY_ATTACK:
+				return "Melee";
+			//case ENTITY_SWEEP_ATTACK: return "Entity-Sweep-Attack";
+			case PROJECTILE:
+				return "Projectile";
+			case SUFFOCATION:
+				return "Suffocation";
+			case FALL:
+				return "Fall";
+			case FIRE:
+				return "Fire";
+			case FIRE_TICK:
+				return "Fire-Tick";
+			case MELTING:
+				return "Melting";
+			case LAVA:
+				return "Lava";
+			case DROWNING:
+				return "Drowning";
+			case BLOCK_EXPLOSION:
+			case ENTITY_EXPLOSION:
+				return "Explosion";
+			case VOID:
+				return "Void";
+			case LIGHTNING:
+				return "Lightning";
+			case SUICIDE:
+				return "Suicide";
+			case STARVATION:
+				return "Starvation";
+			case POISON:
+				return "Poison";
+			case MAGIC:
+				return "Magic";
+			case WITHER:
+				return "Wither";
+			case FALLING_BLOCK:
+				return "Falling-Block";
+			case THORNS:
+				return "Thorns";
+			case DRAGON_BREATH:
+				return "Dragon-Breath";
+			case CUSTOM:
+				return "Custom";
+			case FLY_INTO_WALL:
+				return "Fly-Into-Wall";
+			case HOT_FLOOR:
+				return "Hot-Floor";
+			case CRAMMING:
+				return "Cramming";
+			case DRYOUT:
+				return "Dryout";
+			case FREEZE:
+				return "Freeze";
+			case SONIC_BOOM:
+				return "Sonic-Boom";
+			default:
+				return "Unknown";
+		}
 	}
 
 	public static FileConfiguration getPlayerDeathMessages() {

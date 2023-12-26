@@ -5,14 +5,16 @@ plugins {
 }
 
 dependencies {
-    compileOnly("com.github.sirblobman.combatlogx:CombatLogX:11.4.0.2.Beta-1212")
+    api(project(":WorldGuard"))
     api(project(":WorldGuard6"))
     api(project(":WorldGuard7"))
+    compileOnly("com.github.sirblobman.combatlogx:CombatLogX:11.4.0.2.Beta-1212")
+    compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 }
 

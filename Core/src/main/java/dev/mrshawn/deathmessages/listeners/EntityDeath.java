@@ -40,9 +40,10 @@ public class EntityDeath implements Listener {
 	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	synchronized void onEntityDeath(EntityDeathEvent e) {
-		if (e.getEntity() instanceof Player p && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+		if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+			Player p = (Player) e.getEntity();
 			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-			getPlayer.ifPresentOrElse(pm -> {
+			getPlayer.ifPresent(pm -> {
 				if (e.getEntity().getLastDamageCause() == null) {
 					pm.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
 				} else {
@@ -112,7 +113,10 @@ public class EntityDeath implements Listener {
 							(LivingEntity) pm.getLastEntityDamager(), MessageType.MOB, playerDeath, getWorlds(p), gangKill);
 					Bukkit.getPluginManager().callEvent(event);
 				}
-			}, () -> new PlayerManager(p));
+			});
+			if (!getPlayer.isPresent()) {
+				new PlayerManager(p);
+			}
 		} else {
 			// Entity killed by Player
 			Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());

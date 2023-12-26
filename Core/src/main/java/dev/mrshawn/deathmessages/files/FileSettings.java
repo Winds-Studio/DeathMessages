@@ -43,9 +43,10 @@ public class FileSettings<C extends Enum<C>> {
 
         EnumSet<C> enumSet = EnumSet.allOf(enumClass);
         for (C value : enumSet) {
-            if (!(value instanceof Config config)) {
+            if (!(value instanceof Config)) {
                 throw new IllegalArgumentException("Enum " + enumClass.getName() + " must implement ConfigEnum");
             }
+            Config config = (Config) value;
 
             String configPath = config.getPath();
             if (yamlConfig.contains(configPath)) {

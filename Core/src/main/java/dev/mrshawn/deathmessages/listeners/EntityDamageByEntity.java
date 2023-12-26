@@ -33,19 +33,22 @@ public class EntityDamageByEntity implements Listener {
 
 	@EventHandler
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player p && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
-            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+		if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+			Player p = (Player) e.getEntity();
+			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 			getPlayer.ifPresent(pm -> {
 				if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 					if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager().getUniqueId())) {
 						pm.setLastEntityDamager(explosions.get(e.getDamager().getUniqueId()));
 						pm.setLastExplosiveEntity(e.getDamager());
-					} else if (e.getDamager() instanceof TNTPrimed tnt) {
+					} else if (e.getDamager() instanceof TNTPrimed) {
+						TNTPrimed tnt = (TNTPrimed) e.getDamager();
 						if (tnt.getSource() instanceof LivingEntity) {
 							pm.setLastEntityDamager(tnt.getSource());
 						}
 						pm.setLastExplosiveEntity(e.getDamager());
-					} else if (e.getDamager() instanceof Firework firework) {
+					} else if (e.getDamager() instanceof Firework) {
+						Firework firework = (Firework) e.getDamager();
 						try {
 							if (firework.getShooter() instanceof LivingEntity) {
 								pm.setLastEntityDamager((LivingEntity) firework.getShooter());
@@ -59,7 +62,8 @@ public class EntityDamageByEntity implements Listener {
 						pm.setLastEntityDamager(e.getDamager());
 						pm.setLastExplosiveEntity(e.getDamager());
 					}
-				} else if (e.getDamager() instanceof Projectile projectile) {
+				} else if (e.getDamager() instanceof Projectile) {
+					Projectile projectile = (Projectile) e.getDamager();
 					if (projectile.getShooter() instanceof LivingEntity) {
 						pm.setLastEntityDamager((LivingEntity) projectile.getShooter());
 					}
@@ -68,7 +72,8 @@ public class EntityDamageByEntity implements Listener {
 					pm.setLastEntityDamager(e.getDamager());
 				} else if (e.getDamager().getType().isAlive()) {
 					pm.setLastEntityDamager(e.getDamager());
-				} else if (e.getDamager() instanceof EvokerFangs evokerFangs) {
+				} else if (e.getDamager() instanceof EvokerFangs) {
+					EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
 					pm.setLastEntityDamager(evokerFangs.getOwner());
 				}
 			});
@@ -89,7 +94,7 @@ public class EntityDamageByEntity implements Listener {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())
 						|| (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-					getEntity.ifPresentOrElse(em -> {
+					getEntity.ifPresent(em -> {
 						if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 							if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
 								if (explosions.get(e.getDamager().getUniqueId()) instanceof Player) {
@@ -97,13 +102,15 @@ public class EntityDamageByEntity implements Listener {
 									getPlayer.ifPresent(em::setLastPlayerDamager);
 									em.setLastExplosiveEntity(e.getDamager());
 								}
-							} else if (e.getDamager() instanceof TNTPrimed tnt) {
+							} else if (e.getDamager() instanceof TNTPrimed) {
+								TNTPrimed tnt = (TNTPrimed) e.getDamager();
 								if (tnt.getSource() instanceof Player) {
 									Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) tnt.getSource());
 									getPlayer.ifPresent(em::setLastPlayerDamager);
 								}
 								em.setLastExplosiveEntity(e.getDamager());
-							} else if (e.getDamager() instanceof Firework firework) {
+							} else if (e.getDamager() instanceof Firework) {
+								Firework firework = (Firework) e.getDamager();
 								try {
 									if (firework.getShooter() instanceof Player) {
 										Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) firework.getShooter());
@@ -119,7 +126,8 @@ public class EntityDamageByEntity implements Listener {
 								getPlayer.ifPresent(em::setLastPlayerDamager);
 								em.setLastExplosiveEntity(e.getDamager());
 							}
-						} else if (e.getDamager() instanceof Projectile projectile) {
+						} else if (e.getDamager() instanceof Projectile) {
+							Projectile projectile = (Projectile) e.getDamager();
 							if (projectile.getShooter() instanceof Player) {
 								Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) projectile.getShooter());
 								getPlayer.ifPresent(em::setLastPlayerDamager);
@@ -129,22 +137,24 @@ public class EntityDamageByEntity implements Listener {
 							Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
 							getPlayer.ifPresent(em::setLastPlayerDamager);
 						}
-					}, () -> {
+					});
+					if (!getEntity.isPresent()) {
 						MobType mobType = MobType.VANILLA;
 						if (DeathMessages.getInstance().mythicmobsEnabled
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
 						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
-					});
+					}
 				}
 			}
 		}
 		if (e.getEntity() instanceof EnderCrystal) {
 			if (e.getDamager().getType().isAlive()) {
 				explosions.put(e.getEntity().getUniqueId(), e.getDamager());
-			} else if (e.getDamager() instanceof Projectile projectile) {
-                if (projectile.getShooter() instanceof LivingEntity) {
+			} else if (e.getDamager() instanceof Projectile) {
+				Projectile projectile = (Projectile) e.getDamager();
+				if (projectile.getShooter() instanceof LivingEntity) {
 					explosions.put(e.getEntity().getUniqueId(), (LivingEntity) projectile.getShooter());
 				}
 			}

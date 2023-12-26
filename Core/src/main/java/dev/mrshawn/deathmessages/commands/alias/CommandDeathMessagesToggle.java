@@ -20,10 +20,11 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return false;
 		}
-		if (!(sender instanceof Player player)) {
+		if (!(sender instanceof Player)) {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Player-Only-Command")));
 			return false;
 		}
+		Player player = (Player) sender;
 		if (!player.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
 			DeathMessages.getInstance().adventure().player(player).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
 			return false;

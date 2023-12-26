@@ -98,14 +98,23 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	public String onPlaceholderRequest(Player player, @NotNull String identifier) {
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
 
-		return getPlayer.map(pm -> switch (identifier) {
-			case "messages_enabled" -> String.valueOf(pm.getMessagesEnabled());
-			case "is_blacklisted" -> String.valueOf(pm.isBlacklisted());
-			case "victim_name" -> pm.getName();
-			case "victim_display_name" -> pm.getPlayer().getDisplayName();
-			case "killer_name" -> pm.getLastEntityDamager().getName();
-			case "killer_display_name" -> pm.getLastEntityDamager().getCustomName();
-			default -> null;
+		return getPlayer.map(pm -> {
+			switch (identifier) {
+				case "messages_enabled":
+					return String.valueOf(pm.getMessagesEnabled());
+				case "is_blacklisted":
+					return String.valueOf(pm.isBlacklisted());
+				case "victim_name":
+					return pm.getName();
+				case "victim_display_name":
+					return pm.getPlayer().getDisplayName();
+				case "killer_name":
+					return pm.getLastEntityDamager().getName();
+				case "killer_display_name":
+					return pm.getLastEntityDamager().getCustomName();
+				default:
+					return null;
+			}
 		}).orElse(null);
 	}
 }

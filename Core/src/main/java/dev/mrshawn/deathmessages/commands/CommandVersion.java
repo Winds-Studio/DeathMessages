@@ -38,19 +38,19 @@ public class CommandVersion extends DeathMessagesCommand {
 		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Checking update..."));
 		Updater.checkUpdate();
 		switch (Updater.shouldUpdate) {
-			case 0 ->
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Great! You are using the latest version.", NamedTextColor.GREEN));
-			case 1 ->
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text().append(Component.text("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases", NamedTextColor.YELLOW))
-							.appendNewline()
-							.append(Component.text()
-									.append(Component.text("Current Version: ", NamedTextColor.YELLOW))
-									.append(Component.text(Updater.nowVersion))
-									.append(Component.text(" | Latest Version: ", NamedTextColor.YELLOW))
-									.append(Component.text(Updater.latestVersion))
-									.build()));
-			case -1 ->
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Failed to check update!", NamedTextColor.RED));
+			case 0:
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Great! You are using the latest version.", NamedTextColor.GREEN));
+			case 1:
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text().append(Component.text("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases", NamedTextColor.YELLOW))
+						.appendNewline()
+						.append(Component.text()
+								.append(Component.text("Current Version: ", NamedTextColor.YELLOW))
+								.append(Component.text(Updater.nowVersion))
+								.append(Component.text(" | Latest Version: ", NamedTextColor.YELLOW))
+								.append(Component.text(Updater.latestVersion))
+								.build()));
+			case -1:
+				DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Failed to check update!", NamedTextColor.RED));
 		}
 	}
 }

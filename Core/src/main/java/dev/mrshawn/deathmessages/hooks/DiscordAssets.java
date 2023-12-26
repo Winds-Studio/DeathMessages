@@ -20,11 +20,17 @@ public class DiscordAssets {
 	}
 
 	public List<String> getIDs(MessageType messageType) {
-		return switch (messageType) {
-			case PLAYER -> config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS);
-			case MOB -> config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS);
-			case NATURAL -> config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS);
-			case ENTITY -> config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS);
-		};
+		switch (messageType) {
+			case PLAYER:
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS);
+			case MOB:
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS);
+			case NATURAL:
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS);
+			case ENTITY:
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS);
+			default:
+				return null;
+		}
 	}
 }

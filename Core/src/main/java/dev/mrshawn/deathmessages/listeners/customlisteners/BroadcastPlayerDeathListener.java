@@ -34,7 +34,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 
-		if (getPlayer.isEmpty()) return;
+		if (!getPlayer.isPresent()) return;
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 			String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
@@ -64,7 +64,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 			}
 			for (Player pls : w.getPlayers()) {
 				Optional<PlayerManager> getPlayer2 = PlayerManager.getPlayer(pls);
-				getPlayer2.ifPresentOrElse(pms -> {
+				getPlayer2.ifPresent(pms -> {
 					if (e.getMessageType().equals(MessageType.PLAYER)) {
 						if (privatePlayer && (e.getPlayer().getUniqueId().equals(pms.getUUID())
 								|| e.getLivingEntity().getUniqueId().equals(pms.getUUID()))) {
@@ -85,7 +85,10 @@ public class BroadcastPlayerDeathListener implements Listener {
 							normal(e, pms, pls, e.getBroadcastedWorlds());
 						}
 					}
-				}, () -> new PlayerManager(pls));
+				});
+				if (!getPlayer2.isPresent()) {
+					new PlayerManager(pls);
+				}
 			}
 		}
 		PluginMessaging.sendPluginMSG(e.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));

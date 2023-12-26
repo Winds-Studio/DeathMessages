@@ -209,7 +209,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 		for (String line : lines)
 			contents.append("\n").append(line);
 
-		return contents.isEmpty() ? "" : contents.substring(1);
+		return contents.length() == 0 ? "" : contents.substring(1);
 	}
 
 	/**
@@ -470,7 +470,15 @@ public final class CommentedConfiguration extends YamlConfiguration {
 	/**
 	 * A class that is used as a way of representing a map's entry (which is not implemented).
 	 */
-	private record Pair<K, V>(K key, V value) {
+	private static class Pair<K, V> {
+
+		private final K key;
+		private final V value;
+
+		Pair(K key, V value) {
+			this.key = key;
+			this.value = value;
+		}
 
 		@Override
 		public boolean equals(Object obj) {

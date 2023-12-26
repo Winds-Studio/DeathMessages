@@ -19,7 +19,8 @@ public class EntityDamageByBlock implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDamageByBlockEvent e) {
-		if (e.getEntity() instanceof Player p && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+		if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+			Player p = (Player) e.getEntity();
 			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
 		} else {
@@ -37,14 +38,15 @@ public class EntityDamageByBlock implements Listener {
 			for (String listened : listenedMobs) {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-					getEntity.ifPresentOrElse(em -> em.setLastDamageCause(e.getCause()), () -> {
+					getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
+					if (!getEntity.isPresent()) {
 						MobType mobType = MobType.VANILLA;
 						if (DeathMessages.getInstance().mythicmobsEnabled
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
 						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
-					});
+					}
 				}
 			}
 		}

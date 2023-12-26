@@ -25,7 +25,7 @@
 
 Compatibility
 
-- Support Java 17 and higher
+- Support Java 8 and higher
 - Support 1.12.2 - Latest Minecraft version (1.20.4)
 - Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
 - Multi Plugins Support

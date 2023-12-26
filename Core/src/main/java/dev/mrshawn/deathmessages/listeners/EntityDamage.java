@@ -21,7 +21,8 @@ public class EntityDamage implements Listener {
 	public void onEntityDamage(EntityDamageEvent e) {
 		if (e.isCancelled()) return;
 
-		if (e.getEntity() instanceof Player p && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+		if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+			Player p = (Player) e.getEntity();
 			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
 			// for fall large if ppl want it float dist = e.getEntity().getFallDistance();
