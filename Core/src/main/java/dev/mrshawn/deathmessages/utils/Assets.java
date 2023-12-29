@@ -510,7 +510,8 @@ public class Assets {
 		if (msgs.isEmpty()) {
 			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 			if (msgs.isEmpty()) {
-				LogManager.getLogger(DeathMessages.getInstance().getName()).info("Redirected from [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause + "]");
+				if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+					LogManager.getLogger(DeathMessages.getInstance().getName()).info("Redirected from [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause + "]");
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
 					return getNaturalDeath(pm, damageCause);
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath()))
@@ -561,7 +562,8 @@ public class Assets {
 		if (msgs.isEmpty()) {
 			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 			if (msgs.isEmpty()) {
-				LogManager.getLogger(DeathMessages.getInstance().getName()).info("Redirected from [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage + "]");
+				if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+					LogManager.getLogger(DeathMessages.getInstance().getName()).info("Redirected from [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage + "]");
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
 					return getNaturalDeath(pm, projectileDamage);
 				LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
