@@ -42,13 +42,13 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.bstats.bukkit.Metrics;
+import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -86,6 +86,7 @@ public class DeathMessages extends JavaPlugin {
 
 	public void onEnable() {
 		this.adventure = BukkitAudiences.create(this);
+		adventure.console().sendMessage(loadedLogo);
 		initializeListeners();
 		initializeCommands();
 		initializeHooks();
@@ -93,7 +94,6 @@ public class DeathMessages extends JavaPlugin {
 		checkGameRules();
 		new Metrics(this, 12365);
 		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
-		adventure.console().sendMessage(loadedLogo);
 		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {

@@ -1,9 +1,9 @@
 package dev.mrshawn.deathmessages.api;
 
 import dev.mrshawn.deathmessages.DeathMessages;
+import org.jetbrains.annotations.NotNull;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

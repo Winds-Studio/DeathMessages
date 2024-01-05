@@ -2,9 +2,9 @@ package dev.mrshawn.deathmessages.listeners.customlisteners;
 
 import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;
+import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 

@@ -4,12 +4,12 @@ main: dev.mrshawn.deathmessages.DeathMessages
 api-version: 1.13
 folia-supported: true
 softdepend:
-  - MythicMobs
   - PlaceholderAPI
   - WorldEdit
   - WorldGuard
   - DiscordBotAPI
   - DiscordSRV
+  - MythicMobs
   - CombatLogX
   - eco
   - EcoEnchants

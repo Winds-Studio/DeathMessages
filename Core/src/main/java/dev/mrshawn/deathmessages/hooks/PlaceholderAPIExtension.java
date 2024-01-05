@@ -3,8 +3,8 @@ package dev.mrshawn.deathmessages.hooks;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
