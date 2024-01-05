@@ -54,8 +54,9 @@ Compatibility
 > - Custom bstats charts
 > - Forge Mods support
 > - PVPManager support
-> - Actionbar message and private message
-> - More issues can track in [here](https://bbs.breeze.asia/d/128-si-wang-ti-shi-wen-ti)
+> - Actionbar message and private Actionbar message
+> - Correct show EcoEnchants MiniMessage gradient color
+> - Better Deathmessage console message color
 
 ## Special Thanks To:
 
