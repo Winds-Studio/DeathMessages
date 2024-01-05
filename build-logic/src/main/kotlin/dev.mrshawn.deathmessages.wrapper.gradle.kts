@@ -95,7 +95,7 @@ dependencies {
     implementation("de.tr7zw:item-nbt-api:2.12.2")
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("com.github.HMJosh:DiscordBotAPI:v1.1.1")
-    compileOnly("com.discordsrv:discordsrv:1.27.0-SNAPSHOT")
+    compileOnly("com.discordsrv:discordsrv:1.27.0")
     compileOnly("io.lumine:Mythic-Dist:5.5.1")
 
     api("net.kyori:adventure-platform-bukkit:4.3.2")

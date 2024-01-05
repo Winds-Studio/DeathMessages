@@ -12,6 +12,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
+import dev.mrshawn.deathmessages.hooks.WorldGuard6Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
@@ -239,7 +240,7 @@ public class DeathMessages extends JavaPlugin {
 					worldGuardExtension = new WorldGuard7Extension();
 					worldGuardExtension.registerFlags();
 				} else if (version.startsWith("6")) {
-					//worldGuardExtension = new WorldGuard6Extension();
+					worldGuardExtension = new WorldGuard6Extension();
 					worldGuardExtension.registerFlags();
 				} else throw new Exception();
 				worldGuardEnabled = true;
