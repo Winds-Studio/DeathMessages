@@ -55,7 +55,6 @@ Compatibility
 > - Forge Mods support
 > - PVPManager support
 > - Actionbar message and private Actionbar message
-> - Correct show EcoEnchants MiniMessage gradient color
 > - Better Deathmessage console message color
 
 ## Special Thanks To:

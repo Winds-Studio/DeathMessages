@@ -79,6 +79,11 @@ repositories {
         url = uri("https://repo.minebench.de/")
     }
 
+    // Eco
+    maven {
+        name = "auxilor-repo"
+        url = uri("https://repo.auxilor.io/repository/maven-public/")
+    }
 }
 
 val adventureVersion = "4.15.0"
@@ -97,11 +102,14 @@ dependencies {
     compileOnly("com.github.HMJosh:DiscordBotAPI:v1.1.1")
     compileOnly("com.discordsrv:discordsrv:1.27.0")
     compileOnly("io.lumine:Mythic-Dist:5.5.1")
+    compileOnly("com.willfp:eco:6.68.0")
+    compileOnly("com.willfp:EcoEnchants:11.0.0")
 
     api("net.kyori:adventure-platform-bukkit:4.3.2")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
     api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
+    //api("net.kyori:adventure-text-minimessage:$adventureVersion")
     api("net.kyori:adventure-key:$adventureVersion")
 }
 

@@ -11,6 +11,8 @@ softdepend:
   - DiscordBotAPI
   - DiscordSRV
   - CombatLogX
+  - eco
+  - EcoEnchants
 authors:
   - CosmoConsole
   - Joshb_

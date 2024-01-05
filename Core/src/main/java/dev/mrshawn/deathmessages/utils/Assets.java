@@ -50,6 +50,7 @@ import org.bukkit.entity.Trident;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -329,7 +330,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			buildHover(msg, base, i, displayName);
+			buildHover(pm.getPlayer(), msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -401,7 +402,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			buildHover(msg, base, i, displayName);
+			buildHover(pm.getPlayer(), msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -475,7 +476,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			buildHover(msg, base, i, displayName);
+			buildHover(p, msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -596,7 +597,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			buildHover(msg, base, i, displayName);
+			buildHover(pm.getPlayer(), msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -667,7 +668,7 @@ public class Assets {
 				displayName = i.getItemMeta().getDisplayName();
 			}
 
-			buildHover(msg, base, i, displayName);
+			buildHover(p, msg, base, i, displayName);
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -743,8 +744,28 @@ public class Assets {
 	}
 
 
-	private static void buildHover(String msg, TextComponent.Builder base, ItemStack i, String displayName) {
-		HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getInstance().nbtAPIEnabled ? HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString())) : HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+	private static void buildHover(Player player, String msg, TextComponent.Builder base, ItemStack i, String displayName) {
+
+		HoverEvent<HoverEvent.ShowItem> showItem;
+
+		if (DeathMessages.getInstance().ecoEnchantsEnabled) {
+			List<String> ecoLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItem(i, player);
+
+			if (i.getItemMeta().getLore().size() != ecoLore.size()) {// Dreeam - Unless Eco has API to detect Eco items
+				ItemStack tempItem = i.clone();
+				ItemMeta meta = tempItem.getItemMeta();
+				meta.setLore(ecoLore);
+				tempItem.setItemMeta(meta);
+
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
+			} else {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
+			}
+		} else if (DeathMessages.getInstance().nbtAPIEnabled) {
+			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
+		} else {
+			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+		}
 
 		Component weapon = Component.text()
 				.append(convertFromLegacy(displayName))

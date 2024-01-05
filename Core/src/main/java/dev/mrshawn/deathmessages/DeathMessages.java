@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
+import dev.mrshawn.deathmessages.hooks.EcoExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard6Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
@@ -74,6 +75,10 @@ public class DeathMessages extends JavaPlugin {
 
 	public static DiscordBotAPIExtension discordBotAPIExtension;
 	public static DiscordSRVExtension discordSRVExtension;
+
+	public boolean ecoEnabled = false;
+	public boolean ecoEnchantsEnabled = false;
+	public EcoExtension ecoExtension;
 
 	private static EventPriority eventPriority = EventPriority.HIGH;
 
@@ -167,6 +172,18 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initializeHooks() {
+		if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
+			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
+			LogManager.getLogger(getName()).info("Bungee Hook enabled!");
+			if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
+				bungeeInit = true;
+			} else {
+				bungeeInit = false;
+				bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
+			}
+		}
+
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new PlaceholderAPIExtension(this).register();
 			placeholderAPIEnabled = true;
@@ -219,15 +236,12 @@ public class DeathMessages extends JavaPlugin {
 			Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
 		}
 
-		if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
-			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
-			LogManager.getLogger(getName()).info("Bungee Hook enabled!");
-			if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
-				bungeeInit = true;
-			} else {
-				bungeeInit = false;
-				bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
+		if (Bukkit.getPluginManager().getPlugin("eco") != null) {
+			ecoEnabled = true;
+			ecoExtension = new EcoExtension();
+			if (Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
+				ecoEnchantsEnabled = true;
+				LogManager.getLogger(getName()).info("EcoEnchants Hook Enabled!");
 			}
 		}
 	}
