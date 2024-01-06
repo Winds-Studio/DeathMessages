@@ -92,8 +92,8 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.15.1")
-    compileOnly("org.apache.logging.log4j:log4j-api:2.22.0")
-    api("com.github.cryptomorin:XSeries:9.8.0")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.22.1")
+    api("com.github.cryptomorin:XSeries:9.8.1")
     api("org.bstats:bstats-bukkit:3.0.2")
     api("com.tcoded:FoliaLib:0.3.1")
 
@@ -102,8 +102,8 @@ dependencies {
     compileOnly("com.github.HMJosh:DiscordBotAPI:v1.1.1")
     compileOnly("com.discordsrv:discordsrv:1.27.0")
     compileOnly("io.lumine:Mythic-Dist:5.5.1")
-    compileOnly("com.willfp:eco:6.68.0")
-    compileOnly("com.willfp:EcoEnchants:11.0.0")
+    compileOnly("com.willfp:eco:6.68.1")
+    compileOnly("com.willfp:EcoEnchants:11.3.0")
 
     api("net.kyori:adventure-platform-bukkit:4.3.2")
     api("net.kyori:adventure-api:$adventureVersion")

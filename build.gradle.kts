@@ -3,7 +3,7 @@
 plugins {
     `java-library`
     id("com.github.johnrengelman.shadow") version "8.1.1" apply true
-    id("com.willfp.libreforge-gradle-plugin") version "1.0.0"
+    id("com.willfp.libreforge-gradle-plugin") version "1.0.2"
 }
 
 allprojects {
