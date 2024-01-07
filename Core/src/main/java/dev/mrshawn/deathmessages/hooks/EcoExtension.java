@@ -30,7 +30,7 @@ public class EcoExtension {
      * @author WillFP, Dreeam__
      * @see <a href="https://github.com/Auxilor/EcoEnchants/blob/master/eco-core/core-plugin/src/main/kotlin/com/willfp/ecoenchants/display/EnchantDisplay.kt">...</a>
      */
-    public List<String> getEcoEnchantsItem(ItemStack itemStack, Player player) {
+    public List<String> getEcoEnchantsItemLore(ItemStack itemStack, Player player) {
         if (!EnchantmentTargets.INSTANCE.isEnchantable(itemStack) && Eco.get().getPluginByName("EcoEnchants").getConfigYml().getBool("display.require-enchantable")) {
             return null;
         }

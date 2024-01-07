@@ -749,12 +749,12 @@ public class Assets {
 		HoverEvent<HoverEvent.ShowItem> showItem;
 
 		if (DeathMessages.getInstance().ecoEnchantsEnabled) {
-			List<String> ecoLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItem(i, player);
+			List<String> ecoEItemLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItemLore(i, player);
 
-			if (i.getItemMeta().getLore().size() != ecoLore.size()) {// Dreeam - Unless Eco has API to detect Eco items
+			if (i.getItemMeta().getLore().size() != ecoEItemLore.size()) {// Dreeam - Unless Eco has API to detect Eco items
 				ItemStack tempItem = i.clone();
 				ItemMeta meta = tempItem.getItemMeta();
-				meta.setLore(ecoLore);
+				meta.setLore(ecoEItemLore);
 				tempItem.setItemMeta(meta);
 
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
