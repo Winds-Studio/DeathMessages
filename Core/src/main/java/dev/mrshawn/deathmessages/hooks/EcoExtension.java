@@ -72,7 +72,7 @@ public class EcoExtension {
         List<String> notMetLines = new ArrayList<>();
 
         for (Map.Entry<Enchantment, Integer> ench : enchants.entrySet()) {
-            Enchantment enchant = ench.getKey();
+            EcoEnchantLike enchant = (EcoEnchantLike) ench.getKey();
             Integer level = ench.getValue();
             boolean showNotMet = false;
 
@@ -90,8 +90,8 @@ public class EcoExtension {
                 }
             }
 
-            formattedNames.put(new DisplayableEnchant((EcoEnchantLike) enchant, level, showNotMet),
-                    EnchantmentFormattingKt.getFormattedName((EcoEnchantLike) enchant, level));
+            formattedNames.put(new DisplayableEnchant(enchant, level, showNotMet),
+                    EnchantmentFormattingKt.getFormattedName(enchant, level));
         }
 
         if (shouldCollapse) {
@@ -108,7 +108,7 @@ public class EcoExtension {
                 DisplayableEnchant displayable = entry.getKey();
                 String formattedName = entry.getValue();
 
-                EcoEnchant enchant = (EcoEnchant) displayable.getEnchant();
+                EcoEnchantLike enchant = displayable.getEnchant();
                 int level = displayable.getLevel();
 
                 enchantLore.add(Display.PREFIX + formattedName);
