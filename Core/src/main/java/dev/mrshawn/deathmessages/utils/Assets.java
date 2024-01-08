@@ -761,10 +761,8 @@ public class Assets {
 			} else {
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
 			}
-		} else if (DeathMessages.getInstance().nbtAPIEnabled) {
-			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
 		} else {
-			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
 		}
 
 		Component weapon = Component.text()

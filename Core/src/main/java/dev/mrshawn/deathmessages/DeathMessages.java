@@ -60,7 +60,6 @@ public class DeathMessages extends JavaPlugin {
 	public final FoliaLib foliaLib = new FoliaLib(this);
 
 	public boolean placeholderAPIEnabled = false;
-	public boolean nbtAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
 
 	public MythicBukkit mythicMobs = null;
@@ -191,7 +190,7 @@ public class DeathMessages extends JavaPlugin {
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
-			nbtAPIEnabled = true;
+			// Dreeam - Remove this useless notice in the future.
 			LogManager.getLogger(getName()).info("Item-NBT-API Hook Enabled!");
 		}
 
