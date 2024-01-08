@@ -133,4 +133,11 @@ public class EcoExtension {
 
         return enchantLore;
     }
+
+    public boolean isEcoEnchantsItem(ItemStack i) {
+        // EcoEnchants item has no specific pdc data
+        // And it converts Vanilla enchants lore to its own lore description
+        // So just using isEnchantable to detect whether using EcoEnchants way to display dore.
+        return EnchantmentTargets.INSTANCE.isEnchantable(i);
+    }
 }

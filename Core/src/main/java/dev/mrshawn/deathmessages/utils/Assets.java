@@ -504,7 +504,7 @@ public class Assets {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
-			//Bukkit.broadcastMessage("is myth - " + internalMobType);
+			//System.out.println("is myth - " + internalMobType);
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		}
 
@@ -748,19 +748,15 @@ public class Assets {
 
 		HoverEvent<HoverEvent.ShowItem> showItem;
 
-		if (DeathMessages.getInstance().ecoEnchantsEnabled) {
+		if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
 			List<String> ecoEItemLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItemLore(i, player);
 
-			if (i.getItemMeta().getLore().size() != ecoEItemLore.size()) {// Dreeam - Unless Eco has API to detect Eco items
-				ItemStack tempItem = i.clone();
-				ItemMeta meta = tempItem.getItemMeta();
-				meta.setLore(ecoEItemLore);
-				tempItem.setItemMeta(meta);
+			ItemStack tempItem = i.clone();
+			ItemMeta meta = tempItem.getItemMeta();
+			meta.setLore(ecoEItemLore);
+			tempItem.setItemMeta(meta);
 
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
-			} else {
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
-			}
+			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
 		} else {
 			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
 		}
