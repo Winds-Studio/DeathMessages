@@ -758,7 +758,12 @@ public class Assets {
 
 			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
 		} else {
-			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
+			try {
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
+			} catch (NullPointerException e) {
+				// Item has no `tag` compound in nbt
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+			}
 		}
 
 		Component weapon = Component.text()
