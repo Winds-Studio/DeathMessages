@@ -135,7 +135,10 @@ public class Assets {
 				|| materialName.contains("AXE")
 				|| materialName.contains("HOE")
 				|| materialName.contains("SWORD")
-				|| materialName.contains("BOW");
+				|| materialName.contains("BOW")
+				|| materialName.contains("CROSSBOW")
+				|| materialName.contains("ARROW")
+				|| materialName.contains("TRIDENT");
 	}
 
 	public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
