@@ -61,6 +61,7 @@ public class DeathMessages extends JavaPlugin {
 
 	public boolean placeholderAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
+	public boolean langUtilsEnabled = false;
 
 	public MythicBukkit mythicMobs = null;
 	public boolean mythicmobsEnabled = false;
@@ -238,9 +239,23 @@ public class DeathMessages extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("eco") != null) {
 			ecoEnabled = true;
 			ecoExtension = new EcoExtension();
+			LogManager.getLogger(getName()).info("eco Hook Enabled!");
 			if (Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
 				ecoEnchantsEnabled = true;
 				LogManager.getLogger(getName()).info("EcoEnchants Hook Enabled!");
+			}
+		}
+
+		if (majorVersion() <= 12) {
+			if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
+					|| Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
+				if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
+					langUtilsEnabled = true;
+					LogManager.getLogger(getName()).info("LangUtils Hook Enabled!");
+				} else {
+					LogManager.getLogger(getName()).warn("You enable the I18N Display feature, you need install LangUtils plugin to make it works under <=1.12.2");
+					LogManager.getLogger(getName()).warn("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
+				}
 			}
 		}
 	}

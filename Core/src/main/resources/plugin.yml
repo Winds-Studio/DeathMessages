@@ -13,6 +13,7 @@ softdepend:
   - CombatLogX
   - eco
   - EcoEnchants
+  - LangUtils
 authors:
   - CosmoConsole
   - Joshb_

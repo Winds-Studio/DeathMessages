@@ -1,6 +1,7 @@
 package dev.mrshawn.deathmessages.utils;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.meowj.langutils.lang.LanguageHelper;
 import de.tr7zw.changeme.nbtapi.NBT;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
@@ -328,7 +329,7 @@ public class Assets {
 						return getNaturalDeath(pm, "Projectile-Unknown");
 					}
 				}
-				displayName = getI18nName(i);
+				displayName = getI18nName(i, pm.getPlayer());
 			} else {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
@@ -400,7 +401,7 @@ public class Assets {
 								.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
 					}
 				}
-				displayName = getI18nName(i);
+				displayName = getI18nName(i, pm.getPlayer());
 			} else {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
@@ -474,7 +475,7 @@ public class Assets {
 								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO.getPath()), mobType);
 					}
 				}
-				displayName = getI18nName(i);
+				displayName = getI18nName(i, p);
 			} else {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
@@ -595,7 +596,7 @@ public class Assets {
 						return getProjectile(gang, pm, mob, Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()));
 					}
 				}
-				displayName = getI18nName(i);
+				displayName = getI18nName(i, pm.getPlayer());
 			} else {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
@@ -666,7 +667,7 @@ public class Assets {
 								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()), mobType);
 					}
 				}
-				displayName = getI18nName(i);
+				displayName = getI18nName(i, p);
 			} else {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
@@ -916,15 +917,18 @@ public class Assets {
 	 	Thus, able to display item name for players based on player's client locale.
 	 	But I think maybe there is a better way to display localized item name to player
 	 */
-	private static Component getI18nName(ItemStack i) {
+	private static Component getI18nName(ItemStack i, Player p) {
 		Component i18nName;
-		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
-				&& DeathMessages.majorVersion() > 12) {// Dreeam TODO - Compatible to 1.12.2 lang key
-			// Block block.minecraft.example
-			// Item item.minecraft.example
-			String materialType = i.getType().isBlock() ? "block" : "item";
-			String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
-			i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
+		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())) {
+			if (DeathMessages.majorVersion() > 12) {
+				// Block block.minecraft.example
+				// Item item.minecraft.example
+				String materialType = i.getType().isBlock() ? "block" : "item";
+				String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
+				i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
+			} else {
+				i18nName = Component.text(LanguageHelper.getItemDisplayName(i, p.getLocale()));
+			}
 		} else {
 			i18nName = Component.text(i.getType().name());
 		}
