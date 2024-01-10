@@ -109,6 +109,7 @@ dependencies {
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
     api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
+    api("net.kyori:adventure-text-minimessage:$adventureVersion")
     api("net.kyori:adventure-key:$adventureVersion")
 }
 

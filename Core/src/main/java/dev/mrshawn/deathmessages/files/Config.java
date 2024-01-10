@@ -56,6 +56,8 @@ public enum Config {
 	RENAME_MOBS_IF_CONTAINS("Rename-Mobs.If-Contains", "♡♥❤■"),
 
 	DISABLE_NAMED_MOBS("Disable-Named-Mobs", false),
+	DISPLAY_I18N_ITEM_NAME("I18N-Display.Item-Name", true),
+	DISPLAY_I18N_MOB_NAME("I18N-Display.Mob-Name", true),
 
 	EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER("Expire-Last-Damage.Expire-Player", 7),
 	EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY("Expire-Last-Damage.Expire-Entity", 7),

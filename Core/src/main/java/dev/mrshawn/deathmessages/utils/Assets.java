@@ -22,8 +22,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -317,7 +317,7 @@ public class Assets {
 				}
 			}
 
-			String displayName;
+			Component displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
@@ -328,9 +328,9 @@ public class Assets {
 						return getNaturalDeath(pm, "Projectile-Unknown");
 					}
 				}
-				displayName = convertString(i.getType().name());
+				displayName = getI18nName(i);
 			} else {
-				displayName = i.getItemMeta().getDisplayName();
+				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
 			buildHover(pm.getPlayer(), msg, base, i, displayName);
@@ -387,7 +387,7 @@ public class Assets {
 
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
-			String displayName;
+			Component displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
 					if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
@@ -400,9 +400,9 @@ public class Assets {
 								.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
 					}
 				}
-				displayName = convertString(i.getType().name());
+				displayName = getI18nName(i);
 			} else {
-				displayName = i.getItemMeta().getDisplayName();
+				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
 			buildHover(pm.getPlayer(), msg, base, i, displayName);
@@ -461,7 +461,7 @@ public class Assets {
 
 		if (msg.contains("%weapon%")) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
-			String displayName;
+			Component displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS.getPath())) {
@@ -474,9 +474,9 @@ public class Assets {
 								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO.getPath()), mobType);
 					}
 				}
-				displayName = convertString(i.getType().name());
+				displayName = getI18nName(i);
 			} else {
-				displayName = i.getItemMeta().getDisplayName();
+				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
 			buildHover(p, msg, base, i, displayName);
@@ -587,7 +587,7 @@ public class Assets {
 
 		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
-			String displayName;
+			Component displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
@@ -595,9 +595,9 @@ public class Assets {
 						return getProjectile(gang, pm, mob, Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()));
 					}
 				}
-				displayName = convertString(i.getType().name());
+				displayName = getI18nName(i);
 			} else {
-				displayName = i.getItemMeta().getDisplayName();
+				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
 			buildHover(pm.getPlayer(), msg, base, i, displayName);
@@ -657,7 +657,7 @@ public class Assets {
 
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
-			String displayName;
+			Component displayName;
 			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
 					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
@@ -666,9 +666,9 @@ public class Assets {
 								Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()), mobType);
 					}
 				}
-				displayName = convertString(i.getType().name());
+				displayName = getI18nName(i);
 			} else {
-				displayName = i.getItemMeta().getDisplayName();
+				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
 			buildHover(p, msg, base, i, displayName);
@@ -747,7 +747,7 @@ public class Assets {
 	}
 
 
-	private static void buildHover(Player player, String msg, TextComponent.Builder base, ItemStack i, String displayName) {
+	private static void buildHover(Player player, String msg, TextComponent.Builder base, ItemStack i, Component displayName) {
 
 		HoverEvent<HoverEvent.ShowItem> showItem;
 
@@ -770,7 +770,7 @@ public class Assets {
 		}
 
 		Component weapon = Component.text()
-				.append(convertFromLegacy(displayName))
+				.append(displayName)
 				.build()
 				.hoverEvent(showItem);
 
@@ -911,18 +911,37 @@ public class Assets {
 		return msg;
 	}
 
-	public static String convertString(String string) {
-		string = string.replaceAll("_", " ").toLowerCase();
-		String[] spl = string.split(" ");
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < spl.length; i++) {
-			if (i == spl.length - 1) {
-				builder.append(StringUtils.capitalize(spl[i]));
-			} else {
-				builder.append(StringUtils.capitalize(spl[i])).append(" ");
-			}
+	/*
+		Use MiniMessage feature to send translatable component to player.
+	 	Thus, able to display item name for players based on player's client locale.
+	 	But I think maybe there is a better way to display localized item name to player
+	 */
+	private static Component getI18nName(ItemStack i) {
+		Component i18nName;
+		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
+				&& DeathMessages.majorVersion() > 12) {// Dreeam TODO - Compatible to 1.12.2 lang key
+			// Block block.minecraft.example
+			// Item item.minecraft.example
+			String materialType = i.getType().isBlock() ? "block" : "item";
+			String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
+			i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
+		} else {
+			i18nName = Component.text(i.getType().name());
 		}
-		return builder.toString();
+
+		return i18nName;
+	}
+
+	private static Component getI18nName(LivingEntity mob) {
+		// Dreeam - TODO
+		Component i18nName;
+		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
+			i18nName = Component.empty();
+		} else {
+			i18nName = Component.empty();
+		}
+
+		return i18nName;
 	}
 
 	public static String getEnvironment(World.Environment environment) {

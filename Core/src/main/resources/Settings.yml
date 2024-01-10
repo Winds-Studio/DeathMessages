@@ -128,6 +128,11 @@ Rename-Mobs:
 # If enabled, mobs will always default to their entity name. Display names will always be ignored. (Besides players)
 Disable-Named-Mobs: false
 
+# If enabled, if the item/mob has no custom name, the display of the name will base on player's client locale.
+I18N-Display:
+  Item-Name: true
+  Mob-Name: true #TODO
+
 Expire-Last-Damage:
   # How long until the last mob that damaged a player expires? (Becomes a natural death cause)
   # Default: 7
