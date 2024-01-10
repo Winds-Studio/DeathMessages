@@ -41,7 +41,7 @@ public class PlayerManager {
 
 	private WrappedTask lastEntityTask;
 
-	private static final List<PlayerManager> players = new CopyOnWriteArrayList<>();
+	private static final List<PlayerManager> players = new CopyOnWriteArrayList<>(); // Fix ConcurrentModificationException in PlayerMoveEvent
 
 	public final boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
 
