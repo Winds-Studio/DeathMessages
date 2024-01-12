@@ -16,11 +16,5 @@ allprojects {
             url = uri("https://repo.auxilor.io/repository/maven-public/")
         }
     }
-
-    tasks {
-        build {
-            dependsOn(shadowJar)
-        }
-    }
 }
 // Dreeam end

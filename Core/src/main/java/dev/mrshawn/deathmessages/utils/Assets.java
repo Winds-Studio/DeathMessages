@@ -270,7 +270,7 @@ public class Assets {
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to [Natural-Cause.Unknown] message node");
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 		msg = playerDeathPlaceholders(msg, pm, null);
 
 		TextComponent.Builder base = Component.text();
@@ -376,7 +376,7 @@ public class Assets {
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 		msg = playerDeathPlaceholders(msg, pm, mob);
 
 		TextComponent.Builder base = Component.text();
@@ -450,7 +450,7 @@ public class Assets {
 			return Component.empty();
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 		msg = entityDeathPlaceholders(msg, p, e, hasOwner);
 
 		TextComponent.Builder base = Component.text();
@@ -526,7 +526,7 @@ public class Assets {
 			}
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 
 		TextComponent.Builder base = Component.text();
 
@@ -576,7 +576,7 @@ public class Assets {
 			}
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 		msg = playerDeathPlaceholders(msg, pm, mob);
 
 		TextComponent.Builder base = Component.text();
@@ -646,7 +646,7 @@ public class Assets {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 		msg = entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner);
 
 		TextComponent.Builder base = Component.text();
@@ -721,7 +721,7 @@ public class Assets {
 			return Component.empty();
 		}
 
-		String msg = msgs.get(ThreadLocalRandom.current().nextInt(msgs.size()));
+		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
 
 		TextComponent.Builder base = Component.text();
 
