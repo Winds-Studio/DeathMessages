@@ -12,7 +12,7 @@
 # %killer% - returns the entity's name. If there is no name set, it will be the entity type.
 # %killer_display% - if the killer is a player, returns the display name of the player
 # %killer_type% - returns the entity type from Mobs.<Mob> in Messages.yml
-# %biome% - returns the biome the player was in
+# %biome% - returns the biome name the player located
 # %world% - returns the world name
 # %world_environment% - returns the environment of the world (normal, nether, the_end) (These are configurable in Messages.yml (Environment))
 # %x% - returns the x position the player died at.
