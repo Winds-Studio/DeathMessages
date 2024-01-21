@@ -31,8 +31,8 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
 		this.livingEntity = livingEntity;
 		this.messageType = messageType;
 		this.textComponent = textComponent;
-		this.isGangDeath = isGangDeath;
 		this.broadcastedWorlds = broadcastedWorlds;
+		this.isGangDeath = isGangDeath;
 		this.isCancelled = false;
 	}
 

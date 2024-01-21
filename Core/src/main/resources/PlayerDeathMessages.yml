@@ -26,9 +26,9 @@
 # Actions must start with either COMMAND:, or SUGGEST_COMMAND:
 # You can add lines in the hover messages like so "line one\nLine Two....."
 # Examples:
-# "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::COMMAND:tppos %x% %y% %z%"
-# "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%"
-# "%player% was killed by %killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::SUGGEST_COMMAND:msg %player% lol noob"
+# "%player% was killed by [%killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::COMMAND::tppos %x% %y% %z%]"
+# "%player% was killed by [%killer%::&cLocations: X:%x%, Y:%y%, Z:%z%]"
+# "%player% was killed by [%killer%::&cLocations: X:%x%, Y:%y%, Z:%z%::SUGGEST_COMMAND::msg %player% lol noob]"
 #
 # Permissions Based Messages
 #

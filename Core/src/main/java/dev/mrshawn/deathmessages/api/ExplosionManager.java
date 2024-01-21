@@ -26,7 +26,7 @@ public class ExplosionManager {
 		this.effected = effected;
 		explosions.add(this);
 
-		//  Destroys class. Won't need the info anymore
+		// Destroys class. Won't need the info anymore
 		DeathMessages.getInstance().foliaLib.getImpl().runLater(this::destroy, 5 * 20L);
 	}
 

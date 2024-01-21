@@ -4,7 +4,9 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
+import dev.mrshawn.deathmessages.files.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,6 +40,7 @@ public class EntityDamageByBlock implements Listener {
 			for (String listened : listenedMobs) {
 				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+					if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 					getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
 					if (!getEntity.isPresent()) {
 						MobType mobType = MobType.VANILLA;
