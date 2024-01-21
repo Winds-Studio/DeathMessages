@@ -25,11 +25,11 @@ public class CommandBlacklist extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_BLACKLIST.getValue())) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
 			return;
 		}
 		if (args.length == 0) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help"));
 		} else {
 			TextReplacementConfig player = TextReplacementConfig.builder()
 					.match("%player%")
@@ -42,16 +42,16 @@ public class CommandBlacklist extends DeathMessagesCommand {
 				getPlayer.ifPresent(pm -> {
 					if (pm.isBlacklisted()) {
 						pm.setBlacklisted(false);
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove"))
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
 								.replaceText(player));
 					} else {
 						pm.setBlacklisted(true);
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add"))
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
 								.replaceText(player));
 					}
 				});
 				if (!getPlayer.isPresent()) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent"))
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
 							.replaceText(player));
 				}
 				return;
@@ -68,20 +68,20 @@ public class CommandBlacklist extends DeathMessagesCommand {
 							pm.setBlacklisted(false);
 							UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
 							UserData.getInstance().save();
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove"))
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
 									.replaceText(player));
 						} else {
 							pm.setBlacklisted(true);
 							UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
 							UserData.getInstance().save();
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add"))
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
 									.replaceText(player));
 						}
 
 					}
 				});
 				if (!getPlayer.isPresent()) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent"))
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
 							.replaceText(player));
 				}
 				return;

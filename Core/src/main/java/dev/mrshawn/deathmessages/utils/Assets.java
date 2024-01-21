@@ -81,9 +81,8 @@ public class Assets {
 			.replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
 			.build();
 
-	public static String formatMessage(String path) {
-		return Messages.getInstance().getConfig().getString(path)
-				.replaceAll("%prefix%", Messages.getInstance().getConfig().getString("Prefix"));
+	public static Component formatMessage(String path) {
+		return convertFromLegacy(Messages.getInstance().getConfig().getString(path)).replaceText(prefix);
 	}
 
 	public static TextComponent convertFromLegacy(String s) {

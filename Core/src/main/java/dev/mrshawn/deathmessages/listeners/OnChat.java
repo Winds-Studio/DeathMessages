@@ -4,6 +4,7 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
 import dev.mrshawn.deathmessages.utils.Assets;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,11 +31,11 @@ public class OnChat implements Listener {
 				PlayerDeathMessages.getInstance().getConfig().set("Mobs." + mobName + "." + mode + "." + damageType, list);
 				PlayerDeathMessages.getInstance().save();
 				PlayerDeathMessages.getInstance().reload();
-				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
-						.replaceAll("%message%", e.getMessage())
-						.replaceAll("%mob_name%", mobName)
-						.replaceAll("%mode%", mode)
-						.replaceAll("%damage_type%", damageType)));
+				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(e.getMessage()).build())
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%mob_name%").replacement(mobName).build())
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%mode%").replacement(mode).build())
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%damage_type%").replacement(damageType).build()));
 			} else {
 				String mobName = spl[0];
 				String damageType = spl[1];
@@ -43,10 +44,10 @@ public class OnChat implements Listener {
 				EntityDeathMessages.getInstance().getConfig().set("Entities." + mobName + "." + damageType, list);
 				EntityDeathMessages.getInstance().save();
 				EntityDeathMessages.getInstance().reload();
-				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
-						.replaceAll("%message%", e.getMessage())
-						.replaceAll("%mob_name%", mobName)
-						.replaceAll("%damage_type%", damageType)));
+				DeathMessages.getInstance().adventure().player(p).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Added-Message")
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(e.getMessage()).build())
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%mob_name%").replacement(mobName).build())
+						.replaceText(TextReplacementConfig.builder().matchLiteral("%damage_type%").replacement(damageType).build()));
 			}
 		}
 	}

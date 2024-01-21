@@ -7,6 +7,7 @@ import dev.mrshawn.deathmessages.enums.DamageTypes;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -26,14 +27,14 @@ public class CommandEdit extends DeathMessagesCommand {
 	public void onCommand(CommandSender sender, String[] args) {
 		// /dm edit <player> <mobName> <solo, gang> <damage type> <add, remove, list> (remove=placeholder)
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_EDIT.getValue())) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.No-Permission")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
 			return;
 		}
 
 		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("You are trying to use a deprecated command. Command edit will be removed since DeathMessages 1.4.19", NamedTextColor.RED));
 
 		if (args.length <= 3) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Usage")));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Usage"));
 		} else {
 			if (args[0].equalsIgnoreCase("player")) {
 				String mobName = args[1];
@@ -47,40 +48,40 @@ public class CommandEdit extends DeathMessagesCommand {
                     }
 				}
 				if (!exists) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type"));
 					return;
 				}
 				if (!DamageTypes.getFriendlyNames().contains(damageType)) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Damage-Type")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Damage-Type"));
 					return;
 				}
 				if (args[4].equalsIgnoreCase("add")) {
 					if (args[2].equalsIgnoreCase("solo")) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Adding-Start")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Adding-Start"));
 						Assets.addingMessage.put(sender.getName(), "Solo:" + mobName + ":" + damageType);
 					} else if (args[2].equalsIgnoreCase("gang")) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Adding-Start")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Adding-Start"));
 						Assets.addingMessage.put(sender.getName(), "Gang:" + mobName + ":" + damageType);
 					} else {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments"));
 					}
 				} else if (args[4].equalsIgnoreCase("remove")) {
 					if (args[5] == null) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments"));
 						return;
 					}
 					if (!Assets.isNumeric(args[5])) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Placeholder")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Placeholder"));
 						return;
 					}
 					int placeholder = Integer.parseInt(args[5]) - 1;
 					if (args[2].equalsIgnoreCase("solo")) {
 						List<String> list = PlayerDeathMessages.getInstance().getConfig().getStringList("Mobs." + mobName + ".Solo." + damageType);
 						if (list.get(placeholder) == null) {
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Selection")));
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Selection"));
 							return;
 						}
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Removed-Message").replaceAll("%message%", list.get(placeholder))));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Removed-Message").replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(list.get(placeholder)).build()));
 						list.remove(placeholder);
 						PlayerDeathMessages.getInstance().getConfig().set("Mobs." + mobName + ".Solo." + damageType, list);
 						PlayerDeathMessages.getInstance().save();
@@ -88,10 +89,10 @@ public class CommandEdit extends DeathMessagesCommand {
 					} else if (args[2].equalsIgnoreCase("gang")) {
 						List<String> list = PlayerDeathMessages.getInstance().getConfig().getStringList("Mobs." + mobName + ".Gang." + damageType);
 						if (list.get(placeholder) == null) {
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Selection")));
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Selection"));
 							return;
 						}
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Removed-Message").replaceAll("%message%", list.get(placeholder))));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Removed-Message").replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(list.get(placeholder)).build()));
 						list.remove(placeholder);
 						PlayerDeathMessages.getInstance().getConfig().set("Mobs." + mobName + ".Gang." + damageType, list);
 						PlayerDeathMessages.getInstance().save();
@@ -114,10 +115,10 @@ public class CommandEdit extends DeathMessagesCommand {
 							placeholder++;
 						}
 					} else {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments"));
 					}
 				} else {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments"));
 				}
 			} else if (args[0].equalsIgnoreCase("entity")) {
 				String mobName = args[1];
@@ -131,32 +132,32 @@ public class CommandEdit extends DeathMessagesCommand {
                     }
 				}
 				if (!exists) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Mob-Type"));
 					return;
 				}
 				if (!DamageTypes.getFriendlyNames().contains(damageType)) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Damage-Type")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Damage-Type"));
 					return;
 				}
 				if (args[3].equalsIgnoreCase("add")) {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Adding-Start")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Adding-Start"));
 					Assets.addingMessage.put(sender.getName(), mobName + ":" + damageType);
 				} else if (args[3].equalsIgnoreCase("remove")) {
 					if (args[4] == null) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments"));
 						return;
 					}
 					if (!Assets.isNumeric(args[4])) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Placeholder")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Placeholder"));
 						return;
 					}
 					int placeholder = Integer.parseInt(args[4]) - 1;
 					List<String> list = EntityDeathMessages.getInstance().getConfig().getStringList("Entities." + mobName + "." + damageType);
 					if (list.get(placeholder) == null) {
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Selection")));
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Selection"));
 						return;
 					}
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Removed-Message").replaceAll("%message%", list.get(placeholder))));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Removed-Message").replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(list.get(placeholder)).build()));
 					list.remove(placeholder);
 					EntityDeathMessages.getInstance().getConfig().set("Entities." + mobName + "." + damageType, list);
 					EntityDeathMessages.getInstance().save();
@@ -171,7 +172,7 @@ public class CommandEdit extends DeathMessagesCommand {
 						placeholder++;
 					}
 				} else {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.convertFromLegacy(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments")));
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Edit.Invalid-Arguments"));
 				}
 			}
 		}
