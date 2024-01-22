@@ -13,7 +13,6 @@ import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -76,7 +75,7 @@ public class BroadcastEntityDeathListener implements Listener {
 								}
 							}
 							DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
-							PluginMessaging.sendPluginMSG(pms.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
+							PluginMessaging.sendPluginMSG(pms.getPlayer(), Assets.convertToLegacy(e.getTextComponent()));
 						}
 					});
 					if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
@@ -104,7 +103,7 @@ public class BroadcastEntityDeathListener implements Listener {
 				}
 			}
 		}
-		PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
+		PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Assets.convertToLegacy(e.getTextComponent()));
 		Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 		getEntity.ifPresent(EntityManager::destroy);
 	}

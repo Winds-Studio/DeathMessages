@@ -13,7 +13,6 @@ import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -37,12 +36,14 @@ public class BroadcastPlayerDeathListener implements Listener {
 		if (!getPlayer.isPresent()) return;
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-			String message = Assets.playerDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), getPlayer.get(), e.getLivingEntity());
-			DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message)
-					.replaceText(TextReplacementConfig.builder()
+			// Dreeam TODO: maybe just use formatMessage is also ok?
+			Component message = Assets.playerDeathPlaceholders(Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), getPlayer.get(), e.getLivingEntity());
+			DeathMessages.getInstance().adventure().console().sendMessage(
+					message.replaceText(TextReplacementConfig.builder()
 							.match("%message%")
 							.replacement(e.getTextComponent())
-							.build()));
+							.build())
+			);
 		}
 
 		if (getPlayer.get().isInCooldown()) {
@@ -91,7 +92,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 				}
 			}
 		}
-		PluginMessaging.sendPluginMSG(e.getPlayer(), LegacyComponentSerializer.legacyAmpersand().serialize(e.getTextComponent()));
+		PluginMessaging.sendPluginMSG(e.getPlayer(), Assets.convertToLegacy(e.getTextComponent()));
 	}
 
 	private void normal(BroadcastDeathMessageEvent e, PlayerManager pm, Player player, List<World> worlds) {

@@ -22,6 +22,7 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -54,6 +55,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +89,10 @@ public class Assets {
 
 	public static TextComponent convertFromLegacy(String s) {
 		return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
+	}
+
+	public static String convertToLegacy(Component component) {
+		return LegacyComponentSerializer.legacyAmpersand().serialize(component);
 	}
 
 	public static boolean isClimbable(Material material) {
@@ -333,7 +339,10 @@ public class Assets {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
-			buildHover(pm.getPlayer(), msg, base, i, displayName);
+			TextComponent deathMessage = convertFromLegacy(msg);
+			Component weaponHover = buildHover(pm.getPlayer(), i, displayName);
+
+			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -405,7 +414,10 @@ public class Assets {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
-			buildHover(pm.getPlayer(), msg, base, i, displayName);
+			TextComponent deathMessage = convertFromLegacy(msg);
+			Component weaponHover = buildHover(pm.getPlayer(), i, displayName);
+
+			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -479,7 +491,10 @@ public class Assets {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
-			buildHover(p, msg, base, i, displayName);
+			TextComponent deathMessage = convertFromLegacy(msg);
+			Component weaponHover = buildHover(p, i, displayName);
+
+			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -600,7 +615,10 @@ public class Assets {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
-			buildHover(pm.getPlayer(), msg, base, i, displayName);
+			TextComponent deathMessage = convertFromLegacy(msg);
+			Component weaponHover = buildHover(pm.getPlayer(), i, displayName);
+
+			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -671,7 +689,10 @@ public class Assets {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
-			buildHover(p, msg, base, i, displayName);
+			TextComponent deathMessage = convertFromLegacy(msg);
+			Component weaponHover = buildHover(p, i, displayName);
+
+			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -746,11 +767,11 @@ public class Assets {
 		return base.build();
 	}
 
-
-	private static void buildHover(Player player, String msg, TextComponent.Builder base, ItemStack i, Component displayName) {
+	private static Component buildHover(Player player, ItemStack i, Component displayName) {
 
 		HoverEvent<HoverEvent.ShowItem> showItem;
 
+		// EcoEnchants items
 		if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
 			List<String> ecoEItemLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItemLore(i, player);
 
@@ -762,6 +783,7 @@ public class Assets {
 			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
 		} else {
 			try {
+				// Item with NBT
 				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
 			} catch (NullPointerException e) {
 				// Item has no `tag` compound in nbt
@@ -769,20 +791,10 @@ public class Assets {
 			}
 		}
 
-		Component weapon = Component.text()
+        return Component.text()
 				.append(displayName)
 				.build()
 				.hoverEvent(showItem);
-
-		Component deathMessage = Component.text()
-				.append(convertFromLegacy(msg))
-				.build()
-				.replaceText(TextReplacementConfig.builder()
-						.match("%weapon%")
-						.replacement(weapon)
-						.build());
-
-		base.append(deathMessage);
 	}
 
 	public static List<String> sortList(List<String> list, Player player, Entity killer) {
@@ -861,24 +873,21 @@ public class Assets {
 		return msg;
 	}
 
-	public static String playerDeathPlaceholders(String msg, PlayerManager pm, LivingEntity mob) {
-		msg = msg
-				.replaceAll("%player%", pm.getName())
-				.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
-				.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
-				.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
-				.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
-				.replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
-				.replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
+	public static Component playerDeathPlaceholders(Component msg, PlayerManager pm, LivingEntity mob) {
+		msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(pm.getName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%player_display%").replacement(pm.getPlayer().getDisplayName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%world%").replacement(pm.getLastLocation().getWorld().getName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%world_environment%").replacement(getEnvironment(pm.getLastLocation().getWorld().getEnvironment()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%x%").replacement(String.valueOf(pm.getLastLocation().getBlock().getX())).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%y%").replacement(String.valueOf(pm.getLastLocation().getBlock().getY())).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%z%").replacement(String.valueOf(pm.getLastLocation().getBlock().getZ())).build()));
 
 		try {
-			msg = msg
-					.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement(pm.getLastLocation().getBlock().getBiome().name()).build());
 		} catch (NullPointerException e) {
 			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
 			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
-			msg = msg
-					.replaceAll("%biome%", "Unknown");
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
 		}
 
 		if (mob != null) {
@@ -895,18 +904,16 @@ public class Assets {
 			if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
 				mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
 			}
-			msg = msg
-					.replaceAll("%killer%", mobName)
-					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase()));
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%killer%").replacement(mobName).build())
+					.replaceText(TextReplacementConfig.builder().matchLiteral("%killer_type%").replacement(Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase())).build());
 
 			if (mob instanceof Player) {
 				Player p = (Player) mob;
-				msg = msg
-						.replaceAll("%killer_display%", p.getDisplayName());
+				msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%killer_display%").replacement(p.getDisplayName()).build());
 			}
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
-			msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
+			msg = convertFromLegacy(PlaceholderAPI.setPlaceholders(pm.getPlayer(), Assets.convertToLegacy(msg)));
 		}
 		return msg;
 	}

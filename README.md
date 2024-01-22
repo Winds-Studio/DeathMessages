@@ -52,7 +52,6 @@ Compatibility
 > - Look into get entity name
 > - Improve hoverEvent (showEntity/Re-add hoverText, commandSuggest)
 > - Custom bstats charts
-> - Forge Mods support
 > - PVPManager support
 > - Actionbar message and private Actionbar message
 > - Better Deathmessage console message color
