@@ -13,6 +13,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.util.DiscordUtil;
 import me.joshb.discordbotapi.server.DiscordBotAPI;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.logging.log4j.LogManager;
@@ -258,8 +259,8 @@ public class DiscordSRVExtension {
                     .replaceAll("%username%", p.getName()));
         }
 
-        String title = Assets.entityDeathPlaceholders(getMessages().getString("Discord.DeathMessage.Title"), p, entity, hasOwner)
-                .replaceAll("%message%", message);
+        String title = Assets.convertToLegacy(Assets.entityDeathPlaceholders(Assets.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Title")), p, entity, hasOwner)
+                .replaceText(Assets.replace("%message%", message)));
 
         if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);

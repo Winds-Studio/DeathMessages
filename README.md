@@ -51,9 +51,10 @@ Compatibility
 > - Auto reload config? maybe)
 > - Look into get entity name
 > - Improve hoverEvent (showEntity/Re-add hoverText, commandSuggest)
-> - Custom bstats charts
+> - Custom bstats charts (waiting using own bstats)
 > - PVPManager support
 > - Actionbar message and private Actionbar message
+> - Refactor DiscordSRV hook
 > - Better Deathmessage console message color
 
 ## Special Thanks To:
