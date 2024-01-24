@@ -32,7 +32,7 @@ public class CommandBlacklist extends DeathMessagesCommand {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help"));
 		} else {
 			TextReplacementConfig player = TextReplacementConfig.builder()
-					.match("%player%")
+					.matchLiteral("%player%")
 					.replacement(args[0])
 					.build();
 

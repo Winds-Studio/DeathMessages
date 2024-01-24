@@ -30,7 +30,7 @@ public class CommandRestore extends DeathMessagesCommand {
 
 				Component message = Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
 						.replaceText(TextReplacementConfig.builder()
-								.match("%backup-code%")
+								.matchLiteral("%backup-code%")
 								.replacement(code)
 								.build());
 

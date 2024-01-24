@@ -80,15 +80,15 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 				.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
 						.replaceText(Assets.prefix)
 						.replaceText(TextReplacementConfig.builder()
-								.match("%discordJar%")
+								.matchLiteral("%discordJar%")
 								.replacement(discordJar)
 								.build())
 						.replaceText(TextReplacementConfig.builder()
-								.match("%discordToken%")
+								.matchLiteral("%discordToken%")
 								.replacement(discordToken)
 								.build())
 						.replaceText(TextReplacementConfig.builder()
-								.match("%discordConfig%")
+								.matchLiteral("%discordConfig%")
 								.replacement(discordConfig)
 								.build())
 				));

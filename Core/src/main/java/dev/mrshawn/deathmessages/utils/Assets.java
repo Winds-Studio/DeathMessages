@@ -79,9 +79,16 @@ public class Assets {
 	}
 
 	public static TextReplacementConfig prefix = TextReplacementConfig.builder()
-			.match("%prefix%")
+			.matchLiteral("%prefix%")
 			.replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
 			.build();
+
+	public static TextReplacementConfig replace(String match, String replace) {
+		return TextReplacementConfig.builder()
+				.matchLiteral(match)
+				.replacement(replace)
+				.build();
+	}
 
 	public static Component formatMessage(String path) {
 		return convertFromLegacy(Messages.getInstance().getConfig().getString(path)).replaceText(prefix);
@@ -268,6 +275,7 @@ public class Assets {
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("Natural-Cause." + damageCause);
 		if (msgs.isEmpty()) {
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find message node: [" + "Natural-Cause." + damageCause + "] in PlayerDeathMessages.yml");
 			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This should not happen, please check your config or report issue on Github");
@@ -276,7 +284,6 @@ public class Assets {
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-		msg = playerDeathPlaceholders(msg, pm, null);
 
 		TextComponent.Builder base = Component.text();
 		// Dreeam - For debug
@@ -339,10 +346,10 @@ public class Assets {
 				displayName = convertFromLegacy(i.getItemMeta().getDisplayName());
 			}
 
-			TextComponent deathMessage = convertFromLegacy(msg);
+			TextComponent message = convertFromLegacy(msg);
 			Component weaponHover = buildHover(pm.getPlayer(), i, displayName);
 
-			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
+			base.append(message.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
@@ -360,7 +367,9 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, null)));
 //			}
 //		}
-		return base.build();
+
+		TextComponent.Builder deathMessage = Component.text().append(playerDeathPlaceholders(base.build(), pm, null));
+		return deathMessage.build();
 	}
 
 	public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
@@ -385,7 +394,6 @@ public class Assets {
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-		msg = playerDeathPlaceholders(msg, pm, mob);
 
 		TextComponent.Builder base = Component.text();
 
@@ -434,7 +442,9 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
 //			}
 //		}
-		return base.build();
+
+		Component deathMessage = playerDeathPlaceholders(base.build(), pm, mob);
+		return Component.text().append(deathMessage).build();
 	}
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
@@ -462,7 +472,6 @@ public class Assets {
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-		msg = entityDeathPlaceholders(msg, p, e, hasOwner);
 
 		TextComponent.Builder base = Component.text();
 
@@ -510,7 +519,9 @@ public class Assets {
 //				String cmd = sec[2].split(":")[1];
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
 //			}
-		return base.build();
+
+		Component deathMessage = entityDeathPlaceholders(base.build(), p, e, hasOwner);
+		return Component.text().append(deathMessage).build();
 	}
 
 	public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
@@ -549,7 +560,7 @@ public class Assets {
 			base.append(prefix);
 		}
 
-		TextComponent deathMessage = convertFromLegacy(playerDeathPlaceholders(msg, pm, mob));
+		Component deathMessage = playerDeathPlaceholders(convertFromLegacy(msg), pm, mob);
 		base.append(deathMessage);
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
@@ -591,7 +602,6 @@ public class Assets {
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-		msg = playerDeathPlaceholders(msg, pm, mob);
 
 		TextComponent.Builder base = Component.text();
 
@@ -635,7 +645,9 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
 //			}
 //		}
-		return base.build();
+
+		Component deathMessage = playerDeathPlaceholders(base.build(), pm, mob);
+		return Component.text().append(deathMessage).build();
 	}
 
 	public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
@@ -750,7 +762,7 @@ public class Assets {
 			base.append(prefix);
 		}
 
-		TextComponent deathMessage = convertFromLegacy(entityDeathPlaceholders(msg, player, e, hasOwner));
+		Component deathMessage = entityDeathPlaceholders(convertFromLegacy(msg), player, e, hasOwner);
 		base.append(deathMessage);
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
@@ -839,6 +851,37 @@ public class Assets {
 		return newList;
 	}
 
+	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean owner) {
+		msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%entity%").replacement(Messages.getInstance().getConfig().getString("Mobs."
+						+ entity.getType().toString().toLowerCase())).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%entity_display%").replacement(entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
+						+ entity.getType().toString().toLowerCase()) : entity.getCustomName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%killer%").replacement(player.getName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%killer_display%").replacement(player.getDisplayName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%world%").replacement(entity.getLocation().getWorld().getName()).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%world_environment%").replacement(getEnvironment(entity.getLocation().getWorld().getEnvironment())).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%x%").replacement(String.valueOf(entity.getLocation().getBlock().getX())).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%y%").replacement(String.valueOf(entity.getLocation().getBlock().getY())).build())
+				.replaceText(TextReplacementConfig.builder().matchLiteral("%z%").replacement(String.valueOf(entity.getLocation().getBlock().getZ())).build());
+
+		if (owner && entity instanceof Tameable && ((Tameable) entity).getOwner() != null && ((Tameable) entity).getOwner().getName() != null) {
+			Tameable tameable = (Tameable) entity;
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%owner%").replacement(tameable.getOwner().getName()).build());
+		}
+		try {
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement(entity.getLocation().getBlock().getBiome().name()).build());
+		} catch (NullPointerException e) {
+			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
+		}
+		if (DeathMessages.getInstance().placeholderAPIEnabled) {
+			msg = convertFromLegacy(PlaceholderAPI.setPlaceholders(player.getPlayer(), convertToLegacy(msg)));
+		}
+		return msg;
+	}
+
+	@Deprecated
 	public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean owner) {
 		msg = msg
 				.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
@@ -874,20 +917,20 @@ public class Assets {
 	}
 
 	public static Component playerDeathPlaceholders(Component msg, PlayerManager pm, LivingEntity mob) {
-		msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%player%").replacement(pm.getName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%player_display%").replacement(pm.getPlayer().getDisplayName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%world%").replacement(pm.getLastLocation().getWorld().getName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%world_environment%").replacement(getEnvironment(pm.getLastLocation().getWorld().getEnvironment()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%x%").replacement(String.valueOf(pm.getLastLocation().getBlock().getX())).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%y%").replacement(String.valueOf(pm.getLastLocation().getBlock().getY())).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%z%").replacement(String.valueOf(pm.getLastLocation().getBlock().getZ())).build()));
+		msg = msg.replaceText(replace("%player%", pm.getName()))
+				.replaceText(replace("%player_display%", pm.getPlayer().getDisplayName()))
+				.replaceText(replace("%world%", pm.getLastLocation().getWorld().getName()))
+				.replaceText(replace("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment())))
+				.replaceText(replace("%x%", String.valueOf(pm.getLastLocation().getBlock().getX())))
+				.replaceText(replace("%y%", String.valueOf(pm.getLastLocation().getBlock().getY())))
+				.replaceText(replace("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ())));
 
 		try {
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement(pm.getLastLocation().getBlock().getBiome().name()).build());
+			msg = msg.replaceText(replace("%biome%", pm.getLastLocation().getBlock().getBiome().name()));
 		} catch (NullPointerException e) {
 			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
 			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
+			msg = msg.replaceText(replace("%biome%", "Unknown"));
 		}
 
 		if (mob != null) {
@@ -904,16 +947,16 @@ public class Assets {
 			if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
 				mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
 			}
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%killer%").replacement(mobName).build())
-					.replaceText(TextReplacementConfig.builder().matchLiteral("%killer_type%").replacement(Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase())).build());
+			msg = msg.replaceText(replace("%killer%", mobName))
+					.replaceText(replace("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase())));
 
 			if (mob instanceof Player) {
 				Player p = (Player) mob;
-				msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%killer_display%").replacement(p.getDisplayName()).build());
+				msg = msg.replaceText(replace("%killer_display%", p.getDisplayName()));
 			}
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
-			msg = convertFromLegacy(PlaceholderAPI.setPlaceholders(pm.getPlayer(), Assets.convertToLegacy(msg)));
+			msg = convertFromLegacy(PlaceholderAPI.setPlaceholders(pm.getPlayer(), convertToLegacy(msg)));
 		}
 		return msg;
 	}
@@ -963,6 +1006,7 @@ public class Assets {
 			case THE_END:
 				return Messages.getInstance().getConfig().getString("Environment.the_end");
 			default:
+				// Dreeam TODO: support all environment
 				return Messages.getInstance().getConfig().getString("Environment.unknown");
 		}
 	}

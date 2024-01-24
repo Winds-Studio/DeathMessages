@@ -35,12 +35,11 @@ public class BroadcastEntityDeathListener implements Listener {
 		boolean hasOwner = e.getEntity() instanceof Tameable;
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-			String message = Assets.entityDeathPlaceholders(Messages.getInstance().getConfig().getString("Console.Message"), pm.get().getPlayer(), e.getEntity(), hasOwner);
-			DeathMessages.getInstance().adventure().console().sendMessage(Assets.convertFromLegacy(message)
-					.replaceText(TextReplacementConfig.builder()
-							.match("%message%")
-							.replacement(e.getTextComponent())
-							.build()));
+			Component message = Assets.entityDeathPlaceholders(Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), e.getEntity(), hasOwner);
+			DeathMessages.getInstance().adventure().console().sendMessage(message.replaceText(TextReplacementConfig.builder()
+					.matchLiteral("%message%")
+					.replacement(e.getTextComponent())
+					.build()));
 		}
 
 		if (pm.get().isInCooldown()) {

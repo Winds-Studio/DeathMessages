@@ -29,7 +29,7 @@ public class CommandBackup extends DeathMessagesCommand {
 
 			Component message = Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Backed-Up")
 					.replaceText(TextReplacementConfig.builder()
-							.match("%backup-code%")
+							.matchLiteral("%backup-code%")
 							.replacement(code)
 							.build());
 

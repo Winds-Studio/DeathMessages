@@ -40,7 +40,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 			Component message = Assets.playerDeathPlaceholders(Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), getPlayer.get(), e.getLivingEntity());
 			DeathMessages.getInstance().adventure().console().sendMessage(
 					message.replaceText(TextReplacementConfig.builder()
-							.match("%message%")
+							.matchLiteral("%message%")
 							.replacement(e.getTextComponent())
 							.build())
 			);

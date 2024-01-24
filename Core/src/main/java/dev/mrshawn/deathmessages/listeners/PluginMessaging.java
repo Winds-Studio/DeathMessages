@@ -47,7 +47,7 @@ public class PluginMessaging implements PluginMessageListener {
 				String rawMsg = data[1];
 				Component prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message"))
 						.replaceText(TextReplacementConfig.builder()
-								.match("%server_name%")
+								.matchLiteral("%server_name%")
 								.replacement(serverName)
 								.build());
 				TextComponent message = Assets.convertFromLegacy(rawMsg);

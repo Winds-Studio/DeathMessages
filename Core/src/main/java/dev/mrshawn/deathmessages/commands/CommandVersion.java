@@ -25,11 +25,11 @@ public class CommandVersion extends DeathMessagesCommand {
 
 		Component message = Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Version")
 				.replaceText(TextReplacementConfig.builder()
-						.match("%version%")
+						.matchLiteral("%version%")
 						.replacement(DeathMessages.getInstance().getDescription().getVersion())
 						.build())
 				.replaceText(TextReplacementConfig.builder()
-						.match("%authors%")
+						.matchLiteral("%authors%")
 						.replacement(String.join(", ", DeathMessages.getInstance().getDescription().getAuthors()))
 						.build());
 
