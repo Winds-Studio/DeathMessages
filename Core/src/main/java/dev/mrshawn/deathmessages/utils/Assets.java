@@ -346,12 +346,12 @@ public class Assets {
 			}
 
 			TextComponent message = convertFromLegacy(msg);
-			Component weaponHover = buildHover(pm.getPlayer(), i, displayName);
+			Component weapon = buildHover(pm.getPlayer(), i, displayName);
 
-			base.append(message.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
+			base.append(message.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weapon).build()));
 		} else {
-			TextComponent deathMessage = convertFromLegacy(msg);
-			base.append(deathMessage);
+			TextComponent message = convertFromLegacy(msg);
+			base.append(message);
 		}
 		// TODO: need to re-write the logic of death message click event & hover text.
 //		if (msg.length() >= 2) {
@@ -443,8 +443,10 @@ public class Assets {
 //			}
 //		}
 
-		Component deathMessage = playerDeathPlaceholders(base.build(), pm, mob);
-		return Component.text().append(deathMessage).build();
+		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, mob);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
@@ -521,8 +523,10 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
 //			}
 
-		Component deathMessage = entityDeathPlaceholders(base.build(), p, e, hasOwner);
-		return Component.text().append(deathMessage).build();
+		Component applyPlaceholders = entityDeathPlaceholders(base.build(), p, e, hasOwner);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
@@ -562,9 +566,6 @@ public class Assets {
 			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
-
-		Component deathMessage = playerDeathPlaceholders(convertFromLegacy(msg), pm, mob);
-		base.append(deathMessage);
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
@@ -577,7 +578,11 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
 //			}
 //		}
-		return base.build();
+
+		Component applyPlaceholders = playerDeathPlaceholders(convertFromLegacy(msg), pm, mob);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
@@ -651,8 +656,10 @@ public class Assets {
 //			}
 //		}
 
-		Component deathMessage = playerDeathPlaceholders(base.build(), pm, mob);
-		return Component.text().append(deathMessage).build();
+		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, mob);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
@@ -683,7 +690,6 @@ public class Assets {
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-		msg = entityDeathPlaceholders(msg, p, em.getEntity(), hasOwner);
 
 		TextComponent.Builder base = Component.text();
 
@@ -728,7 +734,11 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
 //			}
 //		}
-		return base.build();
+
+		Component applyPlaceholders = entityDeathPlaceholders(convertFromLegacy(msg), p, em.getEntity(), hasOwner);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	public static TextComponent getEntityDeath(Player player, Entity e, String damageCause, MobType mobType) {
@@ -769,9 +779,6 @@ public class Assets {
 			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
-
-		Component deathMessage = entityDeathPlaceholders(convertFromLegacy(msg), player, e, hasOwner);
-		base.append(deathMessage);
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
 //		}
@@ -784,7 +791,11 @@ public class Assets {
 //				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
 //			}
 //		}
-		return base.build();
+
+		Component applyPlaceholders = entityDeathPlaceholders(convertFromLegacy(msg), player, e, hasOwner);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	private static Component buildHover(Player player, ItemStack i, Component displayName) {
