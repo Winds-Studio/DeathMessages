@@ -895,7 +895,12 @@ public class Assets {
 			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
-			msg = convertFromLegacy(PlaceholderAPI.setPlaceholders(player.getPlayer(), convertToLegacy(msg)));
+			Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(convertToLegacy(msg));
+
+			while (identifiers.find()) {
+				String identifier = identifiers.group(0);
+				msg = msg.replaceText(replace(identifier, PlaceholderAPI.setPlaceholders(player.getPlayer(), identifier)));
+			}
 		}
 		return msg;
 	}
@@ -975,7 +980,12 @@ public class Assets {
 			}
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
-			msg = convertFromLegacy(PlaceholderAPI.setPlaceholders(pm.getPlayer(), convertToLegacy(msg)));
+			Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(convertToLegacy(msg));
+
+			while (identifiers.find()) {
+				String identifier = identifiers.group(0);
+				msg = msg.replaceText(replace(identifier, PlaceholderAPI.setPlaceholders(pm.getPlayer(), identifier)));
+			}
 		}
 		return msg;
 	}
