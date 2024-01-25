@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 // Class designed to keep track of damage and data to mobs that were damaged by players
 
@@ -33,7 +34,7 @@ public class EntityManager {
 
 	private WrappedTask lastPlayerTask;
 
-	private static final List<EntityManager> entities = new ArrayList<>();
+	private static final List<EntityManager> entities = new CopyOnWriteArrayList<>();
 
 	public EntityManager(Entity entity, UUID entityUUID, MobType mobType) {
 		this.entity = entity;

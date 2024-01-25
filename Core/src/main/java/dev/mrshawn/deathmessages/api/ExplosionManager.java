@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ExplosionManager {
 
@@ -17,7 +18,7 @@ public class ExplosionManager {
 	private Location location;
 	private final List<UUID> effected;
 
-	public static final List<ExplosionManager> explosions = new ArrayList<>();
+	public static final List<ExplosionManager> explosions = new CopyOnWriteArrayList<>();
 
 	public ExplosionManager(UUID pyro, Material material, Location location, List<UUID> effected) {
 		this.pyro = pyro;
@@ -52,9 +53,9 @@ public class ExplosionManager {
 	}
 
 	public static Optional<ExplosionManager> getExplosion(Location location) {
-		return explosions.stream()
-				.filter(ex -> ex.getLocation().equals(location))
-				.findFirst();
+		return explosions.parallelStream()
+				.filter(ex -> ex.getLocation() == location)
+				.findAny();
 	}
 
 	public static Optional<ExplosionManager> getManagerIfEffected(UUID uuid) {
