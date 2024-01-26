@@ -7,7 +7,6 @@ softdepend:
   - PlaceholderAPI
   - WorldEdit
   - WorldGuard
-  - DiscordBotAPI
   - DiscordSRV
   - MythicMobs
   - CombatLogX

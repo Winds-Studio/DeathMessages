@@ -121,10 +121,6 @@ public class BroadcastPlayerDeathListener implements Listener {
 		}
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 		if (getPlayer.isPresent()) {
-			if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-				DeathMessages.discordBotAPIExtension.sendDiscordMessage(getPlayer.get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
-				discordSent = true;
-			}
 			if (DeathMessages.discordSRVExtension != null && !discordSent) {
 				DeathMessages.discordSRVExtension.sendDiscordMessage(getPlayer.get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
 				discordSent = true;

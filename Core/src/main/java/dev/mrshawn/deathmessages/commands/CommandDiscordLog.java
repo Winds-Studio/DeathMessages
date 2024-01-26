@@ -8,7 +8,6 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import github.scarsz.discordsrv.DiscordSRV;
-import me.joshb.discordbotapi.server.DiscordBotAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -31,17 +30,13 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 			return;
 		}
 		String discordJar;
-		if (DeathMessages.discordBotAPIExtension != null) {
-			discordJar = "DiscordBotAPI";
-		} else if (DeathMessages.discordSRVExtension != null) {
+		if (DeathMessages.discordSRVExtension != null) {
 			discordJar = "DiscordSRV";
 		} else {
 			discordJar = "Discord Jar Not Installed";
 		}
 		String discordToken;
-		if (discordJar.equals("DiscordBotAPI")) {
-			discordToken = DiscordBotAPI.getJDA().getToken().length() > 40 ? DiscordBotAPI.getJDA().getToken().substring(40) : "Token Not Set";
-		} else if (DeathMessages.discordSRVExtension != null) {
+		if (DeathMessages.discordSRVExtension != null) {
 			discordToken = DiscordSRV.getPlugin().getJda().getToken().length() > 40 ? DiscordSRV.getPlugin().getJda().getToken().substring(40) : "Token Not Set";
 		} else {
 			discordToken = "Discord Jar Not Installed";

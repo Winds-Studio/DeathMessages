@@ -9,7 +9,6 @@ import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.hooks.DiscordBotAPIExtension;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.EcoExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
@@ -73,7 +72,6 @@ public class DeathMessages extends JavaPlugin {
 	public static boolean bungeeServerNameRequest = true;
 	public static boolean bungeeInit = false;
 
-	public static DiscordBotAPIExtension discordBotAPIExtension;
 	public static DiscordSRVExtension discordSRVExtension;
 
 	public boolean ecoEnabled = false;
@@ -197,12 +195,6 @@ public class DeathMessages extends JavaPlugin {
 
 		if (worldGuardEnabled) {
 			LogManager.getLogger(getName()).info("WorldGuard Hook Enabled!");
-		}
-
-		if (Bukkit.getPluginManager().getPlugin("DiscordBotAPI") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
-			discordBotAPIExtension = new DiscordBotAPIExtension();
-			LogManager.getLogger(getName()).info("DiscordBotAPI Hook Enabled!");
-			LogManager.getLogger(getName()).warn("WARNING: You are using a outdated plugin! DiscordBotAPI support will be removed in DeathMessages 1.4.19, use DiscordSRV instead!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {

@@ -12,7 +12,6 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.util.DiscordUtil;
-import me.joshb.discordbotapi.server.DiscordBotAPI;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -100,11 +99,6 @@ public class DiscordSRVExtension {
             String[] groupSplit = groups.split(":");
             String guildID = groupSplit[0];
             String channelID = groupSplit[1];
-
-            if (DiscordBotAPI.getJDA().getGuildById(guildID) == null) {
-                LogManager.getLogger().error("Could not find the discord guild with ID: " + guildID);
-                continue;
-            }
 
             Guild g = DiscordUtil.getJda().getGuildById(guildID);
 

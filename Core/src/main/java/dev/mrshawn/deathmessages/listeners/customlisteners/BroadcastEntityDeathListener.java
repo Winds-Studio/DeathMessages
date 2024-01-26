@@ -91,10 +91,6 @@ public class BroadcastEntityDeathListener implements Listener {
 						}
 						// Will reach the discord broadcast
 					}
-					if (DeathMessages.discordBotAPIExtension != null && !discordSent) {
-						DeathMessages.discordBotAPIExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), e.getEntity(), hasOwner, e.getMessageType());
-						discordSent = true;
-					}
 					if (DeathMessages.discordSRVExtension != null && !discordSent) {
 						DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), e.getEntity(), hasOwner, e.getMessageType());
 						discordSent = true;
