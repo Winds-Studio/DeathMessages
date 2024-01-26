@@ -85,7 +85,7 @@ public class Assets {
 	public static TextReplacementConfig replace(String match, String replace) {
 		return TextReplacementConfig.builder()
 				.matchLiteral(match)
-				.replacement(replace)
+				.replacement((replace != null) ? replace : match) // Prevent null replacement
 				.build();
 	}
 
