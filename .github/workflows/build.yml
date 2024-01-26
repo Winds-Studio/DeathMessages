@@ -27,8 +27,8 @@ jobs:
         if: "contains(github.event.commits[0].message, '[Release]')"
         uses: marvinpinto/action-automatic-releases@master
         with:
-          title: "DeathMessages v1.4.18"
-          automatic_release_tag: "1.4.18"
+          title: "DeathMessages v1.4.19"
+          automatic_release_tag: "1.4.19"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "Core/build/libs/DeathMessages-*.jar"
           prerelease: false
@@ -37,7 +37,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: marvinpinto/action-automatic-releases@master
         with:
-          title: "DeathMessages v1.4.18"
+          title: "DeathMessages v1.4.19-SNAPSHOT"
           automatic_release_tag: "dev-build"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: "Core/build/libs/DeathMessages-*.jar"
