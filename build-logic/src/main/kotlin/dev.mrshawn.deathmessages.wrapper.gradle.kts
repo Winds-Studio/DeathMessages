@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.mrshawn"
-version = "1.4.18-SNAPSHOT"
+version = "1.4.18"
 
 repositories {
     mavenCentral()
