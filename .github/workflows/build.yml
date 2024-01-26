@@ -23,16 +23,6 @@ jobs:
       - name: Build
         run: ./gradlew clean build
 
-      - name: Release DeathMessages
-        if: "contains(github.event.commits[0].message, '[Release]')"
-        uses: marvinpinto/action-automatic-releases@master
-        with:
-          title: "DeathMessages v1.4.19"
-          automatic_release_tag: "1.4.19"
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "Core/build/libs/DeathMessages-*.jar"
-          prerelease: false
-
       - name: Upload DeathMessages DevBuild
         if: github.ref_name == 'master'
         uses: marvinpinto/action-automatic-releases@master
