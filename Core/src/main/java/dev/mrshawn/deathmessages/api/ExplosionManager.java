@@ -53,7 +53,7 @@ public class ExplosionManager {
 	}
 
 	public static Optional<ExplosionManager> getExplosion(Location location) {
-		return explosions.parallelStream()
+		return explosions.stream()
 				.filter(ex -> ex.getLocation() == location)
 				.findAny();
 	}

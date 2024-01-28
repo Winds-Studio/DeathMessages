@@ -21,8 +21,8 @@ import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByEntity;
 import dev.mrshawn.deathmessages.listeners.EntityDeath;
-import dev.mrshawn.deathmessages.listeners.InteractEvent;
 import dev.mrshawn.deathmessages.listeners.OnChat;
+import dev.mrshawn.deathmessages.listeners.OnInteract;
 import dev.mrshawn.deathmessages.listeners.OnJoin;
 import dev.mrshawn.deathmessages.listeners.OnMove;
 import dev.mrshawn.deathmessages.listeners.OnQuit;
@@ -152,8 +152,8 @@ public class DeathMessages extends JavaPlugin {
 				new EntityDamageByBlock(),
 				new EntityDamageByEntity(),
 				new EntityDeath(),
-				new InteractEvent(),
 				new OnChat(),
+				new OnInteract(),
 				new OnJoin(),
 				new OnMove(),
 				new OnQuit(),
