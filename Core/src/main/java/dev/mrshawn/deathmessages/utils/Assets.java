@@ -1010,7 +1010,7 @@ public class Assets {
 		} else {
 			// To make first letter Capitalize, and then append with rest of string together.
 			String name = i.getType().name();
-			String fst = name.substring(0, 1).toUpperCase();
+			String fst = name.substring(0, 1);
 			String snd = name.substring(1).toLowerCase();
 
 			i18nName = Component.text(fst + snd);
