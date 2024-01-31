@@ -1008,7 +1008,12 @@ public class Assets {
 				i18nName = Component.text(LanguageHelper.getItemDisplayName(i, p.getLocale()));
 			}
 		} else {
-			i18nName = Component.text(i.getType().name());
+			// To make first letter Capitalize, and then append with rest of string together.
+			String name = i.getType().name();
+			String fst = name.substring(0, 1).toUpperCase();
+			String snd = name.substring(1).toLowerCase();
+
+			i18nName = Component.text(fst + snd);
 		}
 
 		return i18nName;
