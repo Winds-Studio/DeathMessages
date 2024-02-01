@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 public class CommandBlacklist extends DeathMessagesCommand {
 
@@ -59,7 +58,7 @@ public class CommandBlacklist extends DeathMessagesCommand {
 
 			// Saved-User-Data enabled
 			for (Map.Entry<String, Object> entry : UserData.getInstance().getConfig().getValues(false).entrySet()) {
-				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
+				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(Bukkit.getPlayer(entry.getKey()));
 				getPlayer.ifPresent(pm -> {
 					String username = UserData.getInstance().getConfig().getString(entry.getKey() + ".username");
 					if (username.equalsIgnoreCase(args[0])) {
