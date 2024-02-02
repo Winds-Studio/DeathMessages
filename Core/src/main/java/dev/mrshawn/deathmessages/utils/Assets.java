@@ -999,8 +999,8 @@ public class Assets {
 		Component i18nName;
 		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())) {
 			if (DeathMessages.majorVersion() > 12) {
-				// Block block.minecraft.example
-				// Item item.minecraft.example
+				// Block: block.minecraft.example
+				// Item: item.minecraft.example
 				String materialType = i.getType().isBlock() ? "block" : "item";
 				String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
 				i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
@@ -1008,12 +1008,8 @@ public class Assets {
 				i18nName = Component.text(LanguageHelper.getItemDisplayName(i, p.getLocale()));
 			}
 		} else {
-			// To make first letter Capitalize, and then append with rest of string together.
-			String name = i.getType().name();
-			String fst = name.substring(0, 1);
-			String snd = name.substring(1).toLowerCase();
-
-			i18nName = Component.text(fst + snd);
+			String name = capitalize(i.getType().name());
+			i18nName = Component.text(name);
 		}
 
 		return i18nName;
@@ -1029,6 +1025,21 @@ public class Assets {
 		}
 
 		return i18nName;
+	}
+
+	private static String capitalize(String name) {
+		// Replace "_" to " " in the material name then split
+		String[] list = name.replaceAll("_", " ").split(" ");
+        StringBuilder sb = new StringBuilder();
+		// To make the first letter of each word capitalized, then append the rest of the string in each word together
+        for (String s : list) {
+			String fst = s.substring(0, 1);
+			String snd = s.substring(1).toLowerCase();
+
+			sb.append(fst).append(snd).append(" ");
+		}
+
+        return sb.toString();
 	}
 
 	public static String getEnvironment(World.Environment environment) {
