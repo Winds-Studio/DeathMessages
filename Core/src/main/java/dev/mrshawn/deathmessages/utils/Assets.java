@@ -798,36 +798,6 @@ public class Assets {
 		return death.build();
 	}
 
-	private static Component buildHover(Player player, ItemStack i, Component displayName) {
-
-		HoverEvent<HoverEvent.ShowItem> showItem;
-
-		// EcoEnchants items
-		if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
-			List<String> ecoEItemLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItemLore(i, player);
-
-			ItemStack tempItem = i.clone();
-			ItemMeta meta = tempItem.getItemMeta();
-			meta.setLore(ecoEItemLore);
-			tempItem.setItemMeta(meta);
-
-			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
-		} else {
-			try {
-				// Item with NBT
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
-			} catch (NullPointerException e) {
-				// Item has no `tag` compound in nbt
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
-			}
-		}
-
-        return Component.text()
-				.append(displayName)
-				.build()
-				.hoverEvent(showItem);
-	}
-
 	public static List<String> sortList(List<String> list, Player player, Entity killer) {
 		List<String> newList = list;
 		List<String> returnList = new ArrayList<>();
@@ -988,6 +958,36 @@ public class Assets {
 			}
 		}
 		return msg;
+	}
+
+	private static Component buildHover(Player player, ItemStack i, Component displayName) {
+
+		HoverEvent<HoverEvent.ShowItem> showItem;
+
+		// EcoEnchants items
+		if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
+			List<String> ecoEItemLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItemLore(i, player);
+
+			ItemStack tempItem = i.clone();
+			ItemMeta meta = tempItem.getItemMeta();
+			meta.setLore(ecoEItemLore);
+			tempItem.setItemMeta(meta);
+
+			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
+		} else {
+			try {
+				// Item with NBT
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
+			} catch (NullPointerException e) {
+				// Item has no `tag` compound in nbt
+				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+			}
+		}
+
+		return Component.text()
+				.append(displayName)
+				.build()
+				.hoverEvent(showItem);
 	}
 
 	/*
