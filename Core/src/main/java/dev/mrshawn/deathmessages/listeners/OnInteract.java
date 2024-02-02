@@ -30,7 +30,7 @@ public class OnInteract implements Listener {
 	public void onInteract(PlayerInteractEvent e) {
 		Block getBlock = e.getClickedBlock();
 
-		if (getBlock == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || getBlock.getType().isAir())
+		if (getBlock == null || !e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || isAir(getBlock.getType()))
 			return; // Dreeam - No NPE
 
 		World.Environment environment = getBlock.getWorld().getEnvironment();
@@ -78,5 +78,23 @@ public class OnInteract implements Listener {
 		new ExplosionManager(e.getPlayer().getUniqueId(), b.getType(), b.getLocation(), effected);
 		DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(e.getPlayer(), b);
 		Bukkit.getPluginManager().callEvent(explodeEvent);
+	}
+
+	private boolean isAir(Material material) {
+		if (DeathMessages.majorVersion() <= 13) {
+			switch (material) {
+				//<editor-fold defaultstate="collapsed" desc="isAir">
+				case AIR:
+				case CAVE_AIR:
+				case VOID_AIR:
+				// ----- Legacy Separator -----
+				case LEGACY_AIR:
+					//</editor-fold>
+					return true;
+				default:
+					return false;
+			}
+		}
+		return material.isAir();
 	}
 }
