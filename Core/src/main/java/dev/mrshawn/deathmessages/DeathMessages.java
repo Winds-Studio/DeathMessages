@@ -93,21 +93,7 @@ public class DeathMessages extends JavaPlugin {
 		new Metrics(this, 12365);
 		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
 		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
-
-		if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {
-			Updater.checkUpdate();
-			foliaLib.getImpl().runLaterAsync(() -> {
-				switch (Updater.shouldUpdate) {
-					case 1:
-						LogManager.getLogger(getName()).warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
-                        LogManager.getLogger(getName()).warn("Current Version: {} | Latest Version: {}", Updater.nowVersion, Updater.latestVersion);
-						break;
-					case -1:
-						LogManager.getLogger(getName()).warn("Failed to check update!");
-						break;
-				}
-			}, 50);
-		}
+		checkUpdate();
 	}
 
 	public void onLoad() {
@@ -245,8 +231,8 @@ public class DeathMessages extends JavaPlugin {
 					langUtilsEnabled = true;
 					LogManager.getLogger(getName()).info("LangUtils Hook Enabled!");
 				} else {
-					LogManager.getLogger(getName()).warn("You enable the I18N Display feature, you need install LangUtils plugin to make it works under <=1.12.2");
-					LogManager.getLogger(getName()).warn("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
+					LogManager.getLogger(getName()).error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
+					LogManager.getLogger(getName()).error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
 				}
 			}
 		}
@@ -297,6 +283,23 @@ public class DeathMessages extends JavaPlugin {
 			.append(Component.text("/_____/\\___/\\__,_/\\__/_/ /_/_/  /_/\\___/____/____/\\__,_/\\__, /\\___/____/  ")).appendNewline()
 			.append(Component.text("                                                       /____/             ")).appendNewline()
 			.build();
+
+	private void checkUpdate() {
+		if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {
+			Updater.checkUpdate();
+			foliaLib.getImpl().runLaterAsync(() -> {
+				switch (Updater.shouldUpdate) {
+					case 1:
+						LogManager.getLogger(getName()).warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
+						LogManager.getLogger(getName()).warn("Current Version: {} | Latest Version: {}", Updater.nowVersion, Updater.latestVersion);
+						break;
+					case -1:
+						LogManager.getLogger(getName()).warn("Failed to check update!");
+						break;
+				}
+			}, 50);
+		}
+	}
 
 	public static DeathMessages getInstance() {
 		return instance;
