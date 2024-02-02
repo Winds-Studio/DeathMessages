@@ -963,6 +963,7 @@ public class Assets {
 	private static Component buildHover(Player player, ItemStack i, Component displayName) {
 
 		HoverEvent<HoverEvent.ShowItem> showItem;
+		String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
 
 		// EcoEnchants items
 		if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
@@ -973,14 +974,14 @@ public class Assets {
 			meta.setLore(ecoEItemLore);
 			tempItem.setItemMeta(meta);
 
-			showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
+			showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
 		} else {
 			try {
 				// Item with NBT
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
+				showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
 			} catch (NullPointerException e) {
 				// Item has no `tag` compound in nbt
-				showItem = HoverEvent.showItem(Key.key(i.getType().name().toLowerCase()), i.getAmount());
+				showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
 			}
 		}
 
