@@ -50,27 +50,27 @@ public class OnInteract implements Listener {
 	private void callEvent(PlayerInteractEvent e, Block b) {
 		List<UUID> effected = new ArrayList<>();
 
-		for (Player p : e.getClickedBlock().getWorld().getPlayers()) {
-			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-			getPlayer.ifPresent(effect -> {
-				if (p.getLocation().distanceSquared(b.getLocation()) < 100) {
-					effected.add(p.getUniqueId());
-					effect.setLastEntityDamager(e.getPlayer());
-				}
-			});
-		}
-
+		// Optimization WIP
 		for (Entity ent : e.getClickedBlock().getWorld().getEntities()) {
-			if (ent instanceof Player) continue;
-			if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
-				Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
-				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
-				getEntity.ifPresent(em -> {
-					effected.add(ent.getUniqueId());
-					getPlayer.ifPresent(em::setLastPlayerDamager);
+			if (ent instanceof Player) {
+				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) ent);
+				getPlayer.ifPresent(effect -> {
+					if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
+						effected.add(ent.getUniqueId());
+						effect.setLastEntityDamager(e.getPlayer());
+					}
 				});
-				if (!getEntity.isPresent()) {
-					new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
+			} else {
+				if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
+					Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
+					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+					getEntity.ifPresent(em -> {
+						effected.add(ent.getUniqueId());
+						getPlayer.ifPresent(em::setLastPlayerDamager);
+					});
+					if (!getEntity.isPresent()) {
+						new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
+					}
 				}
 			}
 		}
