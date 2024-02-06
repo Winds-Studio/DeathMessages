@@ -998,6 +998,7 @@ public class Assets {
 	 */
 	private static Component getI18nName(ItemStack i, Player p) {
 		Component i18nName;
+
 		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())) {
 			if (DeathMessages.majorVersion > 12) {
 				// Block: block.minecraft.example
@@ -1006,7 +1007,7 @@ public class Assets {
 				String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
 				i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
 			} else if (DeathMessages.getInstance().langUtilsEnabled) {
-				i18nName = Component.text(LanguageHelper.getItemDisplayName(i, p.getLocale()));
+				i18nName = Component.text(LanguageHelper.getItemName(i, p.getLocale()));
 			} else {
 				String name = capitalize(i.getType().name());
 				i18nName = Component.text(name);
