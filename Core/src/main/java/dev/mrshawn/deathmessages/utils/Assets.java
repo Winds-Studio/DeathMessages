@@ -1005,8 +1005,11 @@ public class Assets {
 				String materialType = i.getType().isBlock() ? "block" : "item";
 				String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
 				i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
-			} else {
+			} else if (DeathMessages.getInstance().langUtilsEnabled) {
 				i18nName = Component.text(LanguageHelper.getItemDisplayName(i, p.getLocale()));
+			} else {
+				String name = capitalize(i.getType().name());
+				i18nName = Component.text(name);
 			}
 		} else {
 			String name = capitalize(i.getType().name());
