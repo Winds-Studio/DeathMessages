@@ -49,7 +49,7 @@ public class EntityDamageByEntity implements Listener {
 							pm.setLastEntityDamager(tnt.getSource());
 						}
 						pm.setLastExplosiveEntity(e.getDamager());
-					} else if (e.getDamager() instanceof Firework && DeathMessages.majorVersion() >= 16) {// Firework extends Entity under <= 1.15
+					} else if (e.getDamager() instanceof Firework && DeathMessages.majorVersion >= 16) {// Firework extends Entity under <= 1.15
 						Firework firework = (Firework) e.getDamager();
 						try {
 							if (firework.getShooter() instanceof LivingEntity) {
@@ -112,7 +112,7 @@ public class EntityDamageByEntity implements Listener {
 									getPlayer.ifPresent(em::setLastPlayerDamager);
 								}
 								em.setLastExplosiveEntity(e.getDamager());
-							} else if (e.getDamager() instanceof Firework && DeathMessages.majorVersion() >= 16) {
+							} else if (e.getDamager() instanceof Firework && DeathMessages.majorVersion >= 16) {
 								Firework firework = (Firework) e.getDamager();
 								try {
 									if (firework.getShooter() instanceof Player) {

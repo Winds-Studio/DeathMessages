@@ -82,6 +82,12 @@ public class DeathMessages extends JavaPlugin {
 
 	private static FileSettings<Config> config;
 
+	// Dreeam - eg. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
+	public final static int majorVersion = Integer.parseInt(Bukkit.getServer().getBukkitVersion()
+			.replaceFirst("^(\\d+)\\.", "")
+			.replaceAll("\\.(.+)", "")
+	);
+
 	public void onEnable() {
 		this.adventure = BukkitAudiences.create(this);
 		adventure.console().sendMessage(loadedLogo);
@@ -108,14 +114,6 @@ public class DeathMessages extends JavaPlugin {
 			this.adventure = null;
 		}
 		instance = null;
-	}
-
-	public static int majorVersion() {
-		// Dreeam - eg. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
-		return Integer.parseInt(Bukkit.getServer().getBukkitVersion()
-				.replaceFirst("^(\\d+)\\.", "")
-				.replaceAll("\\.(.+)", "")
-		);
 	}
 
 	private void initializeConfigs() {
@@ -224,7 +222,7 @@ public class DeathMessages extends JavaPlugin {
 			}
 		}
 
-		if (majorVersion() <= 12) {
+		if (majorVersion <= 12) {
 			if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
 					|| Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
 				if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {

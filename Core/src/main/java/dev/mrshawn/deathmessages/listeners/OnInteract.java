@@ -38,7 +38,7 @@ public class OnInteract implements Listener {
 			if (getBlock.getType().name().contains("BED") && !getBlock.getType().equals(Material.BEDROCK)) {
 				callEvent(e, getBlock);
 			}
-		} else if (DeathMessages.majorVersion() >= 16) {
+		} else if (DeathMessages.majorVersion >= 16) {
 			if (!getBlock.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
 				if (getBlock.getType().equals(Material.RESPAWN_ANCHOR)) {
 					callEvent(e, getBlock);
@@ -81,7 +81,8 @@ public class OnInteract implements Listener {
 	}
 
 	private boolean isAir(Material material) {
-		if (DeathMessages.majorVersion() <= 13) {
+		if (DeathMessages.majorVersion <= 13) {
+			// From 1.14 org.bukkit.Material.isAir()
 			switch (material) {
 				//<editor-fold defaultstate="collapsed" desc="isAir">
 				case AIR:
