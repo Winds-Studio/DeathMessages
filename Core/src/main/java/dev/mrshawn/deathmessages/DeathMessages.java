@@ -230,8 +230,8 @@ public class DeathMessages extends JavaPlugin {
 					LogManager.getLogger(getName()).info("LangUtils Hook Enabled!");
 				} else {
 					langUtilsEnabled = false;
-					LogManager.getLogger(getName()).warn("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
-					LogManager.getLogger(getName()).warn("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
+					LogManager.getLogger(getName()).error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
+					LogManager.getLogger(getName()).error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
 				}
 			}
 		}
