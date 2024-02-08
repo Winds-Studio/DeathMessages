@@ -49,31 +49,28 @@ public class OnInteract implements Listener {
 
 	private void callEvent(PlayerInteractEvent e, Block b) {
 		List<UUID> effected = new ArrayList<>();
+		List<Entity> getNearby = new ArrayList<>((DeathMessages.majorVersion > 12) ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(100)) : b.getWorld().getNearbyEntities(b.getLocation(), 100, 100, 100));
 
-		// Optimization WIP
-		for (Entity ent : e.getClickedBlock().getWorld().getEntities()) {
-			if (ent instanceof Player) {
-				Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) ent);
-				getPlayer.ifPresent(effect -> {
-					if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
-						effected.add(ent.getUniqueId());
-						effect.setLastEntityDamager(e.getPlayer());
-					}
-				});
-			} else {
-				if (ent.getLocation().distanceSquared(b.getLocation()) < 100) {
-					Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
-					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
-					getEntity.ifPresent(em -> {
-						effected.add(ent.getUniqueId());
-						getPlayer.ifPresent(em::setLastPlayerDamager);
-					});
-					if (!getEntity.isPresent()) {
-						new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
+		getNearby.forEach(ent -> {
+					if (ent instanceof Player) {
+						Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) ent);
+						getPlayer.ifPresent(effect -> {
+							effected.add(ent.getUniqueId());
+							effect.setLastEntityDamager(e.getPlayer());
+						});
+					} else {
+						Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
+						Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+						getEntity.ifPresent(em -> {
+							effected.add(ent.getUniqueId());
+							getPlayer.ifPresent(em::setLastPlayerDamager);
+						});
+						if (!getEntity.isPresent()) {
+							new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
+						}
 					}
 				}
-			}
-		}
+		);
 
 		new ExplosionManager(e.getPlayer().getUniqueId(), b.getType(), b.getLocation(), effected);
 		DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(e.getPlayer(), b);
