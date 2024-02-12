@@ -1091,13 +1091,16 @@ public class Assets {
 
 	public static String getSimpleCause(EntityDamageEvent.DamageCause damageCause) {
 		switch (damageCause) {
-			//case KILL: return "Kill";
-			//case WORLD_BORDER: return "World-Border";
+			//case KILL:
+			//	return "Kill";
+			//case WORLD_BORDER:
+			//	return "World-Border";
 			case CONTACT:
 				return "Contact";
 			case ENTITY_ATTACK:
 				return "Melee";
-			//case ENTITY_SWEEP_ATTACK: return "Entity-Sweep-Attack";
+			//case ENTITY_SWEEP_ATTACK:
+			//	return "Entity-Sweep-Attack";
 			case PROJECTILE:
 				return "Projectile";
 			case SUFFOCATION:
