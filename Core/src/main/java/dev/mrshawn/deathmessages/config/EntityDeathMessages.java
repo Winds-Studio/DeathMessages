@@ -5,9 +5,6 @@ import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 
 public class EntityDeathMessages {
@@ -62,26 +59,11 @@ public class EntityDeathMessages {
 
 		if (!file.exists()) {
 			file.getParentFile().mkdirs();
-			copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
+			ConfigManager.getInstance().copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
 		}
 		config = CommentedConfiguration.loadConfiguration(file);
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
-		} catch (Exception e) {
-			LogManager.getLogger().error(e);
-		}
-	}
-
-	private void copy(InputStream in, File file) {
-		try {
-			OutputStream out = new FileOutputStream(file);
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			out.close();
-			in.close();
 		} catch (Exception e) {
 			LogManager.getLogger().error(e);
 		}

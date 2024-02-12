@@ -7,6 +7,9 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ConfigManager {
 
@@ -162,5 +165,13 @@ public class ConfigManager {
 		}
 		ConfigManager.getInstance().reload();
 		return true;
+	}
+
+	public void copy(InputStream in, File file) {
+		try {
+			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			LogManager.getLogger().error(e);
+		}
 	}
 }
