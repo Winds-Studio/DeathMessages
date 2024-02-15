@@ -184,9 +184,7 @@ public class PlayerManager {
 	}
 
 	public static Optional<PlayerManager> getPlayer(Player p) {
-		return players.stream()
-				.filter(pm -> pm.getUUID().equals(p.getUniqueId()))
-				.findFirst();
+		return getPlayer(p.getUniqueId());
 	}
 
 	public static Optional<PlayerManager> getPlayer(UUID uuid) {
