@@ -154,7 +154,7 @@ public class EntityDeath implements Listener {
 						if (world != null) {
 							broadcastWorlds.add(world);
 						} else {
-                            LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find world with name: {}, in World-Groups", single);
+							LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find world with name: {}, in World-Groups", single);
 						}
 					}
 				}
