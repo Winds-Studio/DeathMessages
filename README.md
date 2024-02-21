@@ -49,13 +49,15 @@ Compatibility
 ## TODOs
 
 > - Auto reload config? maybe)
+> - Config refactor
 > - Look into get entity name
 > - Improve hoverEvent (showEntity/Re-add hoverText, commandSuggest)
-> - Custom bstats charts (waiting using own bstats)
+> - Custom bstats charts (Pending)
 > - PVPManager support
 > - Actionbar message and private Actionbar message
 > - Refactor DiscordSRV hook
 > - Better Deathmessage console message color
+> - Support 1.20.5 in advance
 
 ## Special Thanks To:
 
