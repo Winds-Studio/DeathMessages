@@ -37,7 +37,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	}
 
 	/**
-	 * Because this is a internal class, this check is not needed
+	 * Because this is an internal class, this check is not needed
 	 * and we can simply return {@code true}
 	 *
 	 * @return Always true since it's an internal class.
@@ -49,7 +49,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 
 	/**
 	 * The name of the person who created this expansion should go here.
-	 * <br>For convienience do we return the author from the plugin.yml
+	 * <br>For convenience do we return the author from the plugin.yml
 	 *
 	 * @return The name of the author as a String.
 	 */
@@ -76,7 +76,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 * This is the version of the expansion.
 	 * <br>You don't have to use numbers, since it is set as a String.
 	 * <p>
-	 * For convienience do we return the version from the plugin.yml
+	 * For convenience do we return the version from the plugin.yml
 	 *
 	 * @return The version as a String.
 	 */
@@ -91,15 +91,15 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 	 * <br>We specify the value identifier in this method.
 	 * <br>Since version 2.9.1 can you use OfflinePlayers in your requests.
 	 *
-	 * @param identifier A String containing the identifier/value.
+	 * @param params A String containing the identifier/value.
 	 * @return possibly-null String of the requested identifier.
 	 */
 	@Override
-	public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+	public String onPlaceholderRequest(Player player, @NotNull String params) {
 		Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
 
 		return getPlayer.map(pm -> {
-			switch (identifier) {
+			switch (params) {
 				case "messages_enabled":
 					return String.valueOf(pm.getMessagesEnabled());
 				case "is_blacklisted":
@@ -109,12 +109,12 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
 				case "victim_display_name":
 					return pm.getPlayer().getDisplayName();
 				case "killer_name":
-					return pm.getLastEntityDamager().getName();
+					return (pm.getLastEntityDamager() != null) ? pm.getLastEntityDamager().getName() : "null";
 				case "killer_display_name":
-					return pm.getLastEntityDamager().getCustomName();
+					return (pm.getLastEntityDamager() != null) ? pm.getLastEntityDamager().getCustomName() : "null";
 				default:
-					return null;
+					return "null";
 			}
-		}).orElse(null);
+		}).orElse("null");
 	}
 }
