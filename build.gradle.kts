@@ -18,3 +18,20 @@ allprojects {
     }
 }
 // Dreeam end
+
+tasks.build {
+    doLast {
+        val plugin = project(":Core")
+        val file = file("${plugin.layout.buildDirectory.get()}/libs").listFiles()
+            ?.find { it.name.startsWith(rootProject.name) }
+
+        delete("bin")
+        delete("build/libs")
+        file?.copyTo(file("${rootProject.layout.buildDirectory.get()}/libs/${rootProject.name}-${plugin.version}.jar"), true)
+        listOf(":Core", ":WorldGuard", ":WorldGuard6", ":WorldGuard7").forEach {
+            delete(project(it).layout.buildDirectory.get())
+        }
+    }
+
+    dependsOn(project(":Core").tasks.build)
+}

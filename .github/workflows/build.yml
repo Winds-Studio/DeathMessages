@@ -1,9 +1,9 @@
 name: Build DeathMessages
 on:
   push:
-    branches:
-      - master
-      - dev
+    branches: [ "master", "dev" ]
+  pull_request:
+    branches: [ "master", "dev" ]
 
 jobs:
   build:
@@ -24,13 +24,13 @@ jobs:
         run: ./gradlew clean build
 
       - name: Upload DeathMessages DevBuild
-        if: github.ref_name == 'master'
+        if: github.ref_name == 'master' && github.event_name != 'pull_request'
         uses: marvinpinto/action-automatic-releases@master
         with:
           title: "DeathMessages v1.4.19-SNAPSHOT"
           automatic_release_tag: "dev-build"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "Core/build/libs/DeathMessages-*.jar"
+          files: "build/libs/DeathMessages-*.jar"
           prerelease: true
 
       - name: Upload DeathMessages Nightly
@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: DeathMessages-Nightly
-          path: Core/build/libs/DeathMessages-*.jar
+          path: build/libs/DeathMessages-*.jar
