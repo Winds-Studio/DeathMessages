@@ -22,7 +22,7 @@ public interface WorldGuardExtension {
 			try {
 				registry.register(flag);
 			} catch (FlagConflictException e) {
-				LogManager.getLogger().error(e);
+				LogManager.getLogger("DeathMessages").error(e);
 			}
 		}
 	}

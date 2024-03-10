@@ -3,7 +3,6 @@ package dev.mrshawn.deathmessages.config;
 import dev.mrshawn.deathmessages.DeathMessages;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,33 +53,33 @@ public class ConfigManager {
 		try {
 			FileUtils.copyFileToDirectory(EntityDeathMessages.getInstance().file, backupDir);
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			FileUtils.copyFileToDirectory(Gangs.getInstance().file, backupDir);
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			FileUtils.copyFileToDirectory(Messages.getInstance().file, backupDir);
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			FileUtils.copyFileToDirectory(PlayerDeathMessages.getInstance().file, backupDir);
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			FileUtils.copyFileToDirectory(Settings.getInstance().getFile(), backupDir);
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		if (!excludeUserData) {
 			try {
 				FileUtils.copyFileToDirectory(UserData.getInstance().file, backupDir);
 			} catch (IOException e) {
-				LogManager.getLogger().error(e);
+				DeathMessages.LOGGER.error(e);
 			}
 		}
 		return randomCode;
@@ -101,10 +100,10 @@ public class ConfigManager {
 			if (EntityDeathMessages.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
-				LogManager.getLogger().error("COULD NOT RESTORE " + fileName + ".");
+				DeathMessages.LOGGER.error("COULD NOT RESTORE {}.", fileName);
 			}
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			String fileName = Gangs.getInstance().fileName;
@@ -112,10 +111,10 @@ public class ConfigManager {
 			if (Gangs.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
-				LogManager.getLogger().error("COULD NOT RESTORE " + fileName + ".");
+				DeathMessages.LOGGER.error("COULD NOT RESTORE {}.", fileName);
 			}
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			String fileName = Messages.getInstance().fileName;
@@ -123,10 +122,10 @@ public class ConfigManager {
 			if (Messages.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
-				LogManager.getLogger().error("COULD NOT RESTORE " + fileName + ".");
+				DeathMessages.LOGGER.error("COULD NOT RESTORE {}.", fileName);
 			}
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			String fileName = PlayerDeathMessages.getInstance().fileName;
@@ -134,10 +133,10 @@ public class ConfigManager {
 			if (PlayerDeathMessages.getInstance().file.delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
-				LogManager.getLogger().error("COULD NOT RESTORE " + fileName + ".");
+				DeathMessages.LOGGER.error("COULD NOT RESTORE {}.", fileName);
 			}
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		try {
 			String fileName = Settings.getInstance().fileName;
@@ -145,10 +144,10 @@ public class ConfigManager {
 			if (Settings.getInstance().getFile().delete()) {
 				FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 			} else {
-				LogManager.getLogger().error("COULD NOT RESTORE " + fileName + ".");
+				DeathMessages.LOGGER.error("COULD NOT RESTORE {}.", fileName);
 			}
 		} catch (IOException e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 		if (!excludeUserData) {
 			try {
@@ -157,10 +156,10 @@ public class ConfigManager {
 				if (UserData.getInstance().file.delete()) {
 					FileUtils.copyFileToDirectory(f, DeathMessages.getInstance().getDataFolder());
 				} else {
-					LogManager.getLogger().error("COULD NOT RESTORE " + fileName + ".");
+					DeathMessages.LOGGER.error("COULD NOT RESTORE {}.", fileName);
 				}
 			} catch (IOException e) {
-				LogManager.getLogger().error(e);
+				DeathMessages.LOGGER.error(e);
 			}
 		}
 		ConfigManager.getInstance().reload();
@@ -171,7 +170,7 @@ public class ConfigManager {
 		try {
 			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (Exception e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 	}
 }

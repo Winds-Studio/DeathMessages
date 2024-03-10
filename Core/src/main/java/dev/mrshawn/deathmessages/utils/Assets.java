@@ -26,7 +26,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.apache.logging.log4j.LogManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -55,7 +54,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -274,12 +272,13 @@ public class Assets {
 	public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [Natural-Cause." + damageCause + "]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [Natural-Cause.{}]", damageCause);
 		if (msgs.isEmpty()) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find message node: [" + "Natural-Cause." + damageCause + "] in PlayerDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This should not happen, please check your config or report issue on Github");
+			DeathMessages.LOGGER.warn("Can't find message node: [Natural-Cause.{}] in PlayerDeathMessages.yml", damageCause);
+			DeathMessages.LOGGER.warn("This should not happen, please check your config or report issue on Github");
 			msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause.Unknown"), pm.getPlayer(), pm.getPlayer());
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to [Natural-Cause.Unknown] message node");
+			DeathMessages.LOGGER.warn("Fallback this death to [Natural-Cause.Unknown] message node");
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
@@ -302,7 +301,7 @@ public class Assets {
 
 				base.append(convertFromLegacy(msg.replaceAll("%block%", configValue)));
 			} catch (NullPointerException e) {
-				LogManager.getLogger().error("Could not parse %block%. Please check your config for a wrong value." +
+				DeathMessages.LOGGER.error("Could not parse %block%. Please check your config for a wrong value." +
 						" Your materials could be spelt wrong or it does not exists in the config. Open a issue if you need help, " + "https://github.com/Winds-Studio/DeathMessages/issues");
 				pm.setLastEntityDamager(null);
 				return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
@@ -385,12 +384,13 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [" + mode + "." + affiliation + ".Weapon]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [{}.{}.Weapon]", mode, affiliation);
 		if (msgs.isEmpty()) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find message node: [" + mode + "." + affiliation + ".Weapon" + "] in PlayerDeathMessages.yml");
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This should not happen, please check your config or report this issue on Github");
+			DeathMessages.LOGGER.warn("Can't find message node: [{}.{}.Weapon] in PlayerDeathMessages.yml", mode, affiliation);
+			DeathMessages.LOGGER.warn("This should not happen, please check your config or report this issue on Github");
 			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.BASIC_MODE.getValue() + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
+			DeathMessages.LOGGER.warn("Fallback this death to Basic-Mode of PlayerDeathMessages");
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
@@ -468,7 +468,8 @@ public class Assets {
 			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [Entities." + entityName + ".Weapon]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [Entities.{}.Weapon]", entityName);
 		if (msgs.isEmpty()) {
 			// This death message will not be broadcast, since user have not set death message for this entity
 			return Component.empty();
@@ -542,18 +543,20 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [" + mode + "." + affiliation + "." + damageCause + "]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [{}.{}.{}]", mode, affiliation, damageCause);
 		if (msgs.isEmpty()) {
 			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause), pm.getPlayer(), mob);
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node2: [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause + "]");
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+				DeathMessages.LOGGER.warn("node2: [{}.player.{}.{}]", DeathModes.MOBS.getValue(), affiliation, damageCause);
 			if (msgs.isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
-					LogManager.getLogger(DeathMessages.getInstance().getName()).info("Redirected from [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + damageCause + "]");
+					DeathMessages.LOGGER.info("Redirected from [{}.player.{}.{}]", DeathModes.MOBS.getValue(), affiliation, damageCause);
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
 					return getNaturalDeath(pm, damageCause);
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath()))
 					return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
-				LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
+				DeathMessages.LOGGER.warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
 				return Component.empty();
 			}
 		}
@@ -597,16 +600,18 @@ public class Assets {
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [" + mode + "." + affiliation + "." + projectileDamage + "]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [{}.{}.{}]", mode, affiliation, projectileDamage);
 		if (msgs.isEmpty()) {
 			msgs = sortList(getPlayerDeathMessages().getStringList(DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node2: [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage + "]");
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+				DeathMessages.LOGGER.warn("node2: [{}.player.{}.{}]", DeathModes.MOBS.getValue(), affiliation, projectileDamage);
 			if (msgs.isEmpty()) {
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
-					LogManager.getLogger(DeathMessages.getInstance().getName()).info("Redirected from [" + DeathModes.MOBS.getValue() + ".player." + affiliation + "." + projectileDamage + "]");
+					DeathMessages.LOGGER.info("Redirected from [{}.player.{}.{}]", DeathModes.MOBS.getValue(), affiliation, projectileDamage);
 				if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_NATURAL_DEATH_NOT_DEFINED.getPath()))
 					return getNaturalDeath(pm, projectileDamage);
-				LogManager.getLogger(DeathMessages.getInstance().getName()).warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
+				DeathMessages.LOGGER.warn("This death message will not be broadcast, unless you enable [Default-Natural-Death-Not-Defined] in Settings.yml");
 				return Component.empty();
 			}
 		}
@@ -673,10 +678,12 @@ public class Assets {
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [Entities." + entityName + "." + projectileDamage + "]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [Entities.{}.{}]", entityName, projectileDamage);
 		if (msgs.isEmpty()) {
 			if (Settings.getInstance().getConfig().getBoolean(Config.DEFAULT_MELEE_LAST_DAMAGE_NOT_DEFINED.getPath())) {
-				if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node2：: [getEntityDeath]");
+				if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+					DeathMessages.LOGGER.warn("node2：: [getEntityDeath]");
 				return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK), mobType);
 			}
 			// This death message will not be broadcast, since user have not set death message for this entity
@@ -765,7 +772,8 @@ public class Assets {
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, e);
 		}
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) LogManager.getLogger(DeathMessages.getInstance().getName()).error("node: [Entities." + entityName + "." + damageCause + "]");
+		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+			DeathMessages.LOGGER.warn("node: [Entities.{}.{}]", entityName, damageCause);
 		if (msgs.isEmpty()) {
 			// This death message will not be broadcast, since user have not set death message for this entity
 			return Component.empty();
@@ -860,8 +868,8 @@ public class Assets {
 		try {
 			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement(entity.getLocation().getBlock().getBiome().name()).build());
 		} catch (NullPointerException e) {
-			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
+			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
 			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
@@ -899,8 +907,8 @@ public class Assets {
 			msg = msg
 					.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
 		} catch (NullPointerException e) {
-			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
+			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
 			msg = msg
 					.replaceAll("%biome%", "Unknown");
 		}
@@ -922,8 +930,8 @@ public class Assets {
 		try {
 			msg = msg.replaceText(replace("%biome%", pm.getLastLocation().getBlock().getBiome().name()));
 		} catch (NullPointerException e) {
-			LogManager.getLogger().error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			LogManager.getLogger().error("Custom Biomes are not supported yet.'");
+			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
 			msg = msg.replaceText(replace("%biome%", "Unknown"));
 		}
 

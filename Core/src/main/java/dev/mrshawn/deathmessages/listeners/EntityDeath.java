@@ -16,7 +16,6 @@ import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.apache.logging.log4j.LogManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -154,7 +153,7 @@ public class EntityDeath implements Listener {
 						if (world != null) {
 							broadcastWorlds.add(world);
 						} else {
-							LogManager.getLogger(DeathMessages.getInstance().getName()).warn("Can't find world with name: {}, in World-Groups", single);
+							DeathMessages.LOGGER.warn("Can't find world with name: {}, in World-Groups", single);
 						}
 					}
 				}

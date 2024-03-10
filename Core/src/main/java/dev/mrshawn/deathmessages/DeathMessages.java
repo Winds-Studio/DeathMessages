@@ -40,6 +40,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bstats.bukkit.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
@@ -55,6 +56,7 @@ import java.util.List;
 public class DeathMessages extends JavaPlugin {
 
 	private static DeathMessages instance;
+	public static Logger LOGGER;
 	private BukkitAudiences adventure;
 	public final FoliaLib foliaLib = new FoliaLib(this);
 
@@ -96,14 +98,15 @@ public class DeathMessages extends JavaPlugin {
 		initializeHooks();
 		initializeOnlinePlayers();
 		checkGameRules();
-		new Metrics(this, 12365);
-		LogManager.getLogger(getName()).info("bStats Hook Enabled!");
-		adventure.console().sendMessage(Component.text("DeathMessages " + this.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
+		new Metrics(instance, 12365);
+		LOGGER.info("bStats Hook Enabled!");
+		adventure.console().sendMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
 		checkUpdate();
 	}
 
 	public void onLoad() {
 		instance = this;
+		LOGGER = LogManager.getLogger(instance.getName());
 		initializeConfigs();
 		initializeHooksOnLoad();
 	}
@@ -155,9 +158,9 @@ public class DeathMessages extends JavaPlugin {
 
 	private void initializeHooks() {
 		if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
-			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessaging());
-			LogManager.getLogger(getName()).info("Bungee Hook enabled!");
+			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
+			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(instance, "BungeeCord", new PluginMessaging());
+			LOGGER.info("Bungee Hook enabled!");
 			if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
 				bungeeInit = true;
 			} else {
@@ -167,58 +170,58 @@ public class DeathMessages extends JavaPlugin {
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			new PlaceholderAPIExtension(this).register();
+			new PlaceholderAPIExtension(instance).register();
 			placeholderAPIEnabled = true;
-			LogManager.getLogger(getName()).info("PlaceholderAPI Hook Enabled!");
+			LOGGER.info("PlaceholderAPI Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
 			// Dreeam - Remove this useless notice in the future.
-			LogManager.getLogger(getName()).info("Item-NBT-API Hook Enabled!");
+			LOGGER.info("Item-NBT-API Hook Enabled!");
 		}
 
 		if (worldGuardEnabled) {
-			LogManager.getLogger(getName()).info("WorldGuard Hook Enabled!");
+			LOGGER.info("WorldGuard Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordSRVExtension = new DiscordSRVExtension();
-			LogManager.getLogger(getName()).info("DiscordSRV Hook Enabled!");
+			LOGGER.info("DiscordSRV Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
 			Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
-			LogManager.getLogger(getName()).info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
+			LOGGER.info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
 			try {
 				List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
 				if (!ignoredPlugins.contains("DeathMessages")) {
 					ignoredPlugins.add("DeathMessages");
 				}
 			} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
-				LogManager.getLogger().error("Error adding plugin to ignored plugins list: ", exception);
+				LOGGER.error("Error adding plugin to ignored plugins list: ", exception);
 			}
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
 			combatLogXAPIEnabled = true;
-			Bukkit.getPluginManager().registerEvents(new PlayerUntag(), this);
-			LogManager.getLogger(getName()).info("CombatLogX Hook Enabled!");
+			Bukkit.getPluginManager().registerEvents(new PlayerUntag(), instance);
+			LOGGER.info("CombatLogX Hook Enabled!");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
 			mythicMobs = MythicBukkit.inst();
 			mythicmobsEnabled = true;
-			LogManager.getLogger(getName()).info("MythicMobs Hook Enabled!");
-			Bukkit.getPluginManager().registerEvents(new MobDeath(), this);
+			LOGGER.info("MythicMobs Hook Enabled!");
+			Bukkit.getPluginManager().registerEvents(new MobDeath(), instance);
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("eco") != null) {
 			ecoEnabled = true;
 			ecoExtension = new EcoExtension();
-			LogManager.getLogger(getName()).info("eco Hook Enabled!");
+			LOGGER.info("eco Hook Enabled!");
 			if (Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
 				ecoEnchantsEnabled = true;
-				LogManager.getLogger(getName()).info("EcoEnchants Hook Enabled!");
+				LOGGER.info("EcoEnchants Hook Enabled!");
 			}
 		}
 
@@ -227,11 +230,11 @@ public class DeathMessages extends JavaPlugin {
 					|| Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
 				if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
 					langUtilsEnabled = true;
-					LogManager.getLogger(getName()).info("LangUtils Hook Enabled!");
+					LOGGER.info("LangUtils Hook Enabled!");
 				} else {
 					langUtilsEnabled = false;
-					LogManager.getLogger(getName()).error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
-					LogManager.getLogger(getName()).error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
+					LOGGER.error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
+					LOGGER.error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
 				}
 			}
 		}
@@ -250,7 +253,7 @@ public class DeathMessages extends JavaPlugin {
 				} else throw new Exception();
 				worldGuardEnabled = true;
 			} catch (final Throwable e) {
-				LogManager.getLogger().error("Error loading WorldGuardHook. Error: " + e);
+				LOGGER.error("Error loading WorldGuardHook. Error: {}", e);
 				worldGuardEnabled = false;
 			}
 		}
@@ -289,11 +292,11 @@ public class DeathMessages extends JavaPlugin {
 			foliaLib.getImpl().runLaterAsync(() -> {
 				switch (Updater.shouldUpdate) {
 					case 1:
-						LogManager.getLogger(getName()).warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
-						LogManager.getLogger(getName()).warn("Current Version: {} | Latest Version: {}", Updater.nowVersion, Updater.latestVersion);
+						LOGGER.warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
+						LOGGER.warn("Current Version: {} | Latest Version: {}", Updater.nowVersion, Updater.latestVersion);
 						break;
 					case -1:
-						LogManager.getLogger(getName()).warn("Failed to check update!");
+						LOGGER.warn("Failed to check update!");
 						break;
 				}
 			}, 50);

@@ -1,7 +1,6 @@
 package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import org.apache.logging.log4j.LogManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -55,9 +54,9 @@ public class UserData {
 			ioRunning = null;
 		} catch (IOException e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			LogManager.getLogger().error("Could not save: " + fileName + ".yml");
-			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
-			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
+			DeathMessages.LOGGER.error("Could not save: " + fileName + ".yml");
+			DeathMessages.LOGGER.error("Regenerating file and renaming the current file to: {}", f.getName());
+			DeathMessages.LOGGER.error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -66,6 +65,7 @@ public class UserData {
 	public void reload() {
 		this.reload(false);
 	}
+
 	public void reload(boolean sync) {
 		if (ioRunning != null) ioOperations.push(IOOperation.LOAD);
 		// We should not halt the main server thread
@@ -84,9 +84,9 @@ public class UserData {
 			ioRunning = null;
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			LogManager.getLogger().error("Could not reload: " + fileName + ".yml");
-			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
-			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
+			DeathMessages.LOGGER.error("Could not reload: " + fileName + ".yml");
+			DeathMessages.LOGGER.error("Regenerating file and renaming the current file to: {}", f.getName());
+			DeathMessages.LOGGER.error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -100,7 +100,7 @@ public class UserData {
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
-				LogManager.getLogger().error(e);
+				DeathMessages.LOGGER.error(e);
 			}
 		}
 		config = YamlConfiguration.loadConfiguration(file);

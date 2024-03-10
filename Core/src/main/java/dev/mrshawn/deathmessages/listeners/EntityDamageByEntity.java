@@ -7,7 +7,6 @@ import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
-import org.apache.logging.log4j.LogManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -58,7 +57,7 @@ public class EntityDamageByEntity implements Listener {
 							pm.setLastExplosiveEntity(e.getDamager());
 						} catch (NoSuchMethodError e2) {
 							// McMMO ability
-							LogManager.getLogger().error(e2);
+							DeathMessages.LOGGER.error(e2);
 						}
 					} else {
 						pm.setLastEntityDamager(e.getDamager());
@@ -97,7 +96,8 @@ public class EntityDamageByEntity implements Listener {
 						|| (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 					getEntity.ifPresent(em -> {
-						if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
+						if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
+							System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 						if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 							if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
 								if (explosions.get(e.getDamager().getUniqueId()) instanceof Player) {
@@ -122,7 +122,7 @@ public class EntityDamageByEntity implements Listener {
 									em.setLastExplosiveEntity(e.getDamager());
 								} catch (NoSuchMethodError e3) {
 									// McMMO ability
-									LogManager.getLogger().error(e3);
+									DeathMessages.LOGGER.error(e3);
 								}
 							} else {
 								Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());

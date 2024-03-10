@@ -12,7 +12,6 @@ import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,7 +35,7 @@ public class PluginMessaging implements PluginMessageListener {
 
 			if (subChannel.equals("GetServer")) {
 				String serverName = stream.readUTF();
-				LogManager.getLogger(DeathMessages.getInstance().getName()).info("Server-Name successfully initialized from Bungee! (" + serverName + ")");
+				DeathMessages.LOGGER.info("Server-Name successfully initialized from Bungee! ({})", serverName);
 				DeathMessages.bungeeServerName = serverName;
 				config.set(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName);
 				config.save();
@@ -64,13 +63,13 @@ public class PluginMessaging implements PluginMessageListener {
 				}
 			}
 		} catch (Exception e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 	}
 
 	public static void sendServerNameRequest(Player p) {
 		if (!config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
-		LogManager.getLogger(DeathMessages.getInstance().getName()).info("Attempting to initialize server-name variable from Bungee...");
+		DeathMessages.LOGGER.info("Attempting to initialize server-name variable from Bungee...");
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("GetServer");
 		p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());

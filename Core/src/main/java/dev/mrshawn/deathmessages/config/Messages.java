@@ -2,7 +2,6 @@ package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.util.Date;
@@ -33,9 +32,9 @@ public class Messages {
 			config.save(file);
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			LogManager.getLogger().error("Could not save: " + fileName + ".yml");
-			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
-			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
+			DeathMessages.LOGGER.error("Could not save: " + fileName + ".yml");
+			DeathMessages.LOGGER.error("Regenerating file and renaming the current file to: {}", f.getName());
+			DeathMessages.LOGGER.error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -46,9 +45,9 @@ public class Messages {
 			config = CommentedConfiguration.loadConfiguration(file);
 		} catch (Exception e) {
 			File f = new File(DeathMessages.getInstance().getDataFolder(), fileName + ".broken." + new Date().getTime());
-			LogManager.getLogger().error("Could not reload: " + fileName + ".yml");
-			LogManager.getLogger().error("Regenerating file and renaming the current file to: " + f.getName());
-			LogManager.getLogger().error("You can try fixing the file with a yaml parser online!");
+			DeathMessages.LOGGER.error("Could not reload: " + fileName + ".yml");
+			DeathMessages.LOGGER.error("Regenerating file and renaming the current file to: {}", f.getName());
+			DeathMessages.LOGGER.error("You can try fixing the file with a yaml parser online!");
 			file.renameTo(f);
 			initialize();
 		}
@@ -65,7 +64,7 @@ public class Messages {
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
 		} catch (Exception e) {
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 	}
 }

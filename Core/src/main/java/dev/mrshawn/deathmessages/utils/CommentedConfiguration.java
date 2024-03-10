@@ -17,7 +17,6 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -294,7 +293,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 			FileInputStream stream = new FileInputStream(file);
 			return loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		} catch (FileNotFoundException ex) {
-			LogManager.getLogger(DeathMessages.getInstance().getName()).warn("File " + file.getName() + " doesn't exist.");
+			DeathMessages.LOGGER.warn("File {} doesn't exist.", file.getName());
 			return new CommentedConfiguration().flagAsFailed();
 		}
 	}
@@ -331,7 +330,7 @@ public final class CommentedConfiguration extends YamlConfiguration {
 			config.loadFromString(contents.toString());
 		} catch (IOException | InvalidConfigurationException e) {
 			config.flagAsFailed();
-			LogManager.getLogger().error(e);
+			DeathMessages.LOGGER.error(e);
 		}
 
 		return config;

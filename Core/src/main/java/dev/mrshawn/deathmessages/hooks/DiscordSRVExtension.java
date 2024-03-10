@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.hooks;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
@@ -15,7 +16,6 @@ import github.scarsz.discordsrv.util.DiscordUtil;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.apache.logging.log4j.LogManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
@@ -46,15 +46,14 @@ public class DiscordSRVExtension {
             String channelID = groupSplit[1];
 
             if (DiscordUtil.getJda().getGuildById(guildID) == null) {
-                LogManager.getLogger().error("Could not find the discord guild with ID: " + guildID);
+                DeathMessages.LOGGER.error("Could not find the discord guild with ID: {}", guildID);
                 continue;
             }
 
             Guild g = DiscordUtil.getJda().getGuildById(guildID);
 
             if (g.getTextChannelById(channelID) == null) {
-                LogManager.getLogger().error("Could not find the discord text channel with ID: "
-                        + channelID + " in guild: " + g.getName());
+                DeathMessages.LOGGER.error("Could not find the discord text channel with ID: {} in guild: {}", channelID, g.getName());
                 continue;
             }
 
@@ -103,8 +102,7 @@ public class DiscordSRVExtension {
             Guild g = DiscordUtil.getJda().getGuildById(guildID);
 
             if (g.getTextChannelById(channelID) == null) {
-                LogManager.getLogger().error("Could not find the discord text channel with ID: "
-                        + channelID + " in guild: " + g.getName());
+                DeathMessages.LOGGER.error("Could not find the discord text channel with ID: {} in guild: {}", channelID, g.getName());
                 continue;
             }
 
@@ -323,8 +321,8 @@ public class DiscordSRVExtension {
             }
             return getMessages().getInt("Discord.DeathMessage.Color", color);
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-            LogManager.getLogger().error("Error while parsing " + getMessages().getString("Discord.DeathMessage.Color") + " as a color!");
-            LogManager.getLogger().error(e);
+            DeathMessages.LOGGER.error("Error while parsing {} as a color!", getMessages().getString("Discord.DeathMessage.Color"));
+            DeathMessages.LOGGER.error(e);
             return color;
         }
     }
