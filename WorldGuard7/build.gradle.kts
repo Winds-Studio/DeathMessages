@@ -1,13 +1,13 @@
 plugins {
     id("dev.mrshawn.deathmessages.wrapper")
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply true
+    id("io.github.goooler.shadow") version "8.1.7" apply true
 }
 
 dependencies {
     implementation(project(":WorldGuard"))
     compileOnly("com.sk89q.worldguard:worldguard-core:7.1.0-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.1.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0-SNAPSHOT") {
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.4.0-SNAPSHOT") {
         exclude(group = "org.bstats")
     }
 }

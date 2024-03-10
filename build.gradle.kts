@@ -2,7 +2,7 @@
 // TODO: maybe transfer build-logic to here as allprojects format? =-=
 plugins {
     `java-library`
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply true
+    id("io.github.goooler.shadow") version "8.1.7" apply true
     id("com.willfp.libreforge-gradle-plugin") version "1.0.2"
 }
 
