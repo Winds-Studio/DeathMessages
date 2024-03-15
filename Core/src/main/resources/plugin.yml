@@ -20,7 +20,7 @@ authors:
   - Dreeam-qwq
 commands:
   deathmessages:
-    description: Main plugin command
+    description: Main DeathMessages command
     aliases: [dm]
   deathmessagestoggle:
     description: Alias for /dm toggle in one command

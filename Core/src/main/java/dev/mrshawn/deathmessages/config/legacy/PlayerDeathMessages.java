@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.config;
+package dev.mrshawn.deathmessages.config.legacy;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
@@ -6,20 +6,20 @@ import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 import java.io.File;
 import java.util.Date;
 
-public class Gangs {
+public class PlayerDeathMessages {
 
-	public final String fileName = "Gangs";
+	public final String fileName = "PlayerDeathMessages";
 
 	CommentedConfiguration config;
 
 	File file;
 
-	public Gangs() {
+	public PlayerDeathMessages() {
 	}
 
-	private static final Gangs instance = new Gangs();
+	private static final PlayerDeathMessages instance = new PlayerDeathMessages();
 
-	public static Gangs getInstance() {
+	public static PlayerDeathMessages getInstance() {
 		return instance;
 	}
 

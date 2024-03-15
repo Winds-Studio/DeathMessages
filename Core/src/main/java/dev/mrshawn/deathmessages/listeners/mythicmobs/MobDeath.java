@@ -3,12 +3,10 @@ package dev.mrshawn.deathmessages.listeners.mythicmobs;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
-import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.config.Config;
+import dev.mrshawn.deathmessages.config.legacy.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;
-import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import net.kyori.adventure.text.TextComponent;
@@ -24,8 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class MobDeath implements Listener {
-
-	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	@EventHandler
 	public void onMythicMobDeath(MythicMobDeathEvent e) {
@@ -45,10 +41,10 @@ public class MobDeath implements Listener {
 
 	public static List<World> getWorlds(Entity e) {
 		List<World> broadcastWorlds = new ArrayList<>();
-		if (config.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {
+		if (Config.settings.DISABLED_WORLDS().contains(e.getWorld().getName())) {
 			return broadcastWorlds;
 		}
-		if (config.getBoolean(Config.PER_WORLD_MESSAGES)) {
+		if (Config.settings.PER_WORLD_MESSAGES()) {
 			for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
 				List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);
 				if (worlds.contains(e.getWorld().getName())) {

@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.EntityDeathMessages;
-import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
+import dev.mrshawn.deathmessages.config.legacy.EntityDeathMessages;
+import dev.mrshawn.deathmessages.config.legacy.PlayerDeathMessages;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.entity.Player;

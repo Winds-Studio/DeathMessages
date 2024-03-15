@@ -4,11 +4,9 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
-import dev.mrshawn.deathmessages.config.Messages;
+import dev.mrshawn.deathmessages.config.Config;
+import dev.mrshawn.deathmessages.config.legacy.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
-import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
@@ -24,7 +22,6 @@ import java.util.Optional;
 
 public class BroadcastPlayerDeathListener implements Listener {
 
-	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 	private boolean discordSent = false;
 
 	@EventHandler
@@ -52,15 +49,15 @@ public class BroadcastPlayerDeathListener implements Listener {
 			getPlayer.get().setCooldown();
 		}
 
-		boolean privatePlayer = config.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
-		boolean privateMobs = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
-		boolean privateNatural = config.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
+		boolean privatePlayer = Config.settings.PRIVATE_MESSAGES_PLAYER();
+		boolean privateMobs = Config.settings.PRIVATE_MESSAGES_MOBS();
+		boolean privateNatural = Config.settings.PRIVATE_MESSAGES_NATURAL();
 
 		// To reset for each death message
 		discordSent = false;
 
 		for (World w : e.getBroadcastedWorlds()) {
-			if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
+			if (Config.settings.DISABLED_WORLDS().contains(w.getName())) {
 				continue;
 			}
 			for (Player pls : w.getPlayers()) {
@@ -105,8 +102,8 @@ public class BroadcastPlayerDeathListener implements Listener {
 		if (pm.getMessagesEnabled()) {
 			DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
 		}
-		if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
-			List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
+		if (Config.settings.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED()) {
+			List<String> discordWorldWhitelist = Config.settings.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS();
 			boolean broadcastToDiscord = false;
 			for (World world : worlds) {
 				if (discordWorldWhitelist.contains(world.getName())) {

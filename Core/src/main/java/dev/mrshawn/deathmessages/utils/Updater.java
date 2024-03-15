@@ -1,8 +1,7 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.Settings;
-import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.config.Config;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -20,7 +19,7 @@ public class Updater {
     public static void checkUpdate() {
         DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> {
             try {
-                if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_DEV_VERSION.getPath())) {
+                if (Config.settings.CHECK_UPDATE_DEV()) {
                     // Dreeam TODO - check DEV version
                     latestVersion = null;
                 } else {

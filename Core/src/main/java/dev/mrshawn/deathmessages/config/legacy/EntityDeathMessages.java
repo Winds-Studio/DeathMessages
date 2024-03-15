@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.config;
+package dev.mrshawn.deathmessages.config.legacy;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.CommentedConfiguration;

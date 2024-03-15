@@ -44,10 +44,12 @@ repositories {
     }
 
     // CombatLogX
-//    maven {
-//        name = "sirblobman-public"
-//        url = uri("https://nexus.sirblobman.xyz/repository/public/")
-//    }
+    /*
+    maven {
+        name = "sirblobman-public"
+        url = uri("https://nexus.sirblobman.xyz/repository/public/")
+    }
+     */
 
     // sk89q's
     maven {
@@ -93,6 +95,7 @@ dependencies {
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.15.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.0")
+    api("space.arim.dazzleconf:dazzleconf-ext-snakeyaml:1.3.0-M2")
     api("com.github.cryptomorin:XSeries:9.9.0")
     api("org.bstats:bstats-bukkit:3.0.2")
     api("com.tcoded:FoliaLib:0.3.1")

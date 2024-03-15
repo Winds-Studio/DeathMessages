@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.Messages;
+import dev.mrshawn.deathmessages.config.legacy.Messages;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
 import org.jetbrains.annotations.NotNull;
@@ -16,17 +16,19 @@ import java.util.List;
 
 public class CommandManager implements CommandExecutor {
 
-	private final List<DeathMessagesCommand> commands = new ArrayList<>();
+	private List<DeathMessagesCommand> commands = new ArrayList<>();
 
-	public void initializeSubCommands() {
-		commands.add(new CommandBackup());
-		commands.add(new CommandBlacklist());
-		commands.add(new CommandDiscordLog());
-		commands.add(new CommandEdit());
-		commands.add(new CommandReload());
-		commands.add(new CommandRestore());
-		commands.add(new CommandToggle());
-		commands.add(new CommandVersion());
+	public void initSubCommands() {
+		commands = Arrays.asList(
+				new CommandBackup(),
+				new CommandBlacklist(),
+				new CommandDiscordLog(),
+				new CommandEdit(),
+				new CommandReload(),
+				new CommandRestore(),
+				new CommandToggle(),
+				new CommandVersion()
+		);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 plugins {
     id("dev.mrshawn.deathmessages.wrapper")
-    kotlin("jvm") version "1.9.22"
     id("io.github.goooler.shadow") version "8.1.7" apply true
 }
 
@@ -13,20 +12,14 @@ dependencies {
     compileOnly("com.meowj:LangUtils:1.9")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     archiveFileName = "${rootProject.name}-${project.version}.${archiveExtension.get()}"
     exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
     minimize {
         exclude(dependency("com.tcoded.folialib:.*:.*"))
     }
-    relocate("kotlin", "dev.mrshawn.deathmessages.libs.kotlin")
     relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori")
+    relocate("space.arim.dazzleconf", "dev.mrshawn.deathmessages.libs.dazzleconf")
     relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
     relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
     relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")

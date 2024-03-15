@@ -4,10 +4,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.config.Config;
+import dev.mrshawn.deathmessages.config.legacy.Messages;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -23,8 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class PluginMessaging implements PluginMessageListener {
-
-	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public void onPluginMessageReceived(String channel, @NotNull Player player, byte[] messageBytes) {
 		if (!channel.equals("BungeeCord")) return;
@@ -68,7 +64,7 @@ public class PluginMessaging implements PluginMessageListener {
 	}
 
 	public static void sendServerNameRequest(Player p) {
-		if (!config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
+		if (!Config.settings.HOOKS_BUNGEE_ENABLED()) return;
 		DeathMessages.LOGGER.info("Attempting to initialize server-name variable from Bungee...");
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeUTF("GetServer");
@@ -76,9 +72,9 @@ public class PluginMessaging implements PluginMessageListener {
 	}
 
 	public static void sendPluginMSG(Player p, String msg) {
-		if (!config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
-		if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_GROUPS_ENABLED)) {
-			List<String> serverList = config.getStringList(Config.HOOKS_BUNGEE_SERVER_GROUPS_SERVERS);
+		if (!Config.settings.HOOKS_BUNGEE_ENABLED()) return;
+		if (Config.settings.HOOKS_BUNGEE_SERVER_GROUPS_ENABLED()) {
+			List<String> serverList = Config.settings.HOOKS_BUNGEE_SERVER_GROUPS_SERVERS();
 			for (String server : serverList) {
 				ByteArrayDataOutput out = ByteStreams.newDataOutput();
 				out.writeUTF("Forward");

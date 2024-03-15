@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.config;
+package dev.mrshawn.deathmessages.config.legacy;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
@@ -6,25 +6,29 @@ import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 import java.io.File;
 import java.util.Date;
 
-public class PlayerDeathMessages {
+public class Settings {
 
-	public final String fileName = "PlayerDeathMessages";
+	public final String fileName = "Settings";
 
 	CommentedConfiguration config;
 
 	File file;
 
-	public PlayerDeathMessages() {
+	public Settings() {
 	}
 
-	private static final PlayerDeathMessages instance = new PlayerDeathMessages();
+	private static final Settings instance = new Settings();
 
-	public static PlayerDeathMessages getInstance() {
+	public static Settings getInstance() {
 		return instance;
 	}
 
 	public CommentedConfiguration getConfig() {
 		return config;
+	}
+
+	public File getFile() {
+		return file;
 	}
 
 	public void save() {
