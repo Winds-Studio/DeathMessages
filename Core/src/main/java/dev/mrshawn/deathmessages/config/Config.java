@@ -2,6 +2,7 @@ package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
+
 import java.io.File;
 
 public class Config {

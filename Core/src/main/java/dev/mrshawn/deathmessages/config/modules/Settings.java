@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.config.modules;
 
-import dev.mrshawn.deathmessages.utils.EntityUtil;
 import space.arim.dazzleconf.annote.ConfComments;
 import space.arim.dazzleconf.annote.ConfDefault;
 import space.arim.dazzleconf.annote.ConfHeader;

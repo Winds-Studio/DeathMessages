@@ -4,24 +4,22 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.modules.UserData;
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.logging.log4j.LogManager;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.bukkit.Sound;
-import org.slf4j.event.Level;
-
-import java.io.File;
-import java.time.Duration;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Refer to config system of moom0o/AnarchyExploitFixes by xGinko
+ * @see <a href="https://github.com/moom0o/AnarchyExploitFixes">...</a>
+ */
 public class ConfigManager {
 
     public final File backupDirectory = new File(DeathMessages.getInstance().getDataFolder(), "Backups");

@@ -5,7 +5,6 @@ import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Config;
 import dev.mrshawn.deathmessages.config.legacy.EntityDeathMessages;
-import dev.mrshawn.deathmessages.config.legacy.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

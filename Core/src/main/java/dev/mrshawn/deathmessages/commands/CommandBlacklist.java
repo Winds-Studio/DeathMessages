@@ -3,7 +3,6 @@ package dev.mrshawn.deathmessages.commands;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Config;
-import dev.mrshawn.deathmessages.config.legacy.Settings;
 import dev.mrshawn.deathmessages.config.modules.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;

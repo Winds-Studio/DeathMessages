@@ -1,7 +1,6 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-
 import org.bukkit.event.Listener;
 
 public class EventUtils {

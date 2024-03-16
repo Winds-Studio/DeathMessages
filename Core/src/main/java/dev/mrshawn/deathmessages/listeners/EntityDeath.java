@@ -8,7 +8,6 @@ import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import dev.mrshawn.deathmessages.config.Config;
 import dev.mrshawn.deathmessages.config.legacy.Gangs;
-import dev.mrshawn.deathmessages.config.legacy.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.Assets;

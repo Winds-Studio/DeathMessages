@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
