@@ -17,7 +17,6 @@ import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByEntity;
 import dev.mrshawn.deathmessages.listeners.EntityDeath;
-import dev.mrshawn.deathmessages.listeners.OnChat;
 import dev.mrshawn.deathmessages.listeners.OnInteract;
 import dev.mrshawn.deathmessages.listeners.OnJoin;
 import dev.mrshawn.deathmessages.listeners.OnMove;
@@ -78,12 +77,13 @@ public class DeathMessages extends JavaPlugin {
 
 	private static EventPriority eventPriority = EventPriority.HIGH;
 
-	// Dreeam - eg. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
+	// Dreeam - e.g. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
 	public final static int majorVersion = Integer.parseInt(Bukkit.getServer().getBukkitVersion()
 			.replaceFirst("^(\\d+)\\.", "")
 			.replaceAll("\\.(.+)", "")
 	);
 
+	@Override
 	public void onEnable() {
 		instance = this;
 		LOGGER = LogManager.getLogger(instance.getName());
@@ -107,6 +107,7 @@ public class DeathMessages extends JavaPlugin {
 	public void onLoad() {
 	}
 
+	@Override
 	public void onDisable() {
 		if (this.adventure != null) {
 			this.adventure.close();
@@ -134,7 +135,6 @@ public class DeathMessages extends JavaPlugin {
 				new EntityDamageByBlock(),
 				new EntityDamageByEntity(),
 				new EntityDeath(),
-				new OnChat(),
 				new OnInteract(),
 				new OnJoin(),
 				new OnMove(),

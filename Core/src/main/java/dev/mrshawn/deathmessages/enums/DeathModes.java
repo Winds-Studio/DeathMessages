@@ -1,6 +1,7 @@
 package dev.mrshawn.deathmessages.enums;
 
 public enum DeathModes {
+
 	BASIC_MODE("Basic-Mode"),
 	MOBS("Mobs");
 

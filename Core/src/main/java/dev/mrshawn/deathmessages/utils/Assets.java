@@ -52,7 +52,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -64,8 +63,6 @@ public class Assets {
 	// Dreeam TODO - to figure out why the value defined in private static field will not change with the change of the config value
 	//private static final CommentedConfiguration config = Settings.getInstance().getConfig();
 	//private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES();
-	public static final HashMap<String, String> addingMessage = new HashMap<>();
-
 	public static boolean isNumeric(String s) {
 		for (char c : s.toCharArray()) {
 			return Character.isDigit(c);
@@ -1023,6 +1020,7 @@ public class Assets {
 	private static Component getI18nName(LivingEntity mob) {
 		// Dreeam - TODO
 		Component i18nName;
+
 		if (Config.settings.DISPLAY_I18N_MOB_NAME()) {
 			i18nName = Component.empty();
 		} else {
