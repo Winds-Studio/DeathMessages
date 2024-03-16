@@ -87,8 +87,8 @@ public class DeathMessages extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		LOGGER = LogManager.getLogger(instance.getName());
-		this.adventure = BukkitAudiences.create(this);
-		this.adventure.console().sendMessage(loadedLogo);
+		instance.adventure = BukkitAudiences.create(instance);
+		instance.adventure.console().sendMessage(loadedLogo);
 
 		initConfig();
 		initListeners();
@@ -100,7 +100,7 @@ public class DeathMessages extends JavaPlugin {
 
 		new Metrics(instance, 12365);
 		LOGGER.info("bStats Hook Enabled!");
-		this.adventure.console().sendMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
+		instance.adventure.console().sendMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
 		checkUpdate();
 	}
 
@@ -116,8 +116,8 @@ public class DeathMessages extends JavaPlugin {
 		instance = null;
 	}
 
-	private void initConfig() {
-		Config.init();
+	public void initConfig() {
+		Config.load();
 
 		DeathMessages.eventPriority = EventPriority.valueOf(
 				Config.settings.DEATH_LISTENER_PRIORITY().toUpperCase()
@@ -236,7 +236,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initHooksOnLoad() {
-		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && Config.settings.HOOKS_WORLDGUARD_ENABLED()) {
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Config.settings.HOOKS_WORLDGUARD_ENABLED()) {
 			try {
 				final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
 				if (version.startsWith("7")) {
@@ -255,7 +255,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initOnlinePlayers() {
-		Bukkit.getServer().getOnlinePlayers().forEach(PlayerManager::new);
+		getServer().getOnlinePlayers().forEach(PlayerManager::new);
 	}
 
 	private void checkGameRules() {

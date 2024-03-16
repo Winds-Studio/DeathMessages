@@ -16,14 +16,13 @@ import java.util.List;
 
 public class CommandManager implements CommandExecutor {
 
-	private List<DeathMessagesCommand> commands = new ArrayList<>();
+	private List<DeathMessagesCommand> commands;
 
 	public void initSubCommands() {
 		commands = Arrays.asList(
 				new CommandBackup(),
 				new CommandBlacklist(),
 				new CommandDiscordLog(),
-				new CommandEdit(),
 				new CommandReload(),
 				new CommandRestore(),
 				new CommandToggle(),

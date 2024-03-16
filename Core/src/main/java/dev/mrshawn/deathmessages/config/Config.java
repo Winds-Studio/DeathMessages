@@ -1,43 +1,38 @@
 package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.modules.EntityDeathMessages;
-import dev.mrshawn.deathmessages.config.modules.Gangs;
-import dev.mrshawn.deathmessages.config.modules.Messages;
-import dev.mrshawn.deathmessages.config.modules.PlayerDeathMessages;
-import dev.mrshawn.deathmessages.config.modules.Settings;
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
+import java.io.File;
 
 public class Config {
 
-    private static ConfigManager<?> entityDeathMessagesManager, gangsManager, messagesManager, playerDeathMessagesManager, settingsManager;
+    private static ConfigFile entityDeathMessages, gangs, messages, playerDeathMessages, settings;
 
-    public static EntityDeathMessages entityDeathMessages;
-    public static Gangs gangs;
-    public static Messages messages;
-    public static PlayerDeathMessages playerDeathMessages;
-    public static Settings settings;
+    public static void load() {
+        File configFolder = DeathMessages.getInstance().getDataFolder();
 
-    public static void init() {
-        entityDeathMessagesManager = ConfigManager.create(DeathMessages.getInstance().getDataFolder().toPath(), "EntityDeathMessages.yml", EntityDeathMessages.class);
-        gangsManager = ConfigManager.create(DeathMessages.getInstance().getDataFolder().toPath(), "Gangs.yml", Gangs.class);
-        messagesManager = ConfigManager.create(DeathMessages.getInstance().getDataFolder().toPath(), "Messages.yml", Messages.class);
-        playerDeathMessagesManager = ConfigManager.create(DeathMessages.getInstance().getDataFolder().toPath(), "PlayerDeathMessages.yml", PlayerDeathMessages.class);
-        settingsManager = ConfigManager.create(DeathMessages.getInstance().getDataFolder().toPath(), "Settings.yml", Settings.class);
+        if (!configFolder.exists() && !configFolder.mkdir()) {
+            DeathMessages.LOGGER.error("Failed to create plugin folder.");
+        }
 
-        reload();
+        try {
+            entityDeathMessages = ConfigFile.loadConfig(new File(configFolder, "EntityDeathMessages.yml"));
+            gangs = ConfigFile.loadConfig(new File(configFolder, "Gangs.yml"));
+            messages = ConfigFile.loadConfig(new File(configFolder, "Messages.yml"));
+            playerDeathMessages = ConfigFile.loadConfig(new File(configFolder, "PlayerDeathMessages.yml"));
+            settings = ConfigFile.loadConfig(new File(configFolder, "Settings.yml"));
+        } catch (Exception e) {
+            DeathMessages.LOGGER.error("Config load failed.", e);
+        }
 
-        entityDeathMessages = (EntityDeathMessages) entityDeathMessagesManager.getConfigData();
-        gangs = (Gangs) gangsManager.getConfigData();
-        messages = (Messages) messagesManager.getConfigData();
-        playerDeathMessages = (PlayerDeathMessages) playerDeathMessagesManager.getConfigData();
-        settings = (Settings) settingsManager.getConfigData();
+        Config.save();
     }
 
-    public static void reload() {
-        entityDeathMessagesManager.reloadConfig();
-        gangsManager.reloadConfig();
-        messagesManager.reloadConfig();
-        playerDeathMessagesManager.reloadConfig();
-        settingsManager.reloadConfig();
+    public static void save() {
+        ConfigManager.saveConfig(entityDeathMessages);
+        ConfigManager.saveConfig(gangs);
+        ConfigManager.saveConfig(messages);
+        ConfigManager.saveConfig(playerDeathMessages);
+        ConfigManager.saveConfig(settings);
     }
 }
