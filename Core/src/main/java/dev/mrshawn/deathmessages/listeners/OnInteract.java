@@ -35,7 +35,7 @@ public class OnInteract implements Listener {
 
 		World.Environment environment = getBlock.getWorld().getEnvironment();
 		if (environment.equals(World.Environment.NETHER) || environment.equals(World.Environment.THE_END)) {
-			if (getBlock.getType().name().contains("BED") && !getBlock.getType().equals(Material.BEDROCK)) {
+			if (getBlock.getType().name().endsWith("BED") || getBlock.getType().name().endsWith("BED_BLOCK")) {
 				callEvent(e, getBlock);
 			}
 		} else if (DeathMessages.majorVersion >= 16) {
