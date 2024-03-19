@@ -39,7 +39,9 @@ public final class WorldGuard6Extension implements WorldGuardExtension {
 		if (regions == null) return false;
 		final ApplicableRegionSet applicableRegionSet = regions.getApplicableRegions(p.getLocation());
 		for (ProtectedRegion region : applicableRegionSet) {
-			return region.getId().equals(regionID);
+			if (region.getId().equals(regionID)) {
+				return true;
+			}
 		}
 		return false;
 	}

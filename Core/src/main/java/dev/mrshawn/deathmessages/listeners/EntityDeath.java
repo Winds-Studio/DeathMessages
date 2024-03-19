@@ -34,7 +34,8 @@ import java.util.Optional;
 
 public class EntityDeath implements Listener {
 
-	synchronized void onEntityDeath(EntityDeathEvent e) {
+	void onEntityDeath(EntityDeathEvent e) {
+		// Player death
 		if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
 			Player p = (Player) e.getEntity();
 			Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);

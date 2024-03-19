@@ -39,7 +39,9 @@ public final class WorldGuard7Extension implements WorldGuardExtension {
 		final RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
 		final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
 		for (ProtectedRegion region : set) {
-			return region.getId().equals(regionID);
+			if (region.getId().equals(regionID)) {
+				return true;
+			}
 		}
 		return false;
 	}

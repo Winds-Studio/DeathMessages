@@ -64,8 +64,11 @@ public class Assets {
 	//private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES();
 	public static boolean isNumeric(String s) {
 		for (char c : s.toCharArray()) {
-			return Character.isDigit(c);
+			if (Character.isDigit(c)) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
