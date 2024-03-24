@@ -85,15 +85,12 @@ public class DeathMessages extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		instance = this;
 		LOGGER = LogManager.getLogger(instance.getName());
 		instance.adventure = BukkitAudiences.create(instance);
 		instance.adventure.console().sendMessage(loadedLogo);
 
-		initConfig();
 		initListeners();
 		initCommands();
-		initHooksOnLoad();
 		initHooks();
 		initOnlinePlayers();
 		checkGameRules();
@@ -104,7 +101,12 @@ public class DeathMessages extends JavaPlugin {
 		checkUpdate();
 	}
 
+	@Override
 	public void onLoad() {
+		instance = this;
+
+		initConfig();
+		initHooksOnLoad();
 	}
 
 	@Override
