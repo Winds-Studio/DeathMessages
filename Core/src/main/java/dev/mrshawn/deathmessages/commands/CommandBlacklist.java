@@ -2,9 +2,10 @@ package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.config.Config;
-import dev.mrshawn.deathmessages.config.modules.UserData;
+import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
+import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.utils.Assets;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.Bukkit;
@@ -41,7 +42,7 @@ public class CommandBlacklist extends DeathMessagesCommand {
 
 			// Saved-User-Data disabled
 			// Only can be used on online players
-			if (!Config.settings.SAVED_USER_DATA()) {
+			if (!Settings.getInstance().getConfig().getBoolean(Config.SAVED_USER_DATA.getPath())) {
 				if (target != null && target.isOnline()) {
 					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(target);
 					getPlayer.ifPresent(pm -> {

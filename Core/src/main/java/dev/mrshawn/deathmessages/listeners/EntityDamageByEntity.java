@@ -3,9 +3,10 @@ package dev.mrshawn.deathmessages.listeners;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.config.Config;
-import dev.mrshawn.deathmessages.config.legacy.EntityDeathMessages;
+import dev.mrshawn.deathmessages.config.EntityDeathMessages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
+import dev.mrshawn.deathmessages.files.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -95,7 +96,7 @@ public class EntityDamageByEntity implements Listener {
 						|| (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 					getEntity.ifPresent(em -> {
-						if (Config.settings.DEBUG())
+						if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
 							System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 						if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 							if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
@@ -146,14 +147,14 @@ public class EntityDamageByEntity implements Listener {
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
-						if (Config.settings.DEBUG()) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
+						if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
 					}
 				}
 			}
 		}
 		if (e.getEntity() instanceof EnderCrystal) {
-			if (Config.settings.DEBUG()) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
+			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
 			if (e.getDamager().getType().isAlive()) {
 				explosions.put(e.getEntity().getUniqueId(), e.getDamager());
 			} else if (e.getDamager() instanceof Projectile) {

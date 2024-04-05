@@ -2,9 +2,11 @@ package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import dev.mrshawn.deathmessages.config.Config;
-import dev.mrshawn.deathmessages.config.legacy.Messages;
+import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
@@ -24,6 +26,8 @@ import java.time.Instant;
 import java.util.List;
 
 public class DiscordSRVExtension {
+
+    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
     public DiscordSRVExtension() {
     }
@@ -55,7 +59,7 @@ public class DiscordSRVExtension {
             TextChannel textChannel = g.getTextChannelById(channelID);
 
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
-                    && Config.settings.ADD_PREFIX_TO_ALL_MESSAGES()) {
+                    && config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
                 String prefix = Assets.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }

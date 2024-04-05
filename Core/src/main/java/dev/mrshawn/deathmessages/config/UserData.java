@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.config.modules;
+package dev.mrshawn.deathmessages.config;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +15,7 @@ public class UserData {
 
 	FileConfiguration config;
 
-	public File file;
+	File file;
 
 	public UserData() {
 	}

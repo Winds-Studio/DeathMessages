@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.config.legacy.Messages;
+import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
 import org.jetbrains.annotations.NotNull;

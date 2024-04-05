@@ -1,7 +1,9 @@
 package dev.mrshawn.deathmessages.hooks;
 
-import dev.mrshawn.deathmessages.config.Config;
 import dev.mrshawn.deathmessages.enums.MessageType;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class DiscordAssets {
 	}
 
 	private static final DiscordAssets instance = new DiscordAssets();
+	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
 	public static DiscordAssets getInstance() {
 		return instance;
@@ -19,13 +22,13 @@ public class DiscordAssets {
 	public List<String> getIDs(MessageType messageType) {
 		switch (messageType) {
 			case PLAYER:
-				return Config.settings.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS();
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_PLAYER_CHANNELS);
 			case MOB:
-				return Config.settings.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS();
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_MOB_CHANNELS);
 			case NATURAL:
-				return Config.settings.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS();
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_NATURAL_CHANNELS);
 			case ENTITY:
-				return Config.settings.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS();
+				return config.getStringList(Config.HOOKS_DISCORD_CHANNELS_ENTITY_CHANNELS);
 			default:
 				return null;
 		}

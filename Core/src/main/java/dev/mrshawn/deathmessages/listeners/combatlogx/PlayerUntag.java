@@ -4,7 +4,7 @@ import com.github.sirblobman.combatlogx.api.event.PlayerUntagEvent;
 import com.github.sirblobman.combatlogx.api.object.UntagReason;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
-import dev.mrshawn.deathmessages.config.legacy.Gangs;
+import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.listeners.EntityDeath;
 import dev.mrshawn.deathmessages.utils.Assets;

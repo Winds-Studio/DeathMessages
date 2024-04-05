@@ -1,6 +1,7 @@
 package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
+import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Assets;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,7 @@ public class CommandReload extends DeathMessagesCommand {
 			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
 			return;
 		}
-		DeathMessages.getInstance().initConfig();
+		ConfigManager.getInstance().reload();
 		DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Reload.Reloaded"));
 	}
 }

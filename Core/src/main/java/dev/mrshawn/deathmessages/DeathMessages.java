@@ -5,13 +5,17 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.commands.CommandManager;
 import dev.mrshawn.deathmessages.commands.TabCompleter;
 import dev.mrshawn.deathmessages.commands.alias.CommandDeathMessagesToggle;
-import dev.mrshawn.deathmessages.config.Config;
+import dev.mrshawn.deathmessages.config.ConfigManager;
+import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.EcoExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard6Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
+import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByEntity;
@@ -27,7 +31,7 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
-import dev.mrshawn.deathmessages.utils.EventUtils;
+import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -76,6 +80,7 @@ public class DeathMessages extends JavaPlugin {
 	public EcoExtension ecoExtension;
 
 	private static EventPriority eventPriority = EventPriority.HIGH;
+	private static FileSettings<Config> config;
 
 	// Dreeam - e.g. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
 	public final static int majorVersion = Integer.parseInt(Bukkit.getServer().getBukkitVersion()
@@ -119,15 +124,16 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	public void initConfig() {
-		Config.load();
+		ConfigManager.getInstance().initialize();
+		config = FileStore.INSTANCE.getCONFIG();
 
 		DeathMessages.eventPriority = EventPriority.valueOf(
-				Config.settings.DEATH_LISTENER_PRIORITY().toUpperCase()
+				config.getString(Config.DEATH_LISTENER_PRIORITY).toUpperCase()
 		);
 	}
 
 	private void initListeners() {
-		EventUtils.registerEvents(
+		EventUtil.registerEvents(
 				// DeathMessages
 				new BroadcastPlayerDeathListener(),
 				new BroadcastEntityDeathListener(),
@@ -154,15 +160,15 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initHooks() {
-		if (Config.settings.HOOKS_BUNGEE_ENABLED()) {
+		if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
 			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
 			Bukkit.getServer().getMessenger().registerIncomingPluginChannel(instance, "BungeeCord", new PluginMessaging());
 			LOGGER.info("Bungee Hook enabled!");
-			if (Config.settings.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE()) {
+			if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
 				bungeeInit = true;
 			} else {
 				bungeeInit = false;
-				bungeeServerName = Config.settings.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME();
+				bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
 			}
 		}
 
@@ -181,7 +187,7 @@ public class DeathMessages extends JavaPlugin {
 			LOGGER.info("WorldGuard Hook Enabled!");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && Config.settings.HOOKS_DISCORD_ENABLED()) {
+		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordSRVExtension = new DiscordSRVExtension();
 			LOGGER.info("DiscordSRV Hook Enabled!");
 		}
@@ -199,13 +205,13 @@ public class DeathMessages extends JavaPlugin {
 			}
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && Config.settings.HOOKS_COMBATLOGX_ENABLED()) {
+		if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
 			combatLogXAPIEnabled = true;
 			Bukkit.getPluginManager().registerEvents(new PlayerUntag(), instance);
 			LOGGER.info("CombatLogX Hook Enabled!");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && Config.settings.HOOKS_MYTHICMOBS_ENABLED()) {
+		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
 			mythicMobs = MythicBukkit.inst();
 			mythicmobsEnabled = true;
 			LOGGER.info("MythicMobs Hook Enabled!");
@@ -223,8 +229,8 @@ public class DeathMessages extends JavaPlugin {
 		}
 
 		if (majorVersion <= 12) {
-			if (Config.settings.DISPLAY_I18N_ITEM_NAME()
-					|| Config.settings.DISPLAY_I18N_MOB_NAME()) {
+			if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
+					|| Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
 				if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
 					langUtilsEnabled = true;
 					LOGGER.info("LangUtils Hook Enabled!");
@@ -238,7 +244,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initHooksOnLoad() {
-		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && Config.settings.HOOKS_WORLDGUARD_ENABLED()) {
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
 			try {
 				final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
 				if (version.startsWith("7")) {
@@ -261,7 +267,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void checkGameRules() {
-		if (Config.settings.DISABLE_DEFAULT_MESSAGES()) {
+		if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
 			for (World world : Bukkit.getWorlds()) {
 				try {
 					if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
@@ -284,7 +290,7 @@ public class DeathMessages extends JavaPlugin {
 			.build();
 
 	private void checkUpdate() {
-		if (Config.settings.CHECK_UPDATE()) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {
 			Updater.checkUpdate();
 			foliaLib.getImpl().runLaterAsync(() -> {
 				switch (Updater.shouldUpdate) {
