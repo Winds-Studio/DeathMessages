@@ -361,8 +361,10 @@ public class Assets {
 //			}
 //		}
 
-		TextComponent.Builder deathMessage = Component.text().append(playerDeathPlaceholders(base.build(), pm, null));
-		return deathMessage.build();
+		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, null);
+		TextComponent.Builder death = Component.text().append(applyPlaceholders);
+
+		return death.build();
 	}
 
 	public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
@@ -564,6 +566,8 @@ public class Assets {
 			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
+
+		base.append(convertFromLegacy(msg));
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
 //		}
@@ -577,7 +581,7 @@ public class Assets {
 //			}
 //		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(convertFromLegacy(msg), pm, mob);
+		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, mob);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -737,7 +741,7 @@ public class Assets {
 //			}
 //		}
 
-		Component applyPlaceholders = entityDeathPlaceholders(convertFromLegacy(msg), p, em.getEntity(), hasOwner);
+		Component applyPlaceholders = entityDeathPlaceholders(base.build(), p, em.getEntity(), hasOwner);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -782,6 +786,8 @@ public class Assets {
 			TextComponent prefix = convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
 			base.append(prefix);
 		}
+
+		base.append(convertFromLegacy(msg));
 //		if (sec.length >= 2) {
 //			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
 //		}
@@ -795,7 +801,7 @@ public class Assets {
 //			}
 //		}
 
-		Component applyPlaceholders = entityDeathPlaceholders(convertFromLegacy(msg), player, e, hasOwner);
+		Component applyPlaceholders = entityDeathPlaceholders(base.build(), player, e, hasOwner);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -953,11 +959,11 @@ public class Assets {
 			}
 		}
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
-			Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(convertToLegacy(msg));
+			Matcher params = Pattern.compile("%([^%]+)%").matcher(convertToLegacy(msg));
 
-			while (identifiers.find()) {
-				String identifier = identifiers.group(0);
-				msg = msg.replaceText(replace(identifier, PlaceholderAPI.setPlaceholders(pm.getPlayer(), identifier)));
+			while (params.find()) {
+				String param = params.group(0);
+				msg = msg.replaceText(replace(param, PlaceholderAPI.setPlaceholders(pm.getPlayer(), param)));
 			}
 		}
 		return msg;
