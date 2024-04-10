@@ -193,6 +193,10 @@ Natural-Cause:
     - "%player% did not put their snow suit on before they went to play."
   Thorns:
     - "%player% tried playing armor with thorns"
+  Kill:
+    - "%player% was killed"
+  World-Border:
+    - "%player% left the confines of this world"
   # Hook related deaths
   CombatLogX-Kill:
     - "%player% wants to escape reality, but was still sent to another dimension -.-"
