@@ -28,6 +28,7 @@ public class PlayerManager {
 	private final String playerName;
 	private boolean messagesEnabled;
 	private boolean isBlacklisted;
+	private boolean isCommandDeath;
 	private DamageCause damageCause;
 	private Entity lastEntityDamager;
 	private Entity lastExplosiveEntity;
@@ -63,6 +64,7 @@ public class PlayerManager {
 			isBlacklisted = false;
 		}
 		this.damageCause = DamageCause.CUSTOM;
+		this.isCommandDeath = false;
 		players.add(this);
 	}
 
@@ -107,7 +109,15 @@ public class PlayerManager {
 	}
 
 	public DamageCause getLastDamage() {
-		return damageCause;
+		return this.damageCause;
+	}
+
+	public void setCommandDeath(boolean isTrue) {
+		this.isCommandDeath = isTrue;
+	}
+
+	public boolean isCommandDeath() {
+		return this.isCommandDeath;
 	}
 
 	public void setLastEntityDamager(Entity e) {

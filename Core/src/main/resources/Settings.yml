@@ -194,5 +194,13 @@ Custom-Item-Display-Names-Is-Weapon:
 Custom-Item-Material-Is-Weapon:
   - "ACACIA_FENCE"
 
+# Custom kill/suicide commands
+
+# If your plugins use custom kill or suicide like commands, add them to this list
+# When players die using command from the list, then use `Natural-Cause.Suicide` as the death message
+Custom-Suicide-Commands:
+  - "/kill"
+  - "/suicide"
+
 # Debug toggle for developer, don't touch!
 Debug: false

@@ -82,6 +82,7 @@ public enum Config {
 			("Custom-Item-Display-Names-Is-Weapon", Arrays.asList("&6SUPER COOL GOLDEN APPLE", "SICKNAME")),
 
 	CUSTOM_ITEM_MATERIAL_IS_WEAPON("Custom-Item-Material-Is-Weapon", Arrays.asList("ACACIA_FENCE")),
+	CUSTOM_SUICIDE_COMMANDS("Custom-Suicide-Commands", Arrays.asList("/kill", "/suicide")),
 
 	DEBUG("Debug", false);
 
