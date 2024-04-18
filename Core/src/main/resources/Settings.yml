@@ -127,6 +127,10 @@ Rename-Mobs:
 # If enabled, mobs will always default to their entity name. Display names will always be ignored. (Besides players)
 Disable-Named-Mobs: false
 
+# If enabled, player killed by ender dragon will use death message of
+# `Natural-Cause.Dragon-Breath. instead of `Natural-Cause.Melee`
+Fix-MC-84595: false
+
 # If enabled, if the item/mob has no custom name, the display of the name will base on player's client locale.
 I18N-Display:
   Item-Name: true

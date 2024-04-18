@@ -19,7 +19,9 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
@@ -52,7 +54,7 @@ public class EntityDeath implements Listener {
 				} else if (pm.isCommandDeath()) { // If died by using suicide like command
 					pm.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
 					pm.setCommandDeath(false);
-				} else {
+				} else { // Reset lastDamageCause
 					pm.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
 				}
 
@@ -83,6 +85,15 @@ public class EntityDeath implements Listener {
 						}
 					} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 						naturalDeath = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
+					} else if (DeathMessages.majorVersion >= 9 && DeathMessages.majorVersion < 999 && e.getEntity().getLastDamageCause().getDamageSource().getDirectEntity() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
+						AreaEffectCloud cloud = (AreaEffectCloud) e.getEntity().getLastDamageCause().getDamageSource().getDirectEntity();
+						if (cloud.getSource() instanceof EnderDragon) {
+							pm.setLastDamageCause(
+									Settings.getInstance().getConfig().getBoolean(Config.FIX_MC_84595.getPath())
+											? EntityDamageEvent.DamageCause.DRAGON_BREATH : EntityDamageEvent.DamageCause.ENTITY_ATTACK
+							);
+						}
+						naturalDeath = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
 					} else {
 						naturalDeath = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
 					}
