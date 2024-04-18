@@ -85,8 +85,8 @@ public class EntityDeath implements Listener {
 						}
 					} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 						naturalDeath = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
-					} else if (DeathMessages.majorVersion >= 9 && DeathMessages.majorVersion < 999 && e.getEntity().getLastDamageCause().getDamageSource().getDirectEntity() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
-						AreaEffectCloud cloud = (AreaEffectCloud) e.getEntity().getLastDamageCause().getDamageSource().getDirectEntity();
+					} else if (DeathMessages.majorVersion >= 9 && DeathMessages.majorVersion < 999 && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
+						AreaEffectCloud cloud = (AreaEffectCloud) pm.getLastEntityDamager();
 						if (cloud.getSource() instanceof EnderDragon) {
 							pm.setLastDamageCause(
 									Settings.getInstance().getConfig().getBoolean(Config.FIX_MC_84595.getPath())

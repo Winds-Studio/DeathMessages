@@ -8,6 +8,7 @@ import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EvokerFangs;
@@ -76,6 +77,8 @@ public class EntityDamageByEntity implements Listener {
 				} else if (e.getDamager() instanceof EvokerFangs) {
 					EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
 					pm.setLastEntityDamager(evokerFangs.getOwner());
+				} else if (e.getDamager() instanceof AreaEffectCloud) {
+					pm.setLastEntityDamager(e.getDamager());
 				}
 			});
 		} else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
