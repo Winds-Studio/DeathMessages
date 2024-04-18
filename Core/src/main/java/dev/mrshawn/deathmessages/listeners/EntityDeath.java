@@ -34,6 +34,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class EntityDeath implements Listener {
 
@@ -97,8 +99,13 @@ public class EntityDeath implements Listener {
 
 					if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
 						int totalMobEntities = 0;
-						for (Entity entities : p.getNearbyEntities(radius, radius, radius)) {
-							if (entities.getType().equals(ent.getType())) {
+						// Dreeam TODO: need move to EntityUtil
+						Predicate<Entity> isNotDragonParts = entity -> !entity.toString().contains("EnderDragonPart"); // Exclude EnderDragonPart
+						List<Entity> entities = p.getNearbyEntities(radius, radius, radius).stream()
+								.filter(isNotDragonParts).collect(Collectors.toList());
+
+						for (Entity entity : entities) {
+							if (entity.getType().equals(ent.getType())) {
 								totalMobEntities++;
 							}
 						}

@@ -17,7 +17,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class PlayerUntag implements Listener {
 
@@ -35,8 +38,12 @@ public class PlayerUntag implements Listener {
 
 			if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
 				int totalMobEntities = 0;
-				for (Entity entities : p.getNearbyEntities(radius, radius, radius)) {
-					if (entities.getType().equals(EntityType.PLAYER)) {
+				Predicate<Entity> isNotDragonParts = entity -> !entity.toString().contains("EnderDragonPart"); // Exclude EnderDragonPart
+				List<Entity> entities = p.getNearbyEntities(radius, radius, radius).stream()
+						.filter(isNotDragonParts).collect(Collectors.toList());
+
+				for (Entity entity : entities) {
+					if (entity.getType().equals(EntityType.PLAYER)) {
 						totalMobEntities++;
 					}
 				}
