@@ -84,6 +84,7 @@ public class EntityDeath implements Listener {
 									naturalDeath = Assets.getNaturalDeath(pm, "Respawn-Anchor");
 								}
 							}
+							// Dreeam TODO: Check weather needs to handle unknow explosion to prevent potential empty death message
 						}
 					} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 						naturalDeath = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));

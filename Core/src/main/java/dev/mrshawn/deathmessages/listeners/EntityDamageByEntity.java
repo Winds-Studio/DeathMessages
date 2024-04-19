@@ -43,13 +43,13 @@ public class EntityDamageByEntity implements Listener {
 					if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager().getUniqueId())) {
 						pm.setLastEntityDamager(explosions.get(e.getDamager().getUniqueId()));
 						pm.setLastExplosiveEntity(e.getDamager());
-					} else if (e.getDamager() instanceof TNTPrimed) {
+					} else if (e.getDamager() instanceof TNTPrimed) { // For <= 1.20.2, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
 						TNTPrimed tnt = (TNTPrimed) e.getDamager();
 						if (tnt.getSource() instanceof LivingEntity) {
 							pm.setLastEntityDamager(tnt.getSource());
 						}
 						pm.setLastExplosiveEntity(e.getDamager());
-					} else if (DeathMessages.majorVersion >= 16 && e.getDamager() instanceof Firework) {// Firework extends Entity under <= 1.15
+					} else if (DeathMessages.majorVersion >= 16 && e.getDamager() instanceof Firework) { // Firework extends Entity under <= 1.15
 						Firework firework = (Firework) e.getDamager();
 						try {
 							if (firework.getShooter() instanceof LivingEntity) {
