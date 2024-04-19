@@ -34,6 +34,7 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathL
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
+import dev.mrshawn.deathmessages.utils.Util;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -59,6 +60,8 @@ public class DeathMessages extends JavaPlugin {
 	public static Logger LOGGER;
 	private BukkitAudiences adventure;
 	public final FoliaLib foliaLib = new FoliaLib(this);
+
+	public Util uitl;
 
 	public boolean placeholderAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
@@ -94,6 +97,8 @@ public class DeathMessages extends JavaPlugin {
 		LOGGER = LogManager.getLogger(instance.getName());
 		instance.adventure = BukkitAudiences.create(instance);
 		instance.adventure.console().sendMessage(loadedLogo);
+
+		instance.uitl = new Util();
 
 		initListeners();
 		initCommands();
