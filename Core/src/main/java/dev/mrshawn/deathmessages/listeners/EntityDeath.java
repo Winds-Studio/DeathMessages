@@ -52,6 +52,8 @@ public class EntityDeath implements Listener {
 				if (e.getEntity().getLastDamageCause() == null) {
 					pm.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
 				} else if (pm.isCommandDeath()) { // If died by using suicide like command
+					// set to null since it is command death
+					pm.setLastEntityDamager(null);
 					pm.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
 					pm.setCommandDeath(false);
 				} else { // Reset lastDamageCause
