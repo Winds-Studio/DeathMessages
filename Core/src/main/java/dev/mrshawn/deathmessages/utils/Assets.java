@@ -807,46 +807,46 @@ public class Assets {
 		return death.build();
 	}
 
-	public static List<String> sortList(List<String> list, Player player, Entity killer) {
-		List<String> newList = list;
-		List<String> returnList = new ArrayList<>();
+	// To filter death messages based on permissions or world guard regions
+	// Support multi perm nodes or regions to become more configurable
+	// e.g. - "PERMISSION[node1]PERMISSION_KILLER[node2]REGION[r1]&2message"
+	public static List<String> sortList(List<String> list, Player victim, Entity killer) {
+		List<String> result = new ArrayList<>();
+
 		for (String s : list) {
-			// Check for permission messages
+			// Check for victim permission messages
 			if (s.contains("PERMISSION[")) {
-				Matcher m = Pattern.compile("PERMISSION\\[([^)]+)]").matcher(s);
+				Matcher m = Pattern.compile("PERMISSION\\[(.*?)]").matcher(s);
 				while (m.find()) {
 					String perm = m.group(1);
-					if (player.getPlayer().hasPermission(perm)) {
-						returnList.add(s.replace("PERMISSION[" + perm + "]", ""));
-					}
+					s = victim.hasPermission(perm)
+							? s.replace("PERMISSION[" + perm + "]", "") : "";
 				}
 			}
+			// Check for killer permission messages
 			if (s.contains("PERMISSION_KILLER[")) {
-				Matcher m = Pattern.compile("PERMISSION_KILLER\\[([^)]+)]").matcher(s);
+				Matcher m = Pattern.compile("PERMISSION_KILLER\\[(.*?)]").matcher(s);
 				while (m.find()) {
 					String perm = m.group(1);
-					if (killer.hasPermission(perm)) {
-						returnList.add(s.replace("PERMISSION_KILLER[" + perm + "]", ""));
-					}
+					s = killer.hasPermission(perm)
+							? s.replace("PERMISSION_KILLER[" + perm + "]", "") : "";
 				}
 			}
 			// Check for region specific messages
 			if (s.contains("REGION[")) {
-				Matcher m = Pattern.compile("REGION\\[([^)]+)]").matcher(s);
+				Matcher m = Pattern.compile("REGION\\[(.*?)]").matcher(s);
 				while (m.find()) {
 					String regionID = m.group(1);
-					if (DeathMessages.worldGuardExtension.isInRegion(player.getPlayer(), regionID)) {
-						returnList.add(s.replace("REGION[" + regionID + "]", ""));
-					}
+					s = DeathMessages.worldGuardExtension.isInRegion(victim, regionID)
+							? s.replace("REGION[" + regionID + "]", "") : "";
 				}
 			}
+
+			// Append messages sorted
+			if (!s.isEmpty()) result.add(s);
 		}
-		if (!returnList.isEmpty()) {
-			newList = returnList;
-		} else {
-			newList.removeIf(s -> s.contains("PERMISSION[") || s.contains("REGION[") || s.contains("PERMISSION_KILLER["));
-		}
-		return newList;
+
+		return result;
 	}
 
 	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean owner) {
