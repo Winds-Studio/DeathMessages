@@ -811,7 +811,7 @@ public class Assets {
 	// Support multi perm nodes or regions to become more configurable
 	// e.g. - "PERMISSION[node1]PERMISSION_KILLER[node2]REGION[r1]&2message"
 	public static List<String> sortList(List<String> list, Player victim, Entity killer) {
-		List<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>(list.size());
 
 		for (String s : list) {
 			// Check for victim permission messages
