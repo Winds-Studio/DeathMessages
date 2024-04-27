@@ -1136,7 +1136,6 @@ public class Assets {
 		}
 
 		// Append hover click events if exists
-		// Dreeam TODO: supports multiple actions, like RUN_COMMAND + SUGGEST_COMMAND
 		if (rawHover.length == 4) {
 			ClickEvent click = null;
 			final String content = isPlayerDeath ? playerDeathPlaceholders(rawHover[3], pm, (LivingEntity) e) : entityDeathPlaceholders(rawHover[3], p, e, owner);
