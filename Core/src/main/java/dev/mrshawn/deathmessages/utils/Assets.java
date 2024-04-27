@@ -22,6 +22,7 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -288,6 +289,9 @@ public class Assets {
 			base.append(prefix);
 		}
 
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
+
 		if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
 			try {
 				FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
@@ -347,21 +351,20 @@ public class Assets {
 			TextComponent message = convertFromLegacy(msg);
 			base.append(message);
 		}
-		// TODO: need to re-write the logic of death message click event & hover text.
-//		if (msg.length() >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(msg[1], pm, null))));
-//		}
-//		if (msg.length() == 3) {
-//			if (msg[2].startsWith("COMMAND:")) {
-//				String cmd = msg[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand( "/" + playerDeathPlaceholders(cmd, pm, null)));
-//			} else if (msg[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = msg[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, null)));
-//			}
-//		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, null);
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, pm, null, null, false, true);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
+
+		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, null);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -399,6 +402,9 @@ public class Assets {
 			base.append(prefix);
 		}
 
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
+
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			Component displayName;
@@ -427,20 +433,20 @@ public class Assets {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
-//		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
-//		}
-//		if (sec.length == 3) {
-//			if (sec[2].startsWith("COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-//			}
-//		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, mob);
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, pm, null, mob, false, true);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
+
+		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, mob);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -481,6 +487,9 @@ public class Assets {
 			base.append(prefix);
 		}
 
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
+
 		if (msg.contains("%weapon%")) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			Component displayName;
@@ -509,19 +518,20 @@ public class Assets {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
-//		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], p, e, hasOwner))));
-//		}
-//		if (sec.length == 3) {
-//			if (sec[2].startsWith("COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
-//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, e, hasOwner)));
-//			}
 
-		Component applyPlaceholders = entityDeathPlaceholders(base.build(), p, e, hasOwner);
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, null, p, e, hasOwner, false);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
+
+		Component applyPlaceholders = entityDeathPlaceholders(baseWithEvents, p, e, hasOwner);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -567,21 +577,24 @@ public class Assets {
 			base.append(prefix);
 		}
 
-		base.append(convertFromLegacy(msg));
-//		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
-//		}
-//		if (sec.length == 3) {
-//			if (sec[2].startsWith("COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-//			}
-//		}
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
 
-		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, mob);
+		base.append(convertFromLegacy(msg));
+
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, pm, null, mob, false, true);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
+
+		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, mob);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -624,6 +637,9 @@ public class Assets {
 			base.append(prefix);
 		}
 
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
+
 		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
 			Component displayName;
@@ -647,20 +663,20 @@ public class Assets {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
-//		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(playerDeathPlaceholders(sec[1], pm, mob))));
-//		}
-//		if (sec.length == 3) {
-//			if (sec[2].startsWith("COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + playerDeathPlaceholders(cmd, pm, mob)));
-//			}
-//		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(base.build(), pm, mob);
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, pm, null, mob, false, true);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
+
+		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, mob);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -704,6 +720,9 @@ public class Assets {
 			base.append(prefix);
 		}
 
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
+
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
 			Component displayName;
@@ -728,20 +747,20 @@ public class Assets {
 			TextComponent deathMessage = convertFromLegacy(msg);
 			base.append(deathMessage);
 		}
-//		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], p, em.getEntity(), hasOwner))));
-//		}
-//		if (sec.length == 3) {
-//			if (sec[2].startsWith("COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
-//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, p, em.getEntity(), hasOwner)));
-//			}
-//		}
 
-		Component applyPlaceholders = entityDeathPlaceholders(base.build(), p, em.getEntity(), hasOwner);
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, null, p, em.getEntity(), hasOwner, false);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
+
+		Component applyPlaceholders = entityDeathPlaceholders(baseWithEvents, p, em.getEntity(), hasOwner);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
 
 		return death.build();
@@ -787,19 +806,22 @@ public class Assets {
 			base.append(prefix);
 		}
 
+		List<String> rawEvents = new ArrayList<>();
+		msg = sortHoverEvents(msg, rawEvents);
+
 		base.append(convertFromLegacy(msg));
-//		if (sec.length >= 2) {
-//			tc.hoverEvent(HoverEvent.showText(convertFromLegacy(entityDeathPlaceholders(sec[1], player, entity, hasOwner))));
-//		}
-//		if (sec.length == 3) {
-//			if (sec[2].startsWith("COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.runCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
-//			} else if (sec[2].startsWith("SUGGEST_COMMAND:")) {
-//				String cmd = sec[2].split(":")[1];
-//				tc.clickEvent(ClickEvent.suggestCommand("/" + entityDeathPlaceholders(cmd, player, entity, hasOwner)));
-//			}
-//		}
+
+		Component baseWithEvents = base.build();
+
+		if (!rawEvents.isEmpty()) {
+			int index = 0;
+			for (String rawEvent : rawEvents) {
+				Component hoverEvent = buildHoverEvents(rawEvent, null, player, e, hasOwner, false);
+				baseWithEvents = baseWithEvents.replaceText(
+						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
+				);
+			}
+		}
 
 		Component applyPlaceholders = entityDeathPlaceholders(base.build(), player, e, hasOwner);
 		TextComponent.Builder death = Component.text().append(applyPlaceholders);
@@ -807,9 +829,11 @@ public class Assets {
 		return death.build();
 	}
 
-	// To filter death messages based on permissions or world guard regions
-	// Support multi perm nodes or regions to become more configurable
-	// e.g. - "PERMISSION[node1]PERMISSION_KILLER[node2]REGION[r1]&2message"
+	/*
+		To filter death messages based on permissions or world guard regions
+		Support multi perm nodes or regions to become more configurable
+		e.g. - "PERMISSION[node1]PERMISSION_KILLER[node2]REGION[r1]&2message"
+	 */
 	public static List<String> sortList(List<String> list, Player victim, Entity killer) {
 		List<String> result = new ArrayList<>(list.size());
 
@@ -866,6 +890,7 @@ public class Assets {
 			Tameable tameable = (Tameable) entity;
 			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%owner%").replacement(tameable.getOwner().getName()).build());
 		}
+
 		try {
 			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement(entity.getLocation().getBlock().getBiome().name()).build());
 		} catch (NullPointerException e) {
@@ -873,18 +898,19 @@ public class Assets {
 			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
 			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
 		}
+
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
 			Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(convertToLegacy(msg));
 
 			while (identifiers.find()) {
 				String identifier = identifiers.group(0);
-				msg = msg.replaceText(replace(identifier, PlaceholderAPI.setPlaceholders(player.getPlayer(), identifier)));
+				msg = msg.replaceText(replace(identifier, PlaceholderAPI.setPlaceholders(player, identifier)));
 			}
 		}
+
 		return msg;
 	}
 
-	@Deprecated
 	public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean owner) {
 		msg = msg
 				.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
@@ -904,6 +930,7 @@ public class Assets {
 			msg = msg
 					.replaceAll("%owner%", tameable.getOwner().getName());
 		}
+
 		try {
 			msg = msg
 					.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
@@ -913,9 +940,11 @@ public class Assets {
 			msg = msg
 					.replaceAll("%biome%", "Unknown");
 		}
+
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
-			msg = PlaceholderAPI.setPlaceholders(player.getPlayer(), msg);
+			msg = PlaceholderAPI.setPlaceholders(player, msg);
 		}
+
 		return msg;
 	}
 
@@ -947,9 +976,11 @@ public class Assets {
 					}
 				}
 			}
+
 			if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
 				mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
 			}
+
 			msg = msg.replaceText(replace("%killer%", mobName))
 					.replaceText(replace("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase())));
 
@@ -958,6 +989,7 @@ public class Assets {
 				msg = msg.replaceText(replace("%killer_display%", p.getDisplayName()));
 			}
 		}
+
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
 			Matcher params = Pattern.compile("%([^%]+)%").matcher(convertToLegacy(msg));
 
@@ -966,6 +998,84 @@ public class Assets {
 				msg = msg.replaceText(replace(param, PlaceholderAPI.setPlaceholders(pm.getPlayer(), param)));
 			}
 		}
+
+		return msg;
+	}
+
+	public static String playerDeathPlaceholders(String msg, PlayerManager pm, LivingEntity mob) {
+		msg = msg.replaceAll("%player%", pm.getName())
+				.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
+				.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
+				.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
+				.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
+				.replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
+				.replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
+
+		try {
+			msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
+		} catch (NullPointerException e) {
+			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+			msg = msg.replaceAll("%biome%", "Unknown");
+		}
+
+		if (mob != null) {
+			String mobName = mob.getName();
+			if (Settings.getInstance().getConfig().getBoolean(Config.RENAME_MOBS_ENABLED.getPath())) {
+				String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
+				for (String ch : chars) {
+					if (mobName.contains(ch)) {
+						mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
+						break;
+					}
+				}
+			}
+
+			if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
+				mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
+			}
+
+			msg = msg.replaceAll("%killer%", mobName)
+					.replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase()));
+
+			if (mob instanceof Player) {
+				Player p = (Player) mob;
+				msg = msg.replaceAll("%killer_display%", p.getDisplayName());
+			}
+		}
+
+		if (DeathMessages.getInstance().placeholderAPIEnabled) {
+			msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
+		}
+
+		return msg;
+	}
+
+	/*
+		Process hover event string in message
+		If found, add string to rawEvents list, then replace them to placeholder like %example% in msg
+		If there are multiple event string in message, the message should be like `%hover_event_0%, ..., %hover_event_N%` after the replacing
+ 	*/
+	private static String sortHoverEvents(String msg, List<String> rawEvents) {
+		// If contains event string, process, otherwise return original msg directly
+		if (msg.contains("[")) {
+			int index = 0;
+			// Match all string between [ and ], e.g. abc[123]edf -> [123]
+			Pattern pattern = Pattern.compile("\\[(.*?)]");
+			Matcher matcher = pattern.matcher(msg);
+
+			while (matcher.find()) {
+				String replacement = "%hover_event_" + index + "%";
+
+				// Added in raw Events list
+				rawEvents.add(matcher.group(1));
+				// Replace original message
+				msg = msg.replace("[" + matcher.group(1) + "]", replacement);
+				// Update index
+				index++;
+			}
+		}
+
 		return msg;
 	}
 
@@ -998,6 +1108,61 @@ public class Assets {
 				.append(displayName)
 				.build()
 				.hoverEvent(showItem);
+	}
+
+	/*
+		Process and build hover events from raw events list
+		Only for playerDeath: pm, e, Only for EntityDeath: p, e, owner
+	 */
+	private static Component buildHoverEvents(
+			String rawEvent,
+			PlayerManager pm,
+			Player p,
+			Entity e,
+			boolean owner,
+			boolean isPlayerDeath
+	) {
+		rawEvent = rawEvent.replace("[", "").replace("]", "");
+		String[] rawHover = rawEvent.split("::");
+		TextComponent.Builder event = Component.text();
+
+		// Append base message which has the hover text and events
+		event.append(convertFromLegacy(rawHover[0]));
+
+		// Append hover text if exists
+		if (!rawHover[1].isEmpty()) {
+			HoverEvent<Component> showText = HoverEvent.showText(convertFromLegacy(rawHover[1]));
+			event.hoverEvent(showText);
+		}
+
+		// Append hover click events if exists
+		// Dreeam TODO: supports multiple actions, like RUN_COMMAND + SUGGEST_COMMAND
+		if (rawHover.length == 4) {
+			ClickEvent click = null;
+			final String content = isPlayerDeath ? playerDeathPlaceholders(rawHover[3], pm, (LivingEntity) e) : entityDeathPlaceholders(rawHover[3], p, e, owner);
+
+			switch (rawHover[2]) {
+				case "COPY_TO_CLIPBOARD":
+					click = ClickEvent.copyToClipboard(content);
+					break;
+				case "OPEN_URL":
+					click = ClickEvent.openUrl(content);
+					break;
+				case "RUN_COMMAND":
+					click = ClickEvent.runCommand("/" + content);
+					break;
+				case "SUGGEST_COMMAND":
+					click = ClickEvent.suggestCommand("/" + content);
+					break;
+				default:
+					DeathMessages.LOGGER.error("Unknown hover event action: {}", rawHover[2]);
+					break;
+			}
+
+			event.clickEvent(click);
+		}
+
+		return event.build();
 	}
 
 	/*
