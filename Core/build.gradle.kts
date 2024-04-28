@@ -1,7 +1,7 @@
 plugins {
     id("dev.mrshawn.deathmessages.wrapper")
-    kotlin("jvm") version "1.9.22"
-    id("io.github.goooler.shadow") version "8.1.7" apply true
+    kotlin("jvm") version "1.9.23"
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 
 dependencies {
