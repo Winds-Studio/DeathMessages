@@ -6,7 +6,7 @@ import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
-import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import github.scarsz.discordsrv.DiscordSRV;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -26,7 +26,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_DISCORDLOG.getValue())) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
 			return;
 		}
 		String discordJar;
@@ -71,9 +71,9 @@ public class CommandDiscordLog extends DeathMessagesCommand {
 
 		Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog")
 				.stream()
-				.map(Assets::convertFromLegacy)
+				.map(Util::convertFromLegacy)
 				.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
-						.replaceText(Assets.prefix)
+						.replaceText(Util.prefix)
 						.replaceText(TextReplacementConfig.builder()
 								.matchLiteral("%discordJar%")
 								.replacement(discordJar)

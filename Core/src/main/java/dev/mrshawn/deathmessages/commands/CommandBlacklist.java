@@ -6,7 +6,7 @@ import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -26,11 +26,11 @@ public class CommandBlacklist extends DeathMessagesCommand {
 	@Override
 	public void onCommand(CommandSender sender, String[] args) {
 		if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_BLACKLIST.getValue())) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
 			return;
 		}
 		if (args.length == 0) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help"));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help"));
 		} else {
 			Player target = Bukkit.getPlayer(args[0]);
 			String targetName = (target != null) ? target.getDisplayName() : args[0];
@@ -48,16 +48,16 @@ public class CommandBlacklist extends DeathMessagesCommand {
 					getPlayer.ifPresent(pm -> {
 						if (pm.isBlacklisted()) {
 							pm.setBlacklisted(false);
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
 									.replaceText(player));
 						} else {
 							pm.setBlacklisted(true);
-							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
+							DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
 									.replaceText(player));
 						}
 					});
 				} else {
-					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
+					DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
 							.replaceText(player));
 				}
 				return;
@@ -78,7 +78,7 @@ public class CommandBlacklist extends DeathMessagesCommand {
 							UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
 							UserData.getInstance().save();
 						}
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
 								.replaceText(player));
 					} else {
 						getPlayer.ifPresent(pm -> pm.setBlacklisted(true));
@@ -86,7 +86,7 @@ public class CommandBlacklist extends DeathMessagesCommand {
 							UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
 							UserData.getInstance().save();
 						}
-						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
+						DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
 								.replaceText(player));
 					}
 
@@ -94,7 +94,7 @@ public class CommandBlacklist extends DeathMessagesCommand {
 				}
 			}
 			// Can't find args[0] in userData, then does not exist
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
 					.replaceText(TextReplacementConfig.builder().match("%player%").replacement(args[0]).build()));
 		}
 	}

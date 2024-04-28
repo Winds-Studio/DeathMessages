@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -35,7 +36,7 @@ public class BroadcastEntityDeathListener implements Listener {
 		boolean hasOwner = e.getEntity() instanceof Tameable;
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-			Component message = Assets.entityDeathPlaceholders(Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), e.getEntity(), hasOwner);
+			Component message = Assets.entityDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), e.getEntity(), hasOwner);
 			DeathMessages.getInstance().adventure().console().sendMessage(message.replaceText(TextReplacementConfig.builder()
 					.matchLiteral("%message%")
 					.replacement(e.getTextComponent())
@@ -74,7 +75,7 @@ public class BroadcastEntityDeathListener implements Listener {
 								}
 							}
 							DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
-							PluginMessaging.sendPluginMSG(pms.getPlayer(), Assets.convertToLegacy(e.getTextComponent()));
+							PluginMessaging.sendPluginMSG(pms.getPlayer(), Util.convertToLegacy(e.getTextComponent()));
 						}
 					});
 					if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
@@ -98,7 +99,7 @@ public class BroadcastEntityDeathListener implements Listener {
 				}
 			}
 		}
-		PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Assets.convertToLegacy(e.getTextComponent()));
+		PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(e.getTextComponent()));
 		Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 		getEntity.ifPresent(EntityManager::destroy);
 	}

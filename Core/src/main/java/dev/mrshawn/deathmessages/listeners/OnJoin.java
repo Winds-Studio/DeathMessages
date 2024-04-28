@@ -14,7 +14,7 @@ public class OnJoin implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> {
-			if (!PlayerManager.getPlayer(p).isPresent()) new PlayerManager(p);
+			if (PlayerManager.isEmpty(p)) new PlayerManager(p);
 		});
 
 		if (!DeathMessages.bungeeInit) return;

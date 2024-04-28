@@ -3,7 +3,7 @@ package dev.mrshawn.deathmessages.commands;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.Permission;
-import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,15 +32,15 @@ public class CommandManager implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
 		if (sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Assets.formatMessage("Commands.DeathMessages.No-Permission"));
+			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
 			return false;
 		}
 		if (args.length == 0) {
 			Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
 					.stream()
-					.map(Assets::convertFromLegacy)
+					.map(Util::convertFromLegacy)
 					.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
-							.replaceText(Assets.prefix)));
+							.replaceText(Util.prefix)));
 		} else {
 			DeathMessagesCommand cmd = get(args[0]);
 			if (cmd != null) {
@@ -50,9 +50,9 @@ public class CommandManager implements CommandExecutor {
 			}
 			Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
 					.stream()
-					.map(Assets::convertFromLegacy)
+					.map(Util::convertFromLegacy)
 					.forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
-							.replaceText(Assets.prefix)));
+							.replaceText(Util.prefix)));
 		}
 		return false;
 	}

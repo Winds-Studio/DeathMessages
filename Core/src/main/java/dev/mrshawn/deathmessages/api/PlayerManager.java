@@ -203,6 +203,10 @@ public class PlayerManager {
 				.findFirst();
 	}
 
+	public static boolean isEmpty(Player p) {
+		return !getPlayer(p).isPresent();
+	}
+
 	public void removePlayer() {
 		players.remove(this);
 	}

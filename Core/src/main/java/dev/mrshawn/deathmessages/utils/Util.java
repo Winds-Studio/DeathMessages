@@ -5,7 +5,12 @@ import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;
+import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MobType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -19,7 +24,41 @@ import java.util.UUID;
 
 public class Util {
 
-    public void getExplosionNearbyEffected(Player p, Block b) {
+    public static TextReplacementConfig prefix = TextReplacementConfig.builder()
+            .matchLiteral("%prefix%")
+            .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
+            .build();
+
+    public static TextReplacementConfig replace(String match, String replace) {
+        return TextReplacementConfig.builder()
+                .matchLiteral(match)
+                .replacement((replace != null) ? replace : match) // Prevent null replacement
+                .build();
+    }
+
+    public static Component formatMessage(String path) {
+        return convertFromLegacy(Messages.getInstance().getConfig().getString(path)).replaceText(prefix);
+    }
+
+    public static TextComponent convertFromLegacy(String s) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
+    }
+
+    public static String convertToLegacy(Component component) {
+        return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+    }
+
+    public static boolean isNumeric(String s) {
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void getExplosionNearbyEffected(Player p, Block b) {
         List<UUID> effected = new ArrayList<>();
         List<Entity> getNearby = new ArrayList<>((DeathMessages.majorVersion > 12) ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(100)) : b.getWorld().getNearbyEntities(b.getLocation(), 100, 100, 100));
 

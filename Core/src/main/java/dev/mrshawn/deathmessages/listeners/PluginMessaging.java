@@ -8,7 +8,7 @@ import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
-import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -44,12 +44,12 @@ public class PluginMessaging implements PluginMessageListener {
 				String[] data = stream.readUTF().split("######");
 				String serverName = data[0];
 				String rawMsg = data[1];
-				Component prefix = Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message"))
+				Component prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message"))
 						.replaceText(TextReplacementConfig.builder()
 								.matchLiteral("%server_name%")
 								.replacement(serverName)
 								.build());
-				TextComponent message = Assets.convertFromLegacy(rawMsg);
+				TextComponent message = Util.convertFromLegacy(rawMsg);
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
 					getPlayer.ifPresent(pm -> {

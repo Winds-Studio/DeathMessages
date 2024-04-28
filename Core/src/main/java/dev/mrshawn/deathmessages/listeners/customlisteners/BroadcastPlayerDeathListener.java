@@ -11,6 +11,7 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -37,7 +38,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
 			// Dreeam TODO: maybe just use formatMessage is also ok?
-			Component message = Assets.playerDeathPlaceholders(Assets.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), getPlayer.get(), e.getLivingEntity());
+			Component message = Assets.playerDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), getPlayer.get(), e.getLivingEntity());
 			DeathMessages.getInstance().adventure().console().sendMessage(
 					message.replaceText(TextReplacementConfig.builder()
 							.matchLiteral("%message%")
@@ -92,7 +93,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 				}
 			}
 		}
-		PluginMessaging.sendPluginMSG(e.getPlayer(), Assets.convertToLegacy(e.getTextComponent()));
+		PluginMessaging.sendPluginMSG(e.getPlayer(), Util.convertToLegacy(e.getTextComponent()));
 	}
 
 	private void normal(BroadcastDeathMessageEvent e, PlayerManager pm, Player player, List<World> worlds) {

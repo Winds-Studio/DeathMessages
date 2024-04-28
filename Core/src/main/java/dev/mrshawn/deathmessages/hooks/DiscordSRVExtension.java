@@ -8,6 +8,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
@@ -60,7 +61,7 @@ public class DiscordSRVExtension {
 
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
                     && config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
-                String prefix = Assets.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
+                String prefix = Util.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }
 
@@ -73,11 +74,11 @@ public class DiscordSRVExtension {
                     sb.append(s + "\n");
                 }
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
-                    textChannel.sendMessage(Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(sb.toString()), pm, null)
+                    textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, null)
                                     .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
                             .queue();
                 } else {
-                    textChannel.sendMessage(Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(sb.toString()), pm, (LivingEntity) pm.getLastEntityDamager())
+                    textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, (LivingEntity) pm.getLastEntityDamager())
                                     .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
                             .queue();
                 }
@@ -108,7 +109,7 @@ public class DiscordSRVExtension {
             TextChannel textChannel = g.getTextChannelById(channelID);
 
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
-                String prefix = Assets.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
+                String prefix = Util.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }
 
@@ -123,11 +124,11 @@ public class DiscordSRVExtension {
                 }
 
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
-                    textChannel.sendMessage(Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(sb.toString()), pm, null)
+                    textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, null)
                             .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
                             .queue();
                 } else {
-                    textChannel.sendMessage(Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(sb.toString()), pm, (LivingEntity) pm.getLastEntityDamager())
+                    textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, (LivingEntity) pm.getLastEntityDamager())
                             .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
                             .queue();
                 }
@@ -167,23 +168,23 @@ public class DiscordSRVExtension {
                     .replaceAll("%username%", pm.getName()));
         }
 
-        String title = Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Title")), pm, (LivingEntity) pm.getLastEntityDamager())
+        String title = Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Title")), pm, (LivingEntity) pm.getLastEntityDamager())
                 .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build()));
 
         if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);
         }
 
-        String description = Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Description")), pm, (LivingEntity) pm.getLastEntityDamager())
+        String description = Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Description")), pm, (LivingEntity) pm.getLastEntityDamager())
                 .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build()));
 
         if (!description.equalsIgnoreCase("")) {
             eb.setDescription(description);
         }
 
-        String footerText = Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Footer.Text")), pm, (LivingEntity) pm.getLastEntityDamager())
+        String footerText = Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Footer.Text")), pm, (LivingEntity) pm.getLastEntityDamager())
                 .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build()));
-        String footerIcon = Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL")), pm, (LivingEntity) pm.getLastEntityDamager())
+        String footerIcon = Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Footer.Icon-URL")), pm, (LivingEntity) pm.getLastEntityDamager())
                 .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())
                 .replaceText(TextReplacementConfig.builder().matchLiteral("%uuid%").replacement(pm.getUUID().toString()).build())
                 .replaceText(TextReplacementConfig.builder().matchLiteral("%username%").replacement(pm.getName()).build()));
@@ -207,9 +208,9 @@ public class DiscordSRVExtension {
                 eb.addBlankField(b);
             } else {
                 boolean b = Boolean.parseBoolean(conSpl[2]);
-                String header = Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(conSpl[0]), pm, (LivingEntity) pm.getLastEntityDamager())
+                String header = Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(conSpl[0]), pm, (LivingEntity) pm.getLastEntityDamager())
                         .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build()));
-                String subHeader = Assets.convertToLegacy(Assets.playerDeathPlaceholders(Assets.convertFromLegacy(conSpl[1]), pm, (LivingEntity) pm.getLastEntityDamager())
+                String subHeader = Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(conSpl[1]), pm, (LivingEntity) pm.getLastEntityDamager())
                         .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build()));
                 eb.addField(header, subHeader, b);
             }
@@ -250,8 +251,8 @@ public class DiscordSRVExtension {
                     .replaceAll("%username%", p.getName()));
         }
 
-        String title = Assets.convertToLegacy(Assets.entityDeathPlaceholders(Assets.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Title")), p, entity, hasOwner)
-                .replaceText(Assets.replace("%message%", message)));
+        String title = Util.convertToLegacy(Assets.entityDeathPlaceholders(Util.convertFromLegacy(getMessages().getString("Discord.DeathMessage.Title")), p, entity, hasOwner)
+                .replaceText(Util.replace("%message%", message)));
 
         if (!title.equalsIgnoreCase("")) {
             eb.setTitle(title);
