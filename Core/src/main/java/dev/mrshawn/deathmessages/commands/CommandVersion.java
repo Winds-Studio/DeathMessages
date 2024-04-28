@@ -46,9 +46,9 @@ public class CommandVersion extends DeathMessagesCommand {
 						.appendNewline()
 						.append(Component.text()
 								.append(Component.text("Current Version: ", NamedTextColor.YELLOW))
-								.append(Component.text(Updater.nowVersion))
+								.append(Component.text(Updater.nowVer))
 								.append(Component.text(" | Latest Version: ", NamedTextColor.YELLOW))
-								.append(Component.text(Updater.latestVersion))
+								.append(Component.text(Updater.latest))
 								.build()));
 				break;
 			case -1:

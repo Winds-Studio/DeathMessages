@@ -298,7 +298,7 @@ public class DeathMessages extends JavaPlugin {
 				switch (Updater.shouldUpdate) {
 					case 1:
 						LOGGER.warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");
-						LOGGER.warn("Current Version: {} | Latest Version: {}", Updater.nowVersion, Updater.latestVersion);
+						LOGGER.warn("Current Version: {} | Latest Version: {}", Updater.nowVer, Updater.latest);
 						break;
 					case -1:
 						LOGGER.warn("Failed to check update!");
