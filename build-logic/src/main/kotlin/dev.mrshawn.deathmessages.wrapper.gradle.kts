@@ -85,7 +85,7 @@ repositories {
 val adventureVersion = "4.16.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.16.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.1")
@@ -93,7 +93,7 @@ dependencies {
     api("org.bstats:bstats-bukkit:3.0.2")
     api("com.tcoded:FoliaLib:0.3.1")
 
-    implementation("de.tr7zw:item-nbt-api:2.12.4-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.12.4")
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("com.discordsrv:discordsrv:1.27.0")
     compileOnly("io.lumine:Mythic-Dist:5.6.1")

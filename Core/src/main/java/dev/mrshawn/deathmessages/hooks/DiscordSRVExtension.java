@@ -61,11 +61,11 @@ public class DiscordSRVExtension {
 
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
                     && config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
-                String prefix = Util.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
+                String prefix = PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }
 
-            if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
+            if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
                 textChannel.sendMessage(deathMessageToDiscordMessage(pm, message)).queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
@@ -109,11 +109,11 @@ public class DiscordSRVExtension {
             TextChannel textChannel = g.getTextChannelById(channelID);
 
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
-                String prefix = Util.convertToLegacy(PlainTextComponentSerializer.plainText().deserialize(getMessages().getString("Prefix")));
+                String prefix = PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }
 
-            if (getMessages().getString("Discord.DeathMessage.Text").equalsIgnoreCase("")) {
+            if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
                 textChannel.sendMessage(deathMessageToDiscordMessage(message, pm.getPlayer(), entity, hasOwner))
                         .queue();
             } else {
