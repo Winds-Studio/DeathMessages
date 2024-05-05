@@ -3,6 +3,7 @@ package dev.mrshawn.deathmessages.hooks;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Messages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
@@ -65,8 +66,10 @@ public class DiscordSRVExtension {
                 message = message.substring(prefix.length());
             }
 
+            message = revertI18n(message); // Revert i18n item/mob name
+
             if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
-                textChannel.sendMessage(deathMessageToDiscordMessage(pm, message)).queue();
+                textChannel.sendMessage(buildMessage(pm, message)).queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
                 StringBuilder sb = new StringBuilder();
@@ -87,7 +90,7 @@ public class DiscordSRVExtension {
     }
 
     public void sendEntityDiscordMessage(String rawMessage, PlayerManager pm, Entity entity, boolean hasOwner, MessageType messageType) {
-        String message = rawMessage;
+        String message = revertI18n(rawMessage); // Revert i18n item/mob name
         List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 
         for (String groups : channels) {
@@ -114,7 +117,7 @@ public class DiscordSRVExtension {
             }
 
             if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
-                textChannel.sendMessage(deathMessageToDiscordMessage(message, pm.getPlayer(), entity, hasOwner))
+                textChannel.sendMessage(buildMessage(message, pm.getPlayer(), entity, hasOwner))
                         .queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
@@ -136,7 +139,7 @@ public class DiscordSRVExtension {
         }
     }
 
-    public MessageEmbed deathMessageToDiscordMessage(PlayerManager pm, String message) {
+    private MessageEmbed buildMessage(PlayerManager pm, String message) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(getDeathMessageColor());
@@ -219,7 +222,7 @@ public class DiscordSRVExtension {
         return eb.build();
     }
 
-    public MessageEmbed deathMessageToDiscordMessage(String message, Player p, Entity entity, boolean hasOwner) {
+    private MessageEmbed buildMessage(String message, Player p, Entity entity, boolean hasOwner) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(getDeathMessageColor());
@@ -325,6 +328,33 @@ public class DiscordSRVExtension {
             DeathMessages.LOGGER.error(e);
             return color;
         }
+    }
+
+    /*
+        Revert i18n format of item name or mob name caused by the i18n feature
+        Since DiscordSRV can't resolve and translate the translatable tag of Minecraft
+        Do revert only when >1.12 and i18n feature is enabled
+     */
+    private String revertI18n(String s) {
+        if (DeathMessages.majorVersion <= 12
+                && !(Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()))) return s;
+
+        // Revert block
+        if (s.contains("block.minecraft.")) {
+            s = s.replace("block.minecraft.", "");
+        }
+
+        // Revert item
+        if (s.contains("item.minecraft.")) {
+            s = s.replace("item.minecraft.", "");
+        }
+
+        // Revert mob
+        if (s.contains("mob.")) {
+            s = s.replace("mob.", "");
+        }
+
+        return s;
     }
 
     private FileConfiguration getMessages() {
