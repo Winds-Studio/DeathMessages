@@ -83,11 +83,14 @@ public class DeathMessages extends JavaPlugin {
 	private static EventPriority eventPriority = EventPriority.HIGH;
 	private static FileSettings<Config> config;
 
-	// Dreeam - e.g. 1.20.2-R0.1-SNAPSHOT -> 20, replace string before first decimal point, then replace all string after the second decimal point
-	public final static int majorVersion = Integer.parseInt(Bukkit.getServer().getBukkitVersion()
-			.replaceFirst("^(\\d+)\\.", "")
-			.replaceAll("\\.(.+)", "")
-	);
+	// Server version, e.g. 1.20.2-R0.1-SNAPSHOT -> {"1","20","2"}
+	private final static String[] serverVersion = Bukkit.getServer().getBukkitVersion()
+			.substring(0, Bukkit.getServer().getBukkitVersion().indexOf("-"))
+			.split("\\.");
+
+	private final static int mcFirstVersion = Integer.parseInt(serverVersion[0]);
+	public final static int majorVersion = Integer.parseInt(serverVersion[1]);
+	public final static int minorVersion = Integer.parseInt(serverVersion[2]);
 
 	@Override
 	public void onEnable() {
