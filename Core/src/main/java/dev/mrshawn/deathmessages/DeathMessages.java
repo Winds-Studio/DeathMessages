@@ -75,10 +75,11 @@ public class DeathMessages extends JavaPlugin {
 	public static boolean bungeeInit = false;
 
 	public static DiscordSRVExtension discordSRVExtension;
+	public static boolean discordSRVEnabled = false;
 
+	public EcoExtension ecoExtension;
 	public boolean ecoEnabled = false;
 	public boolean ecoEnchantsEnabled = false;
-	public EcoExtension ecoExtension;
 
 	private static EventPriority eventPriority = EventPriority.HIGH;
 	private static FileSettings<Config> config;
@@ -194,6 +195,7 @@ public class DeathMessages extends JavaPlugin {
 
 		if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
 			discordSRVExtension = new DiscordSRVExtension();
+			discordSRVEnabled = true;
 			LOGGER.info("DiscordSRV Hook Enabled!");
 		}
 
@@ -224,8 +226,8 @@ public class DeathMessages extends JavaPlugin {
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("eco") != null) {
-			ecoEnabled = true;
 			ecoExtension = new EcoExtension();
+			ecoEnabled = true;
 			LOGGER.info("eco Hook Enabled!");
 			if (Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
 				ecoEnchantsEnabled = true;

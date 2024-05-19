@@ -1019,7 +1019,7 @@ public class Assets {
 	private static Component getI18nName(ItemStack i, Player p) {
 		Component i18nName;
 
-		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) && !DeathMessages.discordSRVEnabled) {
 			if (DeathMessages.majorVersion > 12) {
 				// Block: block.minecraft.example
 				// Item: item.minecraft.example
@@ -1043,7 +1043,7 @@ public class Assets {
 	private static Component getI18nName(LivingEntity mob) {
 		// Dreeam - TODO
 		Component i18nName;
-		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
+		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()) && !DeathMessages.discordSRVEnabled) {
 			i18nName = Component.empty();
 		} else {
 			i18nName = Component.empty();
