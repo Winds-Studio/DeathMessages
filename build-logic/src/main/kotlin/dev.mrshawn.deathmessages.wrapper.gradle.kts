@@ -83,7 +83,7 @@ repositories {
 val adventureVersion = "4.17.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT") // Universal
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.16.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.1")

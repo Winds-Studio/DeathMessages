@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":WorldGuard"))
+    implementation(project(":Hooks:WorldGuard"))
     compileOnly("com.sk89q.worldguard:worldguard-core:7.1.0-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.1.0-SNAPSHOT")
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.4.0-SNAPSHOT") {
