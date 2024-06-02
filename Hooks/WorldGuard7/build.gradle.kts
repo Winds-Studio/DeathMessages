@@ -5,9 +5,9 @@ plugins {
 
 dependencies {
     implementation(project(":Hooks:WorldGuard"))
-    compileOnly("com.sk89q.worldguard:worldguard-core:7.1.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.1.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.4.0-SNAPSHOT") {
+    compileOnly("com.sk89q.worldguard:worldguard-core:7.0.9") // Latest Java 17
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9") // Latest Java 17
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0") { // Latest Java 17
         exclude(group = "org.bstats")
     }
 }
