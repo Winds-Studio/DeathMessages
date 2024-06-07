@@ -3,7 +3,6 @@ package dev.mrshawn.deathmessages.hooks;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
@@ -26,6 +25,7 @@ import org.bukkit.entity.Player;
 import java.awt.Color;
 import java.time.Instant;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class DiscordSRVExtension {
 
@@ -60,13 +60,17 @@ public class DiscordSRVExtension {
 
             TextChannel textChannel = g.getTextChannelById(channelID);
 
+            // Try to strip Minecraft format code to plain text
+            if (message.contains("§")) {
+                final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + "§" + "[0-9A-FK-ORX]");
+                message = STRIP_COLOR_PATTERN.matcher(message).replaceAll("");
+            }
+
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
                     && config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
                 String prefix = PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }
-
-            message = revertI18n(message); // Revert i18n item/mob name
 
             if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
                 textChannel.sendMessage(buildMessage(pm, message)).queue();
@@ -90,7 +94,6 @@ public class DiscordSRVExtension {
     }
 
     public void sendEntityDiscordMessage(String rawMessage, PlayerManager pm, Entity entity, boolean hasOwner, MessageType messageType) {
-        String message = revertI18n(rawMessage); // Revert i18n item/mob name
         List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 
         for (String groups : channels) {
@@ -111,13 +114,8 @@ public class DiscordSRVExtension {
 
             TextChannel textChannel = g.getTextChannelById(channelID);
 
-            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")) {
-                String prefix = PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(getMessages().getString("Prefix")));
-                message = message.substring(prefix.length());
-            }
-
             if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
-                textChannel.sendMessage(buildMessage(message, pm.getPlayer(), entity, hasOwner))
+                textChannel.sendMessage(buildMessage(rawMessage, pm.getPlayer(), entity, hasOwner))
                         .queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
@@ -128,11 +126,11 @@ public class DiscordSRVExtension {
 
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
                     textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, null)
-                            .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
+                            .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
                             .queue();
                 } else {
                     textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, (LivingEntity) pm.getLastEntityDamager())
-                            .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
+                            .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
                             .queue();
                 }
             }
@@ -328,33 +326,6 @@ public class DiscordSRVExtension {
             DeathMessages.LOGGER.error(e);
             return color;
         }
-    }
-
-    /*
-        Revert i18n format of item name or mob name caused by the i18n feature
-        Since DiscordSRV can't resolve and translate the translatable tag of Minecraft
-        Do revert only when >1.12 and i18n feature is enabled
-     */
-    private String revertI18n(String s) {
-        if (DeathMessages.majorVersion <= 12
-                && !(Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()))) return s;
-
-        // Revert block
-        if (s.contains("block.minecraft.")) {
-            s = s.replace("block.minecraft.", "");
-        }
-
-        // Revert item
-        if (s.contains("item.minecraft.")) {
-            s = s.replace("item.minecraft.", "");
-        }
-
-        // Revert mob
-        if (s.contains("mob.")) {
-            s = s.replace("mob.", "");
-        }
-
-        return s;
     }
 
     private FileConfiguration getMessages() {
