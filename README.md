@@ -42,7 +42,7 @@ Compatibility
 
 ## Building
 
-- Use Java 17
+- Use Java 21
 - Open your IDE, recommended to use IDEA
 - Build the plugin with: `./gradlew clean build`
 

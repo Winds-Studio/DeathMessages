@@ -8,6 +8,7 @@ dependencies {
     api(project(":Hooks:WorldGuard"))
     api(project(":Hooks:WorldGuard6"))
     api(project(":Hooks:WorldGuard7"))
+
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")
     compileOnly("com.meowj:LangUtils:1.9")

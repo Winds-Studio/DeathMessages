@@ -11,6 +11,7 @@ rootProject.name = "DeathMessages"
 
 include(
     ":Core",
+
     ":Hooks:WorldGuard",
     ":Hooks:WorldGuard6",
     ":Hooks:WorldGuard7"
