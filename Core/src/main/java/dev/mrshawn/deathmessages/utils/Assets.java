@@ -1117,8 +1117,8 @@ public class Assets {
 				return "World-Border";
 			case CONTACT:
 				return "Contact";
-			case ENTITY_SWEEP_ATTACK:
 			case ENTITY_ATTACK:
+			case ENTITY_SWEEP_ATTACK:
 				return "Melee";
 			case PROJECTILE:
 				return "Projectile";

@@ -26,7 +26,7 @@
 Compatibility
 
 - Support Java 8 and higher
-- Support 1.12.2 - Latest Minecraft version (1.20.6)
+- Support 1.12.2 - Latest Minecraft version (1.21)
 - Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
 - Multi Plugins Support
 - Folia Support
@@ -53,7 +53,6 @@ Compatibility
 > - Custom bstats charts (Pending)
 > - PVPManager support
 > - Actionbar message and private Actionbar message
-> - Refactor DiscordSRV hook
 
 ## Special Thanks To:
 

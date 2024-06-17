@@ -1333,6 +1333,21 @@ Mobs:
         - "%player% was slain by a bunch of %killer%'s"
       Sonic-Boom:
         - "%player% was obliterated by a bunch of sonically-charged shrieks"
+  # 1.21
+  bogged:
+    Solo:
+      Melee:
+        - "%player% was knocked by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was knocked by a bunch of %killer%'s"
+  breeze:
+    Solo:
+      Melee:
+        - "%player% was knocked by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was knocked by a bunch of %killer%'s"
   player:
     Solo:
       Bed:

@@ -225,3 +225,9 @@ Gang:
     warden:
       Radius: 5
       Amount: 4
+    bogged:
+      Radius: 5
+      Amount: 4
+    breeze:
+      Radius: 5
+      Amount: 4
