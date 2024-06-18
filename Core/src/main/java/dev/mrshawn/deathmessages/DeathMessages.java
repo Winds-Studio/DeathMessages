@@ -15,6 +15,8 @@ import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard6Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
+import dev.mrshawn.deathmessages.hooks.utils.nms.Wrapper;
+import dev.mrshawn.deathmessages.hooks.utils.nms.v1_20_6;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
@@ -59,6 +61,7 @@ public class DeathMessages extends JavaPlugin {
 	public static Logger LOGGER;
 	private BukkitAudiences adventure;
 	public final FoliaLib foliaLib = new FoliaLib(this);
+	private static Wrapper nmsInstance;
 
 	public boolean placeholderAPIEnabled = false;
 	public boolean combatLogXAPIEnabled = false;
@@ -98,6 +101,7 @@ public class DeathMessages extends JavaPlugin {
 		instance.adventure = BukkitAudiences.create(instance);
 		instance.adventure.console().sendMessage(loadedLogo);
 
+		initNMS();
 		initListeners();
 		initCommands();
 		initHooks();
@@ -125,6 +129,12 @@ public class DeathMessages extends JavaPlugin {
 			this.adventure = null;
 		}
 		instance = null;
+	}
+
+	private void initNMS() {
+		if (majorVersion >= 20 && minorVersion >=5) {
+			nmsInstance = new v1_20_6();
+		}
 	}
 
 	public void initConfig() {
@@ -310,6 +320,9 @@ public class DeathMessages extends JavaPlugin {
 
 	public static DeathMessages getInstance() {
 		return instance;
+	}
+	public static Wrapper getNMS() {
+		return nmsInstance;
 	}
 	public static EventPriority getEventPriority() {
 		return eventPriority;

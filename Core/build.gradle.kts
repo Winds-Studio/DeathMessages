@@ -4,10 +4,15 @@ plugins {
     id("io.github.goooler.shadow") version "8.1.7"
 }
 
+val adventureVersion = "4.17.0-SNAPSHOT"
+
 dependencies {
     api(project(":Hooks:WorldGuard"))
     api(project(":Hooks:WorldGuard6"))
     api(project(":Hooks:WorldGuard7"))
+
+    api(project(":NMS:Wrapper"))
+    api(project(":NMS:V1_20_6"))
 
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")

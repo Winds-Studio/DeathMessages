@@ -6,14 +6,11 @@ import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -66,18 +63,23 @@ public class ComponentUtil {
             // Item with Component
             // Dreeam TODO: needs to find correct way to fix
             //HoverEvent<HoverEvent.ShowItem> showItem2 = i.asHoverEvent();
-            String itemComponents = i.hasItemMeta() ? i.getItemMeta().getAsString() : "";
-            String hoverEventStr = "<hover:show_item:" + iNamespace + ":" + i.getAmount() + ":" + itemComponents + ">";
-            HoverEvent<Component> miniHoverEvent = MiniMessage.miniMessage().deserialize(hoverEventStr).asHoverEvent();
+            //NBTItem nbti = new NBTItem(i);
+            //Object compound = nbti.getCompound();
+            //System.out.println(compound);
 
-            return displayName.hoverEvent(miniHoverEvent);
+            //String itemComponents = i.hasItemMeta() ? i.getItemMeta().getAsString() : "";
+            //String hoverEventStr = "<hover:show_item:" + iNamespace + ":" + i.getAmount() + ":" + itemComponents + ">";
+            //HoverEvent<Component> miniHoverEvent = MiniMessage.miniMessage().deserialize(hoverEventStr).asHoverEvent();
+
+            showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), DeathMessages.getNMS().getItemStackComponentsMap(i));
+            //return displayName.hoverEvent(miniHoverEvent);
         } else {
             ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
             showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
                     // Item with NBT
-                    ? HoverEvent.showItem((Keyed) Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
+                    ? HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
                     // Item without NBT (tag compound)
-                    : HoverEvent.showItem((Keyed) Key.key(iNamespace), i.getAmount());
+                    : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
         }
 
         return displayName.hoverEvent(showItem);

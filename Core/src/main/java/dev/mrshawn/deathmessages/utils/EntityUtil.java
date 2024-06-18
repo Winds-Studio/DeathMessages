@@ -79,7 +79,9 @@ public class EntityUtil {
             "piglinbrute",
             "player",
             "goat",
-            "warden"
+            "warden",
+            "bogged",
+            "breeze"
     );
 
     public static List<String> getEntities() {

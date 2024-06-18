@@ -25,6 +25,12 @@ repositories {
         url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 
+    // CodeMC-NMS
+    maven {
+        name = "codemc-nms-repo"
+        url = uri("https://repo.codemc.io/repository/nms/")
+    }
+
     // NBT-API
     maven {
         name = "codemc-repo"
@@ -80,7 +86,7 @@ repositories {
     }
 }
 
-val adventureVersion = "4.16.0" // Dreeam TODO: Item hover broken on 4.17.0
+val adventureVersion = "4.17.0-SNAPSHOT"
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT") // Universal
@@ -98,11 +104,12 @@ dependencies {
     compileOnly("com.willfp:eco:6.70.1")
     compileOnly("com.willfp:EcoEnchants:12.5.1")
 
-    api("net.kyori:adventure-platform-bukkit:4.3.2")
+    api("net.kyori:adventure-platform-bukkit:4.3.3")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
     api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
     api("net.kyori:adventure-text-minimessage:$adventureVersion")
+    api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
     api("net.kyori:adventure-key:$adventureVersion")
 }
 
