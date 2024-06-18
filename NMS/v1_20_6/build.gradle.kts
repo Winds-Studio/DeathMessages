@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":NMS:Wrapper"))
+    implementation(project(":NMS:Wrapper"))
+
     compileOnly("org.spigotmc:spigot:1.20.6-R0.1-SNAPSHOT")
 }
 
