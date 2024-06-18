@@ -29,7 +29,6 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
     minimize {
         exclude(dependency("com.tcoded.folialib:.*:.*"))
-        exclude(dependency("dev.mrshawn.deathmessages:.*:.*"))
     }
     relocate("kotlin", "dev.mrshawn.deathmessages.libs.kotlin")
     relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori")

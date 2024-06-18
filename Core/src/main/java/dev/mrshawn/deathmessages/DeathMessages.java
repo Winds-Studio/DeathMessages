@@ -13,6 +13,8 @@ import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.EcoExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
+import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
+import dev.mrshawn.deathmessages.utils.nms.V1_21;
 import dev.mrshawn.deathmessages.utils.nms.Wrapper;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
@@ -121,15 +123,10 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initNMS() {
-		try {
-			if (Util.isNewerAndEqual(21, 0)) {
-				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_21").getConstructor().newInstance();
-			} else if (Util.isNewerAndEqual(20, 5)) {
-				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_20_6").getConstructor().newInstance();
-			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
-				 NoSuchMethodException e) {
-			LOGGER.error(e);
+		if (Util.isNewerAndEqual(21, 0)) {
+			nmsInstance = new V1_21();
+		} else if (Util.isNewerAndEqual(20, 5)) {
+			nmsInstance = new V1_20_6();
 		}
 	}
 
