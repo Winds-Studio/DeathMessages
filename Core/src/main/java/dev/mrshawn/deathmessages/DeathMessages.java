@@ -12,12 +12,8 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.EcoExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
-import dev.mrshawn.deathmessages.hooks.WorldGuard6Extension;
-import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
 import dev.mrshawn.deathmessages.utils.nms.Wrapper;
-import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
-import dev.mrshawn.deathmessages.utils.nms.V1_21;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
@@ -125,10 +121,15 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initNMS() {
-		if (Util.isNewerAndEqual(21, 0)) {
-			nmsInstance = new V1_21();
-		} else if (Util.isNewerAndEqual(20, 5)) {
-			nmsInstance = new V1_20_6();
+		try {
+			if (Util.isNewerAndEqual(21, 0)) {
+				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_21").getConstructor().newInstance();
+			} else if (Util.isNewerAndEqual(20, 5)) {
+				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_20_6").getConstructor().newInstance();
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
+				 NoSuchMethodException e) {
+			LOGGER.error(e);
 		}
 	}
 
@@ -255,14 +256,15 @@ public class DeathMessages extends JavaPlugin {
 			try {
 				final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
 				if (version.startsWith("7")) {
-					worldGuardExtension = new WorldGuard7Extension();
+					worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard7Extension").getConstructor().newInstance();
 					worldGuardExtension.registerFlags();
 				} else if (version.startsWith("6")) {
-					worldGuardExtension = new WorldGuard6Extension();
+					worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard6Extension").getConstructor().newInstance();
 					worldGuardExtension.registerFlags();
-				} else throw new Exception();
-				worldGuardEnabled = true;
-			} catch (final Throwable e) {
+				} else throw new UnsupportedOperationException();
+				worldGuardEnabled = false;
+			} catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+					 IllegalAccessException | NoSuchMethodException e) {
 				LOGGER.error("Error loading WorldGuardHook. Error: {}", e);
 				worldGuardEnabled = false;
 			}

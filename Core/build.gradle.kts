@@ -5,13 +5,13 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":Hooks:WorldGuard"))
-    implementation(project(":Hooks:WorldGuard6"))
-    implementation(project(":Hooks:WorldGuard7"))
+    api(project(":Hooks:WorldGuard"))
+    api(project(":Hooks:WorldGuard6"))
+    api(project(":Hooks:WorldGuard7"))
 
-    implementation(project(":NMS:Wrapper"))
-    implementation(project(":NMS:V1_20_6"))
-    implementation(project(":NMS:V1_21"))
+    api(project(":NMS:Wrapper"))
+    api(project(":NMS:V1_20_6"))
+    api(project(":NMS:V1_21"))
 
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")
