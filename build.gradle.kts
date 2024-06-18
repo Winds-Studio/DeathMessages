@@ -28,7 +28,11 @@ tasks.build {
         delete("bin")
         delete("build/libs")
         file?.copyTo(file("${rootProject.layout.buildDirectory.get()}/libs/${rootProject.name}-${plugin.version}.jar"), true)
-        listOf(":Core", ":Hooks:WorldGuard", ":Hooks:WorldGuard6", ":Hooks:WorldGuard7").forEach {
+        listOf(
+            ":Core",
+            ":Hooks:WorldGuard", ":Hooks:WorldGuard6", ":Hooks:WorldGuard7",
+            ":NMS:V1_20_6", ":NMS:V1_21", ":NMS:Wrapper",
+            ).forEach {
             delete(project(it).layout.buildDirectory.get())
         }
     }

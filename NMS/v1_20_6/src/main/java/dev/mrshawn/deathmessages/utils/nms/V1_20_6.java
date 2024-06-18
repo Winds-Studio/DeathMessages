@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package dev.mrshawn.deathmessages.hooks.utils.nms;
+package dev.mrshawn.deathmessages.utils.nms;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -33,8 +33,8 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.MinecraftKey;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class v1_21 implements Wrapper {
+public class V1_20_6 implements Wrapper {
 
     public static final Gson GSON = new Gson();
 
@@ -58,7 +58,7 @@ public class v1_21 implements Wrapper {
         for (Map.Entry<DataComponentType<?>, Optional<?>> entry : dataComponentPatch.b()) {
             DataComponentType<?> type = entry.getKey();
             Optional<?> optValue = entry.getValue();
-            MinecraftKey minecraftKey = BuiltInRegistries.aq.b(type);
+            MinecraftKey minecraftKey = BuiltInRegistries.as.b(type);
             Key key = Key.key(minecraftKey.b(), minecraftKey.a());
             if (optValue.isPresent()) {
                 Codec codec = type.b();

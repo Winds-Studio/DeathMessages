@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.hooks.utils.nms;
+package dev.mrshawn.deathmessages.utils.nms;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.event.DataComponentValue;

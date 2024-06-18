@@ -15,9 +15,9 @@ import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard6Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuard7Extension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
-import dev.mrshawn.deathmessages.hooks.utils.nms.Wrapper;
-import dev.mrshawn.deathmessages.hooks.utils.nms.v1_20_6;
-import dev.mrshawn.deathmessages.hooks.utils.nms.v1_21;
+import dev.mrshawn.deathmessages.utils.nms.Wrapper;
+import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
+import dev.mrshawn.deathmessages.utils.nms.V1_21;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
@@ -126,9 +126,9 @@ public class DeathMessages extends JavaPlugin {
 
 	private void initNMS() {
 		if (Util.isNewerAndEqual(21, 0)) {
-			nmsInstance = new v1_21();
+			nmsInstance = new V1_21();
 		} else if (Util.isNewerAndEqual(20, 5)) {
-			nmsInstance = new v1_20_6();
+			nmsInstance = new V1_20_6();
 		}
 	}
 
