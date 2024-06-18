@@ -80,7 +80,7 @@ repositories {
     }
 }
 
-val adventureVersion = "4.17.0"
+val adventureVersion = "4.16.0" // Dreeam TODO: Item hover broken on 4.17.0
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT") // Universal

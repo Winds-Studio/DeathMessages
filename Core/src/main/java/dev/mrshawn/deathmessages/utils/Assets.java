@@ -250,7 +250,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
 			try {
@@ -304,7 +304,7 @@ public class Assets {
 			}
 
 			TextComponent message = Util.convertFromLegacy(msg);
-			Component weapon = HoverUtil.buildHover(pm.getPlayer(), i, displayName);
+			Component weapon = ComponentUtil.buildItemHover(pm.getPlayer(), i, displayName);
 
 			base.append(message.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weapon).build()));
 		} else {
@@ -317,17 +317,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, pm, null, null, false, true);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, pm, null, null, false, true);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, null);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, null);
 	}
 
 	public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
@@ -363,7 +360,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		if (msg.contains("%weapon%")) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
@@ -386,7 +383,7 @@ public class Assets {
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
-			Component weaponHover = HoverUtil.buildHover(pm.getPlayer(), i, displayName);
+			Component weaponHover = ComponentUtil.buildItemHover(pm.getPlayer(), i, displayName);
 
 			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
@@ -399,17 +396,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, pm, null, mob, false, true);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, pm, null, mob, false, true);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, mob);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, mob);
 	}
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
@@ -448,7 +442,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		if (msg.contains("%weapon%")) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
@@ -471,7 +465,7 @@ public class Assets {
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
-			Component weaponHover = HoverUtil.buildHover(p, i, displayName);
+			Component weaponHover = ComponentUtil.buildItemHover(p, i, displayName);
 
 			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
@@ -484,17 +478,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, null, p, e, hasOwner, false);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, null, p, e, hasOwner, false);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = entityDeathPlaceholders(baseWithEvents, p, e, hasOwner);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) entityDeathPlaceholders(baseWithEvents, p, e, hasOwner);
 	}
 
 	public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
@@ -538,7 +529,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		base.append(Util.convertFromLegacy(msg));
 
@@ -547,17 +538,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, pm, null, mob, false, true);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, pm, null, mob, false, true);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, mob);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, mob);
 	}
 
 	public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
@@ -598,7 +586,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 			ItemStack i = mob.getEquipment().getItemInMainHand();
@@ -616,7 +604,7 @@ public class Assets {
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
-			Component weaponHover = HoverUtil.buildHover(pm.getPlayer(), i, displayName);
+			Component weaponHover = ComponentUtil.buildItemHover(pm.getPlayer(), i, displayName);
 
 			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
@@ -629,17 +617,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, pm, null, mob, false, true);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, pm, null, mob, false, true);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = playerDeathPlaceholders(baseWithEvents, pm, mob);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, mob);
 	}
 
 	public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
@@ -681,7 +666,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
 			ItemStack i = p.getEquipment().getItemInMainHand();
@@ -700,7 +685,7 @@ public class Assets {
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
-			Component weaponHover = HoverUtil.buildHover(p, i, displayName);
+			Component weaponHover = ComponentUtil.buildItemHover(p, i, displayName);
 
 			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
@@ -713,17 +698,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, null, p, em.getEntity(), hasOwner, false);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, null, p, em.getEntity(), hasOwner, false);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = entityDeathPlaceholders(baseWithEvents, p, em.getEntity(), hasOwner);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) entityDeathPlaceholders(baseWithEvents, p, em.getEntity(), hasOwner);
 	}
 
 	public static TextComponent getEntityDeath(Player player, Entity e, String damageCause, MobType mobType) {
@@ -767,7 +749,7 @@ public class Assets {
 		}
 
 		List<String> rawEvents = new ArrayList<>();
-		msg = HoverUtil.sortHoverEvents(msg, rawEvents);
+		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		base.append(Util.convertFromLegacy(msg));
 
@@ -776,17 +758,14 @@ public class Assets {
 		if (!rawEvents.isEmpty()) {
 			int index = 0;
 			for (String rawEvent : rawEvents) {
-				Component hoverEvent = HoverUtil.buildHoverEvents(rawEvent, null, player, e, hasOwner, false);
+				Component hoverEvent = ComponentUtil.buildHoverEvents(rawEvent, null, player, e, hasOwner, false);
 				baseWithEvents = baseWithEvents.replaceText(
 						TextReplacementConfig.builder().match("%hover_event_" + index++ + "%").replacement(hoverEvent).build()
 				);
 			}
 		}
 
-		Component applyPlaceholders = entityDeathPlaceholders(base.build(), player, e, hasOwner);
-		TextComponent.Builder death = Component.text().append(applyPlaceholders);
-
-		return death.build();
+		return (TextComponent) entityDeathPlaceholders(base.build(), player, e, hasOwner);
 	}
 
 	/*

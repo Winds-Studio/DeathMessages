@@ -2,25 +2,28 @@ package dev.mrshawn.deathmessages.utils;
 
 import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HoverUtil {
+public class ComponentUtil {
 
     /*
         Process hover event string in message
@@ -50,35 +53,34 @@ public class HoverUtil {
         return msg;
     }
 
-    public static Component buildHover(Player player, ItemStack i, Component displayName) {
-
+    public static Component buildItemHover(Player player, ItemStack i, Component displayName) {
         HoverEvent<HoverEvent.ShowItem> showItem;
         String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
 
-        // EcoEnchants items
+        // Eco item process
         if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
-            List<String> ecoEItemLore = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItemLore(i, player);
-
-            ItemStack tempItem = i.clone();
-            ItemMeta meta = tempItem.getItemMeta();
-            meta.setLore(ecoEItemLore);
-            tempItem.setItemMeta(meta);
-
-            showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(tempItem).getCompound("tag").toString()));
-        } else {
-            try {
-                // Item with NBT
-                showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(NBT.itemStackToNBT(i).getCompound("tag").toString()));
-            } catch (NullPointerException e) {
-                // Item has no `tag` compound in nbt
-                showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
-            }
+            i = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
-        return Component.text()
-                .append(displayName)
-                .build()
-                .hoverEvent(showItem);
+        if (DeathMessages.majorVersion >= 20 && DeathMessages.minorVersion >= 5) {
+            // Item with Component
+            // Dreeam TODO: needs to find correct way to fix
+            //HoverEvent<HoverEvent.ShowItem> showItem2 = i.asHoverEvent();
+            String itemComponents = i.hasItemMeta() ? i.getItemMeta().getAsString() : "";
+            String hoverEventStr = "<hover:show_item:" + iNamespace + ":" + i.getAmount() + ":" + itemComponents + ">";
+            HoverEvent<Component> miniHoverEvent = MiniMessage.miniMessage().deserialize(hoverEventStr).asHoverEvent();
+
+            return displayName.hoverEvent(miniHoverEvent);
+        } else {
+            ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
+            showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
+                    // Item with NBT
+                    ? HoverEvent.showItem((Keyed) Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
+                    // Item without NBT (tag compound)
+                    : HoverEvent.showItem((Keyed) Key.key(iNamespace), i.getAmount());
+        }
+
+        return displayName.hoverEvent(showItem);
     }
 
     /*

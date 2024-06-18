@@ -78,7 +78,6 @@ public class DeathMessages extends JavaPlugin {
 	public static boolean discordSRVEnabled = false;
 
 	public EcoExtension ecoExtension;
-	public boolean ecoEnabled = false;
 	public boolean ecoEnchantsEnabled = false;
 
 	private static EventPriority eventPriority = EventPriority.HIGH;
@@ -221,18 +220,14 @@ public class DeathMessages extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
 			mythicMobs = MythicBukkit.inst();
 			mythicmobsEnabled = true;
-			LOGGER.info("MythicMobs Hook Enabled!");
 			Bukkit.getPluginManager().registerEvents(new MobDeath(), instance);
+			LOGGER.info("MythicMobs Hook Enabled!");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("eco") != null) {
+		if (Bukkit.getPluginManager().getPlugin("eco") != null && Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
 			ecoExtension = new EcoExtension();
-			ecoEnabled = true;
-			LOGGER.info("eco Hook Enabled!");
-			if (Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
-				ecoEnchantsEnabled = true;
-				LOGGER.info("EcoEnchants Hook Enabled!");
-			}
+			ecoEnchantsEnabled = true;
+			LOGGER.info("EcoEnchants Hook Enabled!");
 		}
 
 		if (majorVersion <= 12) {
