@@ -17,5 +17,6 @@ include(
     ":Hooks:WorldGuard7",
 
     ":NMS:V1_20_6",
+    ":NMS:V1_21",
     ":NMS:Wrapper",
 )
