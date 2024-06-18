@@ -44,7 +44,7 @@ import java.util.Optional;
 
 public class V1_21 implements Wrapper {
 
-    public static final Gson GSON = new Gson();
+    public final Gson GSON = new Gson();
 
     @Override
     public Map<Key, DataComponentValue> getItemStackComponentsMap(ItemStack i) {
@@ -80,7 +80,7 @@ public class V1_21 implements Wrapper {
         return CraftItemStack.asNMSCopy(itemstack);
     }
 
-    public static JsonElement fromNative(Object nativeJsonElement) {
+    public JsonElement fromNative(Object nativeJsonElement) {
         String json = GSON.toJson(nativeJsonElement);
         return GSON.fromJson(json, JsonElement.class);
     }
