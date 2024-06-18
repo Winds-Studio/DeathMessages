@@ -142,7 +142,7 @@ public class Assets {
 						return get(gang, pm, pyro.get().getPlayer(), "Bed");
 					}
 					// Respawn Anchor kill
-					if (DeathMessages.majorVersion >= 16) {
+					if (Util.isNewerAndEqual(16, 0)) {
 						if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
 							return get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
 						}
@@ -200,7 +200,7 @@ public class Assets {
 						return getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Bed", mobType);
 					}
 					// Respawn Anchor kill
-					if (DeathMessages.majorVersion >= 16) {
+					if (Util.isNewerAndEqual(16, 0)) {
 						if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
 							return getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
 						}
@@ -255,7 +255,9 @@ public class Assets {
 		if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
 			try {
 				FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-				String material = (DeathMessages.majorVersion > 12) ? fb.getBlockData().getMaterial().toString().toLowerCase() : fb.getMaterial().toString().toLowerCase();
+				String material = Util.isNewerAndEqual(12, 0)
+						? fb.getBlockData().getMaterial().toString().toLowerCase()
+						: fb.getMaterial().toString().toLowerCase();
 				String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 
 				base.append(Util.convertFromLegacy(msg.replaceAll("%block%", configValue)));
@@ -281,7 +283,7 @@ public class Assets {
 			if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
 				return getNaturalDeath(pm, "Projectile-Unknown");
 			}
-			if (DeathMessages.majorVersion >= 14) {
+			if (Util.isNewerAndEqual(14, 0)) {
 				if (!i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
 					return getNaturalDeath(pm, "Projectile-Unknown");
 				}
@@ -999,7 +1001,7 @@ public class Assets {
 		Component i18nName;
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) && !DeathMessages.discordSRVEnabled) {
-			if (DeathMessages.majorVersion > 12) {
+			if (Util.isNewerAndEqual(12, 0)) {
 				// Block: block.minecraft.example
 				// Item: item.minecraft.example
 				String materialType = i.getType().isBlock() ? "block" : "item";

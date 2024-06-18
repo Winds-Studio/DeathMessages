@@ -7,6 +7,7 @@ import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class EntityDamage implements Listener {
 			getPlayer.ifPresent(pm -> {
 				pm.setLastDamageCause(e.getCause());
 
-				if (DeathMessages.majorVersion >= 20 && DeathMessages.minorVersion >= 3 && e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+				if (Util.isNewerAndEqual(20, 3) && e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
 					// For >= 1.20.3, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
 					if (e.getDamageSource().getDirectEntity() instanceof TNTPrimed) {
 						TNTPrimed tnt = (TNTPrimed) e.getDamageSource().getDirectEntity();

@@ -14,6 +14,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
@@ -79,7 +80,7 @@ public class EntityDeath implements Listener {
 							if (explosion.get().getMaterial().name().contains("BED")) {
 								naturalDeath = Assets.getNaturalDeath(pm, "Bed");
 							}
-							if (DeathMessages.majorVersion >= 16) {
+							if (Util.isNewerAndEqual(16, 0)) {
 								if (explosion.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
 									naturalDeath = Assets.getNaturalDeath(pm, "Respawn-Anchor");
 								}
@@ -88,7 +89,7 @@ public class EntityDeath implements Listener {
 						}
 					} else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 						naturalDeath = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
-					} else if (DeathMessages.majorVersion >= 9 && DeathMessages.majorVersion < 999 && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
+					} else if (Util.isNewerAndEqual(9, 0) && Util.isOlderAndEqual(999, 999) && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
 						AreaEffectCloud cloud = (AreaEffectCloud) pm.getLastEntityDamager();
 						if (cloud.getSource() instanceof EnderDragon) {
 							pm.setLastDamageCause(

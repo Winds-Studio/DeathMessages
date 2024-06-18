@@ -60,7 +60,9 @@ public class Util {
 
     public static void getExplosionNearbyEffected(Player p, Block b) {
         List<UUID> effected = new ArrayList<>();
-        List<Entity> getNearby = new ArrayList<>((DeathMessages.majorVersion > 12) ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(100)) : b.getWorld().getNearbyEntities(b.getLocation(), 100, 100, 100));
+        List<Entity> getNearby = new ArrayList<>(isNewerThan(12, 0)
+                ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(100))
+                : b.getWorld().getNearbyEntities(b.getLocation(), 100, 100, 100));
 
         getNearby.forEach(ent -> {
                     if (ent instanceof Player) {
@@ -86,5 +88,50 @@ public class Util {
         new ExplosionManager(p.getUniqueId(), b.getType(), b.getLocation(), effected);
         DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(p, b);
         Bukkit.getPluginManager().callEvent(explodeEvent);
+    }
+
+    // Server version, e.g. 1.20.2-R0.1-SNAPSHOT -> {"1","20","2"}
+    private final static String[] serverVersion = Bukkit.getServer().getBukkitVersion()
+            .substring(0, Bukkit.getServer().getBukkitVersion().indexOf("-"))
+            .split("\\.");
+
+    private final static int mcFirstVersion = Integer.parseInt(serverVersion[0]);
+    private final static int majorVersion = Integer.parseInt(serverVersion[1]);
+    private final static int minorVersion = serverVersion.length == 3 ? Integer.parseInt(serverVersion[2]) : 0;
+
+    public static boolean isNewerThan(int major, int minor) {
+        if (majorVersion > major) {
+            return true;
+        }
+
+        return majorVersion == major && minorVersion > minor;
+    }
+
+    public static boolean isEqualTo(int major, int minor) {
+        return majorVersion == major && minorVersion == minor;
+    }
+
+    public static boolean isOlderThan(int major, int minor) {
+        if (majorVersion < major) {
+            return true;
+        }
+
+        return majorVersion == major && minorVersion < minor;
+    }
+
+    public static boolean isNewerAndEqual(int major, int minor) {
+        if (majorVersion > major) {
+            return true;
+        }
+
+        return majorVersion == major && minorVersion >= minor;
+    }
+
+    public static boolean isOlderAndEqual(int major, int minor) {
+        if (majorVersion < major) {
+            return true;
+        }
+
+        return majorVersion == major && minorVersion <= minor;
     }
 }

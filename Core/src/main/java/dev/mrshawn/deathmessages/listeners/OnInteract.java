@@ -25,7 +25,7 @@ public class OnInteract implements Listener {
 			if (getBlock.getType().name().endsWith("BED") || getBlock.getType().name().endsWith("BED_BLOCK")) {
 				Util.getExplosionNearbyEffected(e.getPlayer(), getBlock);
 			}
-		} else if (DeathMessages.majorVersion >= 16) {
+		} else if (Util.isNewerAndEqual(16, 0)) {
 			if (!getBlock.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
 				if (getBlock.getType().equals(Material.RESPAWN_ANCHOR)) {
 					Util.getExplosionNearbyEffected(e.getPlayer(), getBlock);
@@ -35,7 +35,7 @@ public class OnInteract implements Listener {
 	}
 
 	private boolean isAir(Material material) {
-		if (DeathMessages.majorVersion <= 13) {
+		if (Util.isOlderAndEqual(13, 2)) {
 			// From 1.14 org.bukkit.Material.isAir()
 			switch (material) {
 				//<editor-fold defaultstate="collapsed" desc="isAir">

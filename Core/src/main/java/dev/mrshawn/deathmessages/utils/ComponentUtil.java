@@ -59,20 +59,9 @@ public class ComponentUtil {
             i = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
-        if (DeathMessages.majorVersion >= 20 && DeathMessages.minorVersion >= 5) {
+        if (Util.isNewerAndEqual(20, 5)) {
             // Item with Component
-            // Dreeam TODO: needs to find correct way to fix
-            //HoverEvent<HoverEvent.ShowItem> showItem2 = i.asHoverEvent();
-            //NBTItem nbti = new NBTItem(i);
-            //Object compound = nbti.getCompound();
-            //System.out.println(compound);
-
-            //String itemComponents = i.hasItemMeta() ? i.getItemMeta().getAsString() : "";
-            //String hoverEventStr = "<hover:show_item:" + iNamespace + ":" + i.getAmount() + ":" + itemComponents + ">";
-            //HoverEvent<Component> miniHoverEvent = MiniMessage.miniMessage().deserialize(hoverEventStr).asHoverEvent();
-
             showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), DeathMessages.getNMS().getItemStackComponentsMap(i));
-            //return displayName.hoverEvent(miniHoverEvent);
         } else {
             ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
             showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()

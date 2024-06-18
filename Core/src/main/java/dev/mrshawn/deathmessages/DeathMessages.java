@@ -36,6 +36,7 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathL
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
+import dev.mrshawn.deathmessages.utils.Util;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -86,15 +87,6 @@ public class DeathMessages extends JavaPlugin {
 	private static EventPriority eventPriority = EventPriority.HIGH;
 	private static FileSettings<Config> config;
 
-	// Server version, e.g. 1.20.2-R0.1-SNAPSHOT -> {"1","20","2"}
-	private final static String[] serverVersion = Bukkit.getServer().getBukkitVersion()
-			.substring(0, Bukkit.getServer().getBukkitVersion().indexOf("-"))
-			.split("\\.");
-
-	private final static int mcFirstVersion = Integer.parseInt(serverVersion[0]);
-	public final static int majorVersion = Integer.parseInt(serverVersion[1]);
-	public final static int minorVersion = serverVersion.length == 3 ? Integer.parseInt(serverVersion[2]) : 0;
-
 	@Override
 	public void onEnable() {
 		LOGGER = LogManager.getLogger(instance.getName());
@@ -132,7 +124,7 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initNMS() {
-		if (majorVersion >= 20 && minorVersion >=5) {
+		if (Util.isNewerAndEqual(20, 5)) {
 			nmsInstance = new v1_20_6();
 		}
 	}
@@ -240,7 +232,7 @@ public class DeathMessages extends JavaPlugin {
 			LOGGER.info("EcoEnchants Hook Enabled!");
 		}
 
-		if (majorVersion <= 12) {
+		if (Util.isOlderAndEqual(12, 2)) {
 			if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
 					|| Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
 				if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
