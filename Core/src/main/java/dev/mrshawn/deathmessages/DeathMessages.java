@@ -276,7 +276,7 @@ public class DeathMessages extends JavaPlugin {
 			for (World world : Bukkit.getWorlds()) {
 				try {
 					if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
-						foliaLib.getImpl().runNextTick(task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
+						foliaLib.getScheduler().runNextTick(task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
 					}
 				} catch (NoClassDefFoundError e) {
 					if (world.getGameRuleValue("showDeathMessages").equals("true")) world.setGameRuleValue("showDeathMessages", "false");
@@ -297,7 +297,7 @@ public class DeathMessages extends JavaPlugin {
 	private void checkUpdate() {
 		if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {
 			Updater.checkUpdate();
-			foliaLib.getImpl().runLaterAsync(() -> {
+			foliaLib.getScheduler().runLaterAsync(() -> {
 				switch (Updater.shouldUpdate) {
 					case 1:
 						LOGGER.warn("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases");

@@ -139,7 +139,7 @@ allprojects {
         processResources {
             filesMatching("**/plugin.yml") {
                 expand(
-                    "version" to project.version
+                    "version" to rootProject.version
                 )
             }
         }
@@ -173,7 +173,7 @@ tasks {
             }
         }
 
-        dependsOn(project(":Core").tasks.shadowJar)
+        dependsOn(project(":Core").tasks.build)
     }
 }
 

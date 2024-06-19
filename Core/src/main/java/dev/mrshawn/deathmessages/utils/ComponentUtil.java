@@ -60,6 +60,7 @@ public class ComponentUtil {
         }
 
         if (Util.isNewerAndEqual(20, 5)) {
+            System.out.println("看看");
             // Item with Component
             showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), DeathMessages.getNMS().getItemStackComponentsMap(i));
         } else {

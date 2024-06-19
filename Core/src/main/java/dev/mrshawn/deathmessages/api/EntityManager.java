@@ -71,7 +71,7 @@ public class EntityManager {
 		if (lastPlayerTask != null) {
 			lastPlayerTask.cancel();
 		}
-		lastPlayerTask = DeathMessages.getInstance().foliaLib.getImpl().runLater(this::destroy, config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+		lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
 		this.damageCause = DamageCause.CUSTOM;
 	}
 

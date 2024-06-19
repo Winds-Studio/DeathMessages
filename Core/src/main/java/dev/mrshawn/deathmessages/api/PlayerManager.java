@@ -128,7 +128,7 @@ public class PlayerManager {
 		if (lastEntityTask != null) {
 			lastEntityTask.cancel();
 		}
-		lastEntityTask = DeathMessages.getInstance().foliaLib.getImpl().runLater(() -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
+		lastEntityTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
 	}
 
 	public Entity getLastEntityDamager() {
@@ -177,7 +177,7 @@ public class PlayerManager {
 
 	public void setCooldown() {
 		cooldown = config.getInt(Config.COOLDOWN);
-		cooldownTask = DeathMessages.getInstance().foliaLib.getImpl().runTimer(() -> {
+		cooldownTask = DeathMessages.getInstance().foliaLib.getScheduler().runTimer(() -> {
 			if (cooldown <= 0) {
 				cooldownTask.cancel();
 			}

@@ -18,7 +18,7 @@ public class Updater {
     private static String updateURL = "https://raw.githubusercontent.com/Winds-Studio/DeathMessages/master/VERSION";
 
     public static void checkUpdate() {
-        DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> {
+        DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> {
             try {
                 if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_DEV_VERSION.getPath())) {
                     // Dreeam TODO - check DEV version

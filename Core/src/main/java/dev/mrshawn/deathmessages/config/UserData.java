@@ -40,7 +40,7 @@ public class UserData {
 		if (ioRunning != null) ioOperations.push(IOOperation.SAVE);
 		// We should not halt the main server thread
 		if (!sync) {
-			DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> saveFile());
+			DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> saveFile());
 		} else {
 			saveFile();
 		}
@@ -70,7 +70,7 @@ public class UserData {
 		if (ioRunning != null) ioOperations.push(IOOperation.LOAD);
 		// We should not halt the main server thread
 		if (!sync) {
-			DeathMessages.getInstance().foliaLib.getImpl().runAsync(task -> reloadFile());
+			DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> reloadFile());
 		} else {
 			saveFile();
 		}
