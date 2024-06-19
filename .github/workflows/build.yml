@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@main
         with:
           java-version: 21
-          distribution: zulu
+          distribution: temurin
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
