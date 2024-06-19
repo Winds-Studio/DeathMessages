@@ -2,7 +2,8 @@ plugins {
     kotlin("jvm") version "2.0.0"
 }
 
-val adventureVersion = "4.17.0-SNAPSHOT" // Dreeam TODO: Check whether item hover broken on latest
+val adventureVersion = findProperty("adventure-version")
+val adventurePlatformVersion = findProperty("adventure-platform-version")
 
 dependencies {
     api(project(":Hooks:WorldGuard"))
@@ -17,9 +18,9 @@ dependencies {
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.16.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.1")
-    api("com.github.cryptomorin:XSeries:11.0.0")
-    api("org.bstats:bstats-bukkit:3.0.2")
-    api("com.tcoded:FoliaLib:0.4.0")
+    implementation("com.github.cryptomorin:XSeries:11.0.0")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("com.tcoded:FoliaLib:0.4.0")
 
     implementation("de.tr7zw:item-nbt-api:2.13.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
@@ -31,7 +32,7 @@ dependencies {
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")
     compileOnly("com.meowj:LangUtils:1.9")
 
-    api("net.kyori:adventure-platform-bukkit:4.3.3")
+    api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     api("net.kyori:adventure-api:$adventureVersion")
     api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
     api("net.kyori:adventure-text-serializer-plain:$adventureVersion")

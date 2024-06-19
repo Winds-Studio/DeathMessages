@@ -1,11 +1,12 @@
-val adventureVersion = "4.17.0-SNAPSHOT" // Dreeam TODO: Check whether item hover broken on latest
+val adventureVersion = findProperty("adventure-version")
+val adventurePlatformVersion = findProperty("adventure-platform-version")
 
 dependencies {
     compileOnly(project(":NMS:Wrapper"))
 
     compileOnly("org.spigotmc:spigot:1.21-R0.1-SNAPSHOT")
 
-    compileOnly("net.kyori:adventure-platform-bukkit:4.3.3")
+    compileOnly("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     compileOnly("net.kyori:adventure-api:$adventureVersion")
     compileOnly("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
     compileOnly("net.kyori:adventure-text-serializer-plain:$adventureVersion")
