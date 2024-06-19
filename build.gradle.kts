@@ -1,15 +1,12 @@
 plugins {
     `java-library`
     `maven-publish`
-    kotlin("jvm") version "2.0.0"
     id("io.github.goooler.shadow") version "8.1.7"
     id("com.willfp.libreforge-gradle-plugin") version "1.0.2"
 }
 
 group = "dev.mrshawn"
 version = "1.4.19-SNAPSHOT"
-
-val adventureVersion = "4.17.0-SNAPSHOT" // Dreeam TODO: Check whether item hover broken on latest
 
 repositories {
     mavenCentral()
@@ -29,7 +26,6 @@ repositories {
 
 allprojects {
     apply(plugin = "java")
-    apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
     apply(plugin = "io.github.goooler.shadow")
 
@@ -113,16 +109,6 @@ allprojects {
         }
     }
 
-    dependencies {
-        api("net.kyori:adventure-platform-bukkit:4.3.3")
-        api("net.kyori:adventure-api:$adventureVersion")
-        api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
-        api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
-        api("net.kyori:adventure-text-minimessage:$adventureVersion")
-        api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
-        api("net.kyori:adventure-key:$adventureVersion")
-    }
-
     configure<JavaPluginExtension> {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -131,12 +117,6 @@ allprojects {
     tasks {
         compileJava {
             options.encoding = "UTF-8"
-        }
-
-        compileKotlin {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
         }
 
         shadowJar {

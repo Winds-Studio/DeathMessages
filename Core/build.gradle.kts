@@ -1,3 +1,9 @@
+plugins {
+    kotlin("jvm") version "2.0.0"
+}
+
+val adventureVersion = "4.17.0-SNAPSHOT" // Dreeam TODO: Check whether item hover broken on latest
+
 dependencies {
     api(project(":Hooks:WorldGuard"))
     api(project(":Hooks:WorldGuard6"))
@@ -24,4 +30,20 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")
     compileOnly("com.meowj:LangUtils:1.9")
+
+    api("net.kyori:adventure-platform-bukkit:4.3.3")
+    api("net.kyori:adventure-api:$adventureVersion")
+    api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
+    api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
+    api("net.kyori:adventure-text-minimessage:$adventureVersion")
+    api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
+    api("net.kyori:adventure-key:$adventureVersion")
+}
+
+tasks {
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
 }
