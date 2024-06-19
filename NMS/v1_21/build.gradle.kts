@@ -1,8 +1,3 @@
-plugins {
-    id("dev.mrshawn.deathmessages.wrapper")
-    id("io.github.goooler.shadow") version "8.1.7"
-}
-
 dependencies {
     compileOnly(project(":NMS:Wrapper"))
 
@@ -12,4 +7,10 @@ dependencies {
 configure<JavaPluginExtension> {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "21"
+    }
 }

@@ -13,8 +13,6 @@ import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
 import dev.mrshawn.deathmessages.hooks.EcoExtension;
 import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
 import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
-import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
-import dev.mrshawn.deathmessages.utils.nms.V1_21;
 import dev.mrshawn.deathmessages.utils.nms.Wrapper;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
@@ -123,10 +121,15 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initNMS() {
-		if (Util.isNewerAndEqual(21, 0)) {
-			nmsInstance = new V1_21();
-		} else if (Util.isNewerAndEqual(20, 5)) {
-			nmsInstance = new V1_20_6();
+		try {
+			if (Util.isNewerAndEqual(21, 0)) {
+				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_21").getConstructor().newInstance();
+			} else if (Util.isNewerAndEqual(20, 5)) {
+				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_20_6").getConstructor().newInstance();
+			}
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
+				 NoSuchMethodException e) {
+			LOGGER.error(e);
 		}
 	}
 
@@ -259,9 +262,8 @@ public class DeathMessages extends JavaPlugin {
 					worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard6Extension").getConstructor().newInstance();
 					worldGuardExtension.registerFlags();
 				} else throw new UnsupportedOperationException();
-				worldGuardEnabled = false;
 			} catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-					 IllegalAccessException | NoSuchMethodException e) {
+					 IllegalAccessException | NoSuchMethodException | UnsupportedOperationException e) {
 				LOGGER.error("Error loading WorldGuardHook. Error: {}", e);
 				worldGuardEnabled = false;
 			}
