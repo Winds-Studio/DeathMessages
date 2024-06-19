@@ -147,6 +147,7 @@ allprojects {
 //            }
             relocate("kotlin", "dev.mrshawn.deathmessages.libs.kotlin")
             relocate("com.google.gson", "dev.mrshawn.deathmessages.libs.gson")
+            relocate("com.google.auto", "dev.mrshawn.deathmessages.libs.auto")
             relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori")
             relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
             relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
@@ -164,30 +165,36 @@ allprojects {
         }
 
         build {
-            dependsOn("shadowJar")
+            dependsOn(shadowJar)
         }
     }
 }
 
-tasks.getByName("shadowJar") {
-    doLast {
-        val plugin = project(":Core")
-        val file = file("${plugin.layout.buildDirectory.get()}/libs").listFiles()
-            ?.find { it.name.startsWith(rootProject.name) }
-
-        delete("bin")
-        delete("build/libs")
-        file?.copyTo(file("${rootProject.layout.buildDirectory.get()}/libs/${rootProject.name}-${rootProject.version}.jar"), true)
-        listOf(
-            ":Core",
-            ":Hooks:WorldGuard", ":Hooks:WorldGuard6", ":Hooks:WorldGuard7",
-            ":NMS:V1_20_6", ":NMS:V1_21", ":NMS:Wrapper",
-        ).forEach {
-            delete(project(it).layout.buildDirectory.get())
-        }
+tasks {
+    libreforgeJar {
+        dependsOn("jar")
     }
 
-    dependsOn(project(":Core").tasks.getByName("shadowJar"))
+    build {
+        doLast {
+            val plugin = project(":Core")
+            val file = file("${plugin.layout.buildDirectory.get()}/libs").listFiles()
+                ?.find { it.name.startsWith(rootProject.name) }
+
+            delete("bin")
+            delete("build/libs")
+            file?.copyTo(file("${rootProject.layout.buildDirectory.get()}/libs/${rootProject.name}-${rootProject.version}.jar"), true)
+            listOf(
+                ":Core",
+                ":Hooks:WorldGuard", ":Hooks:WorldGuard6", ":Hooks:WorldGuard7",
+                ":NMS:V1_20_6", ":NMS:V1_21", ":NMS:Wrapper",
+            ).forEach {
+                delete(project(it).layout.buildDirectory.get())
+            }
+        }
+
+        dependsOn(project(":Core").tasks.shadowJar)
+    }
 }
 
 publishing {

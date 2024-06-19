@@ -21,7 +21,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew clean shadowJar
+        run: ./gradlew clean build
 
       - name: Upload DeathMessages DevBuild
         if: github.ref_name == 'master' && github.event_name != 'pull_request'
