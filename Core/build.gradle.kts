@@ -9,9 +9,9 @@ dependencies {
     api(project(":Hooks:WorldGuard6"))
     api(project(":Hooks:WorldGuard7"))
 
-    api(project(":NMS:Wrapper"))
-    api(project(":NMS:V1_20_6"))
-    api(project(":NMS:V1_21"))
+    implementation(project(":NMS:Wrapper"))
+    implementation(project(":NMS:V1_20_6"))
+    implementation(project(":NMS:V1_21"))
 
     compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT") // Universal
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
