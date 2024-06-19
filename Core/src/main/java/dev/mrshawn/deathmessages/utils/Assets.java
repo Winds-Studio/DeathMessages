@@ -331,7 +331,7 @@ public class Assets {
 
 	public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
 		final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
-		String entityName = mob.getType().getEntityClass().getSimpleName().toLowerCase();
+		String entityName = EntityUtil.getConfigNodeByEntity(mob);
 		final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
 				+ "." + entityName;
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
@@ -409,7 +409,7 @@ public class Assets {
 	}
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
-		String entityName = e.getType().getEntityClass().getSimpleName().toLowerCase();
+		String entityName = EntityUtil.getConfigNodeByEntity(e);
 		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
@@ -492,7 +492,7 @@ public class Assets {
 
 	public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
 		final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
-		String entityName = mob.getType().getEntityClass().getSimpleName().toLowerCase();
+		String entityName = EntityUtil.getConfigNodeByEntity(mob);
 		final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
 				+ "." + entityName;
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
@@ -552,7 +552,7 @@ public class Assets {
 
 	public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
 		final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
-		String entityName = mob.getType().getEntityClass().getSimpleName().toLowerCase();
+		String entityName = EntityUtil.getConfigNodeByEntity(mob);
 		final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
 				+ "." + entityName;
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
@@ -630,7 +630,7 @@ public class Assets {
 	}
 
 	public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
-		String entityName = em.getEntity().getType().getEntityClass().getSimpleName().toLowerCase();
+		String entityName = EntityUtil.getConfigNodeByEntity(em.getEntity());
 		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
@@ -711,7 +711,7 @@ public class Assets {
 	}
 
 	public static TextComponent getEntityDeath(Player player, Entity e, String damageCause, MobType mobType) {
-		String entityName = e.getType().getEntityClass().getSimpleName().toLowerCase();
+		String entityName = EntityUtil.getConfigNodeByEntity(e);
 
 		boolean hasOwner = false;
 		if (e instanceof Tameable) {

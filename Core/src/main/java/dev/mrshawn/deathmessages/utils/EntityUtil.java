@@ -1,5 +1,11 @@
 package dev.mrshawn.deathmessages.utils;
 
+import dev.mrshawn.deathmessages.api.EntityManager;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Wolf;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,4 +93,9 @@ public class EntityUtil {
     public static List<String> getEntities() {
         return list;
     }
+
+    public static String getConfigNodeByEntity(Entity e) {
+        return e.getType().getEntityClass().getSimpleName().toLowerCase();
+    }
+
 }

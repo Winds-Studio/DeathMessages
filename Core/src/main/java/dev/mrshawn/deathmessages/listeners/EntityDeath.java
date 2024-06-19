@@ -14,6 +14,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -106,7 +107,7 @@ public class EntityDeath implements Listener {
 				} else {
 					// Killed by mob
 					Entity ent = pm.getLastEntityDamager();
-					String mobName = ent.getType().getEntityClass().getSimpleName().toLowerCase();
+					String mobName = EntityUtil.getConfigNodeByEntity(ent);
 					int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Radius");
 					int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Amount");
 

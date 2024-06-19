@@ -7,6 +7,7 @@ import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -57,9 +58,9 @@ public class EntityDamage implements Listener {
 			if (listenedMobs.isEmpty()) return;
 
 			for (String listened : listenedMobs) {
-				if (listened.contains(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase())) {
+				if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-					if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(e.getEntity().getType().getEntityClass().getSimpleName().toLowerCase());
+					if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(EntityUtil.getConfigNodeByEntity(e.getEntity()));
 					getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
 					if (!getEntity.isPresent()) {
 						MobType mobType = MobType.VANILLA;
