@@ -123,9 +123,11 @@ public class DeathMessages extends JavaPlugin {
 	private void initNMS() {
 		try {
 			if (Util.isNewerAndEqual(21, 0)) {
-				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_21").getConstructor().newInstance();
+				Class<Wrapper> nmsClass = (Class<Wrapper>) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_21");
+				nmsInstance = nmsClass.getConstructor().newInstance();
 			} else if (Util.isNewerAndEqual(20, 5)) {
-				nmsInstance = (Wrapper) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_20_6").getConstructor().newInstance();
+				Class<Wrapper> nmsClass = (Class<Wrapper>) Class.forName("dev.mrshawn.deathmessages.utils.nms.V1_20_6");
+				nmsInstance = nmsClass.getConstructor().newInstance();
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
 				 NoSuchMethodException e) {
