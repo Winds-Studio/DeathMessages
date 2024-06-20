@@ -4,6 +4,7 @@ import dev.mrshawn.deathmessages.api.EntityManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Wolf;
 
 import java.util.Arrays;
@@ -98,4 +99,13 @@ public class EntityUtil {
         return e.getType().getEntityClass().getSimpleName().toLowerCase();
     }
 
+    // Reduce directly detect hasOwner as few as possible just makes it looks better
+    public static boolean hasOwner(Entity e) {
+        if (e instanceof Tameable) {
+            final Tameable tameable = (Tameable) e;
+            return tameable.getOwner() != null && tameable.getOwner().getName() != null;
+        }
+
+        return false;
+    }
 }

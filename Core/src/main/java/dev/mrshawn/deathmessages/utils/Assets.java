@@ -410,7 +410,9 @@ public class Assets {
 
 	public static TextComponent getEntityDeathWeapon(Player p, Entity e, MobType mobType) {
 		String entityName = EntityUtil.getConfigNodeByEntity(e);
+		boolean hasOwner = EntityUtil.hasOwner(e);
 		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
+
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
 			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
@@ -419,12 +421,6 @@ public class Assets {
 				// reserved
 			}
 			msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + ".Weapon"), p, e);
-		}
-
-		boolean hasOwner = false;
-		if (e instanceof Tameable) {
-			Tameable tameable = (Tameable) e;
-			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
 		if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -497,6 +493,7 @@ public class Assets {
 				+ "." + entityName;
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
+
 		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			//System.out.println("is myth - " + internalMobType);
@@ -557,6 +554,7 @@ public class Assets {
 				+ "." + entityName;
 		final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
 		List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
+
 		if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
 			String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
 			msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
@@ -631,7 +629,9 @@ public class Assets {
 
 	public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
 		String entityName = EntityUtil.getConfigNodeByEntity(em.getEntity());
+		boolean hasOwner = EntityUtil.hasOwner(em.getEntity());
 		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
+
 		if (mobType.equals(MobType.MYTHIC_MOB)) {
 			String internalMobType = null;
 			if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
@@ -650,12 +650,6 @@ public class Assets {
 			}
 			// This death message will not be broadcast, since user have not set death message for this entity
 			return Component.empty();
-		}
-
-		boolean hasOwner = false;
-		if (em.getEntity() instanceof Tameable) {
-			Tameable tameable = (Tameable) em.getEntity();
-			if (tameable.getOwner() != null) hasOwner = true;
 		}
 
 		String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
@@ -712,15 +706,10 @@ public class Assets {
 
 	public static TextComponent getEntityDeath(Player player, Entity e, String damageCause, MobType mobType) {
 		String entityName = EntityUtil.getConfigNodeByEntity(e);
-
-		boolean hasOwner = false;
-		if (e instanceof Tameable) {
-			Tameable tameable = (Tameable) e;
-			if (tameable.getOwner() != null) hasOwner = true;
-		}
-
+		boolean hasOwner = EntityUtil.hasOwner(e);
 		List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
 				entityName + "." + damageCause), player, e);
+
 		if (hasOwner) {
 			msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
 					e.getName().toLowerCase() + ".Tamed"), player, e);
@@ -814,7 +803,8 @@ public class Assets {
 		return result;
 	}
 
-	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean owner) {
+	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean hasOwner) {
+		System.out.println("1");
 		msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%entity%").replacement(Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase())).build())
 				.replaceText(TextReplacementConfig.builder().matchLiteral("%entity_display%").replacement(entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
@@ -827,9 +817,8 @@ public class Assets {
 				.replaceText(TextReplacementConfig.builder().matchLiteral("%y%").replacement(String.valueOf(entity.getLocation().getBlock().getY())).build())
 				.replaceText(TextReplacementConfig.builder().matchLiteral("%z%").replacement(String.valueOf(entity.getLocation().getBlock().getZ())).build());
 
-		if (owner && entity instanceof Tameable && ((Tameable) entity).getOwner() != null && ((Tameable) entity).getOwner().getName() != null) {
-			Tameable tameable = (Tameable) entity;
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%owner%").replacement(tameable.getOwner().getName()).build());
+		if (hasOwner) {
+			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%owner%").replacement(((Tameable) entity).getOwner().getName()).build());
 		}
 
 		try {
@@ -852,7 +841,7 @@ public class Assets {
 		return msg;
 	}
 
-	public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean owner) {
+	public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean hasOwner) {
 		msg = msg
 				.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()))
@@ -866,10 +855,8 @@ public class Assets {
 				.replaceAll("%y%", String.valueOf(entity.getLocation().getBlock().getY()))
 				.replaceAll("%z%", String.valueOf(entity.getLocation().getBlock().getZ()));
 
-		if (owner && entity instanceof Tameable && ((Tameable) entity).getOwner() != null && ((Tameable) entity).getOwner().getName() != null) {
-			Tameable tameable = (Tameable) entity;
-			msg = msg
-					.replaceAll("%owner%", tameable.getOwner().getName());
+		if (hasOwner) {
+			msg = msg.replaceAll("%owner%", ((Tameable) entity).getOwner().getName());
 		}
 
 		try {

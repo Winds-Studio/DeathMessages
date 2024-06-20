@@ -77,14 +77,14 @@ public class ComponentUtil {
 
     /*
         Process and build hover events from raw events list
-        Only for playerDeath: pm, e, Only for EntityDeath: p, e, owner
+        Only for playerDeath: pm, e, Only for EntityDeath: p, e, hasOwner
      */
     public static Component buildHoverEvents(
             String rawEvent,
             PlayerManager pm,
             Player p,
             Entity e,
-            boolean owner,
+            boolean hasOwner,
             boolean isPlayerDeath
     ) {
         rawEvent = rawEvent.replace("[", "").replace("]", "");
@@ -103,7 +103,9 @@ public class ComponentUtil {
         // Append hover click events if exists
         if (rawHover.length == 4) {
             ClickEvent click = null;
-            final String content = isPlayerDeath ? Assets.playerDeathPlaceholders(rawHover[3], pm, (LivingEntity) e) : Assets.entityDeathPlaceholders(rawHover[3], p, e, owner);
+            final String content = isPlayerDeath
+                    ? Assets.playerDeathPlaceholders(rawHover[3], pm, (LivingEntity) e)
+                    : Assets.entityDeathPlaceholders(rawHover[3], p, e, hasOwner);
 
             switch (rawHover[2]) {
                 case "COPY_TO_CLIPBOARD":

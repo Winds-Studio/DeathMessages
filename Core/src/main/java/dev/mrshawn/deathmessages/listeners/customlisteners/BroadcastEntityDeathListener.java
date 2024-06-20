@@ -11,11 +11,13 @@ import dev.mrshawn.deathmessages.files.FileSettings;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
@@ -33,10 +35,11 @@ public class BroadcastEntityDeathListener implements Listener {
 		if (e.getTextComponent().equals(Component.empty())) return; // Dreeam - in Assets: return null -> renturn Component.empty()
 
 		Optional<PlayerManager> pm = Optional.of(e.getPlayer());
-		boolean hasOwner = e.getEntity() instanceof Tameable;
+		Entity entity = e.getEntity();
+		boolean hasOwner = EntityUtil.hasOwner(entity);
 
 		if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-			Component message = Assets.entityDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), e.getEntity(), hasOwner);
+			Component message = Assets.entityDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), entity, hasOwner);
 			DeathMessages.getInstance().adventure().console().sendMessage(message.replaceText(TextReplacementConfig.builder()
 					.matchLiteral("%message%")
 					.replacement(e.getTextComponent())
@@ -93,14 +96,14 @@ public class BroadcastEntityDeathListener implements Listener {
 						// Will reach the discord broadcast
 					}
 					if (DeathMessages.discordSRVExtension != null && !discordSent) {
-						DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), e.getEntity(), hasOwner, e.getMessageType());
+						DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), entity, hasOwner, e.getMessageType());
 						discordSent = true;
 					}
 				}
 			}
 		}
 		PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(e.getTextComponent()));
-		Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+		Optional<EntityManager> getEntity = EntityManager.getEntity(entity.getUniqueId());
 		getEntity.ifPresent(EntityManager::destroy);
 	}
 }
