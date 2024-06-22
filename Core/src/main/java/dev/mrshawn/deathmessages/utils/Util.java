@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util {
 
@@ -40,11 +42,42 @@ public class Util {
     }
 
     public static TextComponent convertFromLegacy(String s) {
+        s = colorizeBungeeRGB(s);
+
         return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
     }
 
     public static String convertToLegacy(Component component) {
         return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+    }
+
+    /*
+        Match and add & in front of each bungee RGB code for adventure to serialize, for backward compatibility
+        In adventure, RGB color code format is like &#a25981
+        In bungee api, RGB color code format is like #a25981
+        To support both bungee and adventure RGB color code in legacy
+    */
+    private static String colorizeBungeeRGB(String s) {
+        if (isNewerAndEqual(16, 0)) {
+            // Match bungee RGB color code only, use Negative Lookbehind to avoid matching code begin with &
+            Pattern pattern = Pattern.compile("(?<!&)(#[0-9a-fA-F]{6})");
+            Matcher matcher = pattern.matcher(s);
+            StringBuffer result = new StringBuffer();
+
+            while (matcher.find()) {
+                String colorCode = matcher.group(1);
+
+                String replacement = "&" + colorCode;
+                matcher.appendReplacement(result, replacement);
+            }
+
+            // Append rest of string
+            matcher.appendTail(result);
+
+            s = result.toString();
+        }
+
+        return s;
     }
 
     public static boolean isNumeric(String s) {
