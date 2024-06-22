@@ -101,8 +101,6 @@ public class EntityDamageByEntity implements Listener {
 						|| (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 					getEntity.ifPresent(em -> {
-						if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
-							System.out.println(EntityUtil.getConfigNodeByEntity(e.getEntity()));
 						if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 							if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
 								if (explosions.get(e.getDamager().getUniqueId()) instanceof Player) {
@@ -152,14 +150,13 @@ public class EntityDamageByEntity implements Listener {
 								&& DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
 							mobType = MobType.MYTHIC_MOB;
 						}
-						if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(EntityUtil.getConfigNodeByEntity(e.getEntity()));
+
 						new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
 					}
 				}
 			}
 		}
 		if (e.getEntity() instanceof EnderCrystal) {
-			if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(EntityUtil.getConfigNodeByEntity(e.getEntity()));
 			if (e.getDamager().getType().isAlive()) {
 				explosions.put(e.getEntity().getUniqueId(), e.getDamager());
 			} else if (e.getDamager() instanceof Projectile) {

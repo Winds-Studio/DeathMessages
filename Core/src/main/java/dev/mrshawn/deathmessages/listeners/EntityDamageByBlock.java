@@ -41,7 +41,7 @@ public class EntityDamageByBlock implements Listener {
 			for (String listened : listenedMobs) {
 				if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))) {
 					Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-					if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath())) System.out.println(EntityUtil.getConfigNodeByEntity(e.getEntity()));
+
 					getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
 					if (!getEntity.isPresent()) {
 						MobType mobType = MobType.VANILLA;

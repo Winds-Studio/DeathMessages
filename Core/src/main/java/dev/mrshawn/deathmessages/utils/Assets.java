@@ -804,7 +804,6 @@ public class Assets {
 	}
 
 	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean hasOwner) {
-		System.out.println("1");
 		msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%entity%").replacement(Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase())).build())
 				.replaceText(TextReplacementConfig.builder().matchLiteral("%entity_display%").replacement(entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
