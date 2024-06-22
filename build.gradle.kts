@@ -128,7 +128,7 @@ allprojects {
             relocate("kotlin", "dev.mrshawn.deathmessages.libs.kotlin")
             relocate("com.google.gson", "dev.mrshawn.deathmessages.libs.gson")
             relocate("com.google.auto", "dev.mrshawn.deathmessages.libs.auto")
-            relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori")
+            //relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori") // Don't relocate to avoid item hover issue
             relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
             relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
             relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")
