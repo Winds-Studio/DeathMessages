@@ -126,8 +126,8 @@ allprojects {
 //                exclude(dependency("com.tcoded.folialib:.*:.*"))
 //            }
             relocate("kotlin", "dev.mrshawn.deathmessages.libs.kotlin")
-            relocate("com.google.gson", "dev.mrshawn.deathmessages.libs.gson")
-            relocate("com.google.auto", "dev.mrshawn.deathmessages.libs.auto")
+            //relocate("com.google.gson", "dev.mrshawn.deathmessages.libs.gson") // Don't relocate to avoid item hover issue
+            //relocate("com.google.auto", "dev.mrshawn.deathmessages.libs.auto") // Don't relocate to avoid item hover issue
             //relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori") // Don't relocate to avoid item hover issue
             relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
             relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
