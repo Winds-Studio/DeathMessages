@@ -3,7 +3,7 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT") // WorldGuard7 began on 1.13.2
 
-    compileOnly("com.sk89q.worldguard:worldguard-core:7.0.9") // Latest Java 17
+    compileOnly("com.sk89q.worldguard:worldguard-core:7.0.10") // Latest Java 17
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9") // Latest Java 17
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0") { // Latest Java 17
         exclude(group = "org.bstats")
