@@ -302,7 +302,7 @@ public class Assets {
 				}
 				displayName = getI18nName(i, pm.getPlayer());
 			} else {
-				displayName = Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+				displayName = ComponentUtil.getItemStackDisplayName(i);
 			}
 
 			TextComponent message = Util.convertFromLegacy(msg);
@@ -381,7 +381,7 @@ public class Assets {
 				}
 				displayName = getI18nName(i, pm.getPlayer());
 			} else {
-				displayName = Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+				displayName = ComponentUtil.getItemStackDisplayName(i);
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
@@ -459,7 +459,7 @@ public class Assets {
 				}
 				displayName = getI18nName(i, p);
 			} else {
-				displayName = Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+				displayName = ComponentUtil.getItemStackDisplayName(i);
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
@@ -600,7 +600,7 @@ public class Assets {
 				}
 				displayName = getI18nName(i, pm.getPlayer());
 			} else {
-				displayName = Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+				displayName = ComponentUtil.getItemStackDisplayName(i);
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
@@ -677,7 +677,7 @@ public class Assets {
 				}
 				displayName = getI18nName(i, p);
 			} else {
-				displayName = Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+				displayName = ComponentUtil.getItemStackDisplayName(i);
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);

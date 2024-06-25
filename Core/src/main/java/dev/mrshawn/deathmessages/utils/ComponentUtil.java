@@ -15,12 +15,24 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ComponentUtil {
+
+    private static Method itemMetaDisplayName;
+
+    static {
+        try {
+            // Modern method to get itemStack displayName, using Paper api
+            itemMetaDisplayName = ItemMeta.class.getMethod("displayName");
+        } catch (NoSuchMethodException ignored) {}
+    }
 
     /*
         Process hover event string in message
@@ -128,5 +140,17 @@ public class ComponentUtil {
         }
 
         return event.build();
+    }
+
+    public static Component getItemStackDisplayName(ItemStack i) {
+        if (Util.isNewerAndEqual(16, 0) && itemMetaDisplayName != null) {
+            try {
+                // Modern method - Paper api
+                return (Component) itemMetaDisplayName.invoke(i.getItemMeta());
+            } catch (InvocationTargetException | IllegalAccessException ignored) {}
+        }
+
+        // Legacy method
+        return Util.convertFromLegacy(i.getItemMeta().getDisplayName());
     }
 }
