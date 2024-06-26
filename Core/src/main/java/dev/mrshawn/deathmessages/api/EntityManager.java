@@ -11,10 +11,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 // Class designed to keep track of damage and data to mobs that were damaged by players
 
@@ -33,13 +33,13 @@ public class EntityManager {
 
 	private WrappedTask lastPlayerTask;
 
-	private static final List<EntityManager> entities = new CopyOnWriteArrayList<>();
+	private static final Map<UUID, EntityManager> entities = new ConcurrentHashMap<>();
 
 	public EntityManager(Entity entity, UUID entityUUID, MobType mobType) {
 		this.entity = entity;
 		this.entityUUID = entityUUID;
 		this.mobType = mobType;
-		entities.add(this);
+		entities.put(entityUUID, this);
 	}
 
 	public Entity getEntity() {
@@ -104,13 +104,11 @@ public class EntityManager {
 	}
 
 	public static Optional<EntityManager> getEntity(UUID uuid) {
-		return entities.stream()
-				.filter(em -> em.getEntityUUID().equals(uuid))
-				.findFirst();
+		return Optional.ofNullable(entities.get(uuid));
 	}
 
 	public void destroy() {
-		entities.remove(this);
+		entities.remove(this.entityUUID);
 	}
 }
 

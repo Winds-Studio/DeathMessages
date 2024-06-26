@@ -5,9 +5,12 @@ import org.jetbrains.annotations.NotNull;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ExplosionManager {
@@ -17,14 +20,16 @@ public class ExplosionManager {
 	private Location location;
 	private final List<UUID> effected;
 
-	public static final List<ExplosionManager> explosions = new CopyOnWriteArrayList<>();
+	private static final Map<UUID, ExplosionManager> explosions = new ConcurrentHashMap<>();
+	private static final Map<Location, UUID> locs = new ConcurrentHashMap<>();
 
 	public ExplosionManager(UUID pyro, Material material, Location location, List<UUID> effected) {
 		this.pyro = pyro;
 		this.material = material;
 		this.location = location;
 		this.effected = effected;
-		explosions.add(this);
+		explosions.put(pyro, this);
+		locs.put(location, pyro);
 
 		// Destroys class. Won't need the info anymore
 		DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, 5 * 20L);
@@ -52,18 +57,20 @@ public class ExplosionManager {
 	}
 
 	public static Optional<ExplosionManager> getExplosion(Location location) {
-		return explosions.stream()
-				.filter(ex -> ex.getLocation() == location)
-				.findAny();
+		UUID uuid = locs.get(location);
+		if (uuid != null) {
+			return Optional.ofNullable(explosions.get(uuid));
+		}
+
+		return Optional.empty();
 	}
 
 	public static Optional<ExplosionManager> getManagerIfEffected(UUID uuid) {
-		return explosions.stream()
-				.filter(ex -> ex.getEffected().contains(uuid))
-				.findFirst();
+		return Optional.ofNullable(explosions.get(uuid));
 	}
 
 	private void destroy() {
-		explosions.remove(this);
+		explosions.remove(this.pyro);
+		locs.remove(this.location);
 	}
 }

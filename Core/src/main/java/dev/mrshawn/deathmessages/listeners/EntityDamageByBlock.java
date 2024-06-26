@@ -28,6 +28,7 @@ public class EntityDamageByBlock implements Listener {
 			getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
 		} else {
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
+
 			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
 					.getKeys(false);
 			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null

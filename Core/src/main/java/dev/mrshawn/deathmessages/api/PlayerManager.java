@@ -16,8 +16,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.Inventory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlayerManager {
@@ -42,7 +44,7 @@ public class PlayerManager {
 
 	private WrappedTask lastEntityTask;
 
-	private static final List<PlayerManager> players = new CopyOnWriteArrayList<>(); // Fix ConcurrentModificationException in PlayerMoveEvent
+	private static final Map<UUID, PlayerManager> players = new ConcurrentHashMap<>();
 
 	public final boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
 
@@ -56,6 +58,7 @@ public class PlayerManager {
 			UserData.getInstance().getConfig().set(playerUUID + ".is-blacklisted", false);
 			UserData.getInstance().save();
 		}
+
 		if (saveUserData) {
 			messagesEnabled = UserData.getInstance().getConfig().getBoolean(playerUUID + ".messages-enabled");
 			isBlacklisted = UserData.getInstance().getConfig().getBoolean(playerUUID + ".is-blacklisted");
@@ -63,9 +66,10 @@ public class PlayerManager {
 			messagesEnabled = true;
 			isBlacklisted = false;
 		}
+
 		this.damageCause = DamageCause.CUSTOM;
 		this.isCommandDeath = false;
-		players.add(this);
+		players.put(p.getUniqueId(), this);
 	}
 
 	public Player getPlayer() {
@@ -198,9 +202,7 @@ public class PlayerManager {
 	}
 
 	public static Optional<PlayerManager> getPlayer(UUID uuid) {
-		return players.stream()
-				.filter(pm -> pm.getUUID().equals(uuid))
-				.findFirst();
+		return Optional.ofNullable(players.get(uuid));
 	}
 
 	public static boolean isEmpty(Player p) {
@@ -208,7 +210,7 @@ public class PlayerManager {
 	}
 
 	public void removePlayer() {
-		players.remove(this);
+		players.remove(this.playerUUID);
 	}
 }
 
