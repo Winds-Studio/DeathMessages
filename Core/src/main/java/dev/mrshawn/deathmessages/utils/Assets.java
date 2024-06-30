@@ -67,6 +67,26 @@ public class Assets {
 				|| name.contains("TRAPDOOR");
 	}
 
+	public static boolean isAir(ItemStack i) {
+		if (Util.isOlderAndEqual(13, 0)) {
+			// From 1.14 org.bukkit.Material.isAir()
+			switch (i.getType()) {
+				//<editor-fold defaultstate="collapsed" desc="isAir">
+				case AIR:
+				case CAVE_AIR:
+				case VOID_AIR:
+					// ----- Legacy Separator -----
+				case LEGACY_AIR:
+					//</editor-fold>
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		return i.getType().isAir();
+	}
+
 	public static boolean itemNameIsWeapon(ItemStack itemStack) {
 		if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return false;
 

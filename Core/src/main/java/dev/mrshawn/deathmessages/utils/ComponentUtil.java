@@ -63,6 +63,11 @@ public class ComponentUtil {
     }
 
     public static Component buildItemHover(Player player, ItemStack i, Component displayName) {
+        // Early return, to prevent no component message sent to player caused by air hover
+        if (Assets.isAir(i)) {
+            return displayName;
+        }
+
         HoverEvent<HoverEvent.ShowItem> showItem;
         String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
 
