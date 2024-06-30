@@ -64,6 +64,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 			if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
 				continue;
 			}
+
 			for (Player pls : w.getPlayers()) {
 				Optional<PlayerManager> getPlayer2 = PlayerManager.getPlayer(pls);
 				getPlayer2.ifPresent(pms -> {
@@ -93,6 +94,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 				}
 			}
 		}
+
 		PluginMessaging.sendPluginMSG(e.getPlayer(), Util.convertToLegacy(e.getTextComponent()));
 	}
 

@@ -56,10 +56,11 @@ public class BroadcastEntityDeathListener implements Listener {
 		boolean discordSent = false;
 
 		for (World w : e.getBroadcastedWorlds()) {
+			if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
+				continue;
+			}
+
 			for (Player player : w.getPlayers()) {
-				if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
-					continue;
-				}
                 Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
                 if (privateTameable) {
                     getPlayer.ifPresent(pms -> {
@@ -102,6 +103,7 @@ public class BroadcastEntityDeathListener implements Listener {
 				}
 			}
 		}
+
 		PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(e.getTextComponent()));
 		Optional<EntityManager> getEntity = EntityManager.getEntity(entity.getUniqueId());
 		getEntity.ifPresent(EntityManager::destroy);
