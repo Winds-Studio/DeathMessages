@@ -92,11 +92,6 @@ Saved-User-Data: true
 Disable-Weapon-Kill-With-No-Custom-Name:
   Enabled: false
 
-  # If enabled, weapons with default display names (white) will be overridden with the message color.
-  # So if the last word is red, then if this is enabled, the weapon name will be red as well.
-  # NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET, NOT WORKING YET,
-  Allow-Message-Color-Override: true
-
   # If the weapon has enchantments and you still want the death type to still be Weapon, set this to false.
   # Even if the weapon name is still default.
   Ignore-Enchantments: true

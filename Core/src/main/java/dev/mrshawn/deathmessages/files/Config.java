@@ -37,8 +37,6 @@ public enum Config {
 	SAVED_USER_DATA("Saved-User-Data", true),
 
 	DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED("Disable-Weapon-Kill-With-No-Custom-Name.Enabled", false),
-	DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ALLOW_MESSAGE_COLOR_OVERRIDE
-			("Disable-Weapon-Kill-With-No-Custom-Name.Allow-Message-Color-Override", true),
 	DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS
 			("Disable-Weapon-Kill-With-No-Custom-Name.Ignore-Enchantments", true),
 	DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO
