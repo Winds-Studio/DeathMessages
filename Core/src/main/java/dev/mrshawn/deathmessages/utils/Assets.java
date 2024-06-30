@@ -1042,16 +1042,16 @@ public class Assets {
 	private static String capitalize(String name) {
 		// Replace "_" to " " in the material name then split
 		String[] list = name.replaceAll("_", " ").split(" ");
-        StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		// To make the first letter of each word capitalized, then append the rest of the string in each word together
-        for (String s : list) {
+		for (String s : list) {
 			String fst = s.substring(0, 1);
 			String snd = s.substring(1).toLowerCase();
 
-			sb.append(fst).append(snd).append(" ");
+			sb.append(fst).append(snd);
 		}
 
-        return sb.toString();
+		return sb.toString();
 	}
 
 	public static String getEnvironment(World.Environment environment) {
