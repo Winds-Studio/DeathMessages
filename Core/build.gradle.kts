@@ -22,7 +22,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.tcoded:FoliaLib:0.4.0")
 
-    implementation("de.tr7zw:item-nbt-api:2.13.1-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.13.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.discordsrv:discordsrv:1.27.0")
     compileOnly("io.lumine:Mythic-Dist:5.6.2")
