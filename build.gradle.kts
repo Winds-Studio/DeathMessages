@@ -2,7 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     id("io.github.goooler.shadow") version "8.1.7"
-    id("com.willfp.libreforge-gradle-plugin") version "1.0.2"
+    id("com.willfp.libreforge-gradle-plugin") version "1.0.3"
 }
 
 group = "dev.mrshawn"
