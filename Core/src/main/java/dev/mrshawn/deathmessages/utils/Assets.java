@@ -48,6 +48,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -139,7 +140,6 @@ public class Assets {
 
 	public static TextComponent playerDeathMessage(PlayerManager pm, boolean gang) {
 		LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
-		boolean hasWeapon = hasWeapon(mob, pm.getLastDamage());
 
 		if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
 			if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
@@ -170,6 +170,8 @@ public class Assets {
 				}
 			}
 		}
+
+		boolean hasWeapon = hasWeapon(mob, pm.getLastDamage());
 		if (hasWeapon) {
 			if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
 				return getWeapon(gang, pm, mob);
@@ -179,6 +181,7 @@ public class Assets {
 				return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
 			}
 		} else {
+			// Dreeam TODO: idk why there is for loop used to if (pm.getLastDamage().equals(dc)), no need, waste performance..
 			for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
 				if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
 					return getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
@@ -1040,15 +1043,24 @@ public class Assets {
 	}
 
 	private static String capitalize(String name) {
-		// Replace "_" to " " in the material name then split
-		String[] list = name.replaceAll("_", " ").split(" ");
+		// Split with "_"
+		String[] list = name.split("_");
 		StringBuilder sb = new StringBuilder();
+		int i = 0;
+
 		// To make the first letter of each word capitalized, then append the rest of the string in each word together
 		for (String s : list) {
 			String fst = s.substring(0, 1);
 			String snd = s.substring(1).toLowerCase();
 
 			sb.append(fst).append(snd);
+
+			// Add space between split words
+			if (i < list.length - 1) {
+				sb.append(" ");
+			}
+
+			i++;
 		}
 
 		return sb.toString();
