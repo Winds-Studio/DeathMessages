@@ -43,15 +43,19 @@ public class ComponentUtil {
         // If contains event string, process, otherwise return original msg directly
         if (msg.contains("[")) {
             int index = 0;
-            // Match all string between [ and ], e.g. abc[123]edf -> [123]
+            // Match all string between [ and ], e.g. aaa[123]bbb -> [123]
             Pattern pattern = Pattern.compile("\\[(.*?)]");
             Matcher matcher = pattern.matcher(msg);
 
             while (matcher.find()) {
+                String group = matcher.group(1);
                 String replacement = "%hover_event_" + index + "%";
 
+                // Filter string like [aaa] or [aaa::]
+                if (group.split("::").length == 1) continue;
+
                 // Added in raw Events list
-                rawEvents.add(matcher.group(1));
+                rawEvents.add(group);
                 // Replace original message
                 msg = msg.replace("[" + matcher.group(1) + "]", replacement);
                 // Update index
@@ -111,7 +115,7 @@ public class ComponentUtil {
         event.append(Util.convertFromLegacy(rawHover[0]));
 
         // Append hover text if exists
-        if (!rawHover[1].isEmpty()) {
+        if (rawHover.length >= 2 && !rawHover[1].isEmpty()) {
             HoverEvent<Component> showText = HoverEvent.showText(Util.convertFromLegacy(rawHover[1]));
             event.hoverEvent(showText);
         }
