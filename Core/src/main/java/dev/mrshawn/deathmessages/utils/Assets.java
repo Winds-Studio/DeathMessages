@@ -827,28 +827,28 @@ public class Assets {
 	}
 
 	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean hasOwner) {
-		msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%entity%").replacement(Messages.getInstance().getConfig().getString("Mobs."
-						+ entity.getType().toString().toLowerCase())).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%entity_display%").replacement(entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
-						+ entity.getType().toString().toLowerCase()) : entity.getCustomName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%killer%").replacement(player.getName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%killer_display%").replacement(player.getDisplayName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%world%").replacement(entity.getLocation().getWorld().getName()).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%world_environment%").replacement(getEnvironment(entity.getLocation().getWorld().getEnvironment())).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%x%").replacement(String.valueOf(entity.getLocation().getBlock().getX())).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%y%").replacement(String.valueOf(entity.getLocation().getBlock().getY())).build())
-				.replaceText(TextReplacementConfig.builder().matchLiteral("%z%").replacement(String.valueOf(entity.getLocation().getBlock().getZ())).build());
+		msg = msg.replaceText(Util.replace("%entity%", Messages.getInstance().getConfig().getString("Mobs."
+						+ entity.getType().toString().toLowerCase())))
+				.replaceText(Util.replace("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
+						+ entity.getType().toString().toLowerCase()) : entity.getCustomName()))
+				.replaceText(Util.replace("%killer%", player.getName()))
+				.replaceText(Util.replace("%killer_display%", player.getDisplayName()))
+				.replaceText(Util.replace("%world%", entity.getLocation().getWorld().getName()))
+				.replaceText(Util.replace("%world_environment%", getEnvironment(entity.getLocation().getWorld().getEnvironment())))
+				.replaceText(Util.replace("%x%", String.valueOf(entity.getLocation().getBlock().getX())))
+				.replaceText(Util.replace("%y%", String.valueOf(entity.getLocation().getBlock().getY())))
+				.replaceText(Util.replace("%z%", String.valueOf(entity.getLocation().getBlock().getZ())));
 
 		if (hasOwner) {
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%owner%").replacement(((Tameable) entity).getOwner().getName()).build());
+			msg = msg.replaceText(Util.replace("%owner%", ((Tameable) entity).getOwner().getName()));
 		}
 
 		try {
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement(entity.getLocation().getBlock().getBiome().name()).build());
+			msg = msg.replaceText(Util.replace("%biome%", entity.getLocation().getBlock().getBiome().name()));
 		} catch (NullPointerException e) {
 			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
 			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-			msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("%biome%").replacement("Unknown").build());
+			msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
 		}
 
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {

@@ -30,10 +30,10 @@ public class Util {
             .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
             .build();
 
-    public static TextReplacementConfig replace(String match, String replace) {
+    public static TextReplacementConfig replace(String matchLiteral, String replace) {
         return TextReplacementConfig.builder()
-                .matchLiteral(match)
-                .replacement((replace != null) ? replace : match) // Prevent null replacement
+                .matchLiteral(matchLiteral)
+                .replacement((replace != null) ? replace : matchLiteral) // Prevent null replacement
                 .build();
     }
 
