@@ -1336,16 +1336,28 @@ Mobs:
   # 1.21
   bogged:
     Solo:
+      Projectile-Arrow:
+        - "%player% was bogged by %killer%."
+      Weapon:
+        - "%player% was bogged by %killer% using %weapon%"
       Melee:
         - "%player% was knocked by a %killer%"
     Gang:
+      Projectile-Arrow:
+        - "%player% was bogged by a bunch of %killer%s"
+      Weapon:
+        - "%player% was bogged by a bunch of %killer%s using %weapon%"
       Melee:
         - "%player% was knocked by a bunch of %killer%'s"
   breeze:
     Solo:
+      Projectile-Fireball:
+        - "%player% was knocked by %killer%"
       Melee:
         - "%player% was knocked by a %killer%"
     Gang:
+      Projectile-Fireball:
+        - "%player% was knocked by a bunch of %killer%s"
       Melee:
         - "%player% was knocked by a bunch of %killer%'s"
   player:
