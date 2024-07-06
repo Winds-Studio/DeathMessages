@@ -52,7 +52,7 @@ public class ComponentUtil {
                 String replacement = "%hover_event_" + index + "%";
 
                 // Filter string like [aaa] or [aaa::]
-                if (group.split("::").length == 1) continue;
+                if (group.split("::").length <= 1) continue;
 
                 // Added in raw Events list
                 rawEvents.add(group);
