@@ -18,7 +18,7 @@ dependencies {
     compileOnly("org.apache.commons:commons-lang3:3.14.0")
     compileOnly("commons-io:commons-io:2.16.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.1")
-    implementation("com.github.cryptomorin:XSeries:11.0.0")
+    implementation("com.github.cryptomorin:XSeries:11.2.0")
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.tcoded:FoliaLib:0.4.0")
 
