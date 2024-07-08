@@ -5,7 +5,7 @@ dependencies {
 
     compileOnly("com.sk89q.worldguard:worldguard-core:7.0.9") // Latest Java 17
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9") // Latest Java 17
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0") { // Latest Java 17
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.4") { // Latest Java 17
         exclude(group = "org.bstats")
     }
 }
