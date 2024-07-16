@@ -95,6 +95,20 @@ public class ComponentUtil {
         return displayName.hoverEvent(showItem);
     }
 
+    // TODO: Check whether needed
+    /*
+    public static Component buildEntityHover(Entity entity, Component name) {
+        HoverEvent<HoverEvent.ShowEntity> showEntity;
+        String iNamespace = XEntityType.of(entity).get().name().toLowerCase();
+
+        showEntity = entity.getCustomName() != null
+                ? HoverEvent.showEntity(Key.key(iNamespace), entity.getUniqueId(), name)
+                : HoverEvent.showEntity(Key.key(iNamespace), entity.getUniqueId());
+
+        return name.hoverEvent(showEntity);
+    }
+     */
+
     /*
         Process and build hover events from raw events list
         Only for playerDeath: pm, e, Only for EntityDeath: p, e, hasOwner
