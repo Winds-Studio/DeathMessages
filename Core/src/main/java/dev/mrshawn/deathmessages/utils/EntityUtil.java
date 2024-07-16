@@ -108,4 +108,16 @@ public class EntityUtil {
 
         return false;
     }
+
+    // TODO - get mob variant name (not sure is needed)
+    /*
+    public static String getName(Entity e) {
+        if (Util.isNewerAndEqual(20, 5) && e.getType() == EntityType.WOLF) {
+            String key = e.getType().getKey().getKey();
+            //Wolf.Variant.ASHEN
+            System.out.println(key);
+        }
+        return null;
+    }
+     */
 }
