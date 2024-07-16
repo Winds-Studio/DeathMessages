@@ -4,6 +4,7 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.CommentedConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 public class Messages {
@@ -63,7 +64,7 @@ public class Messages {
 		config = CommentedConfiguration.loadConfiguration(file);
 		try {
 			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
-		} catch (Exception e) {
+		} catch (IOException e) {
 			DeathMessages.LOGGER.error(e);
 		}
 	}
