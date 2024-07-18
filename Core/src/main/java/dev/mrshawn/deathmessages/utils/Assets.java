@@ -612,23 +612,34 @@ public class Assets {
 		msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
 		if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-			ItemStack i = mob.getEquipment().getItemInMainHand();
-			Component displayName;
-			if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-				if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
-					if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
-							.equals(projectileDamage)) {
-						return getProjectile(gang, pm, mob, Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()));
+			Component weaponHover;
+
+			if (!projectileDamage.equals("Projectile-ShulkerBullet")) {
+				ItemStack i = mob.getEquipment().getItemInMainHand();
+				Component displayName;
+				if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+					if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
+						if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
+								.equals(projectileDamage)) {
+							return getProjectile(gang, pm, mob, Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()));
+						}
 					}
+					displayName = getI18nName(i, pm.getPlayer());
+				} else {
+					displayName = ComponentUtil.getItemStackDisplayName(i);
 				}
-				displayName = getI18nName(i, pm.getPlayer());
+
+				weaponHover = ComponentUtil.buildItemHover(pm.getPlayer(), i, displayName);
 			} else {
-				displayName = ComponentUtil.getItemStackDisplayName(i);
+				Entity projectile = pm.getLastProjectileEntity();
+				Component projectileName = projectile.getCustomName() != null
+						? Component.text(projectile.getCustomName()) // TODO: Get display name using Paper api
+						: getI18nName(projectile, pm.getPlayer());
+
+				weaponHover = projectileName;
 			}
 
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
-			Component weaponHover = ComponentUtil.buildItemHover(pm.getPlayer(), i, displayName);
-
 			base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
 		} else {
 			TextComponent deathMessage = Util.convertFromLegacy(msg);
@@ -1033,13 +1044,27 @@ public class Assets {
 		return i18nName;
 	}
 
-	private static Component getI18nName(LivingEntity mob) {
-		// Dreeam - TODO
+	/*
+     	Use MiniMessage feature to send translatable component to player.
+     	Thus, able to display entity name for players based on player's client locale.
+ 	*/
+	private static Component getI18nName(Entity mob, Player p) {
 		Component i18nName;
+
 		if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()) && !DeathMessages.discordSRVEnabled) {
-			i18nName = Component.empty();
+			if (Util.isNewerAndEqual(12, 0)) {
+				// Entity: entity.minecraft.example
+				String rawTranslatable = "<lang:entity.minecraft." + mob.getType().name().toLowerCase() + ">";
+				i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
+			} else if (DeathMessages.getInstance().langUtilsEnabled && !(mob instanceof ShulkerBullet)) { // <= 1.12.2 no ShulkerBullet lang key
+				i18nName = Component.text(LanguageHelper.getEntityName(mob, p.getLocale()));
+			} else {
+				String name = capitalize(mob.getType().name());
+				i18nName = Component.text(name);
+			}
 		} else {
-			i18nName = Component.empty();
+			String name = capitalize(mob.getType().name());
+			i18nName = Component.text(name);
 		}
 
 		return i18nName;
