@@ -84,6 +84,12 @@ allprojects {
             url = uri("https://nexus.sirblobman.xyz/public/")
         }
 
+        // SayanVanish
+        maven {
+            name = "sayanvanish-repo"
+            url = uri("https://repo.sayandev.org/snapshots")
+        }
+
         // sk89q's
         maven {
             name = "sk89q-repo"

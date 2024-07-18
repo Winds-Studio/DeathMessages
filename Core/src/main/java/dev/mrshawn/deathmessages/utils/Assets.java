@@ -864,13 +864,14 @@ public class Assets {
 	}
 
 	public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean hasOwner) {
+		final boolean isSayanVanished = isSayanVanished(player);
 		msg = msg
 				.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()))
 				.replaceAll("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()) : entity.getCustomName())
-				.replaceAll("%killer%", player.getName())
-				.replaceAll("%killer_display%", player.getDisplayName())
+				.replaceAll("%killer%", isSayanVanished ? getVanishedName() : player.getName())
+				.replaceAll("%killer_display%", isSayanVanished ? getVanishedName() : player.getDisplayName())
 				.replaceAll("%world%", entity.getLocation().getWorld().getName())
 				.replaceAll("%world_environment%", getEnvironment(entity.getLocation().getWorld().getEnvironment()))
 				.replaceAll("%x%", String.valueOf(entity.getLocation().getBlock().getX()))
@@ -899,8 +900,9 @@ public class Assets {
 	}
 
 	public static Component playerDeathPlaceholders(Component msg, PlayerManager pm, LivingEntity mob) {
-		msg = msg.replaceText(Util.replace("%player%", pm.getName()))
-				.replaceText(Util.replace("%player_display%", pm.getPlayer().getDisplayName()))
+		final boolean isSayanVanished = isSayanVanished(pm.getPlayer());
+		msg = msg.replaceText(Util.replace("%player%", isSayanVanished ? getVanishedName() : pm.getName()))
+				.replaceText(Util.replace("%player_display%", isSayanVanished ? getVanishedName() : pm.getPlayer().getDisplayName()))
 				.replaceText(Util.replace("%world%", pm.getLastLocation().getWorld().getName()))
 				.replaceText(Util.replace("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment())))
 				.replaceText(Util.replace("%x%", String.valueOf(pm.getLastLocation().getBlock().getX())))
@@ -953,8 +955,9 @@ public class Assets {
 	}
 
 	public static String playerDeathPlaceholders(String msg, PlayerManager pm, LivingEntity mob) {
-		msg = msg.replaceAll("%player%", pm.getName())
-				.replaceAll("%player_display%", pm.getPlayer().getDisplayName())
+		final boolean isSayanVanished = isSayanVanished(pm.getPlayer());
+		msg = msg.replaceAll("%player%", isSayanVanished ? getVanishedName() : pm.getName())
+				.replaceAll("%player_display%", isSayanVanished ? getVanishedName() : pm.getPlayer().getDisplayName())
 				.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
 				.replaceAll("%world_environment%", getEnvironment(pm.getLastLocation().getWorld().getEnvironment()))
 				.replaceAll("%x%", String.valueOf(pm.getLastLocation().getBlock().getX()))
@@ -990,7 +993,7 @@ public class Assets {
 
 			if (mob instanceof Player) {
 				Player p = (Player) mob;
-				msg = msg.replaceAll("%killer_display%", p.getDisplayName());
+				msg = msg.replaceAll("%killer_display%", isSayanVanished(p) ? getVanishedName() : p.getDisplayName());
 			}
 		}
 
@@ -1183,5 +1186,16 @@ public class Assets {
 
 	public static FileConfiguration getEntityDeathMessages() {
 		return EntityDeathMessages.getInstance().getConfig();
+	}
+
+	private static boolean isSayanVanished(Player p) {
+		if (DeathMessages.getInstance().sayanVanishEnabled) {
+			return DeathMessages.getInstance().sayanVanishExtension.isVanished(p.getUniqueId());
+		}
+		return false;
+	}
+
+	private static String getVanishedName() {
+		return Settings.getInstance().getConfig().getString(Config.HOOKS_SAYANVANISH_VANISHED_NAME.getPath());
 	}
 }
