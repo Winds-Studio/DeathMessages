@@ -13,6 +13,7 @@ softdepend:
   - eco
   - EcoEnchants
   - LangUtils
+  - SayanVanish
 authors:
   - CosmoConsole
   - Joshb_

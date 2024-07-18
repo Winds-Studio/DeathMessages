@@ -9,10 +9,7 @@ import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
-import dev.mrshawn.deathmessages.hooks.EcoExtension;
-import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
-import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
+import dev.mrshawn.deathmessages.hooks.*;
 import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
 import dev.mrshawn.deathmessages.utils.nms.V1_21;
 import dev.mrshawn.deathmessages.utils.nms.Wrapper;
@@ -82,6 +79,9 @@ public class DeathMessages extends JavaPlugin {
 
 	public EcoExtension ecoExtension;
 	public boolean ecoEnchantsEnabled = false;
+
+	public SayanVanishExtension sayanVanishExtension;
+	public boolean sayanVanishEnabled = false;
 
 	private static EventPriority eventPriority = EventPriority.HIGH;
 	private static FileSettings<Config> config;
@@ -235,6 +235,12 @@ public class DeathMessages extends JavaPlugin {
 			ecoExtension = new EcoExtension();
 			ecoEnchantsEnabled = true;
 			LOGGER.info("EcoEnchants Hook Enabled!");
+		}
+
+		if (Bukkit.getPluginManager().getPlugin("SayanVanish") != null && config.getBoolean(Config.HOOKS_SAYANVANISH_ENABLED)) {
+			sayanVanishExtension = new SayanVanishExtension();
+			sayanVanishEnabled = true;
+			LOGGER.info("SayanVanish Hook Enabled!");
 		}
 
 		if (Util.isOlderAndEqual(12, 2)) {
