@@ -39,7 +39,7 @@ Hooks:
   # Enable/Disable SayanVanish hook
   SayanVanish:
     Enabled: true
-    # String used to replace the player name in the message
+    # String used to replace the vanished player name in the message
     VanishedName: "Unknown"
 
   # If DiscordSRV (https://www.spigotmc.org/resources/discordsrv.18494/) is installed, and enabled here.
