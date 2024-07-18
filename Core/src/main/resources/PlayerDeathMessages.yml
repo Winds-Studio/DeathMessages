@@ -18,6 +18,7 @@
 # %x% - returns the x position the player died at.
 # %y% - returns the y position the player died at.
 # %z% - returns the z position the player died at.
+# %distance% represents the distance between the player and the killer in blocks (if applicable)
 #
 #Text components:
 #
