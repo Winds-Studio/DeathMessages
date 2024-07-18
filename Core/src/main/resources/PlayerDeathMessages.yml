@@ -1376,6 +1376,8 @@ Mobs:
         - "%player% was fireballed by %killer%"
       Projectile-Snowball:
         - "%player% was hit in the head with a snowball thrown by %killer%"
+      Projectile-Trident:
+        - "%player% was impaled by %killer%"
       Weapon:
         - "%player% was slain by %killer% somehow using %weapon%"
       Melee:
