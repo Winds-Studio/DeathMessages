@@ -54,8 +54,8 @@ import java.util.List;
 
 public class DeathMessages extends JavaPlugin {
 
+	public static final Logger LOGGER = LogManager.getLogger(DeathMessages.class.getSimpleName());
 	private static DeathMessages instance;
-	public static Logger LOGGER;
 	private BukkitAudiences adventure;
 	public final FoliaLib foliaLib = new FoliaLib(this);
 	private static Wrapper nmsInstance;
@@ -88,7 +88,6 @@ public class DeathMessages extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		LOGGER = LogManager.getLogger(instance.getName());
 		instance.adventure = BukkitAudiences.create(instance);
 		instance.adventure.console().sendMessage(loadedLogo);
 
@@ -259,19 +258,21 @@ public class DeathMessages extends JavaPlugin {
 	}
 
 	private void initHooksOnLoad() {
-		if (getServer().getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
+		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
 			try {
 				final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
 				if (version.startsWith("7")) {
 					worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard7Extension").getConstructor().newInstance();
 					worldGuardExtension.registerFlags();
+					worldGuardEnabled = true;
 				} else if (version.startsWith("6")) {
 					worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard6Extension").getConstructor().newInstance();
 					worldGuardExtension.registerFlags();
+					worldGuardEnabled = true;
 				} else throw new UnsupportedOperationException();
 			} catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
 					 IllegalAccessException | NoSuchMethodException | UnsupportedOperationException e) {
-				LOGGER.error("Error loading WorldGuardHook. Error: {}", e);
+				LOGGER.error("Error loading WorldGuardHook. Error: ", e);
 				worldGuardEnabled = false;
 			}
 		}
