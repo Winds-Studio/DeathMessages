@@ -862,6 +862,15 @@ public class Assets {
 			msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
 		}
 
+		try {
+			if (entity != null && entity.getLocation() != null) {
+				msg = msg.replaceText(Util.replace("%distance%", String.valueOf((int) Math.round(player.getLocation().distance(entity.getLocation())))));
+			}
+		} catch (Exception ex) {
+			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+			msg = msg.replaceText(Util.replace("%distance", "0"));
+		}
+
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
 			Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(Util.convertToLegacy(msg));
 
@@ -903,6 +912,16 @@ public class Assets {
 					.replaceAll("%biome%", "Unknown");
 		}
 
+		try {
+			if (entity != null && entity.getLocation() != null) {
+				msg = msg.replaceAll("%distance%", String.valueOf((int) Math.round(player.getLocation().distance(entity.getLocation()))));
+			}
+		} catch (Exception ex) {
+			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+			msg = msg.replaceAll("%distance", "0");
+		}
+
+
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
 			msg = PlaceholderAPI.setPlaceholders(player, msg);
 		}
@@ -926,6 +945,15 @@ public class Assets {
 			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
 			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
 			msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
+		}
+
+		try {
+			if (mob != null && mob.getLocation() != null) {
+				msg = msg.replaceText(Util.replace("%distance%", String.valueOf((int) Math.round(pm.getLastLocation().distance(mob.getLocation())))));
+			}
+		} catch (Exception ex) {
+			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+			msg = msg.replaceText(Util.replace("%distance", "0"));
 		}
 
 		if (mob != null) {
@@ -981,6 +1009,15 @@ public class Assets {
 			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
 			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
 			msg = msg.replaceAll("%biome%", "Unknown");
+		}
+
+		try {
+			if (mob != null && mob.getLocation() != null) {
+				msg = msg.replaceAll("%distance%", String.valueOf((int) Math.round(pm.getLastLocation().distance(mob.getLocation()))));
+			}
+		} catch (Exception ex) {
+			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+			msg = msg.replaceAll("%distance", "0");
 		}
 
 		if (mob != null) {
