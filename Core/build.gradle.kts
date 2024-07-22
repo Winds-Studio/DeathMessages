@@ -27,7 +27,7 @@ dependencies {
     compileOnly("com.discordsrv:discordsrv:1.27.0")
     compileOnly("io.lumine:Mythic-Dist:5.6.2")
     compileOnly("com.willfp:eco:6.71.6")
-    compileOnly("com.willfp:EcoEnchants:12.12.1")
+    compileOnly("com.willfp:EcoEnchants:12.16.0")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")
     compileOnly("com.meowj:LangUtils:1.9")
