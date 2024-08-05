@@ -20,7 +20,7 @@ dependencies {
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("com.github.cryptomorin:XSeries:11.2.0.1")
     implementation("org.bstats:bstats-bukkit:3.0.2")
-    implementation("com.tcoded:FoliaLib:0.4.0")
+    implementation("com.tcoded:FoliaLib:0.4.2")
 
     implementation("de.tr7zw:item-nbt-api:2.13.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
