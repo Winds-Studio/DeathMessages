@@ -24,7 +24,7 @@ dependencies {
 
     implementation("de.tr7zw:item-nbt-api:2.13.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.discordsrv:discordsrv:1.27.0")
+    compileOnly("com.discordsrv:discordsrv:1.28.1")
     compileOnly("io.lumine:Mythic-Dist:5.6.2")
     compileOnly("com.willfp:eco:6.71.6")
     compileOnly("com.willfp:EcoEnchants:12.12.1")
