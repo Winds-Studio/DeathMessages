@@ -838,6 +838,9 @@ public class Assets {
 	}
 
 	public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean hasOwner) {
+		final boolean hasBiome = msg.contains(Component.text("%biome%"));
+		final boolean hasDistance = msg.contains(Component.text("%distance%"));
+
 		msg = msg.replaceText(Util.replace("%entity%", Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase())))
 				.replaceText(Util.replace("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
@@ -854,21 +857,23 @@ public class Assets {
 			msg = msg.replaceText(Util.replace("%owner%", ((Tameable) entity).getOwner().getName()));
 		}
 
-		try {
-			msg = msg.replaceText(Util.replace("%biome%", entity.getLocation().getBlock().getBiome().name()));
-		} catch (NullPointerException e) {
-			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-			msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
+		if (hasBiome) {
+			try {
+				msg = msg.replaceText(Util.replace("%biome%", entity.getLocation().getBlock().getBiome().name()));
+			} catch (NullPointerException e) {
+				DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+				DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+				msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
+			}
 		}
 
-		try {
-			if (entity != null && entity.getLocation() != null) {
+		if (hasDistance && entity != null && entity.getLocation() != null) {
+			try {
 				msg = msg.replaceText(Util.replace("%distance%", String.valueOf((int) Math.round(player.getLocation().distance(entity.getLocation())))));
+			} catch (Exception ex) {
+				DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+				msg = msg.replaceText(Util.replace("%distance%", "0"));
 			}
-		} catch (Exception ex) {
-			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
-			msg = msg.replaceText(Util.replace("%distance", "0"));
 		}
 
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
@@ -885,8 +890,10 @@ public class Assets {
 
 	public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean hasOwner) {
 		final boolean isSayanVanished = isSayanVanished(player);
-		msg = msg
-				.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
+		final boolean hasBiome = msg.contains("%biome%");
+		final boolean hasDistance = msg.contains("%distance%");
+
+		msg = msg.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()))
 				.replaceAll("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
 						+ entity.getType().toString().toLowerCase()) : entity.getCustomName())
@@ -902,25 +909,24 @@ public class Assets {
 			msg = msg.replaceAll("%owner%", ((Tameable) entity).getOwner().getName());
 		}
 
-		try {
-			msg = msg
-					.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
-		} catch (NullPointerException e) {
-			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-			msg = msg
-					.replaceAll("%biome%", "Unknown");
-		}
-
-		try {
-			if (entity != null && entity.getLocation() != null) {
-				msg = msg.replaceAll("%distance%", String.valueOf((int) Math.round(player.getLocation().distance(entity.getLocation()))));
+		if (hasBiome) {
+			try {
+				msg = msg.replaceAll("%biome%", entity.getLocation().getBlock().getBiome().name());
+			} catch (NullPointerException e) {
+				DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+				DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+				msg = msg.replaceAll("%biome%", "Unknown");
 			}
-		} catch (Exception ex) {
-			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
-			msg = msg.replaceAll("%distance", "0");
 		}
 
+		if (hasDistance && entity != null && entity.getLocation() != null) {
+			try {
+				msg = msg.replaceAll("%distance%", String.valueOf((int) Math.round(player.getLocation().distance(entity.getLocation()))));
+			} catch (Exception ex) {
+				DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+				msg = msg.replaceAll("%distance%", "0");
+			}
+		}
 
 		if (DeathMessages.getInstance().placeholderAPIEnabled) {
 			msg = PlaceholderAPI.setPlaceholders(player, msg);
@@ -931,6 +937,9 @@ public class Assets {
 
 	public static Component playerDeathPlaceholders(Component msg, PlayerManager pm, LivingEntity mob) {
 		final boolean isSayanVanished = isSayanVanished(pm.getPlayer());
+		final boolean hasBiome = msg.contains(Component.text("%biome%"));
+		final boolean hasDistance = msg.contains(Component.text("%distance%"));
+
 		msg = msg.replaceText(Util.replace("%player%", isSayanVanished ? getVanishedName() : pm.getName()))
 				.replaceText(Util.replace("%player_display%", isSayanVanished ? getVanishedName() : pm.getPlayer().getDisplayName()))
 				.replaceText(Util.replace("%world%", pm.getLastLocation().getWorld().getName()))
@@ -939,21 +948,23 @@ public class Assets {
 				.replaceText(Util.replace("%y%", String.valueOf(pm.getLastLocation().getBlock().getY())))
 				.replaceText(Util.replace("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ())));
 
-		try {
-			msg = msg.replaceText(Util.replace("%biome%", pm.getLastLocation().getBlock().getBiome().name()));
-		} catch (NullPointerException e) {
-			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-			msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
+		if (hasBiome) {
+			try {
+				msg = msg.replaceText(Util.replace("%biome%", pm.getLastLocation().getBlock().getBiome().name()));
+			} catch (NullPointerException e) {
+				DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+				DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+				msg = msg.replaceText(Util.replace("%biome%", "Unknown"));
+			}
 		}
 
-		try {
-			if (mob != null && mob.getLocation() != null) {
+		if (hasDistance && mob != null && mob.getLocation() != null) {
+			try {
 				msg = msg.replaceText(Util.replace("%distance%", String.valueOf((int) Math.round(pm.getLastLocation().distance(mob.getLocation())))));
+			} catch (Exception ex) {
+				DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+				msg = msg.replaceText(Util.replace("%distance%", "0"));
 			}
-		} catch (Exception ex) {
-			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
-			msg = msg.replaceText(Util.replace("%distance", "0"));
 		}
 
 		if (mob != null) {
@@ -995,6 +1006,9 @@ public class Assets {
 
 	public static String playerDeathPlaceholders(String msg, PlayerManager pm, LivingEntity mob) {
 		final boolean isSayanVanished = isSayanVanished(pm.getPlayer());
+		final boolean hasBiome = msg.contains("%biome%");
+		final boolean hasDistance = msg.contains("%distance%");
+
 		msg = msg.replaceAll("%player%", isSayanVanished ? getVanishedName() : pm.getName())
 				.replaceAll("%player_display%", isSayanVanished ? getVanishedName() : pm.getPlayer().getDisplayName())
 				.replaceAll("%world%", pm.getLastLocation().getWorld().getName())
@@ -1003,21 +1017,23 @@ public class Assets {
 				.replaceAll("%y%", String.valueOf(pm.getLastLocation().getBlock().getY()))
 				.replaceAll("%z%", String.valueOf(pm.getLastLocation().getBlock().getZ()));
 
-		try {
-			msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
-		} catch (NullPointerException e) {
-			DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
-			DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-			msg = msg.replaceAll("%biome%", "Unknown");
+		if (hasBiome) {
+			try {
+				msg = msg.replaceAll("%biome%", pm.getLastLocation().getBlock().getBiome().name());
+			} catch (NullPointerException e) {
+				DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+				DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+				msg = msg.replaceAll("%biome%", "Unknown");
+			}
 		}
 
-		try {
-			if (mob != null && mob.getLocation() != null) {
+		if (hasDistance && mob != null && mob.getLocation() != null) {
+			try {
 				msg = msg.replaceAll("%distance%", String.valueOf((int) Math.round(pm.getLastLocation().distance(mob.getLocation()))));
+			} catch (Exception ex) {
+				DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
+				msg = msg.replaceAll("%distance%", "0");
 			}
-		} catch (Exception ex) {
-			DeathMessages.LOGGER.error("Unknown distance calculated. Using 'Zero' for the distance.");
-			msg = msg.replaceAll("%distance", "0");
 		}
 
 		if (mob != null) {
