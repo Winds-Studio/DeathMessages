@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":NMS:V1_20_6"))
     implementation(project(":NMS:V1_21"))
 
-    compileOnly("org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT") // Universal
+    compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT") // Universal
     compileOnly("org.apache.commons:commons-lang3:3.15.0")
     compileOnly("commons-io:commons-io:2.16.1")
     compileOnly("org.apache.logging.log4j:log4j-api:2.23.1")
@@ -22,10 +22,10 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.tcoded:FoliaLib:0.4.2")
 
-    implementation("de.tr7zw:item-nbt-api:2.13.2-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.13.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.discordsrv:discordsrv:1.28.1")
-    compileOnly("io.lumine:Mythic-Dist:5.6.2")
+    compileOnly("io.lumine:Mythic-Dist:5.7.0")
     compileOnly("com.willfp:eco:6.73.3")
     compileOnly("com.willfp:EcoEnchants:12.17.0")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
