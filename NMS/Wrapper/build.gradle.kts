@@ -2,7 +2,7 @@ val adventureVersion = findProperty("adventure-version")
 val adventurePlatformVersion = findProperty("adventure-platform-version")
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT")
 
     compileOnly("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     compileOnly("net.kyori:adventure-api:$adventureVersion")
