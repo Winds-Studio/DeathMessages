@@ -94,8 +94,8 @@ public class Util {
     public static void getExplosionNearbyEffected(Player p, Block b) {
         List<UUID> effected = new ArrayList<>();
         List<Entity> getNearby = new ArrayList<>(isNewerAndEqual(13, 0)
-                ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(100))
-                : b.getWorld().getNearbyEntities(b.getLocation(), 100, 100, 100));
+                ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(24)) // TODO: make it configurable
+                : b.getWorld().getNearbyEntities(b.getLocation(), 24, 24, 24));
 
         getNearby.forEach(ent -> {
                     if (ent instanceof Player) {
