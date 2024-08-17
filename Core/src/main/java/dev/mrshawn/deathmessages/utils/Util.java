@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -120,6 +121,23 @@ public class Util {
         new ExplosionManager(p.getUniqueId(), b.getType(), b.getLocation(), effected);
         DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(p, b);
         Bukkit.getPluginManager().callEvent(explodeEvent);
+    }
+
+    // The simpler and better version of common-lang's RandomStringUtils#randomNumeric
+    public static String randomNumeric(int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Length must be greater than zero.");
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            // Bound range 0~9
+            int digit = ThreadLocalRandom.current().nextInt(10);
+            sb.append(digit);
+        }
+
+        return sb.toString();
     }
 
     /*
