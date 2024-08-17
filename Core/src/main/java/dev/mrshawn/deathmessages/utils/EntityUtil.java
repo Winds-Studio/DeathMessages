@@ -12,6 +12,7 @@ import java.util.List;
 
 public class EntityUtil {
 
+    // TODO: update to newest version and add version comment
     private static final List<String> list = Arrays.asList(
             "elderguardian",
             "witherskeleton",
@@ -91,7 +92,7 @@ public class EntityUtil {
             "breeze"
     );
 
-    public static List<String> getEntities() {
+    public static List<String> getEntityList() {
         return list;
     }
 
