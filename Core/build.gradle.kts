@@ -28,7 +28,7 @@ dependencies {
     compileOnly("com.willfp:eco:6.73.3")
     compileOnly("com.willfp:EcoEnchants:12.17.0")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
-    compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT")
+    compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
     compileOnly(files("libs/LangUtils-1.9.jar"))
     compileOnly("org.sayandev:sayanvanish-bukkit:1.4.0")
 
