@@ -40,6 +40,17 @@ Compatibility
 
 - 📫 Discord: `dreeam___` | QQ: `2682173972`
 
+## Translations
+Please feel free to contribute or modify existing translations if they are not right.
+### Contributors
+
+- [Axtazer](https://github.com/Axtazer) (French Translation)
+- [Santyxs](https://github.com/Santyxs) (Spanish Translation)
+
+### Contribute/Download
+
+- [Crowndin - DeathMessages](https://crowdin.com/project/deathmessage)
+
 ## Building
 
 - Use Java 21
