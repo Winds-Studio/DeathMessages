@@ -31,10 +31,6 @@ public class CommandManager implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
-		if (sender instanceof Player && !sender.hasPermission(Permission.DEATHMESSAGES_COMMAND.getValue())) {
-			DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
-			return false;
-		}
 		if (args.length == 0) {
 			Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
 					.stream()

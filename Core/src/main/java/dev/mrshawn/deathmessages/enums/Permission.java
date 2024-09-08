@@ -2,7 +2,6 @@ package dev.mrshawn.deathmessages.enums;
 
 public enum Permission {
 
-	DEATHMESSAGES_COMMAND("deathmessages.command"),
 	DEATHMESSAGES_COMMAND_BACKUP("deathmessages.command.backup"),
 	DEATHMESSAGES_COMMAND_BLACKLIST("deathmessages.command.blacklist"),
 	DEATHMESSAGES_COMMAND_DISCORDLOG("deathmessages.command.discordlog"),
