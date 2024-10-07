@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.listeners;
 
-import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.Material;
 import org.bukkit.World;
