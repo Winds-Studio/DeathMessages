@@ -10,6 +10,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -84,14 +85,15 @@ public class EntityDamageByEntity implements Listener {
 				}
 			});
 		} else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
-			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities") == null) return;
+			ConfigurationSection entityConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities");
 
-			Set<String> listenedMobs = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities")
-					.getKeys(false);
-			if (EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities") != null
-					&& DeathMessages.getInstance().mythicmobsEnabled) {
-				listenedMobs.addAll(EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities")
-						.getKeys(false));
+			if (entityConfig == null) return;
+
+			Set<String> listenedMobs = entityConfig.getKeys(false);
+			ConfigurationSection mobsConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities");
+
+			if (mobsConfig != null && DeathMessages.getInstance().mythicmobsEnabled) {
+				listenedMobs.addAll(mobsConfig.getKeys(false));
 			}
 
 			if (listenedMobs.isEmpty()) return;
