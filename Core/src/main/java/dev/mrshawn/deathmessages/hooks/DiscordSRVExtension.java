@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public class DiscordSRVExtension {
 
     private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
+    private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + "§" + "[0-9A-FK-ORX]");
 
     public DiscordSRVExtension() {
     }
@@ -62,7 +63,6 @@ public class DiscordSRVExtension {
 
             // Try to strip Minecraft format code to plain text
             if (message.contains("§")) {
-                final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + "§" + "[0-9A-FK-ORX]");
                 message = STRIP_COLOR_PATTERN.matcher(message).replaceAll("");
             }
 
