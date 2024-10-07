@@ -15,10 +15,10 @@ dependencies {
     implementation(project(":NMS:V1_21"))
 
     compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT") // Universal
-    compileOnly("commons-io:commons-io:2.16.1")
+    compileOnly("commons-io:commons-io:2.17.0")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.0")
-    implementation("com.github.cryptomorin:XSeries:11.2.1")
-    implementation("org.bstats:bstats-bukkit:3.0.3")
+    implementation("com.github.cryptomorin:XSeries:11.3.0")
+    implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.tcoded:FoliaLib:0.4.2")
 
     implementation("de.tr7zw:item-nbt-api:2.13.2")
@@ -26,7 +26,7 @@ dependencies {
     compileOnly("com.discordsrv:discordsrv:1.28.1")
     compileOnly("io.lumine:Mythic-Dist:5.7.1")
     compileOnly("com.willfp:eco:6.74.1")
-    compileOnly("com.willfp:EcoEnchants:12.18.7")
+    compileOnly("com.willfp:EcoEnchants:12.19.0")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
     compileOnly(files("libs/LangUtils-1.9.jar"))
