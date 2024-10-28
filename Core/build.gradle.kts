@@ -30,7 +30,7 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
     compileOnly(files("libs/LangUtils-1.9.jar"))
-    compileOnly("org.sayandev:sayanvanish-bukkit:1.4.0")
+    compileOnly("org.sayandev:sayanvanish-bukkit:1.5.0")
 
     api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     api("net.kyori:adventure-api:$adventureVersion")
