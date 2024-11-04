@@ -21,7 +21,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.3")
     implementation("com.tcoded:FoliaLib:0.4.2")
 
-    implementation("de.tr7zw:item-nbt-api:2.13.2")
+    implementation("de.tr7zw:item-nbt-api:2.14.0")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.discordsrv:discordsrv:1.28.1")
     compileOnly("io.lumine:Mythic-Dist:5.7.1")
