@@ -63,18 +63,17 @@ public final class CommentedConfiguration extends YamlConfiguration {
      * Sync the config with another resource.
      * This method can be used as an auto updater for your config files.
      *
-     * @param file            The file to save changes into if there are any.
      * @param resource        The resource to sync with. Can be provided by JavaPlugin#getResource
      * @param ignoredSections An array of sections that will be ignored, and won't get updated
      *                        if they are already exist in the config. If they are not in the
      *                        config, they will be synced with the resource's config.
      */
-    public void syncWithConfig(File file, InputStream resource, String... ignoredSections) throws IOException {
+    public void syncWithConfig(InputStream resource, String... ignoredSections) {
         if (creationFailure) return;
 
         CommentedConfiguration cfg = loadConfiguration(resource);
-        if (syncConfigurationSection(cfg, cfg.getConfigurationSection(""), Arrays.asList(ignoredSections)) && file != null)
-            save(file);
+
+        syncConfigurationSection(cfg, cfg.getConfigurationSection(""), Arrays.asList(ignoredSections));
     }
 
     /**
@@ -329,8 +328,15 @@ public final class CommentedConfiguration extends YamlConfiguration {
             StringBuilder contents = new StringBuilder();
 
             String line;
+            String lastLine = null;
             while ((line = bufferedReader.readLine()) != null) {
+                final boolean isComment = line.replace(" ", "").startsWith("#");
+
+                if (isComment && line.equals(lastLine)) continue; // Skip repeat comments
+
                 contents.append(line).append('\n');
+
+                lastLine = line;
             }
 
             config.loadFromString(contents.toString());

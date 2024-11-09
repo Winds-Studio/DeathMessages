@@ -60,11 +60,13 @@ public class EntityDeathMessages {
 			file.getParentFile().mkdirs();
 			ConfigManager.getInstance().copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
 		}
+
 		config = CommentedConfiguration.loadConfiguration(file);
-		try {
-			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "Entities", "Mythic-Mobs-Entities");
-		} catch (Exception e) {
-			DeathMessages.LOGGER.error(e);
+
+		config.syncWithConfig(DeathMessages.getInstance().getResource(fileName + ".yml"), "Entities", "Mythic-Mobs-Entities");
+
+		if (file != null) {
+			save();
 		}
 	}
 }

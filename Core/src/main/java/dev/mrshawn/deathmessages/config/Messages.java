@@ -61,11 +61,13 @@ public class Messages {
 			file.getParentFile().mkdirs();
 			ConfigManager.getInstance().copy(DeathMessages.getInstance().getResource(fileName + ".yml"), file);
 		}
+
 		config = CommentedConfiguration.loadConfiguration(file);
-		try {
-			config.syncWithConfig(file, DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
-		} catch (IOException e) {
-			DeathMessages.LOGGER.error(e);
+
+		config.syncWithConfig(DeathMessages.getInstance().getResource(fileName + ".yml"), "none");
+
+		if (file != null) {
+			save();
 		}
 	}
 }
