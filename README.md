@@ -59,7 +59,6 @@ Please feel free to contribute or modify existing translations if they are not r
 
 ## TODOs
 
-> - Config refactor
 > - Look into get entity name
 > - Custom bstats charts (Pending)
 > - PVPManager support
