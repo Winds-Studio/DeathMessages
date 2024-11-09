@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm") version "2.0.21"
 }
 
 val adventureVersion = findProperty("adventure-version")
@@ -21,16 +21,16 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.tcoded:FoliaLib:0.4.2")
 
-    implementation("de.tr7zw:item-nbt-api:2.13.2")
+    implementation("de.tr7zw:item-nbt-api:2.14.0")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.discordsrv:discordsrv:1.28.1")
     compileOnly("io.lumine:Mythic-Dist:5.7.2")
     compileOnly("com.willfp:eco:6.74.2")
-    compileOnly("com.willfp:EcoEnchants:12.19.0")
+    compileOnly("com.willfp:EcoEnchants:12.19.1")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
     compileOnly(files("libs/LangUtils-1.9.jar"))
-    compileOnly("org.sayandev:sayanvanish-bukkit:1.4.0")
+    compileOnly("org.sayandev:sayanvanish-bukkit:1.5.0")
 
     api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     api("net.kyori:adventure-api:$adventureVersion")
