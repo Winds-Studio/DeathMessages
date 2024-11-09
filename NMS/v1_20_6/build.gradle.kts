@@ -4,7 +4,7 @@ val adventurePlatformVersion = findProperty("adventure-platform-version")
 dependencies {
     compileOnly(project(":NMS:Wrapper"))
 
-    compileOnly("org.spigotmc:spigot:1.20.6-R0.1-SNAPSHOT")
+    compileOnly("org.bukkit:craftbukkit:1.20.6-R0.1-SNAPSHOT")
 
     compileOnly("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     compileOnly("net.kyori:adventure-api:$adventureVersion")
