@@ -26,11 +26,11 @@ dependencies {
     compileOnly("com.discordsrv:discordsrv:1.28.1")
     compileOnly("io.lumine:Mythic-Dist:5.7.2")
     compileOnly("com.willfp:eco:6.74.2")
-    compileOnly("com.willfp:EcoEnchants:12.19.1")
+    compileOnly("com.willfp:EcoEnchants:12.19.3")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
     compileOnly(files("libs/LangUtils-1.9.jar"))
-    compileOnly("org.sayandev:sayanvanish-bukkit:1.5.0")
+    compileOnly("org.sayandev:sayanvanish-bukkit:1.5.3")
 
     api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     api("net.kyori:adventure-api:$adventureVersion")
