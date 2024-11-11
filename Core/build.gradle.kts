@@ -31,7 +31,7 @@ dependencies {
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
     compileOnly(files("libs/LangUtils-1.9.jar"))
     compileOnly("org.sayandev:sayanvanish-api:1.5.3")
-    compileOnly("org.sayandev:sayanvanish-bukkit:1.5.3")
+    compileOnly("org.sayandev:sayanvanish-bukkit:1.5.4")
 
     api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     api("net.kyori:adventure-api:$adventureVersion")
