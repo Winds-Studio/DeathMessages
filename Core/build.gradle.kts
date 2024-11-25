@@ -15,7 +15,7 @@ dependencies {
     implementation(project(":NMS:V1_21"))
 
     compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT") // Universal
-    compileOnly("commons-io:commons-io:2.17.0")
+    compileOnly("commons-io:commons-io:2.18.0")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.1")
     implementation("com.github.cryptomorin:XSeries:11.3.0")
     implementation("org.bstats:bstats-bukkit:3.1.0")
