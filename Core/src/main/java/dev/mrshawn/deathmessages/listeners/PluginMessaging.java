@@ -36,10 +36,10 @@ public class PluginMessaging implements PluginMessageListener {
             if (subChannel.equals("GetServer")) {
                 String serverName = stream.readUTF();
                 DeathMessages.LOGGER.info("Server-Name successfully initialized from Bungee! ({})", serverName);
-                DeathMessages.bungeeServerName = serverName;
+                DeathMessages.getHooks().bungeeServerName = serverName;
                 config.set(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName);
                 config.save();
-                DeathMessages.bungeeServerNameRequest = false;
+                DeathMessages.getHooks().bungeeServerNameRequest = false;
             } else if (subChannel.equals("DeathMessages")) {
                 String[] data = stream.readUTF().split("######");
                 String serverName = data[0];
@@ -84,7 +84,7 @@ public class PluginMessaging implements PluginMessageListener {
                 out.writeUTF("Forward");
                 out.writeUTF(server);
                 out.writeUTF("DeathMessages");
-                out.writeUTF(DeathMessages.bungeeServerName + "######" + msg);
+                out.writeUTF(DeathMessages.getHooks().bungeeServerName + "######" + msg);
                 p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
             }
         } else {
@@ -92,7 +92,7 @@ public class PluginMessaging implements PluginMessageListener {
             out.writeUTF("Forward");
             out.writeUTF("ONLINE");
             out.writeUTF("DeathMessages");
-            out.writeUTF(DeathMessages.bungeeServerName + "######" + msg);
+            out.writeUTF(DeathMessages.getHooks().bungeeServerName + "######" + msg);
             p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
         }
     }

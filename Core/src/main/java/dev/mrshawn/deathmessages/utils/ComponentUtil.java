@@ -77,8 +77,8 @@ public class ComponentUtil {
         String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
 
         // Eco item process
-        if (DeathMessages.getInstance().ecoEnchantsEnabled && DeathMessages.getInstance().ecoExtension.isEcoEnchantsItem(i)) {
-            i = DeathMessages.getInstance().ecoExtension.getEcoEnchantsItem(i, player);
+        if (DeathMessages.getHooks().ecoEnchantsEnabled && DeathMessages.getHooks().ecoExtension.isEcoEnchantsItem(i)) {
+            i = DeathMessages.getHooks().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
         if (Util.isNewerAndEqual(20, 5)) {

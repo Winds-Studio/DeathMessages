@@ -90,7 +90,7 @@ public class EntityDamageByEntity implements Listener {
             Set<String> listenedMobs = entityConfig.getKeys(false);
             ConfigurationSection mobsConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities");
 
-            if (mobsConfig != null && DeathMessages.getInstance().mythicmobsEnabled) {
+            if (mobsConfig != null && DeathMessages.getHooks().mythicmobsEnabled) {
                 listenedMobs.addAll(mobsConfig.getKeys(false));
             }
 
@@ -98,7 +98,7 @@ public class EntityDamageByEntity implements Listener {
 
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))
-                        || (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
+                        || (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
                     Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
                     getEntity.ifPresent(em -> {
                         if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
@@ -146,8 +146,8 @@ public class EntityDamageByEntity implements Listener {
                     });
                     if (!getEntity.isPresent()) {
                         MobType mobType = MobType.VANILLA;
-                        if (DeathMessages.getInstance().mythicmobsEnabled
-                                && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
+                        if (DeathMessages.getHooks().mythicmobsEnabled
+                                && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
                             mobType = MobType.MYTHIC_MOB;
                         }
 

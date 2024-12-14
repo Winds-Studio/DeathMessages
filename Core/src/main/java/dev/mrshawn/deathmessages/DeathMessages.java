@@ -9,11 +9,7 @@ import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.hooks.DiscordSRVExtension;
-import dev.mrshawn.deathmessages.hooks.EcoExtension;
-import dev.mrshawn.deathmessages.hooks.PlaceholderAPIExtension;
-import dev.mrshawn.deathmessages.hooks.SayanVanishExtension;
-import dev.mrshawn.deathmessages.hooks.WorldGuardExtension;
+import dev.mrshawn.deathmessages.hooks.HookInstance;
 import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
@@ -25,19 +21,15 @@ import dev.mrshawn.deathmessages.listeners.OnJoin;
 import dev.mrshawn.deathmessages.listeners.OnMove;
 import dev.mrshawn.deathmessages.listeners.OnQuit;
 import dev.mrshawn.deathmessages.listeners.PlayerDeath;
-import dev.mrshawn.deathmessages.listeners.PluginMessaging;
-import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
-import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
 import dev.mrshawn.deathmessages.utils.Util;
 import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
 import dev.mrshawn.deathmessages.utils.nms.V1_21;
 import dev.mrshawn.deathmessages.utils.nms.Wrapper;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -50,42 +42,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventPriority;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 public class DeathMessages extends JavaPlugin {
 
     public static final Logger LOGGER = LogManager.getLogger(DeathMessages.class.getSimpleName());
     private static DeathMessages instance;
+    private static HookInstance hookInstance;
     private BukkitAudiences adventure;
     public final FoliaLib foliaLib = new FoliaLib(this);
     private static Wrapper nmsInstance;
-
-    public boolean placeholderAPIEnabled = false;
-    public boolean combatLogXAPIEnabled = false;
-    public boolean langUtilsEnabled = false;
-
-    public MythicBukkit mythicMobs = null;
-    public boolean mythicmobsEnabled = false;
-
-    public static WorldGuardExtension worldGuardExtension;
-    public static boolean worldGuardEnabled;
-
-    public static String bungeeServerName;
-    public static boolean bungeeServerNameRequest = true;
-    public static boolean bungeeInit = false;
-
-    public static DiscordSRVExtension discordSRVExtension;
-    public static boolean discordSRVEnabled = false;
-
-    public EcoExtension ecoExtension;
-    public boolean ecoEnchantsEnabled = false;
-
-    public SayanVanishExtension sayanVanishExtension;
-    public boolean sayanVanishEnabled = false;
 
     private static EventPriority eventPriority = EventPriority.HIGH;
     private static FileSettings<Config> config;
@@ -98,7 +64,7 @@ public class DeathMessages extends JavaPlugin {
         initNMS();
         initListeners();
         initCommands();
-        initHooks();
+        getHooks().registerHooks();
         initOnlinePlayers();
         checkGameRules();
 
@@ -113,7 +79,7 @@ public class DeathMessages extends JavaPlugin {
         instance = this;
 
         initConfig();
-        initHooksOnLoad();
+        initHooks();
     }
 
     @Override
@@ -122,6 +88,7 @@ public class DeathMessages extends JavaPlugin {
             this.adventure.close();
             this.adventure = null;
         }
+
         instance = null;
     }
 
@@ -175,111 +142,7 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initHooks() {
-        if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
-            Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
-            Bukkit.getServer().getMessenger().registerIncomingPluginChannel(instance, "BungeeCord", new PluginMessaging());
-            LOGGER.info("Bungee Hook enabled!");
-            if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
-                bungeeInit = true;
-            } else {
-                bungeeInit = false;
-                bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
-            }
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIExtension(instance).register();
-            placeholderAPIEnabled = true;
-            LOGGER.info("PlaceholderAPI Hook Enabled!");
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
-            // Dreeam - Remove this useless notice in the future.
-            LOGGER.info("Item-NBT-API Hook Enabled!");
-        }
-
-        if (worldGuardEnabled) {
-            LOGGER.info("WorldGuard Hook Enabled!");
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
-            discordSRVExtension = new DiscordSRVExtension();
-            discordSRVEnabled = true;
-            LOGGER.info("DiscordSRV Hook Enabled!");
-        }
-
-        if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
-            Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
-            LOGGER.info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
-            try {
-                List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
-                if (!ignoredPlugins.contains("DeathMessages")) {
-                    ignoredPlugins.add("DeathMessages");
-                }
-            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
-                LOGGER.error("Error adding plugin to ignored plugins list: ", exception);
-            }
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
-            combatLogXAPIEnabled = true;
-            Bukkit.getPluginManager().registerEvents(new PlayerUntag(), instance);
-            LOGGER.info("CombatLogX Hook Enabled!");
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
-            mythicMobs = MythicBukkit.inst();
-            mythicmobsEnabled = true;
-            Bukkit.getPluginManager().registerEvents(new MobDeath(), instance);
-            LOGGER.info("MythicMobs Hook Enabled!");
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("eco") != null && Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
-            ecoExtension = new EcoExtension();
-            ecoEnchantsEnabled = true;
-            LOGGER.info("EcoEnchants Hook Enabled!");
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("SayanVanish") != null && config.getBoolean(Config.HOOKS_SAYANVANISH_ENABLED)) {
-            sayanVanishExtension = new SayanVanishExtension();
-            sayanVanishEnabled = true;
-            LOGGER.info("SayanVanish Hook Enabled!");
-        }
-
-        if (Util.isOlderAndEqual(12, 2)) {
-            if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
-                    || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
-                if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
-                    langUtilsEnabled = true;
-                    LOGGER.info("LangUtils Hook Enabled!");
-                } else {
-                    langUtilsEnabled = false;
-                    LOGGER.error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
-                    LOGGER.error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
-                }
-            }
-        }
-    }
-
-    private void initHooksOnLoad() {
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
-            try {
-                final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
-                if (version.startsWith("7")) {
-                    worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard7Extension").getConstructor().newInstance();
-                    worldGuardExtension.registerFlags();
-                    worldGuardEnabled = true;
-                } else if (version.startsWith("6")) {
-                    worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard6Extension").getConstructor().newInstance();
-                    worldGuardExtension.registerFlags();
-                    worldGuardEnabled = true;
-                } else throw new UnsupportedOperationException();
-            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException | NoSuchMethodException | UnsupportedOperationException e) {
-                LOGGER.error("Error loading WorldGuardHook. Error: ", e);
-                worldGuardEnabled = false;
-            }
-        }
+        hookInstance = new HookInstance(this, config);
     }
 
     private void initOnlinePlayers() {
@@ -333,6 +196,10 @@ public class DeathMessages extends JavaPlugin {
 
     public static Wrapper getNMS() {
         return nmsInstance;
+    }
+
+    public static HookInstance getHooks() {
+        return hookInstance.getInstance();
     }
 
     public static EventPriority getEventPriority() {

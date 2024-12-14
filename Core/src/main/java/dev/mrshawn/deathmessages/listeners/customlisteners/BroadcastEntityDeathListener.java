@@ -72,8 +72,8 @@ public class BroadcastEntityDeathListener implements Listener {
                 } else {
                     getPlayer.ifPresent(pms -> {
                         if (pms.getMessagesEnabled()) {
-                            if (DeathMessages.worldGuardExtension != null) {
-                                if (DeathMessages.worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())) {
+                            if (DeathMessages.getHooks().worldGuardExtension != null) {
+                                if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())) {
                                     return;
                                 }
                             }
@@ -95,8 +95,8 @@ public class BroadcastEntityDeathListener implements Listener {
                         }
                         // Will reach the discord broadcast
                     }
-                    if (DeathMessages.discordSRVExtension != null && !discordSent) {
-                        DeathMessages.discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), entity, hasOwner, e.getMessageType());
+                    if (DeathMessages.getHooks().discordSRVExtension != null && !discordSent) {
+                        DeathMessages.getHooks().discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), entity, hasOwner, e.getMessageType());
                         discordSent = true;
                     }
                 }

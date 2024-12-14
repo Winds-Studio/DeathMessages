@@ -359,8 +359,8 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         //Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
-        if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
             //Bukkit.broadcastMessage("is myth - " + internalMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
         }
@@ -437,8 +437,8 @@ public class Assets {
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String internalMobType = null;
-            if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
+                internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
             } else {
                 // reserved
             }
@@ -516,8 +516,8 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 
-        if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
             //System.out.println("is myth - " + internalMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
         }
@@ -577,8 +577,8 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 
-        if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
+            String internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
         }
 
@@ -667,8 +667,8 @@ public class Assets {
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String internalMobType = null;
-            if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
-                internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
+                internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
             }
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
         }
@@ -748,8 +748,8 @@ public class Assets {
                     e.getName().toLowerCase() + ".Tamed"), player, e);
         } else if (mobType.equals(MobType.MYTHIC_MOB)) {
             String internalMobType = null;
-            if (DeathMessages.getInstance().mythicmobsEnabled && DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                internalMobType = DeathMessages.getInstance().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
+                internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
             } else {
                 // reserved
             }
@@ -824,7 +824,7 @@ public class Assets {
                 Matcher m = Pattern.compile("REGION\\[(.*?)]").matcher(s);
                 while (m.find()) {
                     String regionID = m.group(1);
-                    s = DeathMessages.worldGuardExtension.isInRegion(victim, regionID)
+                    s = DeathMessages.getHooks().worldGuardExtension.isInRegion(victim, regionID)
                             ? s.replace("REGION[" + regionID + "]", "") : "";
                 }
             }
@@ -875,7 +875,7 @@ public class Assets {
             }
         }
 
-        if (DeathMessages.getInstance().placeholderAPIEnabled) {
+        if (DeathMessages.getHooks().placeholderAPIEnabled) {
             Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(Util.convertToLegacy(msg));
 
             while (identifiers.find()) {
@@ -927,7 +927,7 @@ public class Assets {
             }
         }
 
-        if (DeathMessages.getInstance().placeholderAPIEnabled) {
+        if (DeathMessages.getHooks().placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(player, msg);
         }
 
@@ -991,7 +991,7 @@ public class Assets {
             }
         }
 
-        if (DeathMessages.getInstance().placeholderAPIEnabled) {
+        if (DeathMessages.getHooks().placeholderAPIEnabled) {
             Matcher params = Pattern.compile("%([^%]+)%").matcher(Util.convertToLegacy(msg));
 
             while (params.find()) {
@@ -1060,7 +1060,7 @@ public class Assets {
             }
         }
 
-        if (DeathMessages.getInstance().placeholderAPIEnabled) {
+        if (DeathMessages.getHooks().placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(pm.getPlayer(), msg);
         }
 
@@ -1075,14 +1075,14 @@ public class Assets {
     private static Component getI18nName(ItemStack i, Player p) {
         Component i18nName;
 
-        if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) && !DeathMessages.discordSRVEnabled) {
+        if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) && !DeathMessages.getHooks().discordSRVEnabled) {
             if (Util.isNewerAndEqual(12, 0)) {
                 // Block: block.minecraft.example
                 // Item: item.minecraft.example
                 String materialType = i.getType().isBlock() ? "block" : "item";
                 String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
                 i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
-            } else if (DeathMessages.getInstance().langUtilsEnabled) {
+            } else if (DeathMessages.getHooks().langUtilsEnabled) {
                 i18nName = Component.text(LanguageHelper.getItemName(i, p.getLocale()));
             } else {
                 String name = capitalize(i.getType().name());
@@ -1103,12 +1103,12 @@ public class Assets {
     private static Component getI18nName(Entity mob, Player p) {
         Component i18nName;
 
-        if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()) && !DeathMessages.discordSRVEnabled) {
+        if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()) && !DeathMessages.getHooks().discordSRVEnabled) {
             if (Util.isNewerAndEqual(12, 0)) {
                 // Entity: entity.minecraft.example
                 String rawTranslatable = "<lang:entity.minecraft." + mob.getType().name().toLowerCase() + ">";
                 i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
-            } else if (DeathMessages.getInstance().langUtilsEnabled && !(mob instanceof ShulkerBullet)) { // <= 1.12.2 no ShulkerBullet lang key
+            } else if (DeathMessages.getHooks().langUtilsEnabled && !(mob instanceof ShulkerBullet)) { // <= 1.12.2 no ShulkerBullet lang key
                 i18nName = Component.text(LanguageHelper.getEntityName(mob, p.getLocale()));
             } else {
                 String name = capitalize(mob.getType().name());
@@ -1266,8 +1266,8 @@ public class Assets {
     }
 
     private static boolean isSayanVanished(Player p) {
-        if (DeathMessages.getInstance().sayanVanishEnabled) {
-            return DeathMessages.getInstance().sayanVanishExtension.isVanished(p.getUniqueId());
+        if (DeathMessages.getHooks().sayanVanishEnabled) {
+            return DeathMessages.getHooks().sayanVanishExtension.isVanished(p.getUniqueId());
         }
         return false;
     }

@@ -1,0 +1,164 @@
+package dev.mrshawn.deathmessages.hooks;
+
+import dev.mrshawn.deathmessages.DeathMessages;
+import dev.mrshawn.deathmessages.config.Settings;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.listeners.PluginMessaging;
+import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
+import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
+import dev.mrshawn.deathmessages.utils.Util;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+public class HookInstance {
+
+    private final DeathMessages instance;
+    private final FileSettings<Config> config;
+
+    public boolean placeholderAPIEnabled = false;
+    public boolean combatLogXAPIEnabled = false;
+    public boolean langUtilsEnabled = false;
+
+    public MythicBukkit mythicMobs = null;
+    public boolean mythicmobsEnabled = false;
+
+    public WorldGuardExtension worldGuardExtension;
+    public boolean worldGuardEnabled;
+
+    public String bungeeServerName;
+    public boolean bungeeServerNameRequest = true;
+    public boolean bungeeInit = false;
+
+    public DiscordSRVExtension discordSRVExtension;
+    public boolean discordSRVEnabled = false;
+
+    public EcoExtension ecoExtension;
+    public boolean ecoEnchantsEnabled = false;
+
+    public SayanVanishExtension sayanVanishExtension;
+    public boolean sayanVanishEnabled = false;
+
+    public HookInstance(DeathMessages pluginInstance, FileSettings<Config> pluginConfig) {
+        instance = pluginInstance;
+        config = pluginConfig;
+
+        registerHooksOnLoad();
+    }
+
+    private void registerHooksOnLoad() {
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
+            try {
+                final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
+                if (version.startsWith("7")) {
+                    worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard7Extension").getConstructor().newInstance();
+                    worldGuardExtension.registerFlags();
+                    worldGuardEnabled = true;
+                } else if (version.startsWith("6")) {
+                    worldGuardExtension = (WorldGuardExtension) Class.forName("dev.mrshawn.deathmessages.hooks.WorldGuard6Extension").getConstructor().newInstance();
+                    worldGuardExtension.registerFlags();
+                    worldGuardEnabled = true;
+                } else throw new UnsupportedOperationException();
+            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException | NoSuchMethodException | UnsupportedOperationException e) {
+                worldGuardEnabled = false;
+                DeathMessages.LOGGER.error("Error loading WorldGuardHook. Error: ", e);
+            }
+        }
+    }
+
+    public void registerHooks() {
+        if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
+            Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
+            Bukkit.getServer().getMessenger().registerIncomingPluginChannel(instance, "BungeeCord", new PluginMessaging());
+            DeathMessages.LOGGER.info("Bungee Hook enabled!");
+            if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
+                bungeeInit = true;
+            } else {
+                bungeeInit = false;
+                bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
+            }
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderAPIExtension(instance).register();
+            placeholderAPIEnabled = true;
+            DeathMessages.LOGGER.info("PlaceholderAPI Hook Enabled!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("NBTAPI") != null) {
+            // Dreeam - Remove this useless notice in the future.
+            DeathMessages.LOGGER.info("Item-NBT-API Hook Enabled!");
+        }
+
+        if (worldGuardEnabled) {
+            DeathMessages.LOGGER.info("WorldGuard Hook Enabled!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
+            discordSRVExtension = new DiscordSRVExtension();
+            discordSRVEnabled = true;
+            DeathMessages.LOGGER.info("DiscordSRV Hook Enabled!");
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
+            Plugin plugMan = Bukkit.getPluginManager().getPlugin("PlugMan");
+            DeathMessages.LOGGER.info("PlugMan found. Adding this plugin to its ignored plugins list due to WorldGuard hook being enabled!");
+            try {
+                List<String> ignoredPlugins = (List<String>) plugMan.getClass().getMethod("getIgnoredPlugins").invoke(plugMan);
+                if (!ignoredPlugins.contains("DeathMessages")) {
+                    ignoredPlugins.add("DeathMessages");
+                }
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException exception) {
+                DeathMessages.LOGGER.error("Error adding plugin to ignored plugins list: ", exception);
+            }
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
+            combatLogXAPIEnabled = true;
+            Bukkit.getPluginManager().registerEvents(new PlayerUntag(), instance);
+            DeathMessages.LOGGER.info("CombatLogX Hook Enabled!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
+            mythicMobs = MythicBukkit.inst();
+            mythicmobsEnabled = true;
+            Bukkit.getPluginManager().registerEvents(new MobDeath(), instance);
+            DeathMessages.LOGGER.info("MythicMobs Hook Enabled!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("eco") != null && Bukkit.getPluginManager().getPlugin("EcoEnchants") != null) {
+            ecoExtension = new EcoExtension();
+            ecoEnchantsEnabled = true;
+            DeathMessages.LOGGER.info("EcoEnchants Hook Enabled!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("SayanVanish") != null && config.getBoolean(Config.HOOKS_SAYANVANISH_ENABLED)) {
+            sayanVanishExtension = new SayanVanishExtension();
+            sayanVanishEnabled = true;
+            DeathMessages.LOGGER.info("SayanVanish Hook Enabled!");
+        }
+
+        if (Util.isOlderAndEqual(12, 2)) {
+            if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
+                    || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
+                if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
+                    langUtilsEnabled = true;
+                    DeathMessages.LOGGER.info("LangUtils Hook Enabled!");
+                } else {
+                    langUtilsEnabled = false;
+                    DeathMessages.LOGGER.error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
+                    DeathMessages.LOGGER.error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
+                }
+            }
+        }
+    }
+
+    public HookInstance getInstance() {
+        return this;
+    }
+}

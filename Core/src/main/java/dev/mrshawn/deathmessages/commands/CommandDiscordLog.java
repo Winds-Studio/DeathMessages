@@ -30,13 +30,13 @@ public class CommandDiscordLog extends DeathMessagesCommand {
             return;
         }
         String discordJar;
-        if (DeathMessages.discordSRVExtension != null) {
+        if (DeathMessages.getHooks().discordSRVExtension != null) {
             discordJar = "DiscordSRV";
         } else {
             discordJar = "Discord Jar Not Installed";
         }
         String discordToken;
-        if (DeathMessages.discordSRVExtension != null) {
+        if (DeathMessages.getHooks().discordSRVExtension != null) {
             discordToken = DiscordSRV.getPlugin().getJda().getToken().length() > 40 ? DiscordSRV.getPlugin().getJda().getToken().substring(40) : "Token Not Set";
         } else {
             discordToken = "Discord Jar Not Installed";

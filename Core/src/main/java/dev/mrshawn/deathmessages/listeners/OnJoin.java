@@ -17,10 +17,10 @@ public class OnJoin implements Listener {
             if (PlayerManager.isEmpty(p)) new PlayerManager(p);
         });
 
-        if (!DeathMessages.bungeeInit) return;
+        if (!DeathMessages.getHooks().bungeeInit) return;
 
         DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> {
-            if (DeathMessages.bungeeServerNameRequest) {
+            if (DeathMessages.getHooks().bungeeServerNameRequest) {
                 PluginMessaging.sendServerNameRequest(p);
             }
         }, 5);

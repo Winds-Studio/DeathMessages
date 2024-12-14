@@ -99,9 +99,9 @@ public class BroadcastPlayerDeathListener implements Listener {
     }
 
     private void normal(BroadcastDeathMessageEvent e, PlayerManager pm, Player player, List<World> worlds) {
-        if (DeathMessages.worldGuardExtension != null) {
-            if (DeathMessages.worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())
-                    || DeathMessages.worldGuardExtension.denyFromRegion(e.getPlayer(), e.getMessageType().getValue())) {
+        if (DeathMessages.getHooks().worldGuardExtension != null) {
+            if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())
+                    || DeathMessages.getHooks().worldGuardExtension.denyFromRegion(e.getPlayer(), e.getMessageType().getValue())) {
                 return;
             }
         }
@@ -124,8 +124,8 @@ public class BroadcastPlayerDeathListener implements Listener {
         }
         Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
         if (getPlayer.isPresent()) {
-            if (DeathMessages.discordSRVExtension != null && !discordSent) {
-                DeathMessages.discordSRVExtension.sendDiscordMessage(getPlayer.get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
+            if (DeathMessages.getHooks().discordSRVExtension != null && !discordSent) {
+                DeathMessages.getHooks().discordSRVExtension.sendDiscordMessage(getPlayer.get(), e.getMessageType(), PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()));
                 discordSent = true;
             }
         }
