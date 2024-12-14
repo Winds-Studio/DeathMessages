@@ -73,7 +73,7 @@ public class BroadcastEntityDeathListener implements Listener {
                     getPlayer.ifPresent(pms -> {
 						if (pms.getMessagesEnabled()) {
 							if (DeathMessages.worldGuardExtension != null) {
-								if (DeathMessages.worldGuardExtension.getRegionState(player, e.getMessageType().getValue()).equals(StateFlag.State.DENY)) {
+								if (DeathMessages.worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())) {
 									return;
 								}
 							}

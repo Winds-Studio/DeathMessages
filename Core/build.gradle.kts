@@ -6,9 +6,9 @@ val adventureVersion = findProperty("adventure-version")
 val adventurePlatformVersion = findProperty("adventure-platform-version")
 
 dependencies {
-    api(project(":Hooks:WorldGuard"))
-    api(project(":Hooks:WorldGuard6"))
-    api(project(":Hooks:WorldGuard7"))
+    implementation(project(":Hooks:WorldGuard"))
+    implementation(project(":Hooks:WorldGuard6"))
+    implementation(project(":Hooks:WorldGuard7"))
 
     implementation(project(":NMS:Wrapper"))
     implementation(project(":NMS:V1_20_6"))

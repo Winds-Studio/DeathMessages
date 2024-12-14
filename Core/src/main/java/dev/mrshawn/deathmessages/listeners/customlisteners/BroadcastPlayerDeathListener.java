@@ -100,8 +100,8 @@ public class BroadcastPlayerDeathListener implements Listener {
 
 	private void normal(BroadcastDeathMessageEvent e, PlayerManager pm, Player player, List<World> worlds) {
 		if (DeathMessages.worldGuardExtension != null) {
-			if (DeathMessages.worldGuardExtension.getRegionState(player, e.getMessageType().getValue()).equals(StateFlag.State.DENY)
-					|| DeathMessages.worldGuardExtension.getRegionState(e.getPlayer(), e.getMessageType().getValue()).equals(StateFlag.State.DENY)) {
+			if (DeathMessages.worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())
+					|| DeathMessages.worldGuardExtension.denyFromRegion(e.getPlayer(), e.getMessageType().getValue())) {
 				return;
 			}
 		}
