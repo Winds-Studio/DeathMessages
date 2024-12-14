@@ -10,19 +10,19 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class OnJoin implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onJoin(PlayerJoinEvent e) {
-		Player p = e.getPlayer();
-		DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> {
-			if (PlayerManager.isEmpty(p)) new PlayerManager(p);
-		});
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> {
+            if (PlayerManager.isEmpty(p)) new PlayerManager(p);
+        });
 
-		if (!DeathMessages.bungeeInit) return;
+        if (!DeathMessages.bungeeInit) return;
 
-		DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> {
-			if (DeathMessages.bungeeServerNameRequest) {
-				PluginMessaging.sendServerNameRequest(p);
-			}
-		}, 5);
-	}
+        DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> {
+            if (DeathMessages.bungeeServerNameRequest) {
+                PluginMessaging.sendServerNameRequest(p);
+            }
+        }, 5);
+    }
 }

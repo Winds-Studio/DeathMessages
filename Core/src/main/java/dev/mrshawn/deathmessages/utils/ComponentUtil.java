@@ -31,7 +31,8 @@ public class ComponentUtil {
         try {
             // Modern method to get itemStack displayName, using Paper api
             itemMetaDisplayName = ItemMeta.class.getMethod("displayName");
-        } catch (NoSuchMethodException ignored) {}
+        } catch (NoSuchMethodException ignored) {
+        }
     }
 
     /*
@@ -170,7 +171,8 @@ public class ComponentUtil {
             try {
                 // Modern method - Paper api
                 return (Component) itemMetaDisplayName.invoke(i.getItemMeta());
-            } catch (InvocationTargetException | IllegalAccessException ignored) {}
+            } catch (InvocationTargetException | IllegalAccessException ignored) {
+            }
         }
 
         // Legacy method

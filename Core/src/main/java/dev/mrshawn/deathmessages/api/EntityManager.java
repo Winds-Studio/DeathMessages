@@ -20,95 +20,94 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityManager {
 
-	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
+    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
-	private final Entity entity;
-	private final UUID entityUUID;
-	private final MobType mobType;
-	private DamageCause damageCause;
-	private PlayerManager lastPlayerDamager;
-	private Entity lastExplosiveEntity;
-	private Projectile lastPlayerProjectile;
-	private Location lastLocation;
+    private final Entity entity;
+    private final UUID entityUUID;
+    private final MobType mobType;
+    private DamageCause damageCause;
+    private PlayerManager lastPlayerDamager;
+    private Entity lastExplosiveEntity;
+    private Projectile lastPlayerProjectile;
+    private Location lastLocation;
 
-	private WrappedTask lastPlayerTask;
+    private WrappedTask lastPlayerTask;
 
-	private static final Map<UUID, EntityManager> entities = new ConcurrentHashMap<>();
+    private static final Map<UUID, EntityManager> entities = new ConcurrentHashMap<>();
 
-	public EntityManager(Entity entity, UUID entityUUID, MobType mobType) {
-		this.entity = entity;
-		this.entityUUID = entityUUID;
-		this.mobType = mobType;
-		entities.put(entityUUID, this);
-	}
+    public EntityManager(Entity entity, UUID entityUUID, MobType mobType) {
+        this.entity = entity;
+        this.entityUUID = entityUUID;
+        this.mobType = mobType;
+        entities.put(entityUUID, this);
+    }
 
-	public Entity getEntity() {
-		return entity;
-	}
+    public Entity getEntity() {
+        return entity;
+    }
 
-	public UUID getEntityUUID() {
-		return entityUUID;
-	}
+    public UUID getEntityUUID() {
+        return entityUUID;
+    }
 
-	public MobType getMobType() {
-		return mobType;
-	}
+    public MobType getMobType() {
+        return mobType;
+    }
 
-	public void setLastDamageCause(DamageCause damageCause) {
-		this.damageCause = damageCause;
-	}
+    public void setLastDamageCause(DamageCause damageCause) {
+        this.damageCause = damageCause;
+    }
 
-	public DamageCause getLastDamage() {
-		return damageCause;
-	}
+    public DamageCause getLastDamage() {
+        return damageCause;
+    }
 
-	public void setLastPlayerDamager(PlayerManager pm) {
-		setLastExplosiveEntity(null);
-		setLastProjectileEntity(null);
+    public void setLastPlayerDamager(PlayerManager pm) {
+        setLastExplosiveEntity(null);
+        setLastProjectileEntity(null);
 
-		this.lastPlayerDamager = pm;
+        this.lastPlayerDamager = pm;
 
-		if (lastPlayerTask != null) {
-			lastPlayerTask.cancel();
-		}
-		lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
-		this.damageCause = DamageCause.CUSTOM;
-	}
+        if (lastPlayerTask != null) {
+            lastPlayerTask.cancel();
+        }
+        lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+        this.damageCause = DamageCause.CUSTOM;
+    }
 
-	public PlayerManager getLastPlayerDamager() {
-		return lastPlayerDamager;
-	}
+    public PlayerManager getLastPlayerDamager() {
+        return lastPlayerDamager;
+    }
 
-	public void setLastExplosiveEntity(Entity e) {
-		this.lastExplosiveEntity = e;
-	}
+    public void setLastExplosiveEntity(Entity e) {
+        this.lastExplosiveEntity = e;
+    }
 
-	public Entity getLastExplosiveEntity() {
-		return lastExplosiveEntity;
-	}
+    public Entity getLastExplosiveEntity() {
+        return lastExplosiveEntity;
+    }
 
-	public void setLastProjectileEntity(Projectile projectile) {
-		this.lastPlayerProjectile = projectile;
-	}
+    public void setLastProjectileEntity(Projectile projectile) {
+        this.lastPlayerProjectile = projectile;
+    }
 
-	public Projectile getLastProjectileEntity() {
-		return lastPlayerProjectile;
-	}
+    public Projectile getLastProjectileEntity() {
+        return lastPlayerProjectile;
+    }
 
-	public void setLastLocation(Location location) {
-		this.lastLocation = location;
-	}
+    public void setLastLocation(Location location) {
+        this.lastLocation = location;
+    }
 
-	public Location getLastLocation() {
-		return lastLocation;
-	}
+    public Location getLastLocation() {
+        return lastLocation;
+    }
 
-	public static Optional<EntityManager> getEntity(UUID uuid) {
-		return Optional.ofNullable(entities.get(uuid));
-	}
+    public static Optional<EntityManager> getEntity(UUID uuid) {
+        return Optional.ofNullable(entities.get(uuid));
+    }
 
-	public void destroy() {
-		entities.remove(this.entityUUID);
-	}
+    public void destroy() {
+        entities.remove(this.entityUUID);
+    }
 }
-

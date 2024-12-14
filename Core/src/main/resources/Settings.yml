@@ -58,13 +58,13 @@ Hooks:
           - "218258614192450048:827286062147837621"
       Mob:
         Enabled: true
-        Channels: []
+        Channels: [ ]
       Natural:
         Enabled: true
-        Channels: []
+        Channels: [ ]
       Entity:
         Enabled: true
-        Channels: []
+        Channels: [ ]
     # If you wish to only have certain worlds with death message broadcast to discord, define them here
     World-Whitelist:
       Enabled: false

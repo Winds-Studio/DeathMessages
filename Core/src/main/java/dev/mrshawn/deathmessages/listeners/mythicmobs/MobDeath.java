@@ -27,60 +27,60 @@ import java.util.Set;
 
 public class MobDeath implements Listener {
 
-	private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
+    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
-	@EventHandler
-	public void onMythicMobDeath(MythicMobDeathEvent e) {
-		ConfigurationSection mobsConfig = getEntityDeathMessages().getConfigurationSection("Mythic-Mobs-Entities");
+    @EventHandler
+    public void onMythicMobDeath(MythicMobDeathEvent e) {
+        ConfigurationSection mobsConfig = getEntityDeathMessages().getConfigurationSection("Mythic-Mobs-Entities");
 
-		if (mobsConfig == null) return;
+        if (mobsConfig == null) return;
 
-		Set<String> mobs = mobsConfig.getKeys(false);
+        Set<String> mobs = mobsConfig.getKeys(false);
 
-		if (mobs.isEmpty()) return;
+        if (mobs.isEmpty()) return;
 
-		for (String customMob : mobs) {
-			if (e.getMob().getType().getInternalName().equals(customMob)) {
-				Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-				getEntity.ifPresent(em -> {
-					PlayerManager damager = em.getLastPlayerDamager();
-					TextComponent mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
+        for (String customMob : mobs) {
+            if (e.getMob().getType().getInternalName().equals(customMob)) {
+                Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+                getEntity.ifPresent(em -> {
+                    PlayerManager damager = em.getLastPlayerDamager();
+                    TextComponent mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
 
-					BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, mythicDeath, getWorlds(e.getEntity()));
-					Bukkit.getPluginManager().callEvent(event);
-				});
-			}
-		}
-	}
+                    BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(damager, e.getEntity(), MessageType.ENTITY, mythicDeath, getWorlds(e.getEntity()));
+                    Bukkit.getPluginManager().callEvent(event);
+                });
+            }
+        }
+    }
 
-	public static List<World> getWorlds(Entity e) {
-		List<World> broadcastWorlds = new ArrayList<>();
+    public static List<World> getWorlds(Entity e) {
+        List<World> broadcastWorlds = new ArrayList<>();
 
-		if (config.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {
-			return broadcastWorlds;
-		}
+        if (config.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {
+            return broadcastWorlds;
+        }
 
-		if (config.getBoolean(Config.PER_WORLD_MESSAGES)) {
-			for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
-				List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);
-				if (worlds.contains(e.getWorld().getName())) {
-					for (String single : worlds) {
-						broadcastWorlds.add(Bukkit.getWorld(single));
-					}
-				}
-			}
+        if (config.getBoolean(Config.PER_WORLD_MESSAGES)) {
+            for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
+                List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);
+                if (worlds.contains(e.getWorld().getName())) {
+                    for (String single : worlds) {
+                        broadcastWorlds.add(Bukkit.getWorld(single));
+                    }
+                }
+            }
 
-			if (broadcastWorlds.isEmpty()) {
-				broadcastWorlds.add(e.getWorld());
-			}
-		} else {
-			return Bukkit.getWorlds();
-		}
+            if (broadcastWorlds.isEmpty()) {
+                broadcastWorlds.add(e.getWorld());
+            }
+        } else {
+            return Bukkit.getWorlds();
+        }
 
-		return broadcastWorlds;
-	}
+        return broadcastWorlds;
+    }
 
-	public static FileConfiguration getEntityDeathMessages() {
-		return Assets.getEntityDeathMessages();
-	}
+    public static FileConfiguration getEntityDeathMessages() {
+        return Assets.getEntityDeathMessages();
+    }
 }

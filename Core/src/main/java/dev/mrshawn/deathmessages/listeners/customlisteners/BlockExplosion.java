@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public class BlockExplosion implements Listener {
 
-	@EventHandler
-	public void onExplode(@NotNull DMBlockExplodeEvent e) {
-		Optional<ExplosionManager> explosions = ExplosionManager.getExplosion(e.getBlock().getLocation());
-		explosions.ifPresent(explosionManager -> {
-			if (explosionManager.getLocation() == null) {
-				explosionManager.setLocation(e.getBlock().getLocation());
-			}
-		});
-	}
+    @EventHandler
+    public void onExplode(@NotNull DMBlockExplodeEvent e) {
+        Optional<ExplosionManager> explosions = ExplosionManager.getExplosion(e.getBlock().getLocation());
+        explosions.ifPresent(explosionManager -> {
+            if (explosionManager.getLocation() == null) {
+                explosionManager.setLocation(e.getBlock().getLocation());
+            }
+        });
+    }
 }

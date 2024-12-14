@@ -2,16 +2,16 @@ package dev.mrshawn.deathmessages.enums;
 
 public enum DeathModes {
 
-	BASIC_MODE("Basic-Mode"),
-	MOBS("Mobs");
+    BASIC_MODE("Basic-Mode"),
+    MOBS("Mobs");
 
-	private final String value;
+    private final String value;
 
-	DeathModes(String value) {
-		this.value = value;
-	}
+    DeathModes(String value) {
+        this.value = value;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 }

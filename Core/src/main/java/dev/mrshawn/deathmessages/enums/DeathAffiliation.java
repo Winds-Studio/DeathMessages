@@ -2,16 +2,16 @@ package dev.mrshawn.deathmessages.enums;
 
 public enum DeathAffiliation {
 
-	SOLO("Solo"),
-	GANG("Gang");
+    SOLO("Solo"),
+    GANG("Gang");
 
-	private final String value;
+    private final String value;
 
-	DeathAffiliation(String value) {
-		this.value = value;
-	}
+    DeathAffiliation(String value) {
+        this.value = value;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 }

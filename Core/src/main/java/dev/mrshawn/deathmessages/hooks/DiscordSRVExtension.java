@@ -126,11 +126,11 @@ public class DiscordSRVExtension {
 
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
                     textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, null)
-                            .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
+                                    .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
                             .queue();
                 } else {
                     textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, (LivingEntity) pm.getLastEntityDamager())
-                            .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
+                                    .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
                             .queue();
                 }
             }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileSettings<C extends Enum<C>> {
+
     private final String fileName;
     private final File file;
     private YamlConfiguration yamlConfig;

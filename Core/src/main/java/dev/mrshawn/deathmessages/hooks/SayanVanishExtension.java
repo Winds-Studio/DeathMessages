@@ -7,6 +7,7 @@ import org.sayandev.sayanvanish.bukkit.api.SayanVanishBukkitAPI;
 import java.util.UUID;
 
 public class SayanVanishExtension {
+
     public SayanVanishAPI<BukkitUser> getSayanVanishAPI() {
         return SayanVanishBukkitAPI.getInstance();
     }
