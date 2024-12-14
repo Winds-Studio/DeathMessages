@@ -6,8 +6,7 @@ import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.utils.Util;
@@ -24,7 +23,6 @@ import java.util.Optional;
 
 public class BroadcastPlayerDeathListener implements Listener {
 
-    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
     private boolean discordSent = false;
 
     @EventHandler
@@ -53,15 +51,15 @@ public class BroadcastPlayerDeathListener implements Listener {
             getPlayer.get().setCooldown();
         }
 
-        boolean privatePlayer = config.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
-        boolean privateMobs = config.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
-        boolean privateNatural = config.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
+        boolean privatePlayer = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
+        boolean privateMobs = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
+        boolean privateNatural = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_NATURAL);
 
         // To reset for each death message
         discordSent = false;
 
         for (World w : e.getBroadcastedWorlds()) {
-            if (config.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
+            if (FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
                 continue;
             }
 
@@ -108,8 +106,8 @@ public class BroadcastPlayerDeathListener implements Listener {
         if (pm.getMessagesEnabled()) {
             DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
         }
-        if (config.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
-            List<String> discordWorldWhitelist = config.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
+        if (FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
+            List<String> discordWorldWhitelist = FileStore.CONFIG.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
             boolean broadcastToDiscord = false;
             for (World world : worlds) {
                 if (discordWorldWhitelist.contains(world.getName())) {

@@ -4,8 +4,7 @@ import com.tcoded.folialib.wrapper.task.WrappedTask;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.files.FileStore;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -19,8 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 // Class designed to keep track of damage and data to mobs that were damaged by players
 
 public class EntityManager {
-
-    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
     private final Entity entity;
     private final UUID entityUUID;
@@ -71,7 +68,7 @@ public class EntityManager {
         if (lastPlayerTask != null) {
             lastPlayerTask.cancel();
         }
-        lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+        lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
         this.damageCause = DamageCause.CUSTOM;
     }
 

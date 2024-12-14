@@ -1,9 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
-plugins {
-    kotlin("jvm") version "2.1.0"
-}
-
 val adventureVersion = findProperty("adventure-version")
 val adventurePlatformVersion = findProperty("adventure-platform-version")
 
@@ -42,12 +36,4 @@ dependencies {
     api("net.kyori:adventure-text-minimessage:$adventureVersion")
     api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
     api("net.kyori:adventure-key:$adventureVersion")
-}
-
-tasks {
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
-        }
-    }
 }

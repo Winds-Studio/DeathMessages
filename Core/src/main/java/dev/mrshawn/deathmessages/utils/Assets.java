@@ -14,7 +14,7 @@ import dev.mrshawn.deathmessages.enums.DeathAffiliation;
 import dev.mrshawn.deathmessages.enums.DeathModes;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.files.FileStore;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -390,15 +390,13 @@ public class Assets {
             ItemStack i = mob.getEquipment().getItemInMainHand();
             Component displayName;
             if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-                if (FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
-                    if (!FileStore.INSTANCE.getCONFIG().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
+                if (FileStore.CONFIG.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED)) {
+                    if (!FileStore.CONFIG.getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_IGNORE_ENCHANTMENTS)) {
                         if (i.getEnchantments().isEmpty()) {
-                            return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
-                                    .getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
+                            return get(gang, pm, mob, FileStore.CONFIG.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
                         }
                     } else {
-                        return get(gang, pm, mob, FileStore.INSTANCE.getCONFIG()
-                                .getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
+                        return get(gang, pm, mob, FileStore.CONFIG.getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_WEAPON_DEFAULT_TO));
                     }
                 }
                 displayName = getI18nName(i, pm.getPlayer());

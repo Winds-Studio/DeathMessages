@@ -4,8 +4,7 @@ import com.tcoded.folialib.wrapper.task.WrappedTask;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.files.FileStore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,8 +20,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerManager {
-
-    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
     private final UUID playerUUID;
     private final String playerName;
@@ -44,7 +41,7 @@ public class PlayerManager {
 
     private static final Map<UUID, PlayerManager> players = new ConcurrentHashMap<>();
 
-    public final boolean saveUserData = config.getBoolean(Config.SAVED_USER_DATA);
+    public final boolean saveUserData = FileStore.CONFIG.getBoolean(Config.SAVED_USER_DATA);
 
     public PlayerManager(Player p) {
         this.playerUUID = p.getUniqueId();
@@ -130,7 +127,7 @@ public class PlayerManager {
         if (lastEntityTask != null) {
             lastEntityTask.cancel();
         }
-        lastEntityTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> setLastEntityDamager(null), config.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
+        lastEntityTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> setLastEntityDamager(null), FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
     }
 
     public Entity getLastEntityDamager() {
@@ -178,7 +175,7 @@ public class PlayerManager {
     }
 
     public void setCooldown() {
-        cooldown = config.getInt(Config.COOLDOWN);
+        cooldown = FileStore.CONFIG.getInt(Config.COOLDOWN);
         cooldownTask = DeathMessages.getInstance().foliaLib.getScheduler().runTimer(() -> {
             if (cooldown <= 0) {
                 cooldownTask.cancel();

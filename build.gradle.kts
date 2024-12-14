@@ -11,12 +11,6 @@ version = "1.4.20-SNAPSHOT"
 repositories {
     mavenCentral()
 
-    // PaperMC
-    maven {
-        name = "papermc-repo"
-        url = uri("https://repo.papermc.io/repository/maven-public/")
-    }
-
     // Eco
     maven {
         name = "auxilor-repo"
@@ -25,7 +19,7 @@ repositories {
 }
 
 allprojects {
-    apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "com.gradleup.shadow")
 

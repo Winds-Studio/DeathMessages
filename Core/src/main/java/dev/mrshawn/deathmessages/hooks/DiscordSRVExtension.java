@@ -5,8 +5,7 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.utils.Util;
 import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder;
@@ -29,7 +28,6 @@ import java.util.regex.Pattern;
 
 public class DiscordSRVExtension {
 
-    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
     private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + "§" + "[0-9A-FK-ORX]");
 
     public DiscordSRVExtension() {
@@ -67,7 +65,7 @@ public class DiscordSRVExtension {
             }
 
             if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
-                    && config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
+                    && FileStore.CONFIG.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
                 String prefix = PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(getMessages().getString("Prefix")));
                 message = message.substring(prefix.length());
             }

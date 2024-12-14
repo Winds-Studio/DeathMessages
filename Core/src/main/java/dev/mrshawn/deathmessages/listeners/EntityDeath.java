@@ -11,8 +11,7 @@ import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
+import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
@@ -42,8 +41,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class EntityDeath implements Listener {
-
-    private static final FileSettings<Config> config = FileStore.INSTANCE.getCONFIG();
 
     void onEntityDeath(EntityDeathEvent e) {
         // Player death
@@ -167,10 +164,10 @@ public class EntityDeath implements Listener {
 
     public static List<World> getWorlds(Entity e) {
         List<World> broadcastWorlds = new ArrayList<>();
-        if (config.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {
+        if (FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {
             return broadcastWorlds;
         }
-        if (config.getBoolean(Config.PER_WORLD_MESSAGES)) {
+        if (FileStore.CONFIG.getBoolean(Config.PER_WORLD_MESSAGES)) {
             // TODO: Add support for Map in FileSettings
             for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
                 List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);

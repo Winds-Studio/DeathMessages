@@ -8,9 +8,8 @@ import dev.mrshawn.deathmessages.commands.alias.CommandDeathMessagesToggle;
 import dev.mrshawn.deathmessages.config.ConfigManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.hooks.HookInstance;
-import dev.mrshawn.deathmessages.kotlin.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.EntityDamage;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByBlock;
 import dev.mrshawn.deathmessages.listeners.EntityDamageByEntity;
@@ -54,7 +53,6 @@ public class DeathMessages extends JavaPlugin {
     private static Wrapper nmsInstance;
 
     private static EventPriority eventPriority = EventPriority.HIGH;
-    private static FileSettings<Config> config;
 
     @Override
     public void onEnable() {
@@ -106,10 +104,9 @@ public class DeathMessages extends JavaPlugin {
 
     public void initConfig() {
         ConfigManager.getInstance().initialize();
-        config = FileStore.INSTANCE.getCONFIG();
 
         DeathMessages.eventPriority = EventPriority.valueOf(
-                config.getString(Config.DEATH_LISTENER_PRIORITY).toUpperCase()
+                FileStore.CONFIG.getString(Config.DEATH_LISTENER_PRIORITY).toUpperCase()
         );
     }
 
@@ -142,7 +139,7 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initHooks() {
-        hookInstance = new HookInstance(this, config);
+        hookInstance = new HookInstance(this);
     }
 
     private void initOnlinePlayers() {
@@ -150,7 +147,7 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void checkGameRules() {
-        if (config.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
+        if (FileStore.CONFIG.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
             for (World world : Bukkit.getWorlds()) {
                 try {
                     if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {

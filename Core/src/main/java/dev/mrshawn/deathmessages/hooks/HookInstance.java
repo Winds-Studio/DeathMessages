@@ -3,7 +3,7 @@ package dev.mrshawn.deathmessages.hooks;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileSettings;
+import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
@@ -18,7 +18,6 @@ import java.util.List;
 public class HookInstance {
 
     private final DeathMessages instance;
-    private final FileSettings<Config> config;
 
     public boolean placeholderAPIEnabled = false;
     public boolean combatLogXAPIEnabled = false;
@@ -43,15 +42,14 @@ public class HookInstance {
     public SayanVanishExtension sayanVanishExtension;
     public boolean sayanVanishEnabled = false;
 
-    public HookInstance(DeathMessages pluginInstance, FileSettings<Config> pluginConfig) {
+    public HookInstance(DeathMessages pluginInstance) {
         instance = pluginInstance;
-        config = pluginConfig;
 
         registerHooksOnLoad();
     }
 
     private void registerHooksOnLoad() {
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && config.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
             try {
                 final String version = Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion();
                 if (version.startsWith("7")) {
@@ -72,15 +70,15 @@ public class HookInstance {
     }
 
     public void registerHooks() {
-        if (config.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
+        if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
             Bukkit.getServer().getMessenger().registerIncomingPluginChannel(instance, "BungeeCord", new PluginMessaging());
             DeathMessages.LOGGER.info("Bungee Hook enabled!");
-            if (config.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
+            if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
                 bungeeInit = true;
             } else {
                 bungeeInit = false;
-                bungeeServerName = config.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
+                bungeeServerName = FileStore.CONFIG.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
             }
         }
 
@@ -99,7 +97,7 @@ public class HookInstance {
             DeathMessages.LOGGER.info("WorldGuard Hook Enabled!");
         }
 
-        if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && config.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
+        if (Bukkit.getPluginManager().getPlugin("DiscordSRV") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
             discordSRVExtension = new DiscordSRVExtension();
             discordSRVEnabled = true;
             DeathMessages.LOGGER.info("DiscordSRV Hook Enabled!");
@@ -118,13 +116,13 @@ public class HookInstance {
             }
         }
 
-        if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && config.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
+        if (Bukkit.getPluginManager().getPlugin("CombatLogX") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
             combatLogXAPIEnabled = true;
             Bukkit.getPluginManager().registerEvents(new PlayerUntag(), instance);
             DeathMessages.LOGGER.info("CombatLogX Hook Enabled!");
         }
 
-        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && config.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
+        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
             mythicMobs = MythicBukkit.inst();
             mythicmobsEnabled = true;
             Bukkit.getPluginManager().registerEvents(new MobDeath(), instance);
@@ -137,7 +135,7 @@ public class HookInstance {
             DeathMessages.LOGGER.info("EcoEnchants Hook Enabled!");
         }
 
-        if (Bukkit.getPluginManager().getPlugin("SayanVanish") != null && config.getBoolean(Config.HOOKS_SAYANVANISH_ENABLED)) {
+        if (Bukkit.getPluginManager().getPlugin("SayanVanish") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_SAYANVANISH_ENABLED)) {
             sayanVanishExtension = new SayanVanishExtension();
             sayanVanishEnabled = true;
             DeathMessages.LOGGER.info("SayanVanish Hook Enabled!");
