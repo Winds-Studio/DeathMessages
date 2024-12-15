@@ -532,9 +532,14 @@ public class Assets {
 
         if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             Component weaponHover;
+            ItemStack i = mob.getEquipment().getItemInMainHand();
 
-            if (!projectileDamage.equals("Projectile-ShulkerBullet")) {
-                ItemStack i = mob.getEquipment().getItemInMainHand();
+            // If there is no item in killer's main hands, then it can be seen as the victim got attack by projectile
+            // So just render that projectile name as the weapon name
+            // Death message for killed by skeleton will still show bow, since bow in the main hand, which is also
+            // meet the expectation
+            // Same logic in getEntityDeathProjectile()
+            if (!MaterialUtil.isAir(i)) {
                 Component displayName;
                 if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
                     if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
@@ -552,7 +557,7 @@ public class Assets {
             } else {
                 Entity projectile = pm.getLastProjectileEntity();
                 Component projectileName = projectile.getCustomName() != null
-                        ? Component.text(projectile.getCustomName()) // TODO: Get display name using Paper api
+                        ? Component.text(projectile.getCustomName())
                         : getI18nName(projectile, pm.getPlayer());
 
                 weaponHover = projectileName;
@@ -618,24 +623,35 @@ public class Assets {
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
         if (msg.contains("%weapon%") && em.getLastProjectileEntity() instanceof Arrow) {
+            Component weaponHover;
             ItemStack i = p.getEquipment().getItemInMainHand();
-            Component displayName;
-            if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
-                if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
-                    if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
-                            .equals(projectileDamage)) {
-                        return getEntityDeathProjectile(p, em,
-                                Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()), mobType);
+
+            if (!MaterialUtil.isAir(i)) {
+                Component displayName;
+                if (i.getItemMeta() == null || !i.getItemMeta().hasDisplayName() || i.getItemMeta().getDisplayName().isEmpty()) {
+                    if (Settings.getInstance().getConfig().getBoolean(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_ENABLED.getPath())) {
+                        if (!Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath())
+                                .equals(projectileDamage)) {
+                            return getEntityDeathProjectile(p, em,
+                                    Settings.getInstance().getConfig().getString(Config.DISABLE_WEAPON_KILL_WITH_NO_CUSTOM_NAME_SOURCE_PROJECTILE_DEFAULT_TO.getPath()), mobType);
+                        }
                     }
+                    displayName = getI18nName(i, p);
+                } else {
+                    displayName = ComponentUtil.getItemStackDisplayName(i);
                 }
-                displayName = getI18nName(i, p);
+
+                weaponHover = ComponentUtil.buildItemHover(p, i, displayName);
             } else {
-                displayName = ComponentUtil.getItemStackDisplayName(i);
+                Entity projectile = em.getLastProjectileEntity();
+                Component projectileName = projectile.getCustomName() != null
+                        ? Component.text(projectile.getCustomName())
+                        : getI18nName(projectile, p);
+
+                weaponHover = projectileName;
             }
 
             TextComponent deathMessage = Util.convertFromLegacy(msg);
-            Component weaponHover = ComponentUtil.buildItemHover(p, i, displayName);
-
             base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
         } else {
             TextComponent deathMessage = Util.convertFromLegacy(msg);
