@@ -33,7 +33,7 @@ public class CommandManager implements CommandExecutor {
                     .stream()
                     .map(Util::convertFromLegacy)
                     .forEach(msg -> sender.sendMessage(msg
-                            .replaceText(Util.prefix)));
+                            .replaceText(Util.PREFIX)));
         } else {
             DeathMessagesCommand cmd = get(args[0]);
             if (cmd != null) {
@@ -45,7 +45,7 @@ public class CommandManager implements CommandExecutor {
                     .stream()
                     .map(Util::convertFromLegacy)
                     .forEach(msg -> sender.sendMessage(msg
-                            .replaceText(Util.prefix)));
+                            .replaceText(Util.PREFIX)));
         }
         return false;
     }

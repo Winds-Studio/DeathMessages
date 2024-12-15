@@ -6,8 +6,8 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
 import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.enums.MessageType;
-import dev.mrshawn.deathmessages.listeners.EntityDeath;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -26,8 +26,8 @@ public class PlayerUntag implements Listener {
 
     @EventHandler
     public void untagPlayer(PlayerUntagEvent e) {
-        Player p = e.getPlayer();
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+        Player player = e.getPlayer();
+        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
         getPlayer.ifPresent(pm -> {
             UntagReason reason = e.getUntagReason();
 
@@ -39,7 +39,7 @@ public class PlayerUntag implements Listener {
             if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
                 int totalMobEntities = 0;
                 Predicate<Entity> isNotDragonParts = entity -> !entity.toString().contains("EnderDragonPart"); // Exclude EnderDragonPart
-                List<Entity> entities = p.getNearbyEntities(radius, radius, radius).stream()
+                List<Entity> entities = player.getNearbyEntities(radius, radius, radius).stream()
                         .filter(isNotDragonParts).collect(Collectors.toList());
 
                 for (Entity entity : entities) {
@@ -52,11 +52,11 @@ public class PlayerUntag implements Listener {
                 }
             }
             TextComponent deathMessage = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
-            BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(p, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, deathMessage, EntityDeath.getWorlds(p), gangKill);
+            BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(player, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, deathMessage, Util.getBroadcastWorlds(player), gangKill);
             Bukkit.getPluginManager().callEvent(event);
         });
         if (!getPlayer.isPresent()) {
-            new PlayerManager(p);
+            new PlayerManager(player);
         }
     }
 }

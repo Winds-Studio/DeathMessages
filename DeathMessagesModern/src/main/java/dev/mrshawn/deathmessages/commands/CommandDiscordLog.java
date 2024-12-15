@@ -70,7 +70,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
                 .stream()
                 .map(Util::convertFromLegacy)
                 .forEach(msg -> sender.sendMessage(msg
-                        .replaceText(Util.prefix)
+                        .replaceText(Util.PREFIX)
                         .replaceText(TextReplacementConfig.builder()
                                 .matchLiteral("%discordJar%")
                                 .replacement(discordJar)

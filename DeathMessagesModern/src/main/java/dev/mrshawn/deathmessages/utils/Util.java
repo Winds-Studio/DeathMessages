@@ -1,10 +1,12 @@
 package dev.mrshawn.deathmessages.utils;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;
 import dev.mrshawn.deathmessages.config.Messages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
@@ -31,8 +33,7 @@ import java.util.regex.Pattern;
 public class Util {
 
     public static final ConsoleCommandSender CONSOLE = Bukkit.getServer().getConsoleSender();
-
-    public static TextReplacementConfig prefix = TextReplacementConfig.builder()
+    public static final TextReplacementConfig PREFIX = TextReplacementConfig.builder()
             .matchLiteral("%prefix%")
             .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
             .build();
@@ -45,7 +46,7 @@ public class Util {
     }
 
     public static Component formatMessage(String path) {
-        return convertFromLegacy(Messages.getInstance().getConfig().getString(path)).replaceText(prefix);
+        return convertFromLegacy(Messages.getInstance().getConfig().getString(path)).replaceText(PREFIX);
     }
 
     public static TextComponent convertFromLegacy(String s) {
@@ -129,9 +130,36 @@ public class Util {
         Bukkit.getPluginManager().callEvent(explodeEvent);
     }
 
-    // TODO
-    public static boolean isDisabledWorlds(World world) {
-        return FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(world.getName());
+    public static List<World> getBroadcastWords(Entity e) {
+        List<World> broadcastWorlds = new ArrayList<>();
+
+        if (FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {
+            return broadcastWorlds;
+        }
+
+        if (FileStore.CONFIG.getBoolean(Config.PER_WORLD_MESSAGES)) {
+            // TODO: Add support for Map in FileSettings
+            for (String groups : Settings.getInstance().getConfig().getConfigurationSection("World-Groups").getKeys(false)) {
+                List<String> worlds = Settings.getInstance().getConfig().getStringList("World-Groups." + groups);
+                if (worlds.contains(e.getWorld().getName())) {
+                    for (String single : worlds) {
+                        World world = Bukkit.getWorld(single);
+                        if (world != null) {
+                            broadcastWorlds.add(world);
+                        } else {
+                            DeathMessages.LOGGER.warn("Can't find world with name: {}, in World-Groups", single);
+                        }
+                    }
+                }
+            }
+            if (broadcastWorlds.isEmpty()) {
+                broadcastWorlds.add(e.getWorld());
+            }
+        } else {
+            return Bukkit.getWorlds();
+        }
+
+        return broadcastWorlds;
     }
 
     // The simpler and better version of common-lang's RandomStringUtils#randomNumeric
