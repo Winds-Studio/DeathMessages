@@ -96,12 +96,6 @@ allprojects {
             url = uri("https://mvn.lumine.io/repository/maven-public/")
         }
 
-        // FoliaLib
-        maven {
-            name = "devmart-other"
-            url = uri("https://nexuslite.gcnt.net/repos/other/")
-        }
-
         // worldguard-legacy
         maven {
             name = "minebench-repo"

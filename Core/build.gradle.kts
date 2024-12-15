@@ -15,7 +15,7 @@ dependencies {
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.2")
     implementation("com.github.cryptomorin:XSeries:12.0.0")
     implementation("org.bstats:bstats-bukkit:3.1.0")
-    implementation("com.tcoded:FoliaLib:0.4.2")
+    implementation("com.github.technicallycoded:FoliaLib:0.4.3")
 
     implementation("de.tr7zw:item-nbt-api:2.14.0")
     compileOnly("me.clip:placeholderapi:2.11.6")
