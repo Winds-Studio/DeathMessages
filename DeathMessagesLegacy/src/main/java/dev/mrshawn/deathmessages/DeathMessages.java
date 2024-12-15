@@ -60,7 +60,7 @@ public class DeathMessages extends JavaPlugin {
         initOnlinePlayers();
         checkGameRules();
 
-        new Metrics(instance, 12365);
+        new Metrics(instance, 24145); // Move to single class for more Metrics function
         LOGGER.info("bStats Hook Enabled!");
         instance.adventure.console().sendMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
         checkUpdate();
