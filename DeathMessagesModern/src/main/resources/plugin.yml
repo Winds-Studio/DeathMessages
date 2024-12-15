@@ -1,0 +1,27 @@
+name: DeathMessages
+version: ${version}
+main: dev.mrshawn.deathmessages.DeathMessages
+api-version: 1.13
+folia-supported: true
+softdepend:
+  - PlaceholderAPI
+  - WorldEdit
+  - WorldGuard
+  - DiscordSRV
+  - MythicMobs
+  - CombatLogX
+  - eco
+  - EcoEnchants
+  - SayanVanish
+authors:
+  - CosmoConsole
+  - Joshb_
+  - MrShawn
+  - Dreeam-qwq
+commands:
+  deathmessages:
+    description: Main DeathMessages command
+    aliases: [ dm ]
+  deathmessagestoggle:
+    description: Alias for /dm toggle in one command
+    aliases: [ dmt, dmtoggle ]

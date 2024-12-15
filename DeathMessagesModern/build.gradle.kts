@@ -4,17 +4,11 @@ plugins {
     id("com.willfp.libreforge-gradle-plugin") version "1.0.2"
 }
 
-val adventureVersion = findProperty("adventure-version")
-val adventurePlatformVersion = findProperty("adventure-platform-version")
-
 dependencies {
     implementation(project(":Hooks:WorldGuard"))
-    implementation(project(":Hooks:WorldGuard6"))
     implementation(project(":Hooks:WorldGuard7"))
 
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT") // Universal
-    compileOnly("commons-io:commons-io:2.18.0") // Remove this
-    compileOnly("org.apache.logging.log4j:log4j-api:2.24.2")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation("com.github.cryptomorin:XSeries:12.0.0")
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.github.technicallycoded:FoliaLib:0.4.3")
@@ -27,17 +21,13 @@ dependencies {
     compileOnly("com.willfp:EcoEnchants:12.19.3")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT")
-    compileOnly(files("libs/LangUtils-1.9.jar"))
     compileOnly("org.sayandev:sayanvanish-api:1.6.0")
     compileOnly("org.sayandev:sayanvanish-bukkit:1.6.0")
+}
 
-    api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
-    api("net.kyori:adventure-api:$adventureVersion")
-    api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
-    api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
-    api("net.kyori:adventure-text-minimessage:$adventureVersion")
-    api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
-    api("net.kyori:adventure-key:$adventureVersion")
+configure<JavaPluginExtension> {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks {
@@ -51,9 +41,6 @@ tasks {
 //            minimize {
 //                exclude(dependency("com.tcoded.folialib:.*:.*"))
 //            }
-        relocate("com.google.gson", "dev.mrshawn.deathmessages.libs.gson") // Don't relocate to avoid item hover issue
-        relocate("com.google.auto", "dev.mrshawn.deathmessages.libs.auto") // Don't relocate to avoid item hover issue
-        relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori") // Don't relocate to avoid item hover issue
         relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
         relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
         relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")
