@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.commands;
 
-import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.UserData;

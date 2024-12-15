@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.commands.alias;
 
-import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.ComponentUtil;
