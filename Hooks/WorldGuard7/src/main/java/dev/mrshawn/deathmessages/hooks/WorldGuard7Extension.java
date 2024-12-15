@@ -26,13 +26,18 @@ public final class WorldGuard7Extension implements WorldGuardExtension {
         final ApplicableRegionSet set = rc.createQuery().getApplicableRegions(loc);
         final LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
 
-        return switch (messageType) {
-            case "player" -> set.queryState(localPlayer, BROADCAST_PLAYER);
-            case "mob" -> set.queryState(localPlayer, BROADCAST_MOBS);
-            case "natural" -> set.queryState(localPlayer, BROADCAST_NATURAL);
-            case "entity" -> set.queryState(localPlayer, BROADCAST_ENTITY);
-            default -> StateFlag.State.ALLOW;
-        };
+        switch (messageType) {
+            case "player":
+                return set.queryState(localPlayer, BROADCAST_PLAYER);
+            case "mob":
+                return set.queryState(localPlayer, BROADCAST_MOBS);
+            case "natural":
+                return set.queryState(localPlayer, BROADCAST_NATURAL);
+            case "entity":
+                return set.queryState(localPlayer, BROADCAST_ENTITY);
+            default:
+                return StateFlag.State.ALLOW;
+        }
     }
 
     @Override

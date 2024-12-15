@@ -25,10 +25,6 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathL
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
-import dev.mrshawn.deathmessages.utils.Util;
-import dev.mrshawn.deathmessages.utils.nms.V1_20_6;
-import dev.mrshawn.deathmessages.utils.nms.V1_21;
-import dev.mrshawn.deathmessages.utils.nms.Wrapper;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -50,7 +46,6 @@ public class DeathMessages extends JavaPlugin {
     private static HookInstance hookInstance;
     private BukkitAudiences adventure;
     public final FoliaLib foliaLib = new FoliaLib(this);
-    private static Wrapper nmsInstance;
 
     private static EventPriority eventPriority = EventPriority.HIGH;
 
@@ -59,7 +54,6 @@ public class DeathMessages extends JavaPlugin {
         instance.adventure = BukkitAudiences.create(instance);
         instance.adventure.console().sendMessage(loadedLogo);
 
-        initNMS();
         initListeners();
         initCommands();
         getHooks().registerHooks();
@@ -88,18 +82,6 @@ public class DeathMessages extends JavaPlugin {
         }
 
         instance = null;
-    }
-
-    private void initNMS() {
-        try {
-            if (Util.isNewerAndEqual(21, 0)) {
-                nmsInstance = V1_21.class.newInstance();
-            } else if (Util.isNewerAndEqual(20, 5)) {
-                nmsInstance = V1_20_6.class.newInstance();
-            }
-        } catch (InstantiationException | IllegalAccessException e) {
-            LOGGER.error(e);
-        }
     }
 
     public void initConfig() {
@@ -189,10 +171,6 @@ public class DeathMessages extends JavaPlugin {
 
     public static DeathMessages getInstance() {
         return instance;
-    }
-
-    public static Wrapper getNMS() {
-        return nmsInstance;
     }
 
     public static HookInstance getHooks() {

@@ -25,16 +25,19 @@
 
 Compatibility
 
-- Support Java 8 and higher
-- Support 1.12.2 - Latest Minecraft version (1.21.4)
-- Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
-- Multi Plugins Support
-- Folia Support
+|                       |           Legacy           |      Modern       |
+|-----------------------|:--------------------------:|:-----------------:|
+| Java Version          |           `>= 8`           |      `>= 17`      |
+| Minecraft Version     |      1.12.2 ~ 1.20.4       |      1.20.5+      |
+| Compatibility         | Spigot / Paper / Forks / * | Paper / Forks / * |
+| Folia Support         |             No             |        Yes        |
+| Multi Plugins Support |            Yes             |        Yes        |
+
 
 ## Portals
 
 - [Github Releases](https://github.com/Winds-Studio/DeathMessages/releases) (Latest DEV Version)
-- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Original DeathMessages)
+- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Latest Stable Version)
 
 ## Contact
 

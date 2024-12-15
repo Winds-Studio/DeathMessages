@@ -1,3 +1,7 @@
+plugins {
+    id("cn.dreeam.deathmessages.wrapper")
+}
+
 dependencies {
     compileOnly(project(":Hooks:WorldGuard"))
 

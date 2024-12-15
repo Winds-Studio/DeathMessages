@@ -81,17 +81,13 @@ public class ComponentUtil {
             i = DeathMessages.getHooks().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
-        if (Util.isNewerAndEqual(20, 5)) {
-            // Item with Component
-            showItem = HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), DeathMessages.getNMS().getItemStackComponentsMap(i));
-        } else {
-            ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
-            showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
-                    // Item with NBT
-                    ? HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
-                    // Item without NBT (tag compound)
-                    : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
-        }
+        // For <= 1.20.4
+        ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
+        showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
+                // Item with NBT
+                ? HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
+                // Item without NBT (tag compound)
+                : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
 
         return displayName.hoverEvent(showItem);
     }

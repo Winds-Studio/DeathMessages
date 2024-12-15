@@ -6,11 +6,14 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MobType;
+import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.files.FileStore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -121,6 +124,11 @@ public class Util {
         new ExplosionManager(p.getUniqueId(), b.getType(), b.getLocation(), effected);
         DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(p, b);
         Bukkit.getPluginManager().callEvent(explodeEvent);
+    }
+
+    // TODO
+    public static boolean isDisabledWorlds(World world) {
+        return FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(world.getName());
     }
 
     // The simpler and better version of common-lang's RandomStringUtils#randomNumeric
