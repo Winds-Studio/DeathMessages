@@ -41,12 +41,8 @@ dependencies {
 }
 
 tasks {
-    compileJava {
-        options.encoding = "UTF-8"
-    }
-
     shadowJar {
-        archiveFileName = "${rootProject.name}-${project.version}.${archiveExtension.get()}"
+        archiveFileName = "${rootProject.name}-Legacy-${project.version}.${archiveExtension.get()}"
         exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
 //            minimize {
 //                exclude(dependency("com.tcoded.folialib:.*:.*"))
@@ -59,14 +55,6 @@ tasks {
         relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")
         relocate("de.tr7zw.changeme.nbtapi", "dev.mrshawn.deathmessages.libs.nbtapi")
         relocate("net.dv8tion.jda", "dev.mrshawn.deathmessages.libs.jda")
-    }
-
-    processResources {
-        filesMatching("**/plugin.yml") {
-            expand(
-                "version" to rootProject.version
-            )
-        }
     }
 
     build {
