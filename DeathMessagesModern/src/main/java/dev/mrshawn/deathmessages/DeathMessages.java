@@ -119,16 +119,11 @@ public class DeathMessages extends JavaPlugin {
 
     private void checkGameRules() {
         if (FileStore.CONFIG.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
-            for (World world : Bukkit.getWorlds()) {
-                try {
-                    if (Boolean.TRUE.equals(world.getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES))) {
-                        foliaLib.getScheduler().runNextTick(task -> world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false));
-                    }
-                } catch (NoClassDefFoundError e) {
-                    if (world.getGameRuleValue("showDeathMessages").equals("true"))
-                        world.setGameRuleValue("showDeathMessages", "false");
+            foliaLib.getScheduler().runNextTick(task -> {
+                for (World world : Bukkit.getWorlds()) {
+                    world.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
                 }
-            }
+            });
         }
     }
 
