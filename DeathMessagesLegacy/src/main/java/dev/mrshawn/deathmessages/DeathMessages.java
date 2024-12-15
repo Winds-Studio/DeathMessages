@@ -23,11 +23,11 @@ import dev.mrshawn.deathmessages.listeners.PlayerDeath;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +52,6 @@ public class DeathMessages extends JavaPlugin {
     @Override
     public void onEnable() {
         instance.adventure = BukkitAudiences.create(instance);
-        instance.adventure.console().sendMessage(loadedLogo);
 
         initListeners();
         initCommands();
@@ -62,7 +61,7 @@ public class DeathMessages extends JavaPlugin {
 
         new Metrics(instance, 24145); // Move to single class for more Metrics function
         LOGGER.info("bStats Hook Enabled!");
-        instance.adventure.console().sendMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
+        ComponentUtil.sendConsoleMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
         checkUpdate();
     }
 
@@ -142,15 +141,6 @@ public class DeathMessages extends JavaPlugin {
             }
         }
     }
-
-    private final TextComponent loadedLogo = Component.text().appendNewline()
-            .append(Component.text("    ____             __  __    __  ___                                    ")).appendNewline()
-            .append(Component.text("   / __ \\___  ____ _/ /_/ /_  /  |/  /__  ______________ _____ ____  _____")).appendNewline()
-            .append(Component.text("  / / / / _ \\/ __ `/ __/ __ \\/ /|_/ / _ \\/ ___/ ___/ __ `/ __ `/ _ \\/ ___/")).appendNewline()
-            .append(Component.text(" / /_/ /  __/ /_/ / /_/ / / / /  / /  __(__  |__  ) /_/ / /_/ /  __(__  ) ")).appendNewline()
-            .append(Component.text("/_____/\\___/\\__,_/\\__/_/ /_/_/  /_/\\___/____/____/\\__,_/\\__, /\\___/____/  ")).appendNewline()
-            .append(Component.text("                                                       /____/             ")).appendNewline()
-            .build();
 
     private void checkUpdate() {
         if (Settings.getInstance().getConfig().getBoolean(Config.CHECK_UPDATE.getPath())) {
