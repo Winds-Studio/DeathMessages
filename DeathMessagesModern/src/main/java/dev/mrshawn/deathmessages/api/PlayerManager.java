@@ -181,7 +181,7 @@ public class PlayerManager {
                 cooldownTask.cancel();
             }
             cooldown--;
-        }, 0, 20);
+        }, 1, 20);
     }
 
     public void setCachedInventory(Inventory inventory) {
