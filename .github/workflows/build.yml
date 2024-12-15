@@ -3,12 +3,12 @@ on:
   push:
     branches: [ "master", "dev" ]
   pull_request:
-    branches: [ "master", "dev" ]
+    branches: [ "master" ]
 
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     if: "github.actor != 'dependabot[bot]'"
     steps:
       - uses: actions/checkout@main
@@ -19,8 +19,8 @@ jobs:
           distribution: zulu
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@main
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Build
         run: ./gradlew build
 
@@ -31,7 +31,9 @@ jobs:
           title: "DeathMessages v1.4.20-SNAPSHOT"
           automatic_release_tag: "dev-build"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "build/libs/DeathMessages-*.jar"
+          files: |
+            DeathMessagesLegacy/build/libs/DeathMessages-*.jar
+            DeathMessagesModern/build/libs/DeathMessages-*.jar
           prerelease: true
 
       - name: Upload DeathMessages Nightly
@@ -39,4 +41,6 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: DeathMessages-Nightly
-          path: build/libs/DeathMessages-*.jar
+          path: |
+            DeathMessagesLegacy/build/libs/DeathMessages-*.jar
+            DeathMessagesModern/build/libs/DeathMessages-*.jar
