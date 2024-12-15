@@ -923,7 +923,7 @@ public class Assets {
         return msg;
     }
 
-    public static String playerDeathPlaceholders(String msg, PlayerManager pm, LivingEntity mob) {
+    public static String playerDeathPlaceholders(String msg, PlayerManager pm, Entity mob) {
         final boolean isSayanVanished = isSayanVanished(pm.getPlayer());
         final boolean hasBiome = msg.contains("%biome%");
         final boolean hasDistance = msg.contains("%distance%");

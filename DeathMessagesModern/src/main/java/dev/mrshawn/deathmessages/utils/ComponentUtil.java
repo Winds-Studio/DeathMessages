@@ -103,7 +103,7 @@ public class ComponentUtil {
         if (rawHover.length == 4) {
             ClickEvent click = null;
             final String content = isPlayerDeath
-                    ? Assets.playerDeathPlaceholders(rawHover[3], pm, (LivingEntity) e)
+                    ? Assets.playerDeathPlaceholders(rawHover[3], pm, e)
                     : Assets.entityDeathPlaceholders(rawHover[3], p, e, hasOwner);
 
             switch (rawHover[2]) {
