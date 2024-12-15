@@ -777,9 +777,9 @@ public class Assets {
         final boolean hasDistance = msg.contains(Component.text("%distance%"));
 
         msg = msg.replaceText(Util.replace("%entity%", Messages.getInstance().getConfig().getString("Mobs."
-                        + entity.getType().toString().toLowerCase())))
+                        + EntityUtil.getConfigNodeByEntity(entity))))
                 .replaceText(Util.replace("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
-                        + entity.getType().toString().toLowerCase()) : entity.getCustomName()))
+                        + EntityUtil.getConfigNodeByEntity(entity)) : entity.getCustomName()))
                 .replaceText(Util.replace("%killer%", player.getName()))
                 .replaceText(Util.replace("%killer_display%", player.getDisplayName()))
                 .replaceText(Util.replace("%world%", entity.getLocation().getWorld().getName()))
@@ -829,9 +829,9 @@ public class Assets {
         final boolean hasDistance = msg.contains("%distance%");
 
         msg = msg.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs."
-                        + entity.getType().toString().toLowerCase()))
+                        + EntityUtil.getConfigNodeByEntity(entity)))
                 .replaceAll("%entity_display%", entity.getCustomName() == null ? Messages.getInstance().getConfig().getString("Mobs."
-                        + entity.getType().toString().toLowerCase()) : entity.getCustomName())
+                        + EntityUtil.getConfigNodeByEntity(entity)) : entity.getCustomName())
                 .replaceAll("%killer%", isSayanVanished ? getVanishedName() : player.getName())
                 .replaceAll("%killer_display%", isSayanVanished ? getVanishedName() : player.getDisplayName())
                 .replaceAll("%world%", entity.getLocation().getWorld().getName())
@@ -908,18 +908,18 @@ public class Assets {
                 String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
                 for (String ch : chars) {
                     if (mobName.contains(ch)) {
-                        mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
+                        mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
                         break;
                     }
                 }
             }
 
             if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
-                mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
+                mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
             }
 
             msg = msg.replaceText(Util.replace("%killer%", mobName))
-                    .replaceText(Util.replace("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase())));
+                    .replaceText(Util.replace("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob))));
 
             if (mob instanceof Player) {
                 Player p = (Player) mob;
@@ -977,18 +977,18 @@ public class Assets {
                 String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
                 for (String ch : chars) {
                     if (mobName.contains(ch)) {
-                        mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
+                        mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
                         break;
                     }
                 }
             }
 
             if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
-                mobName = Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase());
+                mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
             }
 
             msg = msg.replaceAll("%killer%", mobName)
-                    .replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + mob.getType().toString().toLowerCase()));
+                    .replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob)));
 
             if (mob instanceof Player) {
                 Player p = (Player) mob;
