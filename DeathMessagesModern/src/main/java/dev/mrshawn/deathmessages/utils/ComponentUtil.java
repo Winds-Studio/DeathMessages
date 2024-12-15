@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -69,7 +70,7 @@ public class ComponentUtil {
 
     public static Component buildItemHover(Player player, ItemStack i, Component displayName) {
         // Early return, to prevent no component message sent to player caused by air hover
-        if (Assets.isAir(i)) {
+        if (MaterialUtil.isAir(i)) {
             return displayName;
         }
 
@@ -173,5 +174,9 @@ public class ComponentUtil {
 
         // Legacy method
         return Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+    }
+
+    public static void sendConsoleMessage(Component component) {
+        Util.CONSOLE.sendMessage(component);
     }
 }

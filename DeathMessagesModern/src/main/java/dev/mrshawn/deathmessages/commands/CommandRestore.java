@@ -18,11 +18,11 @@ public class CommandRestore extends DeathMessagesCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_RESTORE.getValue())) {
-            DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
+            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
         if (args.length <= 1) {
-            DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Usage"));
+            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Usage"));
         } else {
             String code = args[0];
             boolean excludeUserData = Boolean.parseBoolean(args[1]);
@@ -34,9 +34,9 @@ public class CommandRestore extends DeathMessagesCommand {
                                 .replacement(code)
                                 .build());
 
-                DeathMessages.getInstance().adventure().sender(sender).sendMessage(message);
+                sender.sendMessage(message);
             } else {
-                DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
+                sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
             }
         }
     }

@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":Hooks:WorldGuard7"))
 
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("commons-io:commons-io:2.18.0") // Remove this
     implementation("com.github.cryptomorin:XSeries:12.0.0")
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.github.technicallycoded:FoliaLib:0.4.3")

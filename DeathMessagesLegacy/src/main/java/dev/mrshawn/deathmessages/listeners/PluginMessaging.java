@@ -7,6 +7,7 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -47,11 +48,11 @@ public class PluginMessaging implements PluginMessageListener {
                                 .replacement(serverName)
                                 .build());
                 TextComponent message = Util.convertFromLegacy(rawMsg);
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+                for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
+                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(onlinePlayer);
                     getPlayer.ifPresent(pm -> {
                         if (pm.getMessagesEnabled()) {
-                            DeathMessages.getInstance().adventure().player(p).sendMessage(Component.text()
+                            ComponentUtil.sendMessage(onlinePlayer, Component.text()
                                     .append(prefix)
                                     .append(message)
                                     .build());

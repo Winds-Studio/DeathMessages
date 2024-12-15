@@ -23,6 +23,7 @@ import dev.mrshawn.deathmessages.listeners.PlayerDeath;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
 import net.kyori.adventure.text.Component;
@@ -48,6 +49,8 @@ public class DeathMessages extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        ComponentUtil.sendConsoleMessage(loadedLogo);
+
         initListeners();
         initCommands();
         getHooks().registerHooks();
@@ -56,7 +59,7 @@ public class DeathMessages extends JavaPlugin {
 
         new Metrics(instance, 12365);
         LOGGER.info("bStats Hook Enabled!");
-        instance.getServer().getConsoleSender().sendMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
+        ComponentUtil.sendConsoleMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
         checkUpdate();
     }
 

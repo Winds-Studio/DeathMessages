@@ -21,7 +21,6 @@ public class HookInstance {
 
     public boolean placeholderAPIEnabled = false;
     public boolean combatLogXAPIEnabled = false;
-    public boolean langUtilsEnabled = false;
 
     public MythicBukkit mythicMobs = null;
     public boolean mythicmobsEnabled = false;
@@ -139,20 +138,6 @@ public class HookInstance {
             sayanVanishExtension = new SayanVanishExtension();
             sayanVanishEnabled = true;
             DeathMessages.LOGGER.info("SayanVanish Hook Enabled!");
-        }
-
-        if (Util.isOlderAndEqual(12, 2)) {
-            if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
-                    || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
-                if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {
-                    langUtilsEnabled = true;
-                    DeathMessages.LOGGER.info("LangUtils Hook Enabled!");
-                } else {
-                    langUtilsEnabled = false;
-                    DeathMessages.LOGGER.error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
-                    DeathMessages.LOGGER.error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
-                }
-            }
         }
     }
 

@@ -1,5 +1,6 @@
 package dev.mrshawn.deathmessages.utils;
 
+import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.EntityManager;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.PlayerManager;
@@ -8,6 +9,7 @@ import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -28,6 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Util {
+
+    public static final Audience CONSOLE = DeathMessages.getInstance().adventure().console();
 
     public static TextReplacementConfig prefix = TextReplacementConfig.builder()
             .matchLiteral("%prefix%")

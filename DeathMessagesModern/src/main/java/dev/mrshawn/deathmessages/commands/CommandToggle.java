@@ -18,24 +18,23 @@ public class CommandToggle extends DeathMessagesCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.Player-Only-Command"));
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Player-Only-Command"));
             return;
         }
-        Player p = (Player) sender;
-        if (!p.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
-            DeathMessages.getInstance().adventure().player(p).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
+        if (!player.hasPermission(Permission.DEATHMESSAGES_COMMAND_TOGGLE.getValue())) {
+            player.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
         getPlayer.ifPresent(pm -> {
             boolean msg = pm.getMessagesEnabled();
             if (msg) {
                 pm.setMessagesEnabled(false);
-                DeathMessages.getInstance().adventure().player(p).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));
+                player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));
             } else {
                 pm.setMessagesEnabled(true);
-                DeathMessages.getInstance().adventure().player(p).sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On"));
+                player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On"));
             }
         });
     }

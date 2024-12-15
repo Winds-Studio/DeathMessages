@@ -5,6 +5,7 @@ import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import github.scarsz.discordsrv.DiscordSRV;
 import net.kyori.adventure.text.Component;
@@ -23,7 +24,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_DISCORDLOG.getValue())) {
-            DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
+            ComponentUtil.sendMessage(sender, Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
         String discordJar;
@@ -69,7 +70,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
         Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog")
                 .stream()
                 .map(Util::convertFromLegacy)
-                .forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+                .forEach(msg -> ComponentUtil.sendMessage(sender, msg
                         .replaceText(Util.prefix)
                         .replaceText(TextReplacementConfig.builder()
                                 .matchLiteral("%discordJar%")

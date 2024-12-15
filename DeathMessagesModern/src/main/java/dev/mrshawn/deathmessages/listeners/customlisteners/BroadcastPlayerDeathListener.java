@@ -9,6 +9,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -37,8 +38,7 @@ public class BroadcastPlayerDeathListener implements Listener {
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             // Dreeam TODO: maybe just use formatMessage is also ok?
             Component message = Assets.playerDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), getPlayer.get(), e.getLivingEntity());
-            DeathMessages.getInstance().adventure().console().sendMessage(
-                    message.replaceText(TextReplacementConfig.builder()
+            ComponentUtil.sendConsoleMessage(message.replaceText(TextReplacementConfig.builder()
                             .matchLiteral("%message%")
                             .replacement(e.getTextComponent())
                             .build())
@@ -104,7 +104,7 @@ public class BroadcastPlayerDeathListener implements Listener {
             }
         }
         if (pm.getMessagesEnabled()) {
-            DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
+            player.sendMessage(e.getTextComponent());
         }
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
             List<String> discordWorldWhitelist = FileStore.CONFIG.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);

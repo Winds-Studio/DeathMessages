@@ -47,11 +47,11 @@ public class PluginMessaging implements PluginMessageListener {
                                 .replacement(serverName)
                                 .build());
                 TextComponent message = Util.convertFromLegacy(rawMsg);
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
+                for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
+                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(onlinePlayer);
                     getPlayer.ifPresent(pm -> {
                         if (pm.getMessagesEnabled()) {
-                            DeathMessages.getInstance().adventure().player(p).sendMessage(Component.text()
+                            onlinePlayer.sendMessage(Component.text()
                                     .append(prefix)
                                     .append(message)
                                     .build());

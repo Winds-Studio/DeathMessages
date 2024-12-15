@@ -19,7 +19,7 @@ public class CommandVersion extends DeathMessagesCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_VERSION.getValue())) {
-            DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
+            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
 
@@ -33,16 +33,16 @@ public class CommandVersion extends DeathMessagesCommand {
                         .replacement(String.join(", ", DeathMessages.getInstance().getDescription().getAuthors()))
                         .build());
 
-        DeathMessages.getInstance().adventure().sender(sender).sendMessage(message);
+        sender.sendMessage(message);
 
-        DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Checking update..."));
+        sender.sendMessage(Component.text("Checking update..."));
         Updater.checkUpdate();
         switch (Updater.shouldUpdate) {
             case 0:
-                DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Great! You are using the latest version.", NamedTextColor.GREEN));
+                sender.sendMessage(Component.text("Great! You are using the latest version.", NamedTextColor.GREEN));
                 break;
             case 1:
-                DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text().append(Component.text("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases", NamedTextColor.YELLOW))
+                sender.sendMessage(Component.text().append(Component.text("Find a new version! Click to download: https://github.com/Winds-Studio/DeathMessages/releases", NamedTextColor.YELLOW))
                         .appendNewline()
                         .append(Component.text()
                                 .append(Component.text("Current Version: ", NamedTextColor.YELLOW))
@@ -52,7 +52,7 @@ public class CommandVersion extends DeathMessagesCommand {
                                 .build()));
                 break;
             case -1:
-                DeathMessages.getInstance().adventure().sender(sender).sendMessage(Component.text("Failed to check update!", NamedTextColor.RED));
+                sender.sendMessage(Component.text("Failed to check update!", NamedTextColor.RED));
                 break;
         }
     }

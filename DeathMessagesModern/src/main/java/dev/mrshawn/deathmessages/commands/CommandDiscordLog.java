@@ -23,7 +23,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission(Permission.DEATHMESSAGES_COMMAND_DISCORDLOG.getValue())) {
-            DeathMessages.getInstance().adventure().sender(sender).sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
+            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
         String discordJar;
@@ -69,7 +69,7 @@ public class CommandDiscordLog extends DeathMessagesCommand {
         Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Sub-Commands.DiscordLog")
                 .stream()
                 .map(Util::convertFromLegacy)
-                .forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+                .forEach(msg -> sender.sendMessage(msg
                         .replaceText(Util.prefix)
                         .replaceText(TextReplacementConfig.builder()
                                 .matchLiteral("%discordJar%")

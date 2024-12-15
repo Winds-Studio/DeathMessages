@@ -9,6 +9,7 @@ import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
@@ -36,7 +37,7 @@ public class BroadcastEntityDeathListener implements Listener {
 
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             Component message = Assets.entityDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), entity, hasOwner);
-            DeathMessages.getInstance().adventure().console().sendMessage(message.replaceText(TextReplacementConfig.builder()
+            ComponentUtil.sendConsoleMessage(message.replaceText(TextReplacementConfig.builder()
                     .matchLiteral("%message%")
                     .replacement(e.getTextComponent())
                     .build()));
@@ -62,7 +63,7 @@ public class BroadcastEntityDeathListener implements Listener {
                     getPlayer.ifPresent(pms -> {
                         if (pms.getUUID().equals(pm.get().getPlayer().getUniqueId())) {
                             if (pms.getMessagesEnabled()) {
-                                DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
+                                ComponentUtil.sendMessage(player, e.getTextComponent());
                             }
                         }
                     });
@@ -74,7 +75,7 @@ public class BroadcastEntityDeathListener implements Listener {
                                     return;
                                 }
                             }
-                            DeathMessages.getInstance().adventure().player(player).sendMessage(e.getTextComponent());
+                            ComponentUtil.sendMessage(player, e.getTextComponent());
                             PluginMessaging.sendPluginMSG(pms.getPlayer(), Util.convertToLegacy(e.getTextComponent()));
                         }
                     });

@@ -33,7 +33,7 @@ public class CommandManager implements CommandExecutor {
             Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
                     .stream()
                     .map(Util::convertFromLegacy)
-                    .forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+                    .forEach(msg -> sender.sendMessage(msg
                             .replaceText(Util.prefix)));
         } else {
             DeathMessagesCommand cmd = get(args[0]);
@@ -45,7 +45,7 @@ public class CommandManager implements CommandExecutor {
             Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
                     .stream()
                     .map(Util::convertFromLegacy)
-                    .forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+                    .forEach(msg -> sender.sendMessage(msg
                             .replaceText(Util.prefix)));
         }
         return false;

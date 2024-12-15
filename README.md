@@ -66,6 +66,7 @@ Please feel free to contribute or modify existing translations if they are not r
 > - Custom bstats charts (Pending)
 > - PVPManager support
 > - Actionbar message and private Actionbar message
+> - Check getBiome name in assets
 
 ## Special Thanks To:
 

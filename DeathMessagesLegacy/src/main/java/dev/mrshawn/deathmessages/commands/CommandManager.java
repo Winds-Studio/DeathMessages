@@ -2,6 +2,7 @@ package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.command.Command;
@@ -33,7 +34,7 @@ public class CommandManager implements CommandExecutor {
             Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
                     .stream()
                     .map(Util::convertFromLegacy)
-                    .forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+                    .forEach(msg -> ComponentUtil.sendMessage(sender, msg
                             .replaceText(Util.prefix)));
         } else {
             DeathMessagesCommand cmd = get(args[0]);
@@ -45,7 +46,7 @@ public class CommandManager implements CommandExecutor {
             Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
                     .stream()
                     .map(Util::convertFromLegacy)
-                    .forEach(msg -> DeathMessages.getInstance().adventure().sender(sender).sendMessage(msg
+                    .forEach(msg -> ComponentUtil.sendMessage(sender, msg
                             .replaceText(Util.prefix)));
         }
         return false;
