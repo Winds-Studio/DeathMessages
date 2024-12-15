@@ -1,40 +1,21 @@
 package dev.mrshawn.deathmessages.utils;
 
-import com.cryptomorin.xseries.XMaterial;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.api.PlayerManager;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ComponentUtil {
-
-    private static Method itemMetaDisplayName;
-
-    static {
-        try {
-            // Modern method to get itemStack displayName, using Paper api
-            itemMetaDisplayName = ItemMeta.class.getMethod("displayName");
-        } catch (NoSuchMethodException ignored) {
-        }
-    }
 
     /*
         Process hover event string in message
@@ -74,21 +55,12 @@ public class ComponentUtil {
             return displayName;
         }
 
-        HoverEvent<HoverEvent.ShowItem> showItem;
-        String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
-
         // Eco item process
         if (DeathMessages.getHooks().ecoEnchantsEnabled && DeathMessages.getHooks().ecoExtension.isEcoEnchantsItem(i)) {
             i = DeathMessages.getHooks().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
-        // For <= 1.20.4
-        ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
-        showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
-                // Item with NBT
-                ? HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
-                // Item without NBT (tag compound)
-                : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
+        HoverEvent<HoverEvent.ShowItem> showItem = i.asHoverEvent();
 
         return displayName.hoverEvent(showItem);
     }
@@ -96,12 +68,7 @@ public class ComponentUtil {
     // TODO: Check whether needed
     /*
     public static Component buildEntityHover(Entity entity, Component name) {
-        HoverEvent<HoverEvent.ShowEntity> showEntity;
-        String iNamespace = XEntityType.of(entity).get().name().toLowerCase();
-
-        showEntity = entity.getCustomName() != null
-                ? HoverEvent.showEntity(Key.key(iNamespace), entity.getUniqueId(), name)
-                : HoverEvent.showEntity(Key.key(iNamespace), entity.getUniqueId());
+        HoverEvent<HoverEvent.ShowEntity> showEntity = entity.asHoverEvent();
 
         return name.hoverEvent(showEntity);
     }
@@ -164,16 +131,7 @@ public class ComponentUtil {
     }
 
     public static Component getItemStackDisplayName(ItemStack i) {
-        if (Util.isNewerAndEqual(16, 0) && itemMetaDisplayName != null) {
-            try {
-                // Modern method - Paper api
-                return (Component) itemMetaDisplayName.invoke(i.getItemMeta());
-            } catch (InvocationTargetException | IllegalAccessException ignored) {
-            }
-        }
-
-        // Legacy method
-        return Util.convertFromLegacy(i.getItemMeta().getDisplayName());
+        return i.displayName();
     }
 
     public static void sendConsoleMessage(Component component) {
