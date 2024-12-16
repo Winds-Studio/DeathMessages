@@ -13,6 +13,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.util.DiscordUtil;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,8 +33,8 @@ public class DiscordSRVExtension {
     public DiscordSRVExtension() {
     }
 
-    public void sendDiscordMessage(PlayerManager pm, MessageType messageType, String message) {
-        List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
+    public void sendDiscordMessage(TextComponent[] components, MessageType messageType, PlayerManager pm) {
+        final List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 
         for (String groups : channels) {
             if (!groups.contains(":")) {
@@ -57,16 +58,20 @@ public class DiscordSRVExtension {
             }
 
             TextChannel textChannel = g.getTextChannelById(channelID);
+            String prefix = components[0] != null ? PlainTextComponentSerializer.plainText().serialize(components[0]) : "";
+            String messageBody = PlainTextComponentSerializer.plainText().serialize(components[1]);
+            String message;
+
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
+                    && FileStore.CONFIG.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
+                message = messageBody;
+            } else {
+                message = prefix + messageBody;
+            }
 
             // Try to strip Minecraft format code to plain text
             if (message.contains("§")) {
                 message = STRIP_COLOR_PATTERN.matcher(message).replaceAll("");
-            }
-
-            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
-                    && FileStore.CONFIG.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
-                String prefix = PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(getMessages().getString("Prefix")));
-                message = message.substring(prefix.length());
             }
 
             if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
@@ -90,8 +95,8 @@ public class DiscordSRVExtension {
         }
     }
 
-    public void sendEntityDiscordMessage(String rawMessage, PlayerManager pm, Entity entity, boolean hasOwner, MessageType messageType) {
-        List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
+    public void sendEntityDiscordMessage(TextComponent[] components, MessageType messageType, PlayerManager pm, Entity entity, boolean hasOwner) {
+        final List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 
         for (String groups : channels) {
             if (!groups.contains(":")) {
@@ -110,9 +115,24 @@ public class DiscordSRVExtension {
             }
 
             TextChannel textChannel = g.getTextChannelById(channelID);
+            String prefix = components[0] != null ? PlainTextComponentSerializer.plainText().serialize(components[0]) : "";
+            String messageBody = PlainTextComponentSerializer.plainText().serialize(components[1]);
+            String message;
+
+            if (getMessages().getBoolean("Discord.DeathMessage.Remove-Plugin-Prefix")
+                    && FileStore.CONFIG.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES)) {
+                message = messageBody;
+            } else {
+                message = prefix + messageBody;
+            }
+
+            // Try to strip Minecraft format code to plain text
+            if (message.contains("§")) {
+                message = STRIP_COLOR_PATTERN.matcher(message).replaceAll("");
+            }
 
             if (getMessages().getString("Discord.DeathMessage.Text").isEmpty()) {
-                textChannel.sendMessage(buildMessage(rawMessage, pm.getPlayer(), entity, hasOwner))
+                textChannel.sendMessage(buildMessage(message, pm.getPlayer(), entity, hasOwner))
                         .queue();
             } else {
                 String[] spl = getMessages().getString("Discord.DeathMessage.Text").split("\\\\n");
@@ -123,11 +143,11 @@ public class DiscordSRVExtension {
 
                 if (pm.getLastEntityDamager() instanceof FallingBlock) {
                     textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, null)
-                                    .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
+                                    .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
                             .queue();
                 } else {
                     textChannel.sendMessage(Util.convertToLegacy(Assets.playerDeathPlaceholders(Util.convertFromLegacy(sb.toString()), pm, pm.getLastEntityDamager())
-                                    .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(rawMessage).build())))
+                                    .replaceText(TextReplacementConfig.builder().matchLiteral("%message%").replacement(message).build())))
                             .queue();
                 }
             }

@@ -5,7 +5,10 @@ import com.github.sirblobman.combatlogx.api.object.UntagReason;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
 import dev.mrshawn.deathmessages.config.Gangs;
+import dev.mrshawn.deathmessages.config.Messages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
+import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextComponent;
@@ -32,6 +35,7 @@ public class PlayerUntag implements Listener {
             UntagReason reason = e.getUntagReason();
 
             if (!reason.equals(UntagReason.QUIT)) return;
+
             int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs.player.Radius");
             int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs.player.Amount");
             boolean gangKill = false;
@@ -47,15 +51,37 @@ public class PlayerUntag implements Listener {
                         totalMobEntities++;
                     }
                 }
+
                 if (totalMobEntities >= amount) {
                     gangKill = true;
                 }
             }
-            TextComponent deathMessage = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
-            BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(player, (LivingEntity) e.getPreviousEnemies().get(0), MessageType.PLAYER, deathMessage, Util.getBroadcastWords(player), gangKill);
+
+            TextComponent deathMessageBody = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
+            TextComponent[] deathMessage = new TextComponent[2];
+
+            if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
+                TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+                deathMessage[0] = prefix;
+            }
+
+            deathMessage[1] = deathMessageBody;
+
+            TextComponent oldDeathMessage = deathMessage[0].append(deathMessage[1]); // Dreeam TODO: Remove in 1.4.21
+
+            BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
+                    player,
+                    (LivingEntity) e.getPreviousEnemies().get(0),
+                    MessageType.PLAYER,
+                    oldDeathMessage,
+                    deathMessage,
+                    Util.getBroadcastWorlds(player),
+                    gangKill
+            );
             Bukkit.getPluginManager().callEvent(event);
         });
-        if (!getPlayer.isPresent()) {
+
+        if (getPlayer.isEmpty()) {
             new PlayerManager(player);
         }
     }

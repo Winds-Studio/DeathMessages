@@ -130,7 +130,7 @@ public class Util {
         Bukkit.getPluginManager().callEvent(explodeEvent);
     }
 
-    public static List<World> getBroadcastWords(Entity e) {
+    public static List<World> getBroadcastWorlds(Entity e) {
         List<World> broadcastWorlds = new ArrayList<>();
 
         if (FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(e.getWorld().getName())) {

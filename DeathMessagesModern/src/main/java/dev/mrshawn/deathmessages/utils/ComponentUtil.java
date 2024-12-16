@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 public class ComponentUtil {
 
+    public static TextComponent[] EMPTY = new TextComponent[]{Component.empty(), Component.empty()};
+
     /*
         Process hover event string in message
         If found, add string to rawEvents list, then replace them to placeholder like %example% in msg

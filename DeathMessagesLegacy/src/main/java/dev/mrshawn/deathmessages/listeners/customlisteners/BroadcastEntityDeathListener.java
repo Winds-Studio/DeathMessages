@@ -13,6 +13,7 @@ import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.World;
@@ -28,19 +29,26 @@ public class BroadcastEntityDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-        if (e.getTextComponent().equals(Component.empty()))
-            return; // Dreeam - in Assets: return null -> renturn Component.empty()
+        if (e.getTextComponents() == ComponentUtil.EMPTY)
+            return; // Dreeam - in Assets: return null -> return ComponentUtil.EMPTY
 
-        Optional<PlayerManager> pm = Optional.of(e.getPlayer());
-        Entity entity = e.getEntity();
-        boolean hasOwner = EntityUtil.hasOwner(entity);
+        final Optional<PlayerManager> pm = Optional.of(e.getPlayer());
+        final Entity entity = e.getEntity();
+        final boolean hasOwner = EntityUtil.hasOwner(entity);
+        final TextComponent[] components = e.getTextComponents();
+        final TextComponent prefix = components[0];
+        final TextComponent messageBody = components[1];
+        final TextComponent message = prefix != null ? prefix.append(messageBody) : messageBody;
 
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
-            Component message = Assets.entityDeathPlaceholders(Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message")), pm.get().getPlayer(), entity, hasOwner);
-            ComponentUtil.sendConsoleMessage(message.replaceText(TextReplacementConfig.builder()
-                    .matchLiteral("%message%")
-                    .replacement(e.getTextComponent())
-                    .build()));
+            Component rawMessage = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message"));
+            Component consoleMessage = Assets.entityDeathPlaceholders(rawMessage, pm.get().getPlayer(), entity, hasOwner)
+                    .replaceText(TextReplacementConfig.builder()
+                            .matchLiteral("%message%")
+                            .replacement(message)
+                            .build());
+
+            ComponentUtil.sendConsoleMessage(consoleMessage);
         }
 
         if (pm.get().isInCooldown()) {
@@ -49,21 +57,21 @@ public class BroadcastEntityDeathListener implements Listener {
             pm.get().setCooldown();
         }
 
-        boolean privateTameable = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
+        final boolean privateTameable = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
         boolean discordSent = false;
 
-        for (World w : e.getBroadcastedWorlds()) {
-            if (FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(w.getName())) {
+        for (World world : e.getBroadcastedWorlds()) {
+            if (FileStore.CONFIG.getStringList(Config.DISABLED_WORLDS).contains(world.getName())) {
                 continue;
             }
 
-            for (Player player : w.getPlayers()) {
+            for (Player player : world.getPlayers()) {
                 Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
                 if (privateTameable) {
                     getPlayer.ifPresent(pms -> {
                         if (pms.getUUID().equals(pm.get().getPlayer().getUniqueId())) {
                             if (pms.getMessagesEnabled()) {
-                                ComponentUtil.sendMessage(player, e.getTextComponent());
+                                ComponentUtil.sendMessage(player, message);
                             }
                         }
                     });
@@ -75,15 +83,17 @@ public class BroadcastEntityDeathListener implements Listener {
                                     return;
                                 }
                             }
-                            ComponentUtil.sendMessage(player, e.getTextComponent());
-                            PluginMessaging.sendPluginMSG(pms.getPlayer(), Util.convertToLegacy(e.getTextComponent()));
+
+                            ComponentUtil.sendMessage(player, message);
+                            PluginMessaging.sendPluginMSG(pms.getPlayer(), Util.convertToLegacy(message));
                         }
                     });
+
                     if (FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
                         List<String> discordWorldWhitelist = FileStore.CONFIG.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
                         boolean broadcastToDiscord = false;
-                        for (World world : e.getBroadcastedWorlds()) {
-                            if (discordWorldWhitelist.contains(world.getName())) {
+                        for (World broadcastWorld : e.getBroadcastedWorlds()) {
+                            if (discordWorldWhitelist.contains(broadcastWorld.getName())) {
                                 broadcastToDiscord = true;
                             }
                         }
@@ -93,15 +103,22 @@ public class BroadcastEntityDeathListener implements Listener {
                         }
                         // Will reach the discord broadcast
                     }
+
                     if (DeathMessages.getHooks().discordSRVExtension != null && !discordSent) {
-                        DeathMessages.getHooks().discordSRVExtension.sendEntityDiscordMessage(PlainTextComponentSerializer.plainText().serialize(e.getTextComponent()), pm.get(), entity, hasOwner, e.getMessageType());
+                        DeathMessages.getHooks().discordSRVExtension.sendEntityDiscordMessage(
+                                components,
+                                e.getMessageType(),
+                                pm.get(),
+                                entity,
+                                hasOwner
+                        );
                         discordSent = true;
                     }
                 }
             }
         }
 
-        PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(e.getTextComponent()));
+        PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(message));
         Optional<EntityManager> getEntity = EntityManager.getEntity(entity.getUniqueId());
         getEntity.ifPresent(EntityManager::destroy);
     }

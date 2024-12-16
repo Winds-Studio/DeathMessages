@@ -23,10 +23,12 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
@@ -57,22 +59,86 @@ public class Assets {
 
     // Dreeam TODO - to figure out why the value defined in private static field will not change with the change of the config value
     //private static final CommentedConfiguration config = Settings.getInstance().getConfig();
-    //private static final boolean addPrefix = config.getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath());
 
-    public static TextComponent playerDeathMessage(PlayerManager pm, boolean gang) {
+    public static TextComponent[] playerNatureDeathMessage(PlayerManager pm, Player player) {
+        TextComponent[] components = new TextComponent[2];
+
+        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
+            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+            components[0] = prefix;
+        }
+
+        // Natural Death
+        if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
+            components[1] = Assets.getNaturalDeath(pm, "End-Crystal");
+        } else if (pm.getLastExplosiveEntity() instanceof TNTPrimed) {
+            components[1] = Assets.getNaturalDeath(pm, "TNT");
+        } else if (pm.getLastExplosiveEntity() instanceof Firework) {
+            components[1] = Assets.getNaturalDeath(pm, "Firework");
+        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
+            components[1] = Assets.getNaturalDeath(pm, "Climbable");
+        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+            Optional<ExplosionManager> explosion = ExplosionManager.getManagerIfEffected(player.getUniqueId());
+            if (explosion.isPresent()) {
+                if (explosion.get().getMaterial().name().contains("BED")) {
+                    components[1] = Assets.getNaturalDeath(pm, "Bed");
+                }
+                if (Util.isNewerAndEqual(16, 0)) {
+                    if (explosion.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                        components[1] = Assets.getNaturalDeath(pm, "Respawn-Anchor");
+                    }
+                }
+                // Dreeam TODO: Check weather needs to handle unknow explosion to prevent potential empty death message
+            }
+        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
+        } else if (Util.isNewerAndEqual(9, 0) && Util.isOlderAndEqual(999, 999) && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
+            AreaEffectCloud cloud = (AreaEffectCloud) pm.getLastEntityDamager();
+
+            if (cloud.getSource() instanceof EnderDragon) {
+                pm.setLastDamageCause(
+                        Settings.getInstance().getConfig().getBoolean(Config.FIX_MC_84595.getPath())
+                                ? EntityDamageEvent.DamageCause.DRAGON_BREATH : EntityDamageEvent.DamageCause.ENTITY_ATTACK
+                );
+            }
+
+            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
+        } else {
+            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
+        }
+
+        return components;
+    }
+
+    public static TextComponent[] playerDeathMessage(PlayerManager pm, boolean gang) {
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
+        TextComponent[] components = new TextComponent[2];
+
+        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
+            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+            components[0] = prefix;
+        }
 
         if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             if (pm.getLastExplosiveEntity() instanceof EnderCrystal) {
-                return get(gang, pm, mob, "End-Crystal");
-            } else if (pm.getLastExplosiveEntity() instanceof TNTPrimed) {
-                return get(gang, pm, mob, "TNT");
-            } else if (pm.getLastExplosiveEntity() instanceof Firework) {
-                return get(gang, pm, mob, "Firework");
-            } else {
-                return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
+                components[1] = get(gang, pm, mob, "End-Crystal");
+                return components;
             }
+
+            if (pm.getLastExplosiveEntity() instanceof TNTPrimed) {
+                components[1] = get(gang, pm, mob, "TNT");
+                return components;
+            }
+
+            if (pm.getLastExplosiveEntity() instanceof Firework) {
+                components[1] = get(gang, pm, mob, "Firework");
+                return components;
+            }
+
+            components[1] = get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
+            return components;
         }
+
         if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
             Optional<ExplosionManager> explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
             if (explosionManager.isPresent()) {
@@ -80,12 +146,15 @@ public class Assets {
                 if (pyro.isPresent()) {
                     // Bed kill
                     if (explosionManager.get().getMaterial().name().contains("BED")) {
-                        return get(gang, pm, pyro.get().getPlayer(), "Bed");
+                        components[1] = get(gang, pm, pyro.get().getPlayer(), "Bed");
+                        return components;
                     }
+
                     // Respawn Anchor kill
                     if (Util.isNewerAndEqual(16, 0)) {
                         if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                            return get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
+                            components[1] = get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
+                            return components;
                         }
                     }
                 }
@@ -93,47 +162,71 @@ public class Assets {
         }
 
         boolean hasWeapon = MaterialUtil.hasWeapon(mob, pm.getLastDamage());
+
         if (hasWeapon) {
             if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                return getWeapon(gang, pm, mob);
-            } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && pm.getLastProjectileEntity() instanceof Arrow) {
-                return getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
-            } else {
-                return get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+                components[1] = getWeapon(gang, pm, mob);
+                return components;
             }
+
+            if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && pm.getLastProjectileEntity() instanceof Arrow) {
+                components[1] = getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
+                return components;
+            }
+
+            components[1] = get(gang, pm, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_ATTACK));
+            return components;
         } else {
             // Dreeam TODO: idk why there is for loop used to if (pm.getLastDamage().equals(dc)), no need, waste performance..
             for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
                 if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-                    return getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
+                    components[1] = getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
+                    return components;
                 }
+
                 if (pm.getLastDamage().equals(dc)) {
-                    return get(gang, pm, mob, getSimpleCause(dc));
+                    components[1] = get(gang, pm, mob, getSimpleCause(dc));
+                    return components;
                 }
             }
-            return Component.empty();
+
+            return ComponentUtil.EMPTY;
         }
     }
 
-    public static TextComponent entityDeathMessage(EntityManager em, MobType mobType) {
+    public static TextComponent[] entityDeathMessage(EntityManager em, MobType mobType) {
         Optional<PlayerManager> pm = Optional.ofNullable(em.getLastPlayerDamager());
 
-        if (!pm.isPresent()) return Component.empty();
+        if (!pm.isPresent()) return ComponentUtil.EMPTY;
 
         Player p = pm.get().getPlayer();
-        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.get().getLastDamage());
+        TextComponent[] components = new TextComponent[2];
+
+        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
+            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
+            components[0] = prefix;
+        }
 
         if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             if (em.getLastExplosiveEntity() instanceof EnderCrystal) {
-                return getEntityDeath(p, em.getEntity(), "End-Crystal", mobType);
-            } else if (em.getLastExplosiveEntity() instanceof TNTPrimed) {
-                return getEntityDeath(p, em.getEntity(), "TNT", mobType);
-            } else if (em.getLastExplosiveEntity() instanceof Firework) {
-                return getEntityDeath(p, em.getEntity(), "Firework", mobType);
-            } else {
-                return getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION), mobType);
+                components[1] = getEntityDeath(p, em.getEntity(), "End-Crystal", mobType);
+                return components;
             }
+
+            if (em.getLastExplosiveEntity() instanceof TNTPrimed) {
+                components[1] = getEntityDeath(p, em.getEntity(), "TNT", mobType);
+                return components;
+            }
+
+            if (em.getLastExplosiveEntity() instanceof Firework) {
+                components[1] = getEntityDeath(p, em.getEntity(), "Firework", mobType);
+                return components;
+            }
+
+            components[1] = getEntityDeath(p, em.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION), mobType);
+            return components;
         }
+
         if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
             Optional<ExplosionManager> explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
             if (explosionManager.isPresent()) {
@@ -141,35 +234,50 @@ public class Assets {
                 if (pyro.isPresent()) {
                     // Bed kill
                     if (explosionManager.get().getMaterial().name().contains("BED")) {
-                        return getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Bed", mobType);
+                        components[1] = getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Bed", mobType);
+                        return components;
                     }
+
                     // Respawn Anchor kill
                     if (Util.isNewerAndEqual(16, 0)) {
                         if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                            return getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+                            components[1] = getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+                            return components;
                         }
                     }
                 }
             }
         }
+
+        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.get().getLastDamage());
+
         if (hasWeapon) {
             if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                return getEntityDeathWeapon(p, em.getEntity(), mobType);
-            } else if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && em.getLastProjectileEntity() instanceof Arrow) {
-                return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
-            } else {
-                return getEntityDeathWeapon(p, em.getEntity(), mobType);
+                components[1] = getEntityDeathWeapon(p, em.getEntity(), mobType);
+                return components;
             }
+
+            if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && em.getLastProjectileEntity() instanceof Arrow) {
+                components[1] = getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
+                return components;
+            }
+
+            components[1] = getEntityDeathWeapon(p, em.getEntity(), mobType);
+            return components;
         } else {
             for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
                 if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-                    return getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
+                    components[1] = getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
+                    return components;
                 }
+
                 if (em.getLastDamage().equals(dc)) {
-                    return getEntityDeath(p, em.getEntity(), getSimpleCause(dc), mobType);
+                    components[1] = getEntityDeath(p, em.getEntity(), getSimpleCause(dc), mobType);
+                    return components;
                 }
             }
-            return Component.empty();
+
+            return ComponentUtil.EMPTY;
         }
     }
 
@@ -186,13 +294,7 @@ public class Assets {
         }
 
         String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-
         TextComponent.Builder base = Component.text();
-        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-            base.append(prefix);
-        }
-
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
@@ -297,14 +399,7 @@ public class Assets {
         }
 
         String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-
         TextComponent.Builder base = Component.text();
-
-        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-            base.append(prefix);
-        }
-
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
@@ -373,14 +468,7 @@ public class Assets {
         }
 
         String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-
         TextComponent.Builder base = Component.text();
-
-        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-            base.append(prefix);
-        }
-
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
@@ -461,14 +549,7 @@ public class Assets {
         }
 
         String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-
         TextComponent.Builder base = Component.text();
-
-        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-            base.append(prefix);
-        }
-
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
@@ -519,14 +600,7 @@ public class Assets {
         }
 
         String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-
         TextComponent.Builder base = Component.text();
-
-        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-            base.append(prefix);
-        }
-
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
@@ -611,14 +685,7 @@ public class Assets {
         }
 
         String msg = (msgs.size() > 1) ? msgs.get(ThreadLocalRandom.current().nextInt(msgs.size())) : msgs.get(0);
-
         TextComponent.Builder base = Component.text();
-
-        if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
-            TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
-            base.append(prefix);
-        }
-
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
