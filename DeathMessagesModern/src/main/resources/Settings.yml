@@ -40,6 +40,7 @@ Hooks:
   SayanVanish:
     Enabled: true
     # String used to replace the vanished player name in the message
+    # Allow to use HEX color in DeathMessagesModern
     VanishedName: "Unknown"
 
   # If DiscordSRV (https://www.spigotmc.org/resources/discordsrv.18494/) is installed, and enabled here.
