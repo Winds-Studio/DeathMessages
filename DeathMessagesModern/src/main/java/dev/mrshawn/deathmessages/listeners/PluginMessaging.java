@@ -27,6 +27,7 @@ public class PluginMessaging implements PluginMessageListener {
         if (!channel.equals("BungeeCord")) return;
 
         DataInputStream stream = new DataInputStream(new ByteArrayInputStream(messageBytes));
+
         try {
             String subChannel = stream.readUTF();
 
@@ -47,6 +48,7 @@ public class PluginMessaging implements PluginMessageListener {
                                 .replacement(serverName)
                                 .build());
                 TextComponent message = Util.convertFromLegacy(rawMsg);
+
                 for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
                     Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(onlinePlayer);
                     getPlayer.ifPresent(pm -> {
@@ -64,16 +66,18 @@ public class PluginMessaging implements PluginMessageListener {
         }
     }
 
-    public static void sendServerNameRequest(Player p) {
+    public static void sendServerNameRequest(Player player) {
         if (!FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
+
         DeathMessages.LOGGER.info("Attempting to initialize server-name variable from Bungee...");
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("GetServer");
-        p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
+        player.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
     }
 
-    public static void sendPluginMSG(Player p, String msg) {
+    public static void sendPluginMSG(Player player, String msg) {
         if (!FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) return;
+
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_SERVER_GROUPS_ENABLED)) {
             List<String> serverList = FileStore.CONFIG.getStringList(Config.HOOKS_BUNGEE_SERVER_GROUPS_SERVERS);
             for (String server : serverList) {
@@ -82,7 +86,7 @@ public class PluginMessaging implements PluginMessageListener {
                 out.writeUTF(server);
                 out.writeUTF("DeathMessages");
                 out.writeUTF(DeathMessages.getHooks().bungeeServerName + "######" + msg);
-                p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
+                player.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
             }
         } else {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -90,7 +94,7 @@ public class PluginMessaging implements PluginMessageListener {
             out.writeUTF("ONLINE");
             out.writeUTF("DeathMessages");
             out.writeUTF(DeathMessages.getHooks().bungeeServerName + "######" + msg);
-            p.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
+            player.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
         }
     }
 }
