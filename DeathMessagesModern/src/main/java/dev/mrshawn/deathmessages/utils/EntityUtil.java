@@ -102,13 +102,13 @@ public class EntityUtil {
     public static Component getEntityCustomNameComponent(Entity e) {
         final String rawName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(e));
 
-        return Util.convertFromLegacy(rawName);
+        return Util.convertFromLegacy(rawName != null ? rawName : "");
     }
 
     public static String getEntityCustomName(Entity e) {
         final String rawName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(e));
 
-        return PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(rawName));
+        return PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(rawName != null ? rawName : ""));
     }
 
     // Reduce directly detect hasOwner as few as possible just makes it looks better
