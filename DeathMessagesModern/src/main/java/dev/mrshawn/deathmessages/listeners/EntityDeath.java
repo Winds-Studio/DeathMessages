@@ -50,7 +50,7 @@ public class EntityDeath implements Listener {
 
                 if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
                     TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(pm, player);
-                    TextComponent oldNaturalDeath = naturalDeath[0].append(naturalDeath[1]); // Dreeam TODO: Remove in 1.4.21
+                    TextComponent oldNaturalDeath = naturalDeath[0] != null ? naturalDeath[0].append(naturalDeath[1]) : naturalDeath[1]; // Dreeam TODO: Remove in 1.4.21
 
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
                             player,
@@ -90,7 +90,7 @@ public class EntityDeath implements Listener {
                     }
 
                     TextComponent[] playerDeath = Assets.playerDeathMessage(pm, gangKill);
-                    TextComponent oldPlayerDeath = playerDeath[0].append(playerDeath[1]); // Dreeam TODO: Remove in 1.4.21
+                    TextComponent oldPlayerDeath = playerDeath[0] != null ? playerDeath[0].append(playerDeath[1]) : playerDeath[1]; // Dreeam TODO: Remove in 1.4.21
 
                     if (ent instanceof Player) {
                         BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
@@ -137,7 +137,7 @@ public class EntityDeath implements Listener {
                 if (damager == null) return; // Entity killed by Entity should not include in DM
 
                 TextComponent[] entityDeath = Assets.entityDeathMessage(em, mobType);
-                TextComponent oldEntityDeath = entityDeath[0].append(entityDeath[1]); // Dreeam TODO: Remove in 1.4.21
+                TextComponent oldEntityDeath = entityDeath[0] != null ? entityDeath[0].append(entityDeath[1]) : entityDeath[1]; // Dreeam TODO: Remove in 1.4.21
 
                 BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
                         damager,

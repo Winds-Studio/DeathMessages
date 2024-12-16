@@ -36,7 +36,7 @@ public class MobDeath implements Listener {
                 getEntity.ifPresent(em -> {
                     PlayerManager damager = em.getLastPlayerDamager();
                     TextComponent[] mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
-                    TextComponent oldMythicDeath = mythicDeath[0].append(mythicDeath[1]); // Dreeam TODO: Remove in 1.4.21
+                    TextComponent oldMythicDeath = mythicDeath[0] != null ? mythicDeath[0].append(mythicDeath[1]) : mythicDeath[1]; // Dreeam TODO: Remove in 1.4.21
 
                     BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
                             damager,
