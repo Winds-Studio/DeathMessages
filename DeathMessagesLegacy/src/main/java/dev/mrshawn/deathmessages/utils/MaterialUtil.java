@@ -90,6 +90,8 @@ public class MaterialUtil {
                 || itemMaterialIsWeapon(itemStack);
     }
 
+    // Refer https://minecraft.wiki/w/Weapon
+    // Or https://zh.minecraft.wiki/w/%E6%AD%A6%E5%99%A8
     public static boolean isWeapon(Material material) {
         String materialName = material.toString();
         return materialName.contains("SHOVEL")
@@ -100,7 +102,8 @@ public class MaterialUtil {
                 || materialName.contains("BOW")
                 || materialName.contains("CROSSBOW")
                 || materialName.contains("ARROW")
-                || materialName.contains("TRIDENT");
+                || materialName.contains("TRIDENT")
+                || materialName.contains("MACE");
     }
 
     public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
