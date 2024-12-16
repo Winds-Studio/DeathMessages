@@ -837,8 +837,8 @@ public class Assets {
         final boolean hasBiome = msg.contains(Component.text("%biome%"));
         final boolean hasDistance = msg.contains(Component.text("%distance%"));
 
-        msg = msg.replaceText(Util.replace("%entity%", Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(entity))))
-                .replaceText(Util.replace("%entity_display%", entity.getCustomName() != null ? entity.getCustomName() : Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(entity))))
+        msg = msg.replaceText(Util.replace("%entity%", EntityUtil.getEntityCustomNameComponent(entity)))
+                .replaceText(Util.replace("%entity_display%", entity.customName() != null ? entity.customName() : EntityUtil.getEntityCustomNameComponent(entity)))
                 .replaceText(Util.replace("%killer%", Util.getPlayerName(player)))
                 .replaceText(Util.replace("%killer_display%", Util.getPlayerDisplayNameComponent(player)))
                 .replaceText(Util.replace("%world%", entity.getLocation().getWorld().getName()))
@@ -886,8 +886,8 @@ public class Assets {
         final boolean hasBiome = msg.contains("%biome%");
         final boolean hasDistance = msg.contains("%distance%");
 
-        msg = msg.replaceAll("%entity%", Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(entity)))
-                .replaceAll("%entity_display%", entity.getCustomName() != null ? entity.getCustomName() : Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(entity)))
+        msg = msg.replaceAll("%entity%", EntityUtil.getEntityCustomName(entity))
+                .replaceAll("%entity_display%", entity.getCustomName() != null ? entity.getCustomName() : EntityUtil.getEntityCustomName(entity))
                 .replaceAll("%killer%", Util.getPlayerName(player))
                 .replaceAll("%killer_display%", Util.getPlayerDisplayName(player))
                 .replaceAll("%world%", entity.getLocation().getWorld().getName())
@@ -958,23 +958,24 @@ public class Assets {
         }
 
         if (mob != null) {
-            String mobName = mob.getName();
+            String mobNameStr = mob.getName();
+            Component mobName = Component.text(mobNameStr);
             if (Settings.getInstance().getConfig().getBoolean(Config.RENAME_MOBS_ENABLED.getPath())) {
                 String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
                 for (String ch : chars) {
-                    if (mobName.contains(ch)) {
-                        mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
+                    if (mobNameStr.contains(ch)) {
+                        mobName = EntityUtil.getEntityCustomNameComponent(mob);
                         break;
                     }
                 }
             }
 
             if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
-                mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
+                mobName = EntityUtil.getEntityCustomNameComponent(mob);
             }
 
             msg = msg.replaceText(Util.replace("%killer%", mobName))
-                    .replaceText(Util.replace("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob))));
+                    .replaceText(Util.replace("%killer_type%", EntityUtil.getEntityCustomNameComponent(mob)));
 
             if (mob instanceof Player) {
                 Player p = (Player) mob;
@@ -1031,18 +1032,18 @@ public class Assets {
                 String[] chars = Settings.getInstance().getConfig().getString(Config.RENAME_MOBS_IF_CONTAINS.getPath()).split("(?!^)");
                 for (String ch : chars) {
                     if (mobName.contains(ch)) {
-                        mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
+                        mobName = EntityUtil.getEntityCustomName(mob);
                         break;
                     }
                 }
             }
 
             if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
-                mobName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob));
+                mobName = EntityUtil.getEntityCustomName(mob);
             }
 
             msg = msg.replaceAll("%killer%", mobName)
-                    .replaceAll("%killer_type%", Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(mob)));
+                    .replaceAll("%killer_type%", EntityUtil.getEntityCustomName(mob));
 
             if (mob instanceof Player) {
                 Player p = (Player) mob;

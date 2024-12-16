@@ -1,5 +1,8 @@
 package dev.mrshawn.deathmessages.utils;
 
+import dev.mrshawn.deathmessages.config.Messages;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Tameable;
 
@@ -94,6 +97,18 @@ public class EntityUtil {
 
     public static String getConfigNodeByEntity(Entity e) {
         return e.getType().getEntityClass().getSimpleName().toLowerCase();
+    }
+
+    public static Component getEntityCustomNameComponent(Entity e) {
+        final String rawName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(e));
+
+        return Util.convertFromLegacy(rawName);
+    }
+
+    public static String getEntityCustomName(Entity e) {
+        final String rawName = Messages.getInstance().getConfig().getString("Mobs." + EntityUtil.getConfigNodeByEntity(e));
+
+        return PlainTextComponentSerializer.plainText().serialize(Util.convertFromLegacy(rawName));
     }
 
     // Reduce directly detect hasOwner as few as possible just makes it looks better
