@@ -72,12 +72,14 @@ Hooks:
         - test1
         - test2
 
-  # If you run a bungee server that you would like to send death messages to other servers, enable this
+  # BungeeCord / Waterfall / Velocity Hook
+  # Enable to broadcast death messages to other servers
+  # Require to install DeathMessages in every backend server
   Bungee:
     Enabled: false
     # The server name that other servers will see
     Server-Name:
-      # Should the plugin set the server name from the bungee config?
+      # Should the plugin set the server name defined in the bungee / velocity config?
       Get-From-Bungee: false
       # Ignored if Get-From-Bungee is enabled.
       Display-Name: lobby
@@ -85,7 +87,7 @@ Hooks:
       # If enabled, the messages will only send to specified servers you list in the Servers section.
       # If disabled, messages will send to all servers you have the plugin installed on.
       Enabled: false
-      # Get the server names from your config.yml in bungee
+      # Get the server names from your bungeecord / velocity config
       Servers:
         - lobby
         - survival
