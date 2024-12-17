@@ -35,14 +35,17 @@ public class PluginMessaging implements PluginMessageListener {
             if (subChannel.equals("GetServer")) {
                 String serverName = stream.readUTF();
                 DeathMessages.LOGGER.info("Server-Name successfully initialized from Bungee! ({})", serverName);
-                DeathMessages.getHooks().bungeeServerName = serverName;
-                FileStore.CONFIG.set(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName);
+                DeathMessages.getHooks().bungeeServerName = DeathMessages.getHooks().bungeeServerDisplayName = serverName;
+                FileStore.CONFIG.set(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME, serverName); // name get from bungee will override displayname, why?
                 FileStore.CONFIG.save();
                 DeathMessages.getHooks().bungeeServerNameRequest = false;
             } else if (subChannel.equals("DeathMessages")) {
                 String[] data = stream.readUTF().split("######");
                 String serverName = data[0];
                 String rawMsg = data[1];
+
+                if (DeathMessages.getHooks().bungeeServerName != null && serverName.equals(DeathMessages.getHooks().bungeeServerName)) return; // Don't send to self
+
                 Component prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message"))
                         .replaceText(TextReplacementConfig.builder()
                                 .matchLiteral("%server_name%")
@@ -86,7 +89,7 @@ public class PluginMessaging implements PluginMessageListener {
                 out.writeUTF("Forward");
                 out.writeUTF(server);
                 out.writeUTF("DeathMessages");
-                out.writeUTF(DeathMessages.getHooks().bungeeServerName + "######" + msg);
+                out.writeUTF(DeathMessages.getHooks().bungeeServerDisplayName + "######" + msg);
                 player.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
             }
         } else {
@@ -94,7 +97,7 @@ public class PluginMessaging implements PluginMessageListener {
             out.writeUTF("Forward");
             out.writeUTF("ONLINE");
             out.writeUTF("DeathMessages");
-            out.writeUTF(DeathMessages.getHooks().bungeeServerName + "######" + msg);
+            out.writeUTF(DeathMessages.getHooks().bungeeServerDisplayName + "######" + msg);
             player.sendPluginMessage(DeathMessages.getInstance(), "BungeeCord", out.toByteArray());
         }
     }

@@ -29,7 +29,8 @@ public class HookInstance {
     public WorldGuardExtension worldGuardExtension;
     public boolean worldGuardEnabled;
 
-    public String bungeeServerName;
+    public String bungeeServerName; // Own identification name in Bungee
+    public String bungeeServerDisplayName;
     public boolean bungeeServerNameRequest = true;
     public boolean bungeeInit = false;
 
@@ -73,13 +74,13 @@ public class HookInstance {
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
             Bukkit.getServer().getMessenger().registerIncomingPluginChannel(instance, "BungeeCord", new PluginMessaging());
-            DeathMessages.LOGGER.info("Bungee Hook enabled!");
             if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_SERVER_NAME_GET_FROM_BUNGEE)) {
                 bungeeInit = true;
             } else {
                 bungeeInit = false;
-                bungeeServerName = FileStore.CONFIG.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
+                bungeeServerDisplayName = FileStore.CONFIG.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
             }
+            DeathMessages.LOGGER.info("Bungee Hook enabled!");
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
