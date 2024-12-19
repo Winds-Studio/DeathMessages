@@ -1361,6 +1361,18 @@ Mobs:
         - "%player% was knocked by a bunch of %killer%s"
       Melee:
         - "%player% was knocked by a bunch of %killer%'s"
+  # 1.21.4
+  creaking:
+    Solo:
+      Projectile-Fireball:
+        - "%player% was knocked by %killer%"
+      Melee:
+        - "%player% was knocked by a %killer%"
+    Gang:
+      Projectile-Fireball:
+        - "%player% was knocked by a bunch of %killer%s"
+      Melee:
+        - "%player% was knocked by a bunch of %killer%'s"
   player:
     Solo:
       Bed:

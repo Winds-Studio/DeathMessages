@@ -231,3 +231,6 @@ Gang:
     breeze:
       Radius: 5
       Amount: 4
+    creaking:
+      Radius: 5
+      Amount: 4
