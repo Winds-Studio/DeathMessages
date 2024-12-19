@@ -62,8 +62,6 @@ Please feel free to contribute or modify existing translations if they are not r
 
 ## TODOs
 
-> - Look into get entity name
-> - Custom bstats charts (Pending)
 > - PVPManager support
 > - Actionbar message and private Actionbar message
 > - Check getBiome name in assets

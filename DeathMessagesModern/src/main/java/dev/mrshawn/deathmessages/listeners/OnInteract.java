@@ -25,7 +25,7 @@ public class OnInteract implements Listener {
             if (getBlock.getType().name().endsWith("BED") || getBlock.getType().name().endsWith("BED_BLOCK")) {
                 Util.getExplosionNearbyEffected(e.getPlayer(), getBlock);
             }
-        } else if (Util.isNewerAndEqual(16, 0)) {
+        } else {
             if (!getBlock.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
                 if (getBlock.getType().equals(Material.RESPAWN_ANCHOR)) {
                     Util.getExplosionNearbyEffected(e.getPlayer(), getBlock);

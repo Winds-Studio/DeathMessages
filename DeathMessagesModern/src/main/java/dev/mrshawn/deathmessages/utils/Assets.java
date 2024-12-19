@@ -82,16 +82,14 @@ public class Assets {
                 if (explosion.get().getMaterial().name().contains("BED")) {
                     components[1] = Assets.getNaturalDeath(pm, "Bed");
                 }
-                if (Util.isNewerAndEqual(16, 0)) {
-                    if (explosion.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                        components[1] = Assets.getNaturalDeath(pm, "Respawn-Anchor");
-                    }
+                if (explosion.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                    components[1] = Assets.getNaturalDeath(pm, "Respawn-Anchor");
                 }
                 // Dreeam TODO: Check weather needs to handle unknow explosion to prevent potential empty death message
             }
         } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
-        } else if (Util.isNewerAndEqual(9, 0) && Util.isOlderAndEqual(999, 999) && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
+        } else if (Util.isOlderAndEqual(999, 999) && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
             AreaEffectCloud cloud = (AreaEffectCloud) pm.getLastEntityDamager();
 
             if (cloud.getSource() instanceof EnderDragon) {
@@ -151,11 +149,9 @@ public class Assets {
                     }
 
                     // Respawn Anchor kill
-                    if (Util.isNewerAndEqual(16, 0)) {
-                        if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                            components[1] = get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
-                            return components;
-                        }
+                    if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                        components[1] = get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
+                        return components;
                     }
                 }
             }
@@ -240,11 +236,9 @@ public class Assets {
                     }
 
                     // Respawn Anchor kill
-                    if (Util.isNewerAndEqual(16, 0)) {
-                        if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                            components[1] = getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
-                            return components;
-                        }
+                    if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                        components[1] = getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+                        return components;
                     }
                 }
             }
@@ -302,9 +296,7 @@ public class Assets {
         if (msg.contains("%block%") && pm.getLastEntityDamager() instanceof FallingBlock) {
             try {
                 FallingBlock fb = (FallingBlock) pm.getLastEntityDamager();
-                String material = Util.isNewerAndEqual(12, 0)
-                        ? fb.getBlockData().getMaterial().toString().toLowerCase()
-                        : fb.getMaterial().toString().toLowerCase();
+                String material = fb.getBlockData().getMaterial().toString().toLowerCase();
                 String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
 
                 base.append(Util.convertFromLegacy(msg.replaceAll("%block%", configValue)));
@@ -330,10 +322,8 @@ public class Assets {
             if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
                 return getNaturalDeath(pm, "Projectile-Unknown");
             }
-            if (Util.isNewerAndEqual(14, 0)) {
-                if (!i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
-                    return getNaturalDeath(pm, "Projectile-Unknown");
-                }
+            if (!i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
+                return getNaturalDeath(pm, "Projectile-Unknown");
             }
 
             Component displayName;
@@ -1067,16 +1057,11 @@ public class Assets {
         Component i18nName;
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) && !DeathMessages.getHooks().discordSRVEnabled) {
-            if (Util.isNewerAndEqual(12, 0)) {
-                // Block: block.minecraft.example
-                // Item: item.minecraft.example
-                String materialType = i.getType().isBlock() ? "block" : "item";
-                String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
-                i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
-            } else {
-                String name = capitalize(i.getType().name());
-                i18nName = Component.text(name);
-            }
+            // Block: block.minecraft.example
+            // Item: item.minecraft.example
+            String materialType = i.getType().isBlock() ? "block" : "item";
+            String rawTranslatable = "<lang:" + materialType + ".minecraft." + i.getType().name().toLowerCase() + ">";
+            i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
         } else {
             String name = capitalize(i.getType().name());
             i18nName = Component.text(name);
@@ -1093,14 +1078,9 @@ public class Assets {
         Component i18nName;
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()) && !DeathMessages.getHooks().discordSRVEnabled) {
-            if (Util.isNewerAndEqual(12, 0)) {
-                // Entity: entity.minecraft.example
-                String rawTranslatable = "<lang:entity.minecraft." + mob.getType().name().toLowerCase() + ">";
-                i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
-            } else {
-                String name = capitalize(mob.getType().name());
-                i18nName = Component.text(name);
-            }
+            // Entity: entity.minecraft.example
+            String rawTranslatable = "<lang:entity.minecraft." + mob.getType().name().toLowerCase() + ">";
+            i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
         } else {
             String name = capitalize(mob.getType().name());
             i18nName = Component.text(name);

@@ -25,6 +25,7 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathL
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.EventUtil;
+import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -53,6 +54,7 @@ public class DeathMessages extends JavaPlugin {
     public void onEnable() {
         instance.adventure = BukkitAudiences.create(instance);
 
+        PlatformUtil.init();
         initListeners();
         initCommands();
         getHooks().registerHooks();

@@ -31,7 +31,7 @@ public class EntityDamage implements Listener {
             getPlayer.ifPresent(pm -> {
                 pm.setLastDamageCause(e.getCause());
 
-                if (Util.isNewerAndEqual(20, 3) && e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+                if (e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
                     // For >= 1.20.3, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
                     if (e.getDamageSource().getDirectEntity() instanceof TNTPrimed) {
                         TNTPrimed tnt = (TNTPrimed) e.getDamageSource().getDirectEntity();

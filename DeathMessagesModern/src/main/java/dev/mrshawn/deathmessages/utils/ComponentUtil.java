@@ -61,6 +61,7 @@ public class ComponentUtil {
             i = DeathMessages.getHooks().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
+        // For >= 1.20.5
         HoverEvent<HoverEvent.ShowItem> showItem = i.asHoverEvent();
 
         return displayName.hoverEvent(showItem);

@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -109,9 +110,9 @@ public class Util {
 
     public static void getExplosionNearbyEffected(Player p, Block b) {
         List<UUID> effected = new ArrayList<>();
-        List<Entity> getNearby = new ArrayList<>(isNewerAndEqual(13, 0)
+        Collection<Entity> getNearby = isNewerAndEqual(13, 0)
                 ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(24)) // TODO: make it configurable
-                : b.getWorld().getNearbyEntities(b.getLocation(), 24, 24, 24));
+                : b.getWorld().getNearbyEntities(b.getLocation(), 24, 24, 24);
 
         getNearby.forEach(ent -> {
                     if (ent instanceof Player) {
@@ -225,6 +226,10 @@ public class Util {
     /*
         Sakamoto Util
      */
+    // Note:
+    // In Modern module, any condition relates to <= 1.20.4 are removed
+    // In legacy module, any conditions relates to > 1.20.4 are removed
+    // Version support range can be found in README.md
 
     // Server version, e.g. 1.20.2-R0.1-SNAPSHOT -> {"1","20","2"}
     private final static String[] serverVersion = Bukkit.getServer().getBukkitVersion()
