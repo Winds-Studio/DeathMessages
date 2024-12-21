@@ -83,7 +83,8 @@ Discord:
       Name: "%message%"
       # The clickable link
       URL: ""
-      # The picture that shows up in the author name
+      # The head picture of the dead player
+      # If you are a offline server, you should use %username% instead of %uuid%
       # Placeholders: %uuid%, %username%
       Icon-URL: "https://cravatar.eu/helmavatar/%username%"
     Title: "DeathMessage"
