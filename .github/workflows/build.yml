@@ -28,7 +28,7 @@ jobs:
         if: github.ref_name == 'master' && github.event_name != 'pull_request'
         uses: marvinpinto/action-automatic-releases@master
         with:
-          title: "DeathMessages v1.4.20"
+          title: "DeathMessages v1.4.21-SNAPSHOT"
           automatic_release_tag: "dev-build"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: |
