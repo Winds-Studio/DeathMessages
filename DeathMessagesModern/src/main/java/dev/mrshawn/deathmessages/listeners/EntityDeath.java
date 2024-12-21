@@ -24,8 +24,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class EntityDeath implements Listener {
 
@@ -65,27 +63,27 @@ public class EntityDeath implements Listener {
                 } else {
                     // Killed by mob
                     Entity ent = pm.getLastEntityDamager();
-                    String mobName = EntityUtil.getConfigNodeByEntity(ent);
-                    int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Radius");
-                    int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Amount");
-
                     boolean gangKill = false;
 
                     if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
+                        String mobName = EntityUtil.getConfigNodeByEntity(ent);
+                        int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Radius");
+                        int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Amount");
+
                         int totalMobEntities = 0;
-                        // Dreeam TODO: need move to EntityUtil
-                        Predicate<Entity> isNotDragonParts = entity -> !entity.toString().contains("EnderDragonPart"); // Exclude EnderDragonPart
-                        List<Entity> entities = player.getNearbyEntities(radius, radius, radius).stream()
-                                .filter(isNotDragonParts).collect(Collectors.toList());
+                        List<Entity> nearbyEntities = player.getNearbyEntities(radius, radius, radius);
 
-                        for (Entity entity : entities) {
-                            if (entity.getType().equals(ent.getType())) {
-                                totalMobEntities++;
+                        for (Entity entity : nearbyEntities) {
+                            if (entity.toString().contains("EnderDragonPart")) { // Exclude EnderDragonPart
+                                continue;
                             }
-                        }
 
-                        if (totalMobEntities >= amount) {
-                            gangKill = true;
+                            if (entity.getType().equals(ent.getType())) {
+                                if (++totalMobEntities >= amount) {
+                                    gangKill = true;
+                                    break;
+                                }
+                            }
                         }
                     }
 

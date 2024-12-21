@@ -14,7 +14,6 @@ import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,8 +21,6 @@ import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class PlayerUntag implements Listener {
 
@@ -36,24 +33,26 @@ public class PlayerUntag implements Listener {
 
             if (!reason.equals(UntagReason.QUIT)) return;
 
-            int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs.player.Radius");
-            int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs.player.Amount");
             boolean gangKill = false;
 
             if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
+                int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs.player.Radius");
+                int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs.player.Amount");
+
                 int totalMobEntities = 0;
-                Predicate<Entity> isNotDragonParts = entity -> !entity.toString().contains("EnderDragonPart"); // Exclude EnderDragonPart
-                List<Entity> entities = player.getNearbyEntities(radius, radius, radius).stream()
-                        .filter(isNotDragonParts).collect(Collectors.toList());
+                List<Entity> nearbyEntities = player.getNearbyEntities(radius, radius, radius);
 
-                for (Entity entity : entities) {
-                    if (entity.getType().equals(EntityType.PLAYER)) {
-                        totalMobEntities++;
+                for (Entity entity : nearbyEntities) {
+                    if (entity.toString().contains("EnderDragonPart")) { // Exclude EnderDragonPart
+                        continue;
                     }
-                }
 
-                if (totalMobEntities >= amount) {
-                    gangKill = true;
+                    if (entity instanceof Player) {
+                        if (++totalMobEntities >= amount) {
+                            gangKill = true;
+                            break;
+                        }
+                    }
                 }
             }
 

@@ -8,7 +8,6 @@ import net.kyori.adventure.text.Component;
 import org.sayandev.sayanvanish.api.SayanVanishAPI;
 import org.sayandev.sayanvanish.bukkit.api.BukkitUser;
 import org.sayandev.sayanvanish.bukkit.api.SayanVanishBukkitAPI;
-
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
