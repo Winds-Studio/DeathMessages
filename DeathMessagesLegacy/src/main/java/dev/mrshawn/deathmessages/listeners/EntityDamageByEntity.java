@@ -24,25 +24,25 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 public class EntityDamageByEntity implements Listener {
 
-    public static final Map<UUID, Entity> explosions = new HashMap<>();
-
     @EventHandler
     public void entityDamageByEntity(EntityDamageByEntityEvent e) {
+        // Get the damager of ender crystal
+        Util.loadCrystalDamager(e.getEntity(), e.getDamager());
+
         if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Player p = (Player) e.getEntity();
             Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
             getPlayer.ifPresent(pm -> {
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                    if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager().getUniqueId())) {
-                        pm.setLastEntityDamager(explosions.get(e.getDamager().getUniqueId()));
+                    Entity lastCrystalDamager = Util.crystalDeathData.get(e.getDamager().getUniqueId());
+
+                    if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
+                        pm.setLastEntityDamager(lastCrystalDamager);
                         pm.setLastExplosiveEntity(e.getDamager());
                     } else if (e.getDamager() instanceof TNTPrimed) { // For <= 1.20.2, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
                         TNTPrimed tnt = (TNTPrimed) e.getDamager();
@@ -102,9 +102,11 @@ public class EntityDamageByEntity implements Listener {
                     Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
                     getEntity.ifPresent(em -> {
                         if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                            if (e.getDamager() instanceof EnderCrystal && explosions.containsKey(e.getDamager())) {
-                                if (explosions.get(e.getDamager().getUniqueId()) instanceof Player) {
-                                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) explosions.get(e.getDamager().getUniqueId()));
+                            Entity lastCrystalDamager = Util.crystalDeathData.get(e.getDamager().getUniqueId());
+
+                            if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
+                                if (lastCrystalDamager instanceof Player) {
+                                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) lastCrystalDamager);
                                     getPlayer.ifPresent(em::setLastPlayerDamager);
                                     em.setLastExplosiveEntity(e.getDamager());
                                 }
@@ -155,17 +157,6 @@ public class EntityDamageByEntity implements Listener {
                     }
                 }
             }
-        }
-        if (e.getEntity() instanceof EnderCrystal) {
-            if (e.getDamager().getType().isAlive()) {
-                explosions.put(e.getEntity().getUniqueId(), e.getDamager());
-            } else if (e.getDamager() instanceof Projectile) {
-                Projectile projectile = (Projectile) e.getDamager();
-                if (projectile.getShooter() instanceof LivingEntity) {
-                    explosions.put(e.getEntity().getUniqueId(), (LivingEntity) projectile.getShooter());
-                }
-            }
-
         }
     }
 }
