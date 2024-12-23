@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-group = "dev.mrshawn"
+group = "dev.mrshawn.deathmessages"
 version = "1.4.21-SNAPSHOT"
 
 repositories {
@@ -46,7 +46,7 @@ repositories {
     // JitPack
     maven {
         name = "jitpack.io"
-        url = uri("https://jitpack.io")
+        url = uri("https://jitpack.io/")
     }
 
     // DiscordSRV
@@ -64,7 +64,7 @@ repositories {
     // SayanVanish
     maven {
         name = "sayanvanish-repo"
-        url = uri("https://repo.sayandev.org/snapshots")
+        url = uri("https://repo.sayandev.org/snapshots/")
     }
 
     // sk89q's
@@ -99,7 +99,7 @@ tasks {
     processResources {
         filesMatching("**/plugin.yml") {
             expand(
-                "version" to version
+                "version" to project.version
             )
         }
     }

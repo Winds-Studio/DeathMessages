@@ -15,11 +15,11 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT") // Universal
     compileOnly("commons-io:commons-io:2.18.0") // Remove this
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.2")
-    implementation("com.github.cryptomorin:XSeries:12.0.0")
+    implementation("com.github.cryptomorin:XSeries:12.1.0")
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.github.technicallycoded:FoliaLib:0.4.3")
 
-    implementation("de.tr7zw:item-nbt-api:2.14.0")
+    implementation("de.tr7zw:item-nbt-api:2.14.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.discordsrv:discordsrv:1.29.0")
     compileOnly("io.lumine:Mythic-Dist:5.7.2")
@@ -47,14 +47,13 @@ tasks {
 //            minimize {
 //                exclude(dependency("com.tcoded.folialib:.*:.*"))
 //            }
-        relocate("com.google.gson", "dev.mrshawn.deathmessages.libs.gson") // Don't relocate to avoid item hover issue
-        relocate("com.google.auto", "dev.mrshawn.deathmessages.libs.auto") // Don't relocate to avoid item hover issue
-        relocate("net.kyori", "dev.mrshawn.deathmessages.libs.kyori") // Don't relocate to avoid item hover issue
-        relocate("com.cryptomorin.xseries", "dev.mrshawn.deathmessages.libs.xseries")
-        relocate("org.bstats", "dev.mrshawn.deathmessages.libs.bstats")
-        relocate("com.tcoded.folialib", "dev.mrshawn.deathmessages.libs.folialib")
-        relocate("de.tr7zw.changeme.nbtapi", "dev.mrshawn.deathmessages.libs.nbtapi")
-        relocate("net.dv8tion.jda", "dev.mrshawn.deathmessages.libs.jda")
+        relocate("com.google.gson", "${project.group}.libs.gson")
+        relocate("com.google.auto", "${project.group}.libs.auto")
+        relocate("net.kyori", "${project.group}.libs.kyori")
+        relocate("com.cryptomorin.xseries", "${project.group}.libs.xseries")
+        relocate("org.bstats", "${project.group}.libs.bstats")
+        relocate("com.tcoded.folialib", "${project.group}.libs.folialib")
+        relocate("de.tr7zw.changeme.nbtapi", "${project.group}.libs.nbtapi")
     }
 
     build {
