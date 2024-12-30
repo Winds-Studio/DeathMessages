@@ -10,6 +10,7 @@ import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
@@ -66,18 +67,20 @@ public class PlayerUntag implements Listener {
 
             deathMessage[1] = deathMessageBody;
 
-            TextComponent oldDeathMessage = deathMessage[0] != null ? deathMessage[0].append(deathMessage[1]) : deathMessage[1]; // Dreeam TODO: Remove in 1.4.21
+            TextComponent oldDeathMessage = deathMessage[0].append(deathMessage[1]); // Dreeam TODO: Remove in 1.4.21
 
-            BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
-                    player,
-                    (LivingEntity) e.getPreviousEnemies().get(0),
-                    MessageType.PLAYER,
-                    oldDeathMessage,
-                    deathMessage,
-                    Util.getBroadcastWorlds(player),
-                    gangKill
-            );
-            Bukkit.getPluginManager().callEvent(event);
+            if (!ComponentUtil.isMessageEmpty(deathMessage)) {
+                BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
+                        player,
+                        (LivingEntity) e.getPreviousEnemies().get(0),
+                        MessageType.PLAYER,
+                        oldDeathMessage,
+                        deathMessage,
+                        Util.getBroadcastWorlds(player),
+                        gangKill
+                );
+                Bukkit.getPluginManager().callEvent(event);
+            }
         });
 
         if (getPlayer.isEmpty()) {

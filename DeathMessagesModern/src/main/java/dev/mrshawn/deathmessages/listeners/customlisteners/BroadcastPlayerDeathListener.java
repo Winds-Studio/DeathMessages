@@ -28,9 +28,6 @@ public class BroadcastPlayerDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastDeathMessageEvent e) {
-        if (e.getTextComponents() == ComponentUtil.EMPTY)
-            return; // Dreeam - in Assets: return null -> return ComponentUtil.EMPTY
-
         Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
 
         if (!getPlayer.isPresent()) return;
@@ -38,7 +35,7 @@ public class BroadcastPlayerDeathListener implements Listener {
         final TextComponent[] components = e.getTextComponents();
         final TextComponent prefix = components[0];
         final TextComponent messageBody = components[1];
-        final TextComponent message = prefix != null ? prefix.append(messageBody) : messageBody;
+        final TextComponent message = prefix.append(messageBody);
 
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             // Dreeam TODO: maybe just use formatMessage is also ok?

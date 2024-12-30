@@ -60,7 +60,7 @@ public class Assets {
     //private static final CommentedConfiguration config = Settings.getInstance().getConfig();
 
     public static TextComponent[] playerNatureDeathMessage(PlayerManager pm, Player player) {
-        TextComponent[] components = new TextComponent[2];
+        TextComponent[] components = ComponentUtil.empty();
 
         if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
             TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
@@ -109,7 +109,7 @@ public class Assets {
 
     public static TextComponent[] playerDeathMessage(PlayerManager pm, boolean gang) {
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
-        TextComponent[] components = new TextComponent[2];
+        TextComponent[] components = ComponentUtil.empty();
 
         if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
             TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
@@ -186,17 +186,17 @@ public class Assets {
                 }
             }
 
-            return ComponentUtil.EMPTY;
+            return ComponentUtil.empty();
         }
     }
 
     public static TextComponent[] entityDeathMessage(EntityManager em, MobType mobType) {
         Optional<PlayerManager> pm = Optional.ofNullable(em.getLastPlayerDamager());
 
-        if (pm.isEmpty()) return ComponentUtil.EMPTY;
+        if (pm.isEmpty()) return ComponentUtil.empty();
 
         Player p = pm.get().getPlayer();
-        TextComponent[] components = new TextComponent[2];
+        TextComponent[] components = ComponentUtil.empty();
 
         if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
             TextComponent prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix"));
@@ -272,7 +272,7 @@ public class Assets {
                 }
             }
 
-            return ComponentUtil.EMPTY;
+            return ComponentUtil.empty();
         }
     }
 
@@ -374,10 +374,13 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         //Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
+
         if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
-            //Bukkit.broadcastMessage("is myth - " + internalMobType);
-            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
+            String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            //Bukkit.broadcastMessage("is myth - " + mmMobType);
+            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
+
+            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -442,13 +445,16 @@ public class Assets {
         List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + ".Weapon"), p, e);
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
-            String internalMobType = null;
+            String mmMobType = null;
             if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+                mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
             } else {
                 // reserved
             }
-            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + ".Weapon"), p, e);
+
+            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + ".Weapon"), p, e);
+
+            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -516,9 +522,11 @@ public class Assets {
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 
         if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
-            //System.out.println("is myth - " + internalMobType);
-            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
+            String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            //System.out.println("is myth - " + mmMobType);
+            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
+
+            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -570,8 +578,10 @@ public class Assets {
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 
         if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
-            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + internalMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
+            String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+            msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
+
+            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -656,11 +666,14 @@ public class Assets {
         List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
-            String internalMobType = null;
+            String mmMobType = null;
             if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
-                internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
+                mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
             }
-            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + projectileDamage), p, em.getEntity());
+
+            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + "." + projectileDamage), p, em.getEntity());
+
+            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -741,13 +754,16 @@ public class Assets {
             msgs = sortList(getEntityDeathMessages().getStringList("Entities." +
                     e.getName().toLowerCase() + ".Tamed"), player, e);
         } else if (mobType.equals(MobType.MYTHIC_MOB)) {
-            String internalMobType = null;
+            String mmMobType = null;
             if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                internalMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+                mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
             } else {
                 // reserved
             }
-            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + internalMobType + "." + damageCause), player, e);
+
+            msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + "." + damageCause), player, e);
+
+            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))

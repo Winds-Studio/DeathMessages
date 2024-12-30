@@ -10,13 +10,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ComponentUtil {
 
-    public static TextComponent[] EMPTY = new TextComponent[]{Component.empty(), Component.empty()};
+    private static final TextComponent[] EMPTY = new TextComponent[]{Component.empty(), Component.empty()};
 
     /*
         Process hover event string in message
@@ -138,5 +139,13 @@ public class ComponentUtil {
 
     public static void sendConsoleMessage(Component component) {
         Util.CONSOLE.sendMessage(component);
+    }
+
+    public static TextComponent[] empty() {
+        return EMPTY.clone();
+    }
+
+    public static boolean isMessageEmpty(TextComponent[] components) {
+        return Arrays.equals(components, EMPTY) || components[1].equals(Component.empty());
     }
 }

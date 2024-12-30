@@ -28,16 +28,13 @@ public class BroadcastEntityDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-        if (e.getTextComponents() == ComponentUtil.EMPTY)
-            return; // Dreeam - in Assets: return null -> return ComponentUtil.EMPTY
-
         final Optional<PlayerManager> pm = Optional.of(e.getPlayer());
         final Entity entity = e.getEntity();
         final boolean hasOwner = EntityUtil.hasOwner(entity);
         final TextComponent[] components = e.getTextComponents();
         final TextComponent prefix = components[0];
         final TextComponent messageBody = components[1];
-        final TextComponent message = prefix != null ? prefix.append(messageBody) : messageBody;
+        final TextComponent message = prefix.append(messageBody);
 
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             Component rawMessage = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message"));

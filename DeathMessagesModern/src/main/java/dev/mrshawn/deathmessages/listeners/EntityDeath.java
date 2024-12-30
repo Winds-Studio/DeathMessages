@@ -9,6 +9,7 @@ import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextComponent;
@@ -48,18 +49,20 @@ public class EntityDeath implements Listener {
 
                 if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
                     TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(pm, player);
-                    TextComponent oldNaturalDeath = naturalDeath[0] != null ? naturalDeath[0].append(naturalDeath[1]) : naturalDeath[1]; // Dreeam TODO: Remove in 1.4.21
+                    TextComponent oldNaturalDeath = naturalDeath[0].append(naturalDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
-                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
-                            player,
-                            null,
-                            MessageType.NATURAL,
-                            oldNaturalDeath,
-                            naturalDeath,
-                            Util.getBroadcastWorlds(player),
-                            false
-                    );
-                    Bukkit.getPluginManager().callEvent(event);
+                    if (!ComponentUtil.isMessageEmpty(naturalDeath)) {
+                        BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
+                                player,
+                                null,
+                                MessageType.NATURAL,
+                                oldNaturalDeath,
+                                naturalDeath,
+                                Util.getBroadcastWorlds(player),
+                                false
+                        );
+                        Bukkit.getPluginManager().callEvent(event);
+                    }
                 } else {
                     // Killed by mob
                     Entity ent = pm.getLastEntityDamager();
@@ -88,32 +91,21 @@ public class EntityDeath implements Listener {
                     }
 
                     TextComponent[] playerDeath = Assets.playerDeathMessage(pm, gangKill);
-                    TextComponent oldPlayerDeath = playerDeath[0] != null ? playerDeath[0].append(playerDeath[1]) : playerDeath[1]; // Dreeam TODO: Remove in 1.4.21
+                    TextComponent oldPlayerDeath = playerDeath[0].append(playerDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
-                    if (ent instanceof Player) {
+                    if (!ComponentUtil.isMessageEmpty(playerDeath)) {
+                        MessageType messageType = ent instanceof Player ? MessageType.PLAYER : MessageType.MOB;
                         BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
                                 player,
                                 (LivingEntity) pm.getLastEntityDamager(),
-                                MessageType.PLAYER,
+                                messageType,
                                 oldPlayerDeath,
                                 playerDeath,
                                 Util.getBroadcastWorlds(player),
                                 gangKill
                         );
                         Bukkit.getPluginManager().callEvent(event);
-                        return;
                     }
-
-                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
-                            player,
-                            (LivingEntity) pm.getLastEntityDamager(),
-                            MessageType.MOB,
-                            oldPlayerDeath,
-                            playerDeath,
-                            Util.getBroadcastWorlds(player),
-                            gangKill
-                    );
-                    Bukkit.getPluginManager().callEvent(event);
                 }
             });
 
@@ -135,17 +127,19 @@ public class EntityDeath implements Listener {
                 if (damager == null) return; // Entity killed by Entity should not include in DM
 
                 TextComponent[] entityDeath = Assets.entityDeathMessage(em, mobType);
-                TextComponent oldEntityDeath = entityDeath[0] != null ? entityDeath[0].append(entityDeath[1]) : entityDeath[1]; // Dreeam TODO: Remove in 1.4.21
+                TextComponent oldEntityDeath = entityDeath[0].append(entityDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
-                BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
-                        damager,
-                        e.getEntity(),
-                        MessageType.ENTITY,
-                        oldEntityDeath,
-                        entityDeath,
-                        Util.getBroadcastWorlds(e.getEntity())
-                );
-                Bukkit.getPluginManager().callEvent(event);
+                if (!ComponentUtil.isMessageEmpty(entityDeath)) {
+                    BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
+                            damager,
+                            e.getEntity(),
+                            MessageType.ENTITY,
+                            oldEntityDeath,
+                            entityDeath,
+                            Util.getBroadcastWorlds(e.getEntity())
+                    );
+                    Bukkit.getPluginManager().callEvent(event);
+                }
             });
         }
     }

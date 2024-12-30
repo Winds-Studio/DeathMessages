@@ -6,6 +6,7 @@ import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.Assets;
+import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import net.kyori.adventure.text.TextComponent;
@@ -36,17 +37,19 @@ public class MobDeath implements Listener {
                 getEntity.ifPresent(em -> {
                     PlayerManager damager = em.getLastPlayerDamager();
                     TextComponent[] mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
-                    TextComponent oldMythicDeath = mythicDeath[0] != null ? mythicDeath[0].append(mythicDeath[1]) : mythicDeath[1]; // Dreeam TODO: Remove in 1.4.21
+                    TextComponent oldMythicDeath = mythicDeath[0].append(mythicDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
-                    BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
-                            damager,
-                            e.getEntity(),
-                            MessageType.ENTITY,
-                            oldMythicDeath,
-                            mythicDeath,
-                            Util.getBroadcastWorlds(e.getEntity())
-                    );
-                    Bukkit.getPluginManager().callEvent(event);
+                    if (!ComponentUtil.isMessageEmpty(mythicDeath)) {
+                        BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
+                                damager,
+                                e.getEntity(),
+                                MessageType.ENTITY,
+                                oldMythicDeath,
+                                mythicDeath,
+                                Util.getBroadcastWorlds(e.getEntity())
+                        );
+                        Bukkit.getPluginManager().callEvent(event);
+                    }
                 });
             }
         }
