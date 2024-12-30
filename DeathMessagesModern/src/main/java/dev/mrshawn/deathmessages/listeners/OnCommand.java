@@ -18,11 +18,13 @@ public class OnCommand implements Listener {
         Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
         List<String> commands = Settings.getInstance().getConfig().getStringList(Config.CUSTOM_SUICIDE_COMMANDS.getPath());
 
-        for (String command : commands) {
-            if (e.getMessage().equals(command)) {
-                getPlayer.ifPresent(pm -> pm.setCommandDeath(true));
-                break;
+        getPlayer.ifPresent(pm -> {
+            for (String command : commands) {
+                if (e.getMessage().equals(command)) {
+                    pm.setCommandDeath(true);
+                    break;
+                }
             }
-        }
+        });
     }
 }
