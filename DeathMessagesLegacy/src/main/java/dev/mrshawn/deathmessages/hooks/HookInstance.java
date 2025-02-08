@@ -43,6 +43,8 @@ public class HookInstance {
     public SayanVanishExtension sayanVanishExtension;
     public boolean sayanVanishEnabled = false;
 
+    public boolean disableI18nDisplay = false;
+
     public HookInstance(DeathMessages pluginInstance) {
         instance = pluginInstance;
 
@@ -102,6 +104,12 @@ public class HookInstance {
             discordSRVExtension = new DiscordSRVExtension();
             discordSRVEnabled = true;
             DeathMessages.LOGGER.info("DiscordSRV Hook Enabled!");
+
+            if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
+                    || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
+                disableI18nDisplay = true;
+                DeathMessages.LOGGER.warn("I18N Display will be disabled automatically, due to incompatible with platform integration related plugins!");
+            }
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
@@ -142,7 +150,7 @@ public class HookInstance {
             DeathMessages.LOGGER.info("SayanVanish Hook Enabled!");
         }
 
-        if (Util.isOlderAndEqual(12, 2)) {
+        if (!disableI18nDisplay && Util.isOlderAndEqual(12, 2)) {
             if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
                     || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
                 if (Bukkit.getPluginManager().getPlugin("LangUtils") != null) {

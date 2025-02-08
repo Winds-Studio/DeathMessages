@@ -1076,7 +1076,7 @@ public class Assets {
     private static Component getI18nName(ItemStack i, Player p) {
         Component i18nName;
 
-        if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath()) && !DeathMessages.getHooks().discordSRVEnabled) {
+        if (!DeathMessages.getHooks().disableI18nDisplay) {
             // Block: block.minecraft.example
             // Item: item.minecraft.example
             String materialType = i.getType().isBlock() ? "block" : "item";

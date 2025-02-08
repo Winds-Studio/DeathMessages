@@ -1,6 +1,7 @@
 package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
+import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
@@ -39,6 +40,8 @@ public class HookInstance {
 
     public SayanVanishExtension sayanVanishExtension;
     public boolean sayanVanishEnabled = false;
+
+    public boolean disableI18nDisplay = false;
 
     public HookInstance(DeathMessages pluginInstance) {
         instance = pluginInstance;
@@ -99,6 +102,12 @@ public class HookInstance {
             discordSRVExtension = new DiscordSRVExtension();
             discordSRVEnabled = true;
             DeathMessages.LOGGER.info("DiscordSRV Hook Enabled!");
+
+            if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
+                    || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
+                disableI18nDisplay = true;
+                DeathMessages.LOGGER.warn("I18N Display will be disabled automatically, due to incompatible with platform integration related plugins!");
+            }
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlugMan") && worldGuardExtension != null) {
