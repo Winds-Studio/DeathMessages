@@ -1002,6 +1002,8 @@ public class Assets {
             if (mob instanceof Player) {
                 Player p = (Player) mob;
                 msg = msg.replaceText(Util.replace("%killer_display%", Util.getPlayerDisplayName(p)));
+            } else {
+                msg = msg.replaceText(Util.replace("%killer_display%", mobName)); // Fallback to mob name if not player
             }
         }
 
@@ -1070,6 +1072,8 @@ public class Assets {
             if (mob instanceof Player) {
                 Player p = (Player) mob;
                 msg = msg.replaceAll("%killer_display%", Util.getPlayerDisplayName(p));
+            } else {
+                msg = msg.replaceAll("%killer_display%", mobName); // Fallback to mob name if not player
             }
         }
 
