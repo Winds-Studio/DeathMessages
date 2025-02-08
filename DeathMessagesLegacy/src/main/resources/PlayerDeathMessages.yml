@@ -10,7 +10,7 @@
 # %player_display% - returns the custom display name of the player
 # %weapon% - returns a tooltip of the item name, lore, and enchantments
 # %killer% - returns the entity's name. If there is no name set, it will be the entity type.
-# %killer_display% - if the killer is a player, returns the display name of the player
+# %killer_display% - if the killer is a player, returns the display name of the player, otherwise fallback to %killer%
 # %killer_type% - returns the entity type from Mobs.<Mob> in Messages.yml
 # %biome% - returns the biome name the player located
 # %world% - returns the world name
