@@ -28,9 +28,7 @@ public class ComponentUtil {
         // If contains event string, process, otherwise return original msg directly
         if (msg.contains("[")) {
             int index = 0;
-            // Match all string between [ and ], e.g. aaa[123]bbb -> [123]
-            Pattern pattern = Pattern.compile("\\[(.*?)]");
-            Matcher matcher = pattern.matcher(msg);
+            Matcher matcher = Util.DM_HOVER_EVENT_PATTERN.matcher(msg);
 
             while (matcher.find()) {
                 String group = matcher.group(1);

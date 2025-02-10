@@ -52,7 +52,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Assets {
 
@@ -806,7 +805,7 @@ public class Assets {
         for (String s : list) {
             // Check for victim permission messages
             if (s.contains("PERMISSION[")) {
-                Matcher m = Pattern.compile("PERMISSION\\[(.*?)]").matcher(s);
+                Matcher m = Util.DM_PERM_PATTERN.matcher(s);
                 while (m.find()) {
                     String perm = m.group(1);
                     s = victim.hasPermission(perm)
@@ -815,7 +814,7 @@ public class Assets {
             }
             // Check for killer permission messages
             if (s.contains("PERMISSION_KILLER[")) {
-                Matcher m = Pattern.compile("PERMISSION_KILLER\\[(.*?)]").matcher(s);
+                Matcher m = Util.DM_KILLER_PERM_PATTERN.matcher(s);
                 while (m.find()) {
                     String perm = m.group(1);
                     s = killer.hasPermission(perm)
@@ -824,7 +823,7 @@ public class Assets {
             }
             // Check for region specific messages
             if (s.contains("REGION[")) {
-                Matcher m = Pattern.compile("REGION\\[(.*?)]").matcher(s);
+                Matcher m = Util.DM_REGION_PATTERN.matcher(s);
                 while (m.find()) {
                     String regionID = m.group(1);
                     s = DeathMessages.getHooks().worldGuardExtension.isInRegion(victim, regionID)
@@ -877,7 +876,7 @@ public class Assets {
         }
 
         if (DeathMessages.getHooks().placeholderAPIEnabled) {
-            Matcher identifiers = Pattern.compile("%([^%]+)%").matcher(Util.convertToLegacy(msg));
+            Matcher identifiers = Util.PAPI_PLACEHOLDER_PATTERN.matcher(Util.convertToLegacy(msg));
 
             while (identifiers.find()) {
                 String identifier = identifiers.group(0);
@@ -992,7 +991,7 @@ public class Assets {
         }
 
         if (DeathMessages.getHooks().placeholderAPIEnabled) {
-            Matcher params = Pattern.compile("%([^%]+)%").matcher(Util.convertToLegacy(msg));
+            Matcher params = Util.PAPI_PLACEHOLDER_PATTERN.matcher(Util.convertToLegacy(msg));
 
             while (params.find()) {
                 String param = params.group(0);

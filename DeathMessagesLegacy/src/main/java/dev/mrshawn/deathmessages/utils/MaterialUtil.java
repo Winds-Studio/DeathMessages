@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,14 +64,27 @@ public class MaterialUtil {
         if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return false;
 
         String displayName = itemStack.getItemMeta().getDisplayName();
+        Pattern[] customWeaponNames = Util.customWeaponNamePatterns;
 
-        for (String s : Settings.getInstance().getConfig().getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON.getPath())) {
-            Pattern pattern = Pattern.compile(s);
+        if (customWeaponNames == null) {
+            List<String> customWeaponNameList = Settings.getInstance().getConfig().getStringList(Config.CUSTOM_ITEM_DISPLAY_NAMES_IS_WEAPON.getPath());
+            customWeaponNames = new Pattern[customWeaponNameList.size()];
+
+            for (int i = 0; i < customWeaponNameList.size(); i++) {
+                String customWeaponName = customWeaponNameList.get(i);
+                customWeaponNames[i] = Pattern.compile(customWeaponName);
+            }
+
+            Util.customWeaponNamePatterns = customWeaponNames; // Update cache
+        }
+
+        for (Pattern pattern : customWeaponNames) {
             Matcher matcher = pattern.matcher(displayName);
             if (matcher.find()) {
                 return true;
             }
         }
+
         return false;
     }
 
