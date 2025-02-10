@@ -41,12 +41,6 @@ import java.util.regex.Pattern;
 
 public class Util {
 
-    public static final ConsoleCommandSender CONSOLE = Bukkit.getServer().getConsoleSender();
-    public static final TextReplacementConfig PREFIX = TextReplacementConfig.builder()
-            .matchLiteral("%prefix%")
-            .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
-            .build();
-
     private static final Pattern BUNGEE_RGB_PATTERN = Pattern.compile("(?<!&)(#[0-9a-fA-F]{6})"); // Match bungee RGB color code only, use Negative Lookbehind to avoid matching code begin with &
     public static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + "§" + "[0-9A-FK-ORX]");
     public static final Pattern DM_PERM_PATTERN = Pattern.compile("PERMISSION\\[(.*?)]");
@@ -54,6 +48,12 @@ public class Util {
     public static final Pattern DM_REGION_PATTERN = Pattern.compile("REGION\\[(.*?)]");
     public static final Pattern DM_HOVER_EVENT_PATTERN = Pattern.compile("\\[(.*?)]"); // Match all string between [ and ], e.g. aaa[123]bbb -> [123]
     public static final Pattern PAPI_PLACEHOLDER_PATTERN = Pattern.compile("%([^%]+)%");
+
+    public static final ConsoleCommandSender CONSOLE = Bukkit.getServer().getConsoleSender();
+    public static final TextReplacementConfig PREFIX = TextReplacementConfig.builder()
+            .matchLiteral("%prefix%")
+            .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
+            .build();
 
     public static Pattern[] customWeaponNamePatterns;
 
