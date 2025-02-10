@@ -87,7 +87,7 @@ public class Util {
         // Match bungee RGB color code only, use Negative Lookbehind to avoid matching code begin with &
         Pattern pattern = Pattern.compile("(?<!&)(#[0-9a-fA-F]{6})");
         Matcher matcher = pattern.matcher(s);
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         while (matcher.find()) {
             String colorCode = matcher.group(1);
