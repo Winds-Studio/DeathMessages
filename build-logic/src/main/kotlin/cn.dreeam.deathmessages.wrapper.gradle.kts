@@ -25,12 +25,6 @@ repositories {
         url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 
-    // CodeMC-NMS
-    maven {
-        name = "codemc-nms-repo"
-        url = uri("https://repo.codemc.io/repository/nms/")
-    }
-
     // NBT-API
     maven {
         name = "codemc-repo"
