@@ -27,6 +27,7 @@ public class CommandToggle extends DeathMessagesCommand {
             ComponentUtil.sendMessage(player, Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
+
         Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
         getPlayer.ifPresent(pm -> {
             boolean msg = pm.getMessagesEnabled();

@@ -22,21 +22,22 @@ public class CommandRestore extends DeathMessagesCommand {
         }
         if (args.length <= 1) {
             sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Usage"));
+            return;
+        }
+
+        String code = args[0];
+        boolean excludeUserData = Boolean.parseBoolean(args[1]);
+        if (ConfigManager.getInstance().restore(code, excludeUserData)) {
+
+            Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
+                    .replaceText(TextReplacementConfig.builder()
+                            .matchLiteral("%backup-code%")
+                            .replacement(code)
+                            .build());
+
+            sender.sendMessage(message);
         } else {
-            String code = args[0];
-            boolean excludeUserData = Boolean.parseBoolean(args[1]);
-            if (ConfigManager.getInstance().restore(code, excludeUserData)) {
-
-                Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
-                        .replaceText(TextReplacementConfig.builder()
-                                .matchLiteral("%backup-code%")
-                                .replacement(code)
-                                .build());
-
-                sender.sendMessage(message);
-            } else {
-                sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
-            }
+            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
         }
     }
 }

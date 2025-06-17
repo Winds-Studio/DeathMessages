@@ -23,21 +23,22 @@ public class CommandRestore extends DeathMessagesCommand {
         }
         if (args.length <= 1) {
             ComponentUtil.sendMessage(sender, Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Usage"));
+            return;
+        }
+
+        String code = args[0];
+        boolean excludeUserData = Boolean.parseBoolean(args[1]);
+        if (ConfigManager.getInstance().restore(code, excludeUserData)) {
+
+            Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
+                    .replaceText(TextReplacementConfig.builder()
+                            .matchLiteral("%backup-code%")
+                            .replacement(code)
+                            .build());
+
+            ComponentUtil.sendMessage(sender, message);
         } else {
-            String code = args[0];
-            boolean excludeUserData = Boolean.parseBoolean(args[1]);
-            if (ConfigManager.getInstance().restore(code, excludeUserData)) {
-
-                Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Restored")
-                        .replaceText(TextReplacementConfig.builder()
-                                .matchLiteral("%backup-code%")
-                                .replacement(code)
-                                .build());
-
-                ComponentUtil.sendMessage(sender, message);
-            } else {
-                ComponentUtil.sendMessage(sender, Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
-            }
+            ComponentUtil.sendMessage(sender, Util.formatMessage("Commands.DeathMessages.Sub-Commands.Restore.Backup-Not-Found"));
         }
     }
 }

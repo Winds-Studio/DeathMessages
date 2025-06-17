@@ -18,6 +18,7 @@ public class CommandReload extends DeathMessagesCommand {
             sender.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return;
         }
+
         ConfigManager.getInstance().reload();
         sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Reload.Reloaded"));
     }

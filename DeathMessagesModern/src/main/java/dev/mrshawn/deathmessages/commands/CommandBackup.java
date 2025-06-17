@@ -22,17 +22,18 @@ public class CommandBackup extends DeathMessagesCommand {
         }
         if (args.length == 0) {
             sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Usage"));
-        } else {
-            boolean b = Boolean.parseBoolean(args[0]);
-            String code = ConfigManager.getInstance().backup(b);
-
-            Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Backed-Up")
-                    .replaceText(TextReplacementConfig.builder()
-                            .matchLiteral("%backup-code%")
-                            .replacement(code)
-                            .build());
-
-            sender.sendMessage(message);
+            return;
         }
+
+        boolean excludeUserData = Boolean.parseBoolean(args[0]);
+        String code = ConfigManager.getInstance().backup(excludeUserData);
+
+        Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Backed-Up")
+                .replaceText(TextReplacementConfig.builder()
+                        .matchLiteral("%backup-code%")
+                        .replacement(code)
+                        .build());
+
+        sender.sendMessage(message);
     }
 }
