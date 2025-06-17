@@ -18,6 +18,7 @@ public class CommandManager implements CommandExecutor {
         commands = Arrays.asList(
                 new CommandBackup(),
                 new CommandBlacklist(),
+                new CommandDebug(),
                 new CommandDiscordLog(),
                 new CommandReload(),
                 new CommandRestore(),

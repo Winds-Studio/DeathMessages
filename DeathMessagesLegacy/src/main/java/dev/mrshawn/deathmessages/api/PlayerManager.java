@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PlayerManager {
 
@@ -33,7 +34,7 @@ public class PlayerManager {
     private Material climbing;
     private Location explosionCauser;
     private Location location;
-    private int cooldown = 0;
+    private AtomicInteger cooldown = new AtomicInteger(0);
     private WrappedTask cooldownTask;
     private Inventory cachedInventory;
 
@@ -171,16 +172,20 @@ public class PlayerManager {
     }
 
     public boolean isInCooldown() {
-        return cooldown > 0;
+        return cooldown.get() > 0;
+    }
+
+    public int getCooldown() {
+        return cooldown.get();
     }
 
     public void setCooldown() {
-        cooldown = FileStore.CONFIG.getInt(Config.COOLDOWN);
+        cooldown.set(FileStore.CONFIG.getInt(Config.COOLDOWN));
         cooldownTask = DeathMessages.getInstance().foliaLib.getScheduler().runTimer(() -> {
-            if (cooldown <= 0) {
+            if (cooldown.get() <= 0) {
                 cooldownTask.cancel();
             }
-            cooldown--;
+            cooldown.decrementAndGet();
         }, 1, 20);
     }
 

@@ -14,6 +14,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
     private final List<String> tabCompletion = new ArrayList<>(Arrays.asList(
             "backup",
             "blacklist",
+            "debug",
             "discordlog",
             "reload",
             "restore",
@@ -56,6 +57,16 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
                         "player",
                         "entity"
                 );
+            } else if (args[0].equalsIgnoreCase("debug")) {
+                final List<String> players = new ArrayList<>();
+
+                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                    if (player.getName().toLowerCase().startsWith(args[1])) {
+                        players.add(player.getName());
+                    }
+                }
+
+                return players;
             }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("restore")) {
             return Arrays.asList(
