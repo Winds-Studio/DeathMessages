@@ -4,19 +4,6 @@
 
 **_🔔 Active Testing - Report any bugs or give suggestions_**
 
-<details>
-    <summary>✎ Why this fork came out?</summary>
-    <p>
-        The original maintainer of DeathMessages, MrShawn, cleared his repo commits and began his rewritten version of DeathMessages.
-        And on SpigotMC, the last update of DeathMessages stagnated on July 20, 2022, almost around 1 year ago! 
-        Since the rewritten version has incomplete functions with slow update progress and 
-        the original one had so many issues, Then this fork came out.
-    <p>
-        This fork based on DeathMessages 1.4.15. I will continue to maintain this fork to fix issues left in the original plugin, 
-        and add some new features maybe.
-    </p>
-</details>
-
 ## Features
 
 - Fix a bunch of errors and issues from original DeathMessages
