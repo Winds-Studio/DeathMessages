@@ -1,12 +1,21 @@
-# idea
-.idea
+# Mac filesystem dust
+.DS_Store/
+.DS_Store
+
+# Linux temp files
+*~
+
+# vim
+.*.sw[a-p]
+
+# IntelliJ
 *.iml
+.idea
 
 # Gradle
+!gradle/wrapper/gradle-wrapper.jar
 .gradle
 build
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
 
 # Eco
 bin
