@@ -278,14 +278,9 @@ public class Util {
     // In legacy module, any conditions relates to > 1.20.4 are removed
     // Version support range can be found in README.md
 
-    // Server version, e.g. 1.20.2-R0.1-SNAPSHOT -> {"1","20","2"}
-    private final static String[] serverVersion = Bukkit.getServer().getBukkitVersion()
-            .substring(0, Bukkit.getServer().getBukkitVersion().indexOf("-"))
-            .split("\\.");
-
-    private final static int mcFirstVersion = Integer.parseInt(serverVersion[0]);
-    private final static int majorVersion = Integer.parseInt(serverVersion[1]);
-    private final static int minorVersion = serverVersion.length == 3 ? Integer.parseInt(serverVersion[2]) : 0;
+    private final static String[] serverVersion = getServerVersion();
+    private final static int majorVersion = Integer.parseInt(serverVersion[0]);
+    private final static int minorVersion = serverVersion.length == 2 ? Integer.parseInt(serverVersion[1]) : 0;
 
     // > (major, minor)
     public static boolean isNewerThan(int major, int minor) {
@@ -326,5 +321,22 @@ public class Util {
         }
 
         return majorVersion == major && minorVersion <= minor;
+    }
+
+    // New server version format, e.g. 26.1-R0.1-SNAPSHOT -> {"26","1"}
+    // Old server version format, e.g. 1.20.2-R0.1-SNAPSHOT -> {"20","2"}
+    private static String[] getServerVersion() {
+        final String version = Bukkit.getServer().getBukkitVersion();
+
+        if (isNewVersionFormat(version)) {
+            return new String[]{version};
+        }
+
+        return version.substring(version.indexOf("."), version.indexOf("-"))
+                .split("\\.");
+    }
+
+    private static boolean isNewVersionFormat(String version) {
+        return !version.startsWith("1.");
     }
 }
