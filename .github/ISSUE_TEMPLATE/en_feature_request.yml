@@ -1,6 +1,6 @@
 name: EN | Feature request
 description: Suggest an idea for DeathMessages
-labels: ["enhancement"]
+type: "Feature"
 
 body:
   - type: markdown
