@@ -33,7 +33,7 @@ configure<JavaPluginExtension> {
 
 tasks {
     shadowJar {
-        archiveFileName = "${rootProject.name}-Modern-${project.version}.${archiveExtension.get()}"
+        archiveFileName.set("${rootProject.name}-Modern-${project.version}.${archiveExtension.get()}")
         exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
 //            minimize {
 //                exclude(dependency("com.tcoded.folialib:.*:.*"))
@@ -49,7 +49,7 @@ tasks {
     }
 
     libreforgeJar {
-        dependsOn("jar")
+        dependsOn(jar)
     }
 }
 
