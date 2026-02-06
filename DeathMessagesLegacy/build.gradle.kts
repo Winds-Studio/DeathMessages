@@ -15,6 +15,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT") // Universal
     compileOnly("commons-io:commons-io:2.18.0") // Remove this
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
+    compileOnlyApi("org.jspecify:jspecify:1.0.0")
     implementation("com.github.cryptomorin:XSeries:13.3.1")
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.github.technicallycoded:FoliaLib:0.4.4")

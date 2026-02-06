@@ -5,6 +5,7 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,10 +34,10 @@ public class PlayerManager {
     private Location explosionCauser;
     private Location location;
     private int cooldown = 0;
-    private WrappedTask cooldownTask;
+    private @Nullable WrappedTask cooldownTask;
     private Inventory cachedInventory;
 
-    private WrappedTask lastEntityTask;
+    private @Nullable WrappedTask lastEntityTask;
 
     private static final Map<UUID, PlayerManager> players = new ConcurrentHashMap<>();
 
@@ -66,7 +67,8 @@ public class PlayerManager {
         players.put(p.getUniqueId(), this);
     }
 
-    public Player getPlayer() {
+    // TODO: Check whether needs to mark as nullable
+    public @Nullable Player getPlayer() {
         return Bukkit.getPlayer(playerUUID);
     }
 
@@ -191,11 +193,11 @@ public class PlayerManager {
         return cachedInventory;
     }
 
-    public static PlayerManager getPlayer(Player p) {
+    public static @Nullable PlayerManager getPlayer(Player p) {
         return getPlayer(p.getUniqueId());
     }
 
-    public static PlayerManager getPlayer(UUID uuid) {
+    public static @Nullable PlayerManager getPlayer(UUID uuid) {
         return players.get(uuid);
     }
 

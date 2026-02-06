@@ -2,7 +2,7 @@ package dev.mrshawn.deathmessages.api.events;
 
 import dev.mrshawn.deathmessages.enums.MessageType;
 import net.kyori.adventure.text.TextComponent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,11 +12,10 @@ import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
-
 public class BroadcastDeathMessageEvent extends Event implements Cancellable {
 
     private final Player player;
-    private final LivingEntity livingEntity;
+    private final @Nullable LivingEntity livingEntity;
     private final MessageType messageType;
     private final TextComponent textComponent;
     private final TextComponent[] textComponents; // 0: Prefix, 1: Message body
@@ -26,7 +25,7 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastDeathMessageEvent(Player player, LivingEntity livingEntity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
+    public BroadcastDeathMessageEvent(Player player, @Nullable LivingEntity livingEntity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
                                       List<World> broadcastedWorlds, boolean isGangDeath) {
         this.player = player;
         this.livingEntity = livingEntity;
@@ -39,7 +38,7 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public HandlerList getHandlers() {
         return HANDLERS;
     }
 
@@ -61,7 +60,7 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
         return this.player;
     }
 
-    public LivingEntity getLivingEntity() {
+    public @Nullable LivingEntity getLivingEntity() {
         return this.livingEntity;
     }
 

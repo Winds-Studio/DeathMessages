@@ -10,6 +10,7 @@ dependencies {
 
     compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
     compileOnly("commons-io:commons-io:2.18.0") // Remove this
+    compileOnlyApi("org.jspecify:jspecify:1.0.0")
     implementation("com.github.cryptomorin:XSeries:13.3.1")
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.github.technicallycoded:FoliaLib:0.4.4")

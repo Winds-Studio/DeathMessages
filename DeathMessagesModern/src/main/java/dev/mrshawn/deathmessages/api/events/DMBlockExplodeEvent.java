@@ -1,11 +1,9 @@
 package dev.mrshawn.deathmessages.api.events;
 
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
 
 public class DMBlockExplodeEvent extends Event {
 
@@ -20,7 +18,7 @@ public class DMBlockExplodeEvent extends Event {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public HandlerList getHandlers() {
         return HANDLERS;
     }
 

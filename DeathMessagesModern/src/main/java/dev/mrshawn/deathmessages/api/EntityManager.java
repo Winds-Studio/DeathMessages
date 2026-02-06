@@ -5,6 +5,7 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -22,12 +23,12 @@ public class EntityManager {
     private final UUID entityUUID;
     private final MobType mobType;
     private DamageCause damageCause;
-    private PlayerManager lastPlayerDamager;
+    private @Nullable PlayerManager lastPlayerDamager;
     private Entity lastExplosiveEntity;
     private Projectile lastPlayerProjectile;
     private Location lastLocation;
 
-    private WrappedTask lastPlayerTask;
+    private @Nullable WrappedTask lastPlayerTask;
 
     private static final Map<UUID, EntityManager> entities = new ConcurrentHashMap<>();
 
@@ -71,7 +72,7 @@ public class EntityManager {
         this.damageCause = DamageCause.CUSTOM;
     }
 
-    public PlayerManager getLastPlayerDamager() {
+    public @Nullable PlayerManager getLastPlayerDamager() {
         return lastPlayerDamager;
     }
 
@@ -99,7 +100,7 @@ public class EntityManager {
         return lastLocation;
     }
 
-    public static EntityManager getEntity(UUID uuid) {
+    public static @Nullable EntityManager getEntity(UUID uuid) {
         return entities.get(uuid);
     }
 

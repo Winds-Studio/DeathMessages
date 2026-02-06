@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.api;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -32,7 +32,6 @@ public class ExplosionManager {
         DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, 5 * 20L);
     }
 
-    @NotNull
     public UUID getPyro() {
         return this.pyro;
     }
@@ -53,7 +52,7 @@ public class ExplosionManager {
         return this.effected;
     }
 
-    public static ExplosionManager getExplosion(Location location) {
+    public static @Nullable ExplosionManager getExplosion(Location location) {
         UUID uuid = locs.get(location);
         if (uuid != null) {
             return explosions.get(uuid);
@@ -62,7 +61,7 @@ public class ExplosionManager {
         return null;
     }
 
-    public static ExplosionManager getManagerIfEffected(UUID uuid) {
+    public static @Nullable ExplosionManager getManagerIfEffected(UUID uuid) {
         return explosions.get(uuid);
     }
 

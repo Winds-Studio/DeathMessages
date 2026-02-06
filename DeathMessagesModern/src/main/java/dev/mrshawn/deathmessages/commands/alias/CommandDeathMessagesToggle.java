@@ -3,7 +3,6 @@ package dev.mrshawn.deathmessages.commands.alias;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Util;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +11,7 @@ import org.bukkit.entity.Player;
 public class CommandDeathMessagesToggle implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String cmdLabel, final String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Player-Only-Command"));
             return false;

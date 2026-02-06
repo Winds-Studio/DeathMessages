@@ -2,7 +2,6 @@ package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.utils.Util;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,7 @@ public class CommandManager implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String cmdLabel, final String[] args) {
         if (args.length == 0) {
             Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
                     .stream()

@@ -33,7 +33,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bstats.bukkit.Metrics;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -175,7 +174,7 @@ public class DeathMessages extends JavaPlugin {
         return eventPriority;
     }
 
-    public @NotNull BukkitAudiences adventure() {
+    public BukkitAudiences adventure() {
         if (this.adventure == null) {
             throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
         }

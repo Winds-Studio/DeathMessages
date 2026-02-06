@@ -11,7 +11,7 @@ import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -20,9 +20,11 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.List;
 
+@NullMarked
 public class PluginMessaging implements PluginMessageListener {
 
-    public void onPluginMessageReceived(String channel, @NotNull Player player, byte[] messageBytes) {
+    @Override
+    public void onPluginMessageReceived(String channel, Player player, byte[] messageBytes) {
         if (!channel.equals("BungeeCord")) return;
 
         DataInputStream stream = new DataInputStream(new ByteArrayInputStream(messageBytes));

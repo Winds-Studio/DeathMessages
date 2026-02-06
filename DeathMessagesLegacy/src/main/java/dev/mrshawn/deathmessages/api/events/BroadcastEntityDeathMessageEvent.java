@@ -3,7 +3,6 @@ package dev.mrshawn.deathmessages.api.events;
 import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import net.kyori.adventure.text.TextComponent;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
@@ -11,7 +10,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import java.util.List;
-
 
 public class BroadcastEntityDeathMessageEvent extends Event implements Cancellable {
 
@@ -49,7 +47,7 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public HandlerList getHandlers() {
         return HANDLERS;
     }
 
