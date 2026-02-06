@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import java.awt.Color;
 import java.time.Instant;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class DiscordSRVExtension {
 

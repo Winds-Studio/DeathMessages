@@ -6,8 +6,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
-
 public class PlaceholderAPIExtension extends PlaceholderExpansion {
 
     private final DeathMessages plugin;
@@ -95,25 +93,22 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      */
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String params) {
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
+        PlayerManager getPlayer = PlayerManager.getPlayer(player);
 
-        return getPlayer.map(pm -> {
-            switch (params) {
-                case "messages_enabled":
-                    return String.valueOf(pm.getMessagesEnabled());
-                case "is_blacklisted":
-                    return String.valueOf(pm.isBlacklisted());
-                case "victim_name":
-                    return pm.getName();
-                case "victim_display_name":
-                    return pm.getPlayer().getDisplayName();
-                case "killer_name":
-                    return (pm.getLastEntityDamager() != null) ? pm.getLastEntityDamager().getName() : "null";
-                case "killer_display_name":
-                    return (pm.getLastEntityDamager() != null) ? pm.getLastEntityDamager().getCustomName() : "null";
-                default:
-                    return "null";
-            }
-        }).orElse("null");
+        if (getPlayer == null) {
+            return "null";
+        }
+
+      return switch(params) {
+        case "messages_enabled" -> String.valueOf(getPlayer.getMessagesEnabled());
+        case "is_blacklisted" -> String.valueOf(getPlayer.isBlacklisted());
+        case "victim_name" -> getPlayer.getName();
+        case "victim_display_name" -> getPlayer.getPlayer().getDisplayName();
+        case "killer_name" ->
+                (getPlayer.getLastEntityDamager() != null)? getPlayer.getLastEntityDamager().getName() : "null";
+        case "killer_display_name" ->
+                (getPlayer.getLastEntityDamager() != null)? getPlayer.getLastEntityDamager().getCustomName() : "null";
+        default -> "null";
+      };
     }
 }

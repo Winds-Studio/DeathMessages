@@ -22,13 +22,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.List;
-import java.util.Optional;
 
 public class BroadcastEntityDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-        final Optional<PlayerManager> pm = Optional.of(e.getPlayer());
+        final PlayerManager pm = e.getPlayer();
         final Entity entity = e.getEntity();
         final boolean hasOwner = EntityUtil.hasOwner(entity);
         final TextComponent[] components = e.getTextComponents();
@@ -38,7 +37,7 @@ public class BroadcastEntityDeathListener implements Listener {
 
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             Component rawMessage = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message"));
-            Component consoleMessage = Assets.entityDeathPlaceholders(rawMessage, pm.get().getPlayer(), entity, hasOwner)
+            Component consoleMessage = Assets.entityDeathPlaceholders(rawMessage, pm.getPlayer(), entity, hasOwner)
                     .replaceText(TextReplacementConfig.builder()
                             .matchLiteral("%message%")
                             .replacement(message)
@@ -47,10 +46,10 @@ public class BroadcastEntityDeathListener implements Listener {
             ComponentUtil.sendConsoleMessage(consoleMessage);
         }
 
-        if (pm.get().isInCooldown()) {
+        if (pm.isInCooldown()) {
             return;
         } else {
-            pm.get().setCooldown();
+            pm.setCooldown();
         }
 
         final boolean privateTameable = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
@@ -62,18 +61,18 @@ public class BroadcastEntityDeathListener implements Listener {
             }
 
             for (Player player : world.getPlayers()) {
-                Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
+                PlayerManager getPlayer = PlayerManager.getPlayer(player);
                 if (privateTameable) {
-                    getPlayer.ifPresent(pms -> {
-                        if (pms.getUUID().equals(pm.get().getPlayer().getUniqueId())) {
-                            if (pms.getMessagesEnabled()) {
+                    if (getPlayer != null) {
+                        if (getPlayer.getUUID().equals(pm.getPlayer().getUniqueId())) {
+                            if (getPlayer.getMessagesEnabled()) {
                                 player.sendMessage(message);
                             }
                         }
-                    });
+                    }
                 } else {
-                    getPlayer.ifPresent(pms -> {
-                        if (pms.getMessagesEnabled()) {
+                    if (getPlayer != null) {
+                        if (getPlayer.getMessagesEnabled()) {
                             if (DeathMessages.getHooks().worldGuardExtension != null) {
                                 if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())) {
                                     return;
@@ -81,9 +80,9 @@ public class BroadcastEntityDeathListener implements Listener {
                             }
 
                             player.sendMessage(message);
-                            PluginMessaging.sendPluginMSG(pms.getPlayer(), Util.convertToLegacy(message));
+                            PluginMessaging.sendPluginMSG(getPlayer.getPlayer(), Util.convertToLegacy(message));
                         }
-                    });
+                    }
 
                     if (FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {
                         List<String> discordWorldWhitelist = FileStore.CONFIG.getStringList(Config.HOOKS_DISCORD_WORLD_WHITELIST_WORLDS);
@@ -104,7 +103,7 @@ public class BroadcastEntityDeathListener implements Listener {
                         DeathMessages.getHooks().discordSRVExtension.sendEntityDiscordMessage(
                                 components,
                                 e.getMessageType(),
-                                pm.get(),
+                                pm,
                                 entity,
                                 hasOwner
                         );
@@ -115,7 +114,9 @@ public class BroadcastEntityDeathListener implements Listener {
         }
 
         PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(message));
-        Optional<EntityManager> getEntity = EntityManager.getEntity(entity.getUniqueId());
-        getEntity.ifPresent(EntityManager::destroy);
+        EntityManager getEntity = EntityManager.getEntity(entity.getUniqueId());
+        if (getEntity != null) {
+            getEntity.destroy();
+        }
     }
 }

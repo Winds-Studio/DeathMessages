@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 public class CommandBlacklist extends DeathMessagesCommand {
@@ -45,18 +44,18 @@ public class CommandBlacklist extends DeathMessagesCommand {
         // Only can be used on online players
         if (!Settings.getInstance().getConfig().getBoolean(Config.SAVED_USER_DATA.getPath())) {
             if (target != null && target.isOnline()) {
-                Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(target);
-                getPlayer.ifPresent(pm -> {
-                    if (pm.isBlacklisted()) {
-                        pm.setBlacklisted(false);
+                PlayerManager getPlayer = PlayerManager.getPlayer(target);
+                if (getPlayer != null) {
+                    if (getPlayer.isBlacklisted()) {
+                        getPlayer.setBlacklisted(false);
                         sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
                                 .replaceText(player));
                     } else {
-                        pm.setBlacklisted(true);
+                        getPlayer.setBlacklisted(true);
                         sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
                                 .replaceText(player));
                     }
-                });
+                }
             } else {
                 sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Username-None-Existent")
                         .replaceText(player));
@@ -70,20 +69,22 @@ public class CommandBlacklist extends DeathMessagesCommand {
             String username = UserData.getInstance().getConfig().getString(entry.getKey() + ".username");
 
             if (username.equalsIgnoreCase(args[0])) {
-                Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
+                PlayerManager getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
                 boolean blacklisted = UserData.getInstance().getConfig().getBoolean(entry.getKey() + ".is-blacklisted");
 
                 if (blacklisted) {
-                    getPlayer.ifPresent(pm -> pm.setBlacklisted(false));
-                    if (!getPlayer.isPresent()) {
+                    if (getPlayer != null) {
+                        getPlayer.setBlacklisted(false);
+                    } else {
                         UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
                         UserData.getInstance().save();
                     }
                     sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
                             .replaceText(player));
                 } else {
-                    getPlayer.ifPresent(pm -> pm.setBlacklisted(true));
-                    if (!getPlayer.isPresent()) {
+                    if (getPlayer != null) {
+                        getPlayer.setBlacklisted(true);
+                    } else {
                         UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
                         UserData.getInstance().save();
                     }

@@ -7,7 +7,6 @@ import org.bukkit.Material;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,17 +53,17 @@ public class ExplosionManager {
         return this.effected;
     }
 
-    public static Optional<ExplosionManager> getExplosion(Location location) {
+    public static ExplosionManager getExplosion(Location location) {
         UUID uuid = locs.get(location);
         if (uuid != null) {
-            return Optional.ofNullable(explosions.get(uuid));
+            return explosions.get(uuid);
         }
 
-        return Optional.empty();
+        return null;
     }
 
-    public static Optional<ExplosionManager> getManagerIfEffected(UUID uuid) {
-        return Optional.ofNullable(explosions.get(uuid));
+    public static ExplosionManager getManagerIfEffected(UUID uuid) {
+        return explosions.get(uuid);
     }
 
     private void destroy() {

@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class EntityDamage implements Listener {
@@ -26,21 +25,21 @@ public class EntityDamage implements Listener {
 
         if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Player p = (Player) e.getEntity();
-            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-            getPlayer.ifPresent(pm -> {
-                pm.setLastDamageCause(e.getCause());
+            PlayerManager getPlayer = PlayerManager.getPlayer(p);
+            if (getPlayer != null) {
+                getPlayer.setLastDamageCause(e.getCause());
 
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
                     // For >= 1.20.3, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
                     if (e.getDamageSource().getDirectEntity() instanceof TNTPrimed) {
                         TNTPrimed tnt = (TNTPrimed) e.getDamageSource().getDirectEntity();
                         if (tnt.getSource() instanceof LivingEntity) {
-                            pm.setLastEntityDamager(tnt.getSource());
+                            getPlayer.setLastEntityDamager(tnt.getSource());
                         }
-                        pm.setLastExplosiveEntity(tnt);
+                        getPlayer.setLastExplosiveEntity(tnt);
                     }
                 }
-            });
+            }
             // for fall large if ppl want it float dist = e.getEntity().getFallDistance();
         } else {
             ConfigurationSection entityConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities");
@@ -58,10 +57,11 @@ public class EntityDamage implements Listener {
 
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))) {
-                    Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+                    EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 
-                    getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
-                    if (!getEntity.isPresent()) {
+                    if (getEntity != null) {
+                        getEntity.setLastDamageCause(e.getCause());
+                    } else {
                         MobType mobType = MobType.VANILLA;
                         if (DeathMessages.getHooks().mythicmobsEnabled
                                 && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {

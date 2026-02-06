@@ -9,8 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.Optional;
-
 public class OnMove implements Listener {
 
     private boolean falling;
@@ -20,11 +18,11 @@ public class OnMove implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-        getPlayer.ifPresent(pm -> {
+        PlayerManager getPlayer = PlayerManager.getPlayer(p);
+        if (getPlayer != null) {
             lastBlock = e.getTo().getBlock().getType();
             if (MaterialUtil.isClimbable(lastBlock)) {
-                pm.setLastClimbing(lastBlock);
+                getPlayer.setLastClimbing(lastBlock);
             } else {
                 if (p.getFallDistance() > 0) {
                     message = true;
@@ -34,12 +32,12 @@ public class OnMove implements Listener {
                     }
                 } else {
                     if (message) {
-                        pm.setLastClimbing(null);
+                        getPlayer.setLastClimbing(null);
                         falling = false;
                         message = false;
                     }
                 }
             }
-        });
+        }
     }
 }

@@ -11,7 +11,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -100,8 +99,8 @@ public class EntityManager {
         return lastLocation;
     }
 
-    public static Optional<EntityManager> getEntity(UUID uuid) {
-        return Optional.ofNullable(entities.get(uuid));
+    public static EntityManager getEntity(UUID uuid) {
+        return entities.get(uuid);
     }
 
     public void destroy() {

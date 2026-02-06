@@ -16,7 +16,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class MobDeath implements Listener {
@@ -33,10 +32,10 @@ public class MobDeath implements Listener {
 
         for (String customMob : mobs) {
             if (e.getMob().getType().getInternalName().equals(customMob)) {
-                Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-                getEntity.ifPresent(em -> {
-                    PlayerManager damager = em.getLastPlayerDamager();
-                    TextComponent[] mythicDeath = Assets.entityDeathMessage(em, MobType.MYTHIC_MOB);
+                EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+                if (getEntity != null) {
+                    PlayerManager damager = getEntity.getLastPlayerDamager();
+                    TextComponent[] mythicDeath = Assets.entityDeathMessage(getEntity, MobType.MYTHIC_MOB);
                     TextComponent oldMythicDeath = mythicDeath[0].append(mythicDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                     if (!ComponentUtil.isMessageEmpty(mythicDeath)) {
@@ -50,7 +49,7 @@ public class MobDeath implements Listener {
                         );
                         Bukkit.getPluginManager().callEvent(event);
                     }
-                });
+                }
             }
         }
     }

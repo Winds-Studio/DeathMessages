@@ -24,7 +24,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 public class EntityDeath implements Listener {
 
@@ -32,23 +31,23 @@ public class EntityDeath implements Listener {
         // Player death
         if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Player player = (Player) e.getEntity();
-            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-            getPlayer.ifPresent(pm -> {
+            PlayerManager getPlayer = PlayerManager.getPlayer(player);
+            if (getPlayer != null) {
                 if (e.getEntity().getLastDamageCause() == null) {
-                    pm.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
-                } else if (pm.isCommandDeath()) { // If died by using suicide like command
+                    getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
+                } else if (getPlayer.isCommandDeath()) { // If died by using suicide like command
                     // set to null since it is command death
-                    pm.setLastEntityDamager(null);
-                    pm.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
-                    pm.setCommandDeath(false);
+                    getPlayer.setLastEntityDamager(null);
+                    getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
+                    getPlayer.setCommandDeath(false);
                 } else { // Reset lastDamageCause
-                    pm.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
+                    getPlayer.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
                 }
 
-                if (pm.isBlacklisted()) return;
+                if (getPlayer.isBlacklisted()) return;
 
-                if (!(pm.getLastEntityDamager() instanceof LivingEntity) || pm.getLastEntityDamager() == e.getEntity()) {
-                    TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(pm, player);
+                if (!(getPlayer.getLastEntityDamager() instanceof LivingEntity) || getPlayer.getLastEntityDamager() == e.getEntity()) {
+                    TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(getPlayer, player);
                     TextComponent oldNaturalDeath = naturalDeath[0].append(naturalDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                     if (!ComponentUtil.isMessageEmpty(naturalDeath)) {
@@ -65,7 +64,7 @@ public class EntityDeath implements Listener {
                     }
                 } else {
                     // Killed by mob
-                    Entity ent = pm.getLastEntityDamager();
+                    Entity ent = getPlayer.getLastEntityDamager();
                     boolean gangKill = false;
 
                     if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
@@ -90,14 +89,14 @@ public class EntityDeath implements Listener {
                         }
                     }
 
-                    TextComponent[] playerDeath = Assets.playerDeathMessage(pm, gangKill);
+                    TextComponent[] playerDeath = Assets.playerDeathMessage(getPlayer, gangKill);
                     TextComponent oldPlayerDeath = playerDeath[0].append(playerDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                     if (!ComponentUtil.isMessageEmpty(playerDeath)) {
                         MessageType messageType = ent instanceof Player ? MessageType.PLAYER : MessageType.MOB;
                         BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
                                 player,
-                                (LivingEntity) pm.getLastEntityDamager(),
+                                (LivingEntity) getPlayer.getLastEntityDamager(),
                                 messageType,
                                 oldPlayerDeath,
                                 playerDeath,
@@ -107,15 +106,13 @@ public class EntityDeath implements Listener {
                         Bukkit.getPluginManager().callEvent(event);
                     }
                 }
-            });
-
-            if (!getPlayer.isPresent()) {
+            } else {
                 new PlayerManager(player);
             }
         } else {
             // Entity killed by Player
-            Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-            getEntity.ifPresent(em -> {
+            EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+            if (getEntity != null) {
                 MobType mobType = MobType.VANILLA;
                 if (DeathMessages.getHooks().mythicmobsEnabled) {
                     if (DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
@@ -123,10 +120,10 @@ public class EntityDeath implements Listener {
                     }
                 }
 
-                PlayerManager damager = em.getLastPlayerDamager();
+                PlayerManager damager = getEntity.getLastPlayerDamager();
                 if (damager == null) return; // Entity killed by Entity should not include in DM
 
-                TextComponent[] entityDeath = Assets.entityDeathMessage(em, mobType);
+                TextComponent[] entityDeath = Assets.entityDeathMessage(getEntity, mobType);
                 TextComponent oldEntityDeath = entityDeath[0].append(entityDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                 if (!ComponentUtil.isMessageEmpty(entityDeath)) {
@@ -140,7 +137,7 @@ public class EntityDeath implements Listener {
                     );
                     Bukkit.getPluginManager().callEvent(event);
                 }
-            });
+            }
         }
     }
 

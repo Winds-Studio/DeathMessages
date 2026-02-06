@@ -14,7 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class EntityDamageByBlock implements Listener {
@@ -23,8 +22,11 @@ public class EntityDamageByBlock implements Listener {
     public void onEntityDeath(EntityDamageByBlockEvent e) {
         if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Player p = (Player) e.getEntity();
-            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-            getPlayer.ifPresent(pm -> pm.setLastDamageCause(e.getCause()));
+            PlayerManager getPlayer = PlayerManager.getPlayer(p);
+
+            if (getPlayer != null) {
+                getPlayer.setLastDamageCause(e.getCause());
+            }
         } else {
             ConfigurationSection entityConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities");
 
@@ -41,10 +43,11 @@ public class EntityDamageByBlock implements Listener {
 
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))) {
-                    Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+                    EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
 
-                    getEntity.ifPresent(em -> em.setLastDamageCause(e.getCause()));
-                    if (!getEntity.isPresent()) {
+                    if (getEntity != null) {
+                        getEntity.setLastDamageCause(e.getCause());
+                    } else {
                         MobType mobType = MobType.VANILLA;
                         if (DeathMessages.getHooks().mythicmobsEnabled
                                 && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {

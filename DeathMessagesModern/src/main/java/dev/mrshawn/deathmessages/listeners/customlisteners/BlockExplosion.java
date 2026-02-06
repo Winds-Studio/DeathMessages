@@ -6,17 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Optional;
-
 public class BlockExplosion implements Listener {
 
     @EventHandler
     public void onExplode(@NotNull DMBlockExplodeEvent e) {
-        Optional<ExplosionManager> explosions = ExplosionManager.getExplosion(e.getBlock().getLocation());
-        explosions.ifPresent(explosionManager -> {
-            if (explosionManager.getLocation() == null) {
-                explosionManager.setLocation(e.getBlock().getLocation());
+        ExplosionManager explosions = ExplosionManager.getExplosion(e.getBlock().getLocation());
+        if (explosions != null) {
+            if (explosions.getLocation() == null) {
+                explosions.setLocation(e.getBlock().getLocation());
             }
-        });
+        }
     }
 }

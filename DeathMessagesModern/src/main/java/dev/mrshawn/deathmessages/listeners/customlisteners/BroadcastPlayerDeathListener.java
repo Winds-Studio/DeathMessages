@@ -20,7 +20,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.List;
-import java.util.Optional;
 
 public class BroadcastPlayerDeathListener implements Listener {
 
@@ -28,9 +27,9 @@ public class BroadcastPlayerDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastDeathMessageEvent e) {
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+        PlayerManager getPlayer = PlayerManager.getPlayer(e.getPlayer());
 
-        if (!getPlayer.isPresent()) return;
+        if (getPlayer == null) return;
 
         final TextComponent[] components = e.getTextComponents();
         final TextComponent prefix = components[0];
@@ -40,7 +39,7 @@ public class BroadcastPlayerDeathListener implements Listener {
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             // Dreeam TODO: maybe just use formatMessage is also ok?
             Component rawMessage = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message"));
-            Component consoleMessage = Assets.playerDeathPlaceholders(rawMessage, getPlayer.get(), e.getLivingEntity())
+            Component consoleMessage = Assets.playerDeathPlaceholders(rawMessage, getPlayer, e.getLivingEntity())
                     .replaceText(TextReplacementConfig.builder()
                             .matchLiteral("%message%")
                             .replacement(message)
@@ -49,10 +48,10 @@ public class BroadcastPlayerDeathListener implements Listener {
             ComponentUtil.sendConsoleMessage(consoleMessage);
         }
 
-        if (getPlayer.get().isInCooldown()) {
+        if (getPlayer.isInCooldown()) {
             return;
         } else {
-            getPlayer.get().setCooldown();
+            getPlayer.setCooldown();
         }
 
         final boolean privatePlayer = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_PLAYER);
@@ -68,31 +67,29 @@ public class BroadcastPlayerDeathListener implements Listener {
             }
 
             for (Player player : world.getPlayers()) {
-                Optional<PlayerManager> getPlayer2 = PlayerManager.getPlayer(player);
-                getPlayer2.ifPresent(pms -> {
+                PlayerManager getPlayer2 = PlayerManager.getPlayer(player);
+                if (getPlayer2 != null) {
                     if (e.getMessageType().equals(MessageType.PLAYER)) {
-                        if (privatePlayer && (e.getPlayer().getUniqueId().equals(pms.getUUID())
-                                || e.getLivingEntity().getUniqueId().equals(pms.getUUID()))) {
-                            normal(e, components, message, pms, player, e.getBroadcastedWorlds());
+                        if (privatePlayer && (e.getPlayer().getUniqueId().equals(getPlayer2.getUUID())
+                                || e.getLivingEntity().getUniqueId().equals(getPlayer2.getUUID()))) {
+                            normal(e, components, message, getPlayer2, player, e.getBroadcastedWorlds());
                         } else if (!privatePlayer) {
-                            normal(e, components, message, pms, player, e.getBroadcastedWorlds());
+                            normal(e, components, message, getPlayer2, player, e.getBroadcastedWorlds());
                         }
                     } else if (e.getMessageType().equals(MessageType.MOB)) {
-                        if (privateMobs && e.getPlayer().getUniqueId().equals(pms.getUUID())) {
-                            normal(e, components, message, pms, player, e.getBroadcastedWorlds());
+                        if (privateMobs && e.getPlayer().getUniqueId().equals(getPlayer2.getUUID())) {
+                            normal(e, components, message, getPlayer2, player, e.getBroadcastedWorlds());
                         } else if (!privateMobs) {
-                            normal(e, components, message, pms, player, e.getBroadcastedWorlds());
+                            normal(e, components, message, getPlayer2, player, e.getBroadcastedWorlds());
                         }
                     } else if (e.getMessageType().equals(MessageType.NATURAL)) {
-                        if (privateNatural && e.getPlayer().getUniqueId().equals(pms.getUUID())) {
-                            normal(e, components, message, pms, player, e.getBroadcastedWorlds());
+                        if (privateNatural && e.getPlayer().getUniqueId().equals(getPlayer2.getUUID())) {
+                            normal(e, components, message, getPlayer2, player, e.getBroadcastedWorlds());
                         } else if (!privateNatural) {
-                            normal(e, components, message, pms, player, e.getBroadcastedWorlds());
+                            normal(e, components, message, getPlayer2, player, e.getBroadcastedWorlds());
                         }
                     }
-                });
-
-                if (!getPlayer2.isPresent()) {
+                } else {
                     new PlayerManager(player);
                 }
             }
@@ -128,13 +125,13 @@ public class BroadcastPlayerDeathListener implements Listener {
             // Will reach the discord broadcast
         }
 
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
-        if (getPlayer.isPresent()) {
+        PlayerManager getPlayer = PlayerManager.getPlayer(e.getPlayer());
+        if (getPlayer != null) {
             if (DeathMessages.getHooks().discordSRVExtension != null && !discordSent) {
                 DeathMessages.getHooks().discordSRVExtension.sendDiscordMessage(
                         components,
                         e.getMessageType(),
-                        getPlayer.get()
+                        getPlayer
                 );
                 discordSent = true;
             }

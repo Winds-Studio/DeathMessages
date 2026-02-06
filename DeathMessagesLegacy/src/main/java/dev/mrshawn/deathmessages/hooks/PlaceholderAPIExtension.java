@@ -6,8 +6,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
-
 public class PlaceholderAPIExtension extends PlaceholderExpansion {
 
     private final DeathMessages plugin;
@@ -95,25 +93,27 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      */
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String params) {
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
+        PlayerManager getPlayer = PlayerManager.getPlayer(player);
 
-        return getPlayer.map(pm -> {
-            switch (params) {
+        if (getPlayer == null) {
+            return "null";
+        }
+
+        switch (params) {
                 case "messages_enabled":
-                    return String.valueOf(pm.getMessagesEnabled());
+                    return String.valueOf(getPlayer.getMessagesEnabled());
                 case "is_blacklisted":
-                    return String.valueOf(pm.isBlacklisted());
+                    return String.valueOf(getPlayer.isBlacklisted());
                 case "victim_name":
-                    return pm.getName();
+                    return getPlayer.getName();
                 case "victim_display_name":
-                    return pm.getPlayer().getDisplayName();
+                    return getPlayer.getPlayer().getDisplayName();
                 case "killer_name":
-                    return (pm.getLastEntityDamager() != null) ? pm.getLastEntityDamager().getName() : "null";
+                    return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getName() : "null";
                 case "killer_display_name":
-                    return (pm.getLastEntityDamager() != null) ? pm.getLastEntityDamager().getCustomName() : "null";
+                    return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getCustomName() : "null";
                 default:
                     return "null";
             }
-        }).orElse("null");
     }
 }

@@ -6,8 +6,6 @@ import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
-
 public class CommandToggle extends DeathMessagesCommand {
 
     @Override
@@ -26,16 +24,16 @@ public class CommandToggle extends DeathMessagesCommand {
             return;
         }
 
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-        getPlayer.ifPresent(pm -> {
-            boolean msg = pm.getMessagesEnabled();
+        PlayerManager getPlayer = PlayerManager.getPlayer(player);
+        if (getPlayer != null) {
+            boolean msg = getPlayer.getMessagesEnabled();
             if (msg) {
-                pm.setMessagesEnabled(false);
+                getPlayer.setMessagesEnabled(false);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));
             } else {
-                pm.setMessagesEnabled(true);
+                getPlayer.setMessagesEnabled(true);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On"));
             }
-        });
+        }
     }
 }

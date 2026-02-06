@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -132,19 +131,21 @@ public class Util {
 
         getNearby.forEach(ent -> {
                     if (ent instanceof Player) {
-                        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) ent);
-                        getPlayer.ifPresent(effect -> {
+                        PlayerManager getPlayer = PlayerManager.getPlayer((Player) ent);
+                        if (getPlayer != null) {
                             effected.add(ent.getUniqueId());
-                            effect.setLastEntityDamager(p);
-                        });
+                            getPlayer.setLastEntityDamager(p);
+                        }
                     } else {
-                        Optional<EntityManager> getEntity = EntityManager.getEntity(ent.getUniqueId());
-                        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-                        getEntity.ifPresent(em -> {
+                        EntityManager getEntity = EntityManager.getEntity(ent.getUniqueId());
+                        PlayerManager getPlayer = PlayerManager.getPlayer(p);
+                        if (getEntity != null) {
                             effected.add(ent.getUniqueId());
-                            getPlayer.ifPresent(em::setLastPlayerDamager);
-                        });
-                        if (!getEntity.isPresent()) {
+
+                            if (getPlayer != null) {
+                                getEntity.setLastPlayerDamager(getPlayer);
+                            }
+                        } else {
                             new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
                         }
                     }

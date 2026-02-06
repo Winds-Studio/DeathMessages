@@ -9,8 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
-
 public class CommandDeathMessagesToggle implements CommandExecutor {
 
     @Override
@@ -23,17 +21,17 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
             player.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
             return false;
         }
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-        getPlayer.ifPresent(pm -> {
-            boolean msg = pm.getMessagesEnabled();
-            if (msg) {
-                pm.setMessagesEnabled(false);
+        PlayerManager getPlayer = PlayerManager.getPlayer(player);
+        if (getPlayer != null) {
+            boolean msg = getPlayer.getMessagesEnabled();
+            if(msg) {
+                getPlayer.setMessagesEnabled(false);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));
             } else {
-                pm.setMessagesEnabled(true);
+                getPlayer.setMessagesEnabled(true);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On"));
             }
-        });
+        }
         return false;
     }
 }

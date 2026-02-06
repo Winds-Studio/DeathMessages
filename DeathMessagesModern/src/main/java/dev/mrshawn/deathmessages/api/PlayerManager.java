@@ -15,7 +15,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -192,16 +191,16 @@ public class PlayerManager {
         return cachedInventory;
     }
 
-    public static Optional<PlayerManager> getPlayer(Player p) {
+    public static PlayerManager getPlayer(Player p) {
         return getPlayer(p.getUniqueId());
     }
 
-    public static Optional<PlayerManager> getPlayer(UUID uuid) {
-        return Optional.ofNullable(players.get(uuid));
+    public static PlayerManager getPlayer(UUID uuid) {
+        return players.get(uuid);
     }
 
     public static boolean isEmpty(Player p) {
-        return !getPlayer(p).isPresent();
+        return getPlayer(p) == null;
     }
 
     public void removePlayer() {

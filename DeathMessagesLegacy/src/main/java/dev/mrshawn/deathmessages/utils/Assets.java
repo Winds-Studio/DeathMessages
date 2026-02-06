@@ -50,7 +50,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 
@@ -77,13 +76,13 @@ public class Assets {
         } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
             components[1] = Assets.getNaturalDeath(pm, "Climbable");
         } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-            Optional<ExplosionManager> explosion = ExplosionManager.getManagerIfEffected(player.getUniqueId());
-            if (explosion.isPresent()) {
-                if (explosion.get().getMaterial().name().contains("BED")) {
+            ExplosionManager explosion = ExplosionManager.getManagerIfEffected(player.getUniqueId());
+            if (explosion != null) {
+                if (explosion.getMaterial().name().contains("BED")) {
                     components[1] = Assets.getNaturalDeath(pm, "Bed");
                 }
                 if (Util.isNewerAndEqual(16, 0)) {
-                    if (explosion.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                    if (explosion.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
                         components[1] = Assets.getNaturalDeath(pm, "Respawn-Anchor");
                     }
                 }
@@ -139,20 +138,20 @@ public class Assets {
         }
 
         if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-            Optional<ExplosionManager> explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
-            if (explosionManager.isPresent()) {
-                Optional<PlayerManager> pyro = PlayerManager.getPlayer(explosionManager.get().getPyro());
-                if (pyro.isPresent()) {
+            ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
+            if (explosionManager != null) {
+                PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
+                if (pyro != null) {
                     // Bed kill
-                    if (explosionManager.get().getMaterial().name().contains("BED")) {
-                        components[1] = get(gang, pm, pyro.get().getPlayer(), "Bed");
+                    if (explosionManager.getMaterial().name().contains("BED")) {
+                        components[1] = get(gang, pm, pyro.getPlayer(), "Bed");
                         return components;
                     }
 
                     // Respawn Anchor kill
                     if (Util.isNewerAndEqual(16, 0)) {
-                        if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                            components[1] = get(gang, pm, pyro.get().getPlayer(), "Respawn-Anchor");
+                        if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                            components[1] = get(gang, pm, pyro.getPlayer(), "Respawn-Anchor");
                             return components;
                         }
                     }
@@ -194,11 +193,11 @@ public class Assets {
     }
 
     public static TextComponent[] entityDeathMessage(EntityManager em, MobType mobType) {
-        Optional<PlayerManager> pm = Optional.ofNullable(em.getLastPlayerDamager());
+        PlayerManager pm = em.getLastPlayerDamager();
 
-        if (!pm.isPresent()) return ComponentUtil.empty();
+        if (pm == null) return ComponentUtil.empty();
 
-        Player p = pm.get().getPlayer();
+        Player p = pm.getPlayer();
         TextComponent[] components = ComponentUtil.empty();
 
         if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
@@ -227,20 +226,20 @@ public class Assets {
         }
 
         if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-            Optional<ExplosionManager> explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
-            if (explosionManager.isPresent()) {
-                Optional<PlayerManager> pyro = PlayerManager.getPlayer(explosionManager.get().getPyro());
-                if (pyro.isPresent()) {
+            ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
+            if (explosionManager != null) {
+                PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
+                if (pyro != null) {
                     // Bed kill
-                    if (explosionManager.get().getMaterial().name().contains("BED")) {
-                        components[1] = getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Bed", mobType);
+                    if (explosionManager.getMaterial().name().contains("BED")) {
+                        components[1] = getEntityDeath(pyro.getPlayer(), em.getEntity(), "Bed", mobType);
                         return components;
                     }
 
                     // Respawn Anchor kill
                     if (Util.isNewerAndEqual(16, 0)) {
-                        if (explosionManager.get().getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                            components[1] = getEntityDeath(pyro.get().getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+                        if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
+                            components[1] = getEntityDeath(pyro.getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
                             return components;
                         }
                     }
@@ -248,7 +247,7 @@ public class Assets {
             }
         }
 
-        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.get().getLastDamage());
+        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.getLastDamage());
 
         if (hasWeapon) {
             if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {

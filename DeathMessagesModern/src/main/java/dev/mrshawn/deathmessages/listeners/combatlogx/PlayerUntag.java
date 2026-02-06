@@ -21,15 +21,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PlayerUntag implements Listener {
 
     @EventHandler
     public void untagPlayer(PlayerUntagEvent e) {
         Player player = e.getPlayer();
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(player);
-        getPlayer.ifPresent(pm -> {
+        PlayerManager getPlayer = PlayerManager.getPlayer(player);
+        if (getPlayer != null) {
             UntagReason reason = e.getUntagReason();
 
             if (!reason.equals(UntagReason.QUIT)) return;
@@ -57,7 +56,7 @@ public class PlayerUntag implements Listener {
                 }
             }
 
-            TextComponent deathMessageBody = Assets.get(gangKill, pm, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
+            TextComponent deathMessageBody = Assets.get(gangKill, getPlayer, (LivingEntity) e.getPreviousEnemies().get(0), "CombatLogX-Quit");
             TextComponent[] deathMessage = new TextComponent[2];
 
             if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
@@ -81,9 +80,7 @@ public class PlayerUntag implements Listener {
                 );
                 Bukkit.getPluginManager().callEvent(event);
             }
-        });
-
-        if (getPlayer.isEmpty()) {
+        } else {
             new PlayerManager(player);
         }
     }

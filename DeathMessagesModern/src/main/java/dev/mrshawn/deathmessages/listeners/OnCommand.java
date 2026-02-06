@@ -9,22 +9,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 public class OnCommand implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
-        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(e.getPlayer());
+        PlayerManager getPlayer = PlayerManager.getPlayer(e.getPlayer());
         List<String> commands = Settings.getInstance().getConfig().getStringList(Config.CUSTOM_SUICIDE_COMMANDS.getPath());
 
-        getPlayer.ifPresent(pm -> {
+        if (getPlayer != null) {
             for (String command : commands) {
                 if (e.getMessage().equals(command)) {
-                    pm.setCommandDeath(true);
+                    getPlayer.setCommandDeath(true);
                     break;
                 }
             }
-        });
+        }
     }
 }

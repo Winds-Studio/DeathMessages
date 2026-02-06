@@ -24,7 +24,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class EntityDamageByEntity implements Listener {
@@ -36,52 +35,52 @@ public class EntityDamageByEntity implements Listener {
 
         if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Player p = (Player) e.getEntity();
-            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(p);
-            getPlayer.ifPresent(pm -> {
+            PlayerManager getPlayer = PlayerManager.getPlayer(p);
+            if (getPlayer != null) {
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
                     Entity lastCrystalDamager = Util.crystalDeathData.get(e.getDamager().getUniqueId());
 
                     if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
-                        pm.setLastEntityDamager(lastCrystalDamager);
-                        pm.setLastExplosiveEntity(e.getDamager());
+                        getPlayer.setLastEntityDamager(lastCrystalDamager);
+                        getPlayer.setLastExplosiveEntity(e.getDamager());
                     } else if (e.getDamager() instanceof TNTPrimed) { // For <= 1.20.2, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
                         TNTPrimed tnt = (TNTPrimed) e.getDamager();
                         if (tnt.getSource() instanceof LivingEntity) {
-                            pm.setLastEntityDamager(tnt.getSource());
+                            getPlayer.setLastEntityDamager(tnt.getSource());
                         }
-                        pm.setLastExplosiveEntity(e.getDamager());
+                        getPlayer.setLastExplosiveEntity(e.getDamager());
                     } else if (e.getDamager() instanceof Firework) { // Firework extends Entity under <= 1.15
                         Firework firework = (Firework) e.getDamager();
                         try {
                             if (firework.getShooter() instanceof LivingEntity) {
-                                pm.setLastEntityDamager((LivingEntity) firework.getShooter());
+                                getPlayer.setLastEntityDamager((LivingEntity) firework.getShooter());
                             }
-                            pm.setLastExplosiveEntity(e.getDamager());
+                            getPlayer.setLastExplosiveEntity(e.getDamager());
                         } catch (NoSuchMethodError e2) {
                             // McMMO ability
                             DeathMessages.LOGGER.error(e2);
                         }
                     } else {
-                        pm.setLastEntityDamager(e.getDamager());
-                        pm.setLastExplosiveEntity(e.getDamager());
+                        getPlayer.setLastEntityDamager(e.getDamager());
+                        getPlayer.setLastExplosiveEntity(e.getDamager());
                     }
                 } else if (e.getDamager() instanceof Projectile) {
                     Projectile projectile = (Projectile) e.getDamager();
                     if (projectile.getShooter() instanceof LivingEntity) {
-                        pm.setLastEntityDamager((LivingEntity) projectile.getShooter());
+                        getPlayer.setLastEntityDamager((LivingEntity) projectile.getShooter());
                     }
-                    pm.setLastProjectileEntity(projectile);
+                    getPlayer.setLastProjectileEntity(projectile);
                 } else if (e.getDamager() instanceof FallingBlock) {
-                    pm.setLastEntityDamager(e.getDamager());
+                    getPlayer.setLastEntityDamager(e.getDamager());
                 } else if (e.getDamager().getType().isAlive()) {
-                    pm.setLastEntityDamager(e.getDamager());
+                    getPlayer.setLastEntityDamager(e.getDamager());
                 } else if (e.getDamager() instanceof EvokerFangs) {
                     EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
-                    pm.setLastEntityDamager(evokerFangs.getOwner());
+                    getPlayer.setLastEntityDamager(evokerFangs.getOwner());
                 } else if (e.getDamager() instanceof AreaEffectCloud) {
-                    pm.setLastEntityDamager(e.getDamager());
+                    getPlayer.setLastEntityDamager(e.getDamager());
                 }
-            });
+            }
         } else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
             // Cleanup this part below
             // listenedMobs should not use loop
@@ -102,54 +101,65 @@ public class EntityDamageByEntity implements Listener {
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))
                         || (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
-                    Optional<EntityManager> getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-                    getEntity.ifPresent(em -> {
+                    EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+                    if (getEntity != null) {
                         if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
                             Entity lastCrystalDamager = Util.crystalDeathData.get(e.getDamager().getUniqueId());
 
                             if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
                                 if (lastCrystalDamager instanceof Player) {
-                                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) lastCrystalDamager);
-                                    getPlayer.ifPresent(em::setLastPlayerDamager);
-                                    em.setLastExplosiveEntity(e.getDamager());
+                                    PlayerManager getPlayer = PlayerManager.getPlayer((Player) lastCrystalDamager);
+                                    if (getPlayer != null) {
+                                        getEntity.setLastPlayerDamager(getPlayer);
+                                    }
+                                    getEntity.setLastExplosiveEntity(e.getDamager());
                                 }
                             } else if (e.getDamager() instanceof TNTPrimed) {
                                 TNTPrimed tnt = (TNTPrimed) e.getDamager();
                                 if (tnt.getSource() instanceof Player) {
-                                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) tnt.getSource());
-                                    getPlayer.ifPresent(em::setLastPlayerDamager);
+                                    PlayerManager getPlayer = PlayerManager.getPlayer((Player) tnt.getSource());
+                                    if (getPlayer != null) {
+                                        getEntity.setLastPlayerDamager(getPlayer);
+                                    }
                                 }
-                                em.setLastExplosiveEntity(e.getDamager());
+                                getEntity.setLastExplosiveEntity(e.getDamager());
                             } else if (e.getDamager() instanceof Firework) {
                                 Firework firework = (Firework) e.getDamager();
                                 try {
                                     if (firework.getShooter() instanceof Player) {
-                                        Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) firework.getShooter());
-                                        getPlayer.ifPresent(em::setLastPlayerDamager);
+                                        PlayerManager getPlayer = PlayerManager.getPlayer((Player) firework.getShooter());
+                                        if (getPlayer != null) {
+                                            getEntity.setLastPlayerDamager(getPlayer);
+                                        }
                                     }
-                                    em.setLastExplosiveEntity(e.getDamager());
+                                    getEntity.setLastExplosiveEntity(e.getDamager());
                                 } catch (NoSuchMethodError e3) {
                                     // McMMO ability
                                     DeathMessages.LOGGER.error(e3);
                                 }
                             } else {
-                                Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
-                                getPlayer.ifPresent(em::setLastPlayerDamager);
-                                em.setLastExplosiveEntity(e.getDamager());
+                                PlayerManager getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
+                                if (getPlayer != null) {
+                                    getEntity.setLastPlayerDamager(getPlayer);
+                                }
+                                getEntity.setLastExplosiveEntity(e.getDamager());
                             }
                         } else if (e.getDamager() instanceof Projectile) {
                             Projectile projectile = (Projectile) e.getDamager();
                             if (projectile.getShooter() instanceof Player) {
-                                Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) projectile.getShooter());
-                                getPlayer.ifPresent(em::setLastPlayerDamager);
+                                PlayerManager getPlayer = PlayerManager.getPlayer((Player) projectile.getShooter());
+                                if (getPlayer != null) {
+                                    getEntity.setLastPlayerDamager(getPlayer);
+                                }
                             }
-                            em.setLastProjectileEntity(projectile);
+                            getEntity.setLastProjectileEntity(projectile);
                         } else if (e.getDamager() instanceof Player) {
-                            Optional<PlayerManager> getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
-                            getPlayer.ifPresent(em::setLastPlayerDamager);
+                            PlayerManager getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
+                            if (getPlayer != null) {
+                                getEntity.setLastPlayerDamager(getPlayer);
+                            }
                         }
-                    });
-                    if (!getEntity.isPresent()) {
+                    } else {
                         MobType mobType = MobType.VANILLA;
                         if (DeathMessages.getHooks().mythicmobsEnabled
                                 && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {

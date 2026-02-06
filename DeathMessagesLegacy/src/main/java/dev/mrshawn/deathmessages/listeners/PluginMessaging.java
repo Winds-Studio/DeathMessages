@@ -20,7 +20,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.List;
-import java.util.Optional;
 
 public class PluginMessaging implements PluginMessageListener {
 
@@ -54,15 +53,15 @@ public class PluginMessaging implements PluginMessageListener {
                 TextComponent message = Util.convertFromLegacy(rawMsg);
 
                 for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
-                    Optional<PlayerManager> getPlayer = PlayerManager.getPlayer(onlinePlayer);
-                    getPlayer.ifPresent(pm -> {
-                        if (pm.getMessagesEnabled()) {
+                    PlayerManager getPlayer = PlayerManager.getPlayer(onlinePlayer);
+                    if (getPlayer != null) {
+                        if (getPlayer.getMessagesEnabled()) {
                             ComponentUtil.sendMessage(onlinePlayer, Component.text()
                                     .append(prefix)
                                     .append(message)
                                     .build());
                         }
-                    });
+                    }
                 }
             }
         } catch (Exception e) {
