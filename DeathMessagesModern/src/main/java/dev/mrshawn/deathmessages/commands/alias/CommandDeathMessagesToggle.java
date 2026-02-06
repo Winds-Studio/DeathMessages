@@ -23,7 +23,7 @@ public class CommandDeathMessagesToggle implements CommandExecutor {
         PlayerManager getPlayer = PlayerManager.getPlayer(player);
         if (getPlayer != null) {
             boolean msg = getPlayer.getMessagesEnabled();
-            if(msg) {
+            if (msg) {
                 getPlayer.setMessagesEnabled(false);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));
             } else {

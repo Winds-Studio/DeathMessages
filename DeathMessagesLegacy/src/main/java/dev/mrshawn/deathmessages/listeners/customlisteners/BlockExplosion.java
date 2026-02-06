@@ -10,7 +10,7 @@ public class BlockExplosion implements Listener {
     @EventHandler
     public void onExplode(DMBlockExplodeEvent e) {
         ExplosionManager explosions = ExplosionManager.getExplosion(e.getBlock().getLocation());
-        if  (explosions != null) {
+        if (explosions != null) {
             if (explosions.getLocation() == null) {
                 explosions.setLocation(e.getBlock().getLocation());
             }

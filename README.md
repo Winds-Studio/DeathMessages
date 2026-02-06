@@ -1,6 +1,8 @@
 # DeathMessages
 
-![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=for-the-badge)![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=for-the-badge)![Github Stars](https://img.shields.io/github/stars/Winds-Studio/DeathMessages?style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/Winds-Studio/DeathMessages?style=for-the-badge)
+![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/Winds-Studio/DeathMessages/build.yml?style=for-the-badge)
+![Github Stars](https://img.shields.io/github/stars/Winds-Studio/DeathMessages?style=for-the-badge)
 
 **_🔔 Active Testing - Report any bugs or give suggestions_**
 
@@ -19,6 +21,7 @@ Compatibility
 | Compatibility         | Spigot / Paper / Forks / * | Paper / Forks / * |
 | Folia Support         |            Yes             |        Yes        |
 | Multi Plugins Support |            Yes             |        Yes        |
+
 - *Compatibility for Forge / Bukkit Hybrid Server Software is limited, if there is an issue, report!
 
 ## Portals
@@ -31,7 +34,9 @@ Compatibility
 - 📫 Discord: `dreeam___` | QQ: `2682173972`
 
 ## Translations
+
 Please feel free to contribute or modify existing translations if they are not right.
+
 ### Contributors
 
 - [Axtazer](https://github.com/Axtazer) (French Translation)
@@ -58,6 +63,8 @@ Please feel free to contribute or modify existing translations if they are not r
 <a href="https://cloud.swordsman.com.cn/"><img src="JiankeServer.jpg" alt="Jianke Cloud Host" align="left" hspace="8"></a>
 cloud of swordsman | 剑客云
 
-If you want to find a cheaper, high performance, stable with lower latency, then cloud of swordsman is a good choice! Registers and purchases in [here](https://cloud.swordsman.com.cn/?i8ab42c).
+If you want to find a cheaper, high performance, stable with lower latency, then cloud of swordsman is a good choice!
+Registers and purchases in [here](https://cloud.swordsman.com.cn/?i8ab42c).
 
-如果你想找一个低价高性能, 低延迟的云服务商，剑客云是个不错的选择! 你可以在[这里](https://cloud.swordsman.com.cn/?i8ab42c)注册.
+如果你想找一个低价高性能, 低延迟的云服务商，剑客云是个不错的选择! 你可以在 [这里](https://cloud.swordsman.com.cn/?i8ab42c)
+注册.

@@ -45,7 +45,8 @@ public class PluginMessaging implements PluginMessageListener {
                 String serverName = data[0];
                 String rawMsg = data[1];
 
-                if (DeathMessages.getHooks().bungeeServerName != null && serverName.equals(DeathMessages.getHooks().bungeeServerName)) return; // Don't send to self
+                if (DeathMessages.getHooks().bungeeServerName != null && serverName.equals(DeathMessages.getHooks().bungeeServerName))
+                    return; // Don't send to self
 
                 Component prefix = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Bungee.Message"))
                         .replaceText(TextReplacementConfig.builder()

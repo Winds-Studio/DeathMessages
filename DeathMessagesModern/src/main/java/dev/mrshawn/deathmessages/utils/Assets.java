@@ -368,7 +368,7 @@ public class Assets {
         final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
         String entityName = EntityUtil.getConfigNodeByEntity(mob);
         final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
-                + "." + entityName;
+                                                                           + "." + entityName;
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         //Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + ".Weapon"), pm.getPlayer(), mob);
@@ -515,7 +515,7 @@ public class Assets {
         final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
         String entityName = EntityUtil.getConfigNodeByEntity(mob);
         final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
-                + "." + entityName;
+                                                                           + "." + entityName;
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + damageCause), pm.getPlayer(), mob);
 
@@ -571,7 +571,7 @@ public class Assets {
         final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
         String entityName = EntityUtil.getConfigNodeByEntity(mob);
         final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
-                + "." + entityName;
+                                                                           + "." + entityName;
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + projectileDamage), pm.getPlayer(), mob);
 

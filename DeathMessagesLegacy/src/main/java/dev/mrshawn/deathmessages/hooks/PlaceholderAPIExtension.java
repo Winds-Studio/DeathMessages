@@ -101,20 +101,20 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
         }
 
         switch (params) {
-                case "messages_enabled":
-                    return String.valueOf(getPlayer.getMessagesEnabled());
-                case "is_blacklisted":
-                    return String.valueOf(getPlayer.isBlacklisted());
-                case "victim_name":
-                    return getPlayer.getName();
-                case "victim_display_name":
-                    return getPlayer.getPlayer().getDisplayName();
-                case "killer_name":
-                    return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getName() : "null";
-                case "killer_display_name":
-                    return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getCustomName() : "null";
-                default:
-                    return "null";
-            }
+            case "messages_enabled":
+                return String.valueOf(getPlayer.getMessagesEnabled());
+            case "is_blacklisted":
+                return String.valueOf(getPlayer.isBlacklisted());
+            case "victim_name":
+                return getPlayer.getName();
+            case "victim_display_name":
+                return getPlayer.getPlayer().getDisplayName();
+            case "killer_name":
+                return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getName() : "null";
+            case "killer_display_name":
+                return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getCustomName() : "null";
+            default:
+                return "null";
+        }
     }
 }
