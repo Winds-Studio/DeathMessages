@@ -14,15 +14,12 @@ public class OnCommand implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
-        PlayerManager getPlayer = PlayerManager.getPlayer(e.getPlayer());
-        List<String> commands = Settings.getInstance().getConfig().getStringList(Config.CUSTOM_SUICIDE_COMMANDS.getPath());
+        final PlayerManager getPlayer = PlayerManager.getPlayer(e.getPlayer());
 
         if (getPlayer != null) {
-            for (String command : commands) {
-                if (e.getMessage().equals(command)) {
-                    getPlayer.setCommandDeath(true);
-                    break;
-                }
+            final List<String> commands = Settings.getInstance().getConfig().getStringList(Config.CUSTOM_SUICIDE_COMMANDS.getPath());
+            if (commands.contains(e.getMessage())) {
+                getPlayer.setCommandDeath(true);
             }
         }
     }

@@ -33,13 +33,13 @@ public class EntityDeath implements Listener {
             Player player = (Player) e.getEntity();
             PlayerManager getPlayer = PlayerManager.getPlayer(player);
             if (getPlayer != null) {
-                if (e.getEntity().getLastDamageCause() == null) {
-                    getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
-                } else if (getPlayer.isCommandDeath()) { // If died by using suicide like command
+                if (getPlayer.isCommandDeath()) { // If died by using suicide like command
                     // set to null since it is command death
                     getPlayer.setLastEntityDamager(null);
                     getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
                     getPlayer.setCommandDeath(false);
+                } else if (e.getEntity().getLastDamageCause() == null) {
+                    getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
                 } else { // Reset lastDamageCause
                     getPlayer.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
                 }

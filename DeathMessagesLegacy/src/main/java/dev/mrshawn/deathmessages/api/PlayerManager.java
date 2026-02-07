@@ -112,8 +112,8 @@ public class PlayerManager {
         return this.damageCause;
     }
 
-    public void setCommandDeath(boolean isTrue) {
-        this.isCommandDeath = isTrue;
+    public void setCommandDeath(boolean isCommandDeath) {
+        this.isCommandDeath = isCommandDeath;
     }
 
     public boolean isCommandDeath() {
