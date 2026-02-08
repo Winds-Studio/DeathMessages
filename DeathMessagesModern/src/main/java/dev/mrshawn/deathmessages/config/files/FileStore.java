@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.files;
+package dev.mrshawn.deathmessages.config.files;
 
 public class FileStore {
 

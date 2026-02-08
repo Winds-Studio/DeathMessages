@@ -2,7 +2,7 @@ package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Settings;
-import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.config.files.Config;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

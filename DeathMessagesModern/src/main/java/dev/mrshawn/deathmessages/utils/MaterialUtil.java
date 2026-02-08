@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.config.Settings;
-import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.config.files.Config;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;

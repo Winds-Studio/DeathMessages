@@ -8,7 +8,7 @@ import dev.mrshawn.deathmessages.config.Gangs;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MessageType;
-import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.utils.Assets;
 import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;

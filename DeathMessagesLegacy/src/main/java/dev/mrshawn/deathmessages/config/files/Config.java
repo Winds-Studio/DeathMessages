@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.files;
+package dev.mrshawn.deathmessages.config.files;
 
 import java.util.ArrayList;
 import java.util.Arrays;

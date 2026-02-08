@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.listeners;
 
-import dev.mrshawn.deathmessages.files.Config;
-import dev.mrshawn.deathmessages.files.FileStore;
+import dev.mrshawn.deathmessages.config.files.Config;
+import dev.mrshawn.deathmessages.config.files.FileStore;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

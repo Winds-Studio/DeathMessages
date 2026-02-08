@@ -4,7 +4,7 @@ import dev.mrshawn.deathmessages.api.PlayerManager;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
-import dev.mrshawn.deathmessages.files.Config;
+import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextReplacementConfig;

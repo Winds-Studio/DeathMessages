@@ -1,4 +1,4 @@
-package dev.mrshawn.deathmessages.files;
+package dev.mrshawn.deathmessages.config.files;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import org.bukkit.configuration.file.YamlConfiguration;
