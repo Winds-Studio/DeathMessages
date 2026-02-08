@@ -23,8 +23,6 @@ dependencies {
     compileOnly("com.willfp:EcoEnchants:12.22.0")
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT")
-    compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
-    compileOnly("org.sayandev:sayanvanish-bukkit:1.7.0-SNAPSHOT")
 }
 
 configure<JavaPluginExtension> {

@@ -35,10 +35,13 @@ Hooks:
   CombatLogX:
     Enabled: true
 
-  # If SayanVanish is found, enable the hook
-  # Enable/Disable SayanVanish hook
-  SayanVanish:
-    Enabled: true
+  Vanish:
+    # Enable/Disable vanilla potion effect vanish hook
+    Vanilla: true
+    # If common vanish plugins are found, enable the hook
+    # Supports: SayanVanish, SuperVanish, PremiumVanish, EssentialsX, VanishNoPacket and more
+    # Enable/Disable common vanish plugin hook
+    CommonVanishPlugins: true
     # String used to replace the vanished player name in the message
     # Allow to use HEX color in DeathMessagesModern
     VanishedName: "Unknown"

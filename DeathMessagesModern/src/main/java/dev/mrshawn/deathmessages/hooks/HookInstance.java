@@ -38,8 +38,8 @@ public class HookInstance {
     public EcoExtension ecoExtension;
     public boolean ecoEnchantsEnabled = false;
 
-    public SayanVanishExtension sayanVanishExtension;
-    public boolean sayanVanishEnabled = false;
+    // TODO: really needs this (to keep consistency with other enabled)? Or just use config boolean?
+    public boolean commonVanishPluginsEnabled = false;
 
     public boolean disableI18nDisplay = false;
 
@@ -142,10 +142,9 @@ public class HookInstance {
             DeathMessages.LOGGER.info("EcoEnchants Hook Enabled!");
         }
 
-        if (Bukkit.getPluginManager().getPlugin("SayanVanish") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_SAYANVANISH_ENABLED)) {
-            sayanVanishExtension = new SayanVanishExtension();
-            sayanVanishEnabled = true;
-            DeathMessages.LOGGER.info("SayanVanish Hook Enabled!");
+        if (FileStore.CONFIG.getBoolean(Config.HOOKS_VANISH_COMMON_PLUGINS_ENABLED)) {
+            commonVanishPluginsEnabled = true;
+            DeathMessages.LOGGER.info("Common Vanish Plugins Hook Enabled!");
         }
     }
 

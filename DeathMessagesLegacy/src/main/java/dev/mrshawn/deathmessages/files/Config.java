@@ -15,8 +15,9 @@ public enum Config {
     HOOKS_MYTHICMOBS_ENABLED("Hooks.MythicMobs.Enabled", true),
     HOOKS_WORLDGUARD_ENABLED("Hooks.WorldGuard.Enabled", true),
     HOOKS_COMBATLOGX_ENABLED("Hooks.CombatLogX.Enabled", true),
-    HOOKS_SAYANVANISH_ENABLED("Hooks.SayanVanish.Enabled", true),
-    HOOKS_SAYANVANISH_VANISHED_NAME("Hooks.SayanVanish.VanishedName", "Unknown"),
+    HOOKS_VANISH_VANILLA_ENABLED("Hooks.Vanish.Vanilla", true),
+    HOOKS_VANISH_COMMON_PLUGINS_ENABLED("Hooks.Vanish.CommonVanishPlugins", true),
+    HOOKS_VANISH_VANISHED_NAME("Hooks.Vanish.VanishedName", "Unknown"),
 
     HOOKS_DISCORD_ENABLED("Hooks.Discord.Enabled", true),
     HOOKS_DISCORD_CHANNELS_PLAYER_ENABLED("Hooks.Discord.Channels.Player.Enabled", true),

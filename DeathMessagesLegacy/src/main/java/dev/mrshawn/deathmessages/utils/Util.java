@@ -10,7 +10,7 @@ import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.files.Config;
 import dev.mrshawn.deathmessages.files.FileStore;
-import dev.mrshawn.deathmessages.hooks.SayanVanishExtension;
+import dev.mrshawn.deathmessages.hooks.CommonVanishPluginExtension;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -25,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.BoundingBox;
 
@@ -224,16 +225,16 @@ public class Util {
     }
 
     public static String getPlayerName(PlayerManager pm) {
-        if (SayanVanishExtension.isSayanVanished(pm.getPlayer())) {
-            return PlainTextComponentSerializer.plainText().serialize(SayanVanishExtension.getVanishedName());
+        if (isPlayerVanished(pm.getPlayer())) {
+            return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
         }
 
         return pm.getName();
     }
 
     public static String getPlayerName(Player player) {
-        if (SayanVanishExtension.isSayanVanished(player)) {
-            return PlainTextComponentSerializer.plainText().serialize(SayanVanishExtension.getVanishedName());
+        if (isPlayerVanished(player)) {
+            return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
         }
 
         return player.getName();
@@ -242,19 +243,33 @@ public class Util {
     public static String getPlayerDisplayName(PlayerManager pm) {
         final Player player = pm.getPlayer();
 
-        if (SayanVanishExtension.isSayanVanished(player)) {
-            return PlainTextComponentSerializer.plainText().serialize(SayanVanishExtension.getVanishedName());
+        if (isPlayerVanished(player)) {
+            return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
         }
 
         return player.getDisplayName();
     }
 
     public static String getPlayerDisplayName(Player player) {
-        if (SayanVanishExtension.isSayanVanished(player)) {
-            return PlainTextComponentSerializer.plainText().serialize(SayanVanishExtension.getVanishedName());
+        if (isPlayerVanished(player)) {
+            return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
         }
 
         return player.getDisplayName();
+    }
+
+    public static boolean isPlayerVanished(Player player) {
+        if (FileStore.CONFIG.getBoolean(Config.HOOKS_VANISH_VANILLA_ENABLED) && player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            return true;
+        }
+
+        return CommonVanishPluginExtension.isPluginVanished(player);
+    }
+
+    public static Component getVanishedName() {
+        final String name = Settings.getInstance().getConfig().getString(Config.HOOKS_VANISH_VANISHED_NAME.getPath());
+
+        return Util.convertFromLegacy(name != null ? name : "");
     }
 
     /*

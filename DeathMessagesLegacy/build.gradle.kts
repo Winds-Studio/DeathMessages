@@ -29,8 +29,6 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT") // Last JAVA 8 compatibility
     compileOnly(files("libs/LangUtils-1.9.jar"))
-    compileOnly("org.sayandev:sayanvanish-api:1.7.0-SNAPSHOT")
-    compileOnly("org.sayandev:sayanvanish-bukkit:1.7.0-SNAPSHOT")
 
     api("net.kyori:adventure-platform-bukkit:$adventurePlatformVersion")
     api("net.kyori:adventure-api:$adventureVersion")
