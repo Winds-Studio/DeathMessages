@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.commands;
 
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.command.CommandSender;
@@ -24,14 +24,13 @@ public class CommandToggle extends DeathMessagesCommand {
             return;
         }
 
-        PlayerManager getPlayer = PlayerManager.getPlayer(player);
-        if (getPlayer != null) {
-            boolean msg = getPlayer.getMessagesEnabled();
-            if (msg) {
-                getPlayer.setMessagesEnabled(false);
+        PlayerCtx playerCtx = PlayerCtx.of(player.getUniqueId());
+        if (playerCtx != null) {
+            if (playerCtx.isMessageEnabled()) {
+                playerCtx.setMessageEnabled(false);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-Off"));
             } else {
-                getPlayer.setMessagesEnabled(true);
+                playerCtx.setMessageEnabled(true);
                 player.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Toggle.Toggle-On"));
             }
         }

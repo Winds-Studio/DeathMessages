@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.listeners.mythicmobs;
 
-import dev.mrshawn.deathmessages.api.EntityManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.enums.MobType;
@@ -32,15 +32,15 @@ public class MobDeath implements Listener {
 
         for (String customMob : mobs) {
             if (e.getMob().getType().getInternalName().equals(customMob)) {
-                EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-                if (getEntity != null) {
-                    PlayerManager damager = getEntity.getLastPlayerDamager();
-                    TextComponent[] mythicDeath = Assets.entityDeathMessage(getEntity, MobType.MYTHIC_MOB);
+                EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
+                if (entityCtx != null) {
+                    PlayerCtx damagerCtx = entityCtx.getLastPlayerDamager();
+                    TextComponent[] mythicDeath = Assets.entityDeathMessage(entityCtx, MobType.MYTHIC_MOB);
                     TextComponent oldMythicDeath = mythicDeath[0].append(mythicDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                     if (!ComponentUtil.isMessageEmpty(mythicDeath)) {
                         BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
-                                damager,
+                                damagerCtx,
                                 e.getEntity(),
                                 MessageType.ENTITY,
                                 oldMythicDeath,

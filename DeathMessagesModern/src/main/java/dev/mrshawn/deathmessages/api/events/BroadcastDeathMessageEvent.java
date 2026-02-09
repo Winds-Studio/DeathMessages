@@ -18,7 +18,8 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
     private final @Nullable LivingEntity livingEntity;
     private final MessageType messageType;
     private final TextComponent textComponent;
-    private final TextComponent[] textComponents; // 0: Prefix, 1: Message body
+    // 0: Prefix, 1: Message body
+    private final TextComponent[] textComponents;
     private final boolean isGangDeath;
     private final List<World> broadcastedWorlds;
     private boolean isCancelled;

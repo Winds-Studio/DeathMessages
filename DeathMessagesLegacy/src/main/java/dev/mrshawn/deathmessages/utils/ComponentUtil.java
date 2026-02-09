@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
@@ -95,11 +95,11 @@ public class ComponentUtil {
 
     /*
         Process and build hover events from raw events list
-        Only for playerDeath: pm, e, Only for EntityDeath: p, e, hasOwner
+        Only for playerDeath: playerCtx, e, Only for EntityDeath: p, e, hasOwner
      */
     public static Component buildHoverEvents(
             String rawEvent,
-            PlayerManager pm,
+            PlayerCtx playerCtx,
             Player p,
             Entity e,
             boolean hasOwner,
@@ -122,7 +122,7 @@ public class ComponentUtil {
         if (rawHover.length == 4) {
             ClickEvent click = null;
             final String content = isPlayerDeath
-                    ? Assets.playerDeathPlaceholders(rawHover[3], pm, e)
+                    ? Assets.playerDeathPlaceholders(rawHover[3], playerCtx, e)
                     : Assets.entityDeathPlaceholders(rawHover[3], p, e, hasOwner);
 
             switch (rawHover[2]) {

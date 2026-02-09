@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages;
 
 import com.tcoded.folialib.FoliaLib;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.commands.CommandManager;
 import dev.mrshawn.deathmessages.commands.TabCompleter;
 import dev.mrshawn.deathmessages.commands.alias.CommandDeathMessagesToggle;
@@ -16,7 +16,7 @@ import dev.mrshawn.deathmessages.listeners.EntityDamageByEntity;
 import dev.mrshawn.deathmessages.listeners.EntityDeath;
 import dev.mrshawn.deathmessages.listeners.OnCommand;
 import dev.mrshawn.deathmessages.listeners.OnInteract;
-import dev.mrshawn.deathmessages.listeners.OnJoin;
+import dev.mrshawn.deathmessages.listeners.OnConnection;
 import dev.mrshawn.deathmessages.listeners.OnMove;
 import dev.mrshawn.deathmessages.listeners.OnQuit;
 import dev.mrshawn.deathmessages.listeners.PlayerDeath;
@@ -36,6 +36,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -105,7 +106,7 @@ public class DeathMessages extends JavaPlugin {
                 new EntityDeath(),
                 new OnCommand(),
                 new OnInteract(),
-                new OnJoin(),
+                new OnConnection(),
                 new OnMove(),
                 new OnQuit(),
                 new PlayerDeath()
@@ -125,7 +126,9 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initOnlinePlayers() {
-        getServer().getOnlinePlayers().forEach(PlayerManager::new);
+        for (Player player : getServer().getOnlinePlayers()) {
+            PlayerCtx.create(new PlayerCtx(player));
+        }
     }
 
     private void checkGameRules() {

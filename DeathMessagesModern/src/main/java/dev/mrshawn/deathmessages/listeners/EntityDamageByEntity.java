@@ -1,13 +1,12 @@
 package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.EnderCrystal;
@@ -33,52 +32,52 @@ public class EntityDamageByEntity implements Listener {
         // Get the damager of ender crystal
         Util.loadCrystalDamager(e.getEntity(), e.getDamager());
 
-        if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+        if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            PlayerManager getPlayer = PlayerManager.getPlayer(p);
-            if (getPlayer != null) {
+            PlayerCtx playerCtx = PlayerCtx.of(p.getUniqueId());
+            if (playerCtx != null) {
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
                     Entity lastCrystalDamager = Util.crystalDeathData.get(e.getDamager().getUniqueId());
 
                     if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
-                        getPlayer.setLastEntityDamager(lastCrystalDamager);
-                        getPlayer.setLastExplosiveEntity(e.getDamager());
+                        playerCtx.setLastEntityDamager(lastCrystalDamager);
+                        playerCtx.setLastExplosiveEntity(e.getDamager());
                     } else if (e.getDamager() instanceof TNTPrimed) { // For <= 1.20.2, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
                         TNTPrimed tnt = (TNTPrimed) e.getDamager();
                         if (tnt.getSource() instanceof LivingEntity) {
-                            getPlayer.setLastEntityDamager(tnt.getSource());
+                            playerCtx.setLastEntityDamager(tnt.getSource());
                         }
-                        getPlayer.setLastExplosiveEntity(e.getDamager());
+                        playerCtx.setLastExplosiveEntity(e.getDamager());
                     } else if (e.getDamager() instanceof Firework) { // Firework extends Entity under <= 1.15
                         Firework firework = (Firework) e.getDamager();
                         try {
                             if (firework.getShooter() instanceof LivingEntity) {
-                                getPlayer.setLastEntityDamager((LivingEntity) firework.getShooter());
+                                playerCtx.setLastEntityDamager((LivingEntity) firework.getShooter());
                             }
-                            getPlayer.setLastExplosiveEntity(e.getDamager());
+                            playerCtx.setLastExplosiveEntity(e.getDamager());
                         } catch (NoSuchMethodError e2) {
                             // McMMO ability
                             DeathMessages.LOGGER.error(e2);
                         }
                     } else {
-                        getPlayer.setLastEntityDamager(e.getDamager());
-                        getPlayer.setLastExplosiveEntity(e.getDamager());
+                        playerCtx.setLastEntityDamager(e.getDamager());
+                        playerCtx.setLastExplosiveEntity(e.getDamager());
                     }
                 } else if (e.getDamager() instanceof Projectile) {
                     Projectile projectile = (Projectile) e.getDamager();
                     if (projectile.getShooter() instanceof LivingEntity) {
-                        getPlayer.setLastEntityDamager((LivingEntity) projectile.getShooter());
+                        playerCtx.setLastEntityDamager((LivingEntity) projectile.getShooter());
                     }
-                    getPlayer.setLastProjectileEntity(projectile);
+                    playerCtx.setLastProjectileEntity(projectile);
                 } else if (e.getDamager() instanceof FallingBlock) {
-                    getPlayer.setLastEntityDamager(e.getDamager());
+                    playerCtx.setLastEntityDamager(e.getDamager());
                 } else if (e.getDamager().getType().isAlive()) {
-                    getPlayer.setLastEntityDamager(e.getDamager());
+                    playerCtx.setLastEntityDamager(e.getDamager());
                 } else if (e.getDamager() instanceof EvokerFangs) {
                     EvokerFangs evokerFangs = (EvokerFangs) e.getDamager();
-                    getPlayer.setLastEntityDamager(evokerFangs.getOwner());
+                    playerCtx.setLastEntityDamager(evokerFangs.getOwner());
                 } else if (e.getDamager() instanceof AreaEffectCloud) {
-                    getPlayer.setLastEntityDamager(e.getDamager());
+                    playerCtx.setLastEntityDamager(e.getDamager());
                 }
             }
         } else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
@@ -101,62 +100,62 @@ public class EntityDamageByEntity implements Listener {
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))
                         || (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
-                    EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
-                    if (getEntity != null) {
+                    EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
+                    if (entityCtx != null) {
                         if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
                             Entity lastCrystalDamager = Util.crystalDeathData.get(e.getDamager().getUniqueId());
 
                             if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
                                 if (lastCrystalDamager instanceof Player) {
-                                    PlayerManager getPlayer = PlayerManager.getPlayer((Player) lastCrystalDamager);
-                                    if (getPlayer != null) {
-                                        getEntity.setLastPlayerDamager(getPlayer);
+                                    PlayerCtx playerCtx = PlayerCtx.of(lastCrystalDamager.getUniqueId());
+                                    if (playerCtx != null) {
+                                        entityCtx.setLastPlayerDamager(playerCtx);
                                     }
-                                    getEntity.setLastExplosiveEntity(e.getDamager());
+                                    entityCtx.setLastExplosiveEntity(e.getDamager());
                                 }
                             } else if (e.getDamager() instanceof TNTPrimed) {
                                 TNTPrimed tnt = (TNTPrimed) e.getDamager();
                                 if (tnt.getSource() instanceof Player) {
-                                    PlayerManager getPlayer = PlayerManager.getPlayer((Player) tnt.getSource());
-                                    if (getPlayer != null) {
-                                        getEntity.setLastPlayerDamager(getPlayer);
+                                    PlayerCtx playerCtx = PlayerCtx.of(tnt.getSource().getUniqueId());
+                                    if (playerCtx != null) {
+                                        entityCtx.setLastPlayerDamager(playerCtx);
                                     }
                                 }
-                                getEntity.setLastExplosiveEntity(e.getDamager());
+                                entityCtx.setLastExplosiveEntity(e.getDamager());
                             } else if (e.getDamager() instanceof Firework) {
                                 Firework firework = (Firework) e.getDamager();
                                 try {
                                     if (firework.getShooter() instanceof Player) {
-                                        PlayerManager getPlayer = PlayerManager.getPlayer((Player) firework.getShooter());
-                                        if (getPlayer != null) {
-                                            getEntity.setLastPlayerDamager(getPlayer);
+                                        PlayerCtx playerCtx = PlayerCtx.of(((Player) firework.getShooter()).getUniqueId());
+                                        if (playerCtx != null) {
+                                            entityCtx.setLastPlayerDamager(playerCtx);
                                         }
                                     }
-                                    getEntity.setLastExplosiveEntity(e.getDamager());
+                                    entityCtx.setLastExplosiveEntity(e.getDamager());
                                 } catch (NoSuchMethodError e3) {
                                     // McMMO ability
                                     DeathMessages.LOGGER.error(e3);
                                 }
                             } else {
-                                PlayerManager getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
-                                if (getPlayer != null) {
-                                    getEntity.setLastPlayerDamager(getPlayer);
+                                PlayerCtx playerCtx = PlayerCtx.of(e.getDamager().getUniqueId());
+                                if (playerCtx != null) {
+                                    entityCtx.setLastPlayerDamager(playerCtx);
                                 }
-                                getEntity.setLastExplosiveEntity(e.getDamager());
+                                entityCtx.setLastExplosiveEntity(e.getDamager());
                             }
                         } else if (e.getDamager() instanceof Projectile) {
                             Projectile projectile = (Projectile) e.getDamager();
                             if (projectile.getShooter() instanceof Player) {
-                                PlayerManager getPlayer = PlayerManager.getPlayer((Player) projectile.getShooter());
-                                if (getPlayer != null) {
-                                    getEntity.setLastPlayerDamager(getPlayer);
+                                PlayerCtx playerCtx = PlayerCtx.of(((Player) projectile.getShooter()).getUniqueId());
+                                if (playerCtx != null) {
+                                    entityCtx.setLastPlayerDamager(playerCtx);
                                 }
                             }
-                            getEntity.setLastProjectileEntity(projectile);
+                            entityCtx.setLastProjectileEntity(projectile);
                         } else if (e.getDamager() instanceof Player) {
-                            PlayerManager getPlayer = PlayerManager.getPlayer((Player) e.getDamager());
-                            if (getPlayer != null) {
-                                getEntity.setLastPlayerDamager(getPlayer);
+                            PlayerCtx playerCtx = PlayerCtx.of(e.getDamager().getUniqueId());
+                            if (playerCtx != null) {
+                                entityCtx.setLastPlayerDamager(playerCtx);
                             }
                         }
                     } else {
@@ -166,7 +165,7 @@ public class EntityDamageByEntity implements Listener {
                             mobType = MobType.MYTHIC_MOB;
                         }
 
-                        new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
+                        EntityCtx.create(new EntityCtx(e.getEntity(), mobType));
                     }
                 }
             }

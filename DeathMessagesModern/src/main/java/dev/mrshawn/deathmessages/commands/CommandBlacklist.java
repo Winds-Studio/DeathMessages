@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.commands;
 
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.enums.Permission;
@@ -9,6 +9,7 @@ import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -44,14 +45,14 @@ public class CommandBlacklist extends DeathMessagesCommand {
         // Only can be used on online players
         if (!Settings.getInstance().getConfig().getBoolean(Config.SAVED_USER_DATA.getPath())) {
             if (target != null && target.isOnline()) {
-                PlayerManager getPlayer = PlayerManager.getPlayer(target);
-                if (getPlayer != null) {
-                    if (getPlayer.isBlacklisted()) {
-                        getPlayer.setBlacklisted(false);
+                PlayerCtx playerCtx = PlayerCtx.of(target.getUniqueId());
+                if (playerCtx != null) {
+                    if (playerCtx.isBlacklisted()) {
+                        playerCtx.setBlacklisted(false);
                         sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
                                 .replaceText(player));
                     } else {
-                        getPlayer.setBlacklisted(true);
+                        playerCtx.setBlacklisted(true);
                         sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")
                                 .replaceText(player));
                     }
@@ -63,29 +64,31 @@ public class CommandBlacklist extends DeathMessagesCommand {
             return;
         }
 
+        FileConfiguration userData = UserData.getInstance().getConfig();
+
         // Saved-User-Data enabled
         // Can be used on all players stored in userData
-        for (Map.Entry<String, Object> entry : UserData.getInstance().getConfig().getValues(false).entrySet()) {
-            String username = UserData.getInstance().getConfig().getString(entry.getKey() + ".username");
+        for (Map.Entry<String, Object> entry : userData.getValues(false).entrySet()) {
+            String username = userData.getString(entry.getKey() + ".username");
 
             if (username.equalsIgnoreCase(args[0])) {
-                PlayerManager getPlayer = PlayerManager.getPlayer(UUID.fromString(entry.getKey()));
-                boolean blacklisted = UserData.getInstance().getConfig().getBoolean(entry.getKey() + ".is-blacklisted");
+                PlayerCtx playerCtx = PlayerCtx.of(UUID.fromString(entry.getKey()));
+                boolean blacklisted = userData.getBoolean(entry.getKey() + ".is-blacklisted");
 
                 if (blacklisted) {
-                    if (getPlayer != null) {
-                        getPlayer.setBlacklisted(false);
+                    if (playerCtx != null) {
+                        playerCtx.setBlacklisted(false);
                     } else {
-                        UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", false);
+                        userData.set(entry.getKey() + ".is-blacklisted", false);
                         UserData.getInstance().save();
                     }
                     sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Remove")
                             .replaceText(player));
                 } else {
-                    if (getPlayer != null) {
-                        getPlayer.setBlacklisted(true);
+                    if (playerCtx != null) {
+                        playerCtx.setBlacklisted(true);
                     } else {
-                        UserData.getInstance().getConfig().set(entry.getKey() + ".is-blacklisted", true);
+                        userData.set(entry.getKey() + ".is-blacklisted", true);
                         UserData.getInstance().save();
                     }
                     sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Blacklist-Add")

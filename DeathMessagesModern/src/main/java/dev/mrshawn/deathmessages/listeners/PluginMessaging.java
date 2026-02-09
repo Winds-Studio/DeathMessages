@@ -3,7 +3,7 @@ package dev.mrshawn.deathmessages.listeners;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
@@ -55,9 +55,9 @@ public class PluginMessaging implements PluginMessageListener {
                 TextComponent message = Util.convertFromLegacy(rawMsg);
 
                 for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
-                    PlayerManager getPlayer = PlayerManager.getPlayer(onlinePlayer);
-                    if (getPlayer != null) {
-                        if (getPlayer.getMessagesEnabled()) {
+                    PlayerCtx playerCtx = PlayerCtx.of(onlinePlayer.getUniqueId());
+                    if (playerCtx != null) {
+                        if (playerCtx.isMessageEnabled()) {
                             onlinePlayer.sendMessage(Component.text()
                                     .append(prefix)
                                     .append(message)
