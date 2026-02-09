@@ -2,9 +2,9 @@ package dev.mrshawn.deathmessages.api;
 
 import com.tcoded.folialib.wrapper.task.WrappedTask;
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
+import dev.mrshawn.deathmessages.enums.MobType;
 import org.jspecify.annotations.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

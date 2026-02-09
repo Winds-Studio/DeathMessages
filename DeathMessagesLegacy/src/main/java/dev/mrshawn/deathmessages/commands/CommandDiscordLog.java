@@ -2,9 +2,9 @@ package dev.mrshawn.deathmessages.commands;
 
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
-import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
+import dev.mrshawn.deathmessages.enums.Permission;
 import dev.mrshawn.deathmessages.utils.ComponentUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import github.scarsz.discordsrv.DiscordSRV;

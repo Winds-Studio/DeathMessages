@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.hooks;
 
-import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
+import dev.mrshawn.deathmessages.enums.MessageType;
 
 import java.util.List;
 
