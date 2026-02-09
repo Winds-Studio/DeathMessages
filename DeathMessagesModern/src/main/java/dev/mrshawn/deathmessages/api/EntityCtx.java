@@ -58,11 +58,11 @@ public class EntityCtx {
         return damageCause;
     }
 
-    public void setLastPlayerDamager(PlayerCtx playerCtx) {
+    public void setLastPlayerDamager(PlayerCtx damagerCtx) {
         setLastExplosiveEntity(null);
         setLastProjectileEntity(null);
 
-        this.lastPlayerDamager = playerCtx;
+        this.lastPlayerDamager = damagerCtx;
 
         if (lastPlayerTask != null) {
             lastPlayerTask.cancel();

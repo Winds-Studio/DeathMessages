@@ -189,11 +189,11 @@ public class Assets {
     }
 
     public static TextComponent[] entityDeathMessage(EntityCtx em, MobType mobType) {
-        PlayerCtx pm = em.getLastPlayerDamager();
+        PlayerCtx damagerCtx = em.getLastPlayerDamager();
 
-        if (pm == null) return ComponentUtil.empty();
+        if (damagerCtx == null) return ComponentUtil.empty();
 
-        Player p = pm.getPlayer();
+        Player p = damagerCtx.getPlayer();
         TextComponent[] components = ComponentUtil.empty();
 
         if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
@@ -242,7 +242,7 @@ public class Assets {
             }
         }
 
-        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.getLastDamageCause());
+        boolean hasWeapon = MaterialUtil.hasWeapon(p, damagerCtx.getLastDamageCause());
 
         if (hasWeapon) {
             if (em.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {

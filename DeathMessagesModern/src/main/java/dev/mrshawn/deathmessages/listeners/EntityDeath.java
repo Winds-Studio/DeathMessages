@@ -110,8 +110,8 @@ public class EntityDeath implements Listener {
             }
         } else {
             // Entity killed by Player
-            EntityCtx getEntity = EntityCtx.of(e.getEntity().getUniqueId());
-            if (getEntity != null) {
+            EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
+            if (entityCtx != null) {
                 MobType mobType = MobType.VANILLA;
                 if (DeathMessages.getHooks().mythicmobsEnabled) {
                     if (DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
@@ -119,15 +119,15 @@ public class EntityDeath implements Listener {
                     }
                 }
 
-                PlayerCtx damager = getEntity.getLastPlayerDamager();
-                if (damager == null) return; // Entity killed by Entity should not include in DM
+                PlayerCtx damagerCtx = entityCtx.getLastPlayerDamager();
+                if (damagerCtx == null) return; // Entity killed by Entity should not include in DM
 
-                TextComponent[] entityDeath = Assets.entityDeathMessage(getEntity, mobType);
+                TextComponent[] entityDeath = Assets.entityDeathMessage(entityCtx, mobType);
                 TextComponent oldEntityDeath = entityDeath[0].append(entityDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                 if (!ComponentUtil.isMessageEmpty(entityDeath)) {
                     BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
-                            damager,
+                            damagerCtx,
                             e.getEntity(),
                             MessageType.ENTITY,
                             oldEntityDeath,

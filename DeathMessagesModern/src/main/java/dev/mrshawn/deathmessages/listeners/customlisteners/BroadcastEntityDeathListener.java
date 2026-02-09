@@ -114,9 +114,9 @@ public class BroadcastEntityDeathListener implements Listener {
         }
 
         PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(message));
-        EntityCtx getEntity = EntityCtx.of(entity.getUniqueId());
-        if (getEntity != null) {
-            EntityCtx.remove(getEntity.getUUID());
+        EntityCtx entityCtx = EntityCtx.of(entity.getUniqueId());
+        if (entityCtx != null) {
+            EntityCtx.remove(entityCtx.getUUID());
         }
     }
 }

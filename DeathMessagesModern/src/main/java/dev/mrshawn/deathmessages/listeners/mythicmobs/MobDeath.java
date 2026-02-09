@@ -32,15 +32,15 @@ public class MobDeath implements Listener {
 
         for (String customMob : mobs) {
             if (e.getMob().getType().getInternalName().equals(customMob)) {
-                EntityCtx getEntity = EntityCtx.of(e.getEntity().getUniqueId());
-                if (getEntity != null) {
-                    PlayerCtx damager = getEntity.getLastPlayerDamager();
-                    TextComponent[] mythicDeath = Assets.entityDeathMessage(getEntity, MobType.MYTHIC_MOB);
+                EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
+                if (entityCtx != null) {
+                    PlayerCtx damagerCtx = entityCtx.getLastPlayerDamager();
+                    TextComponent[] mythicDeath = Assets.entityDeathMessage(entityCtx, MobType.MYTHIC_MOB);
                     TextComponent oldMythicDeath = mythicDeath[0].append(mythicDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                     if (!ComponentUtil.isMessageEmpty(mythicDeath)) {
                         BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
-                                damager,
+                                damagerCtx,
                                 e.getEntity(),
                                 MessageType.ENTITY,
                                 oldMythicDeath,
