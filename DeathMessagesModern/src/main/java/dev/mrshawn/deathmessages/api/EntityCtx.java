@@ -15,36 +15,35 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-// Class designed to keep track of damage and data to mobs that were damaged by players
-
-public class EntityManager {
+/**
+ * A class for storing entity's death cotext information, for tracking entity that is killed players
+ */
+public class EntityCtx {
 
     private final Entity entity;
-    private final UUID entityUUID;
+    private final UUID uuid;
     private final MobType mobType;
     private DamageCause damageCause;
-    private @Nullable PlayerManager lastPlayerDamager;
+    private @Nullable PlayerCtx lastPlayerDamager;
     private Entity lastExplosiveEntity;
     private Projectile lastPlayerProjectile;
     private Location lastLocation;
-
     private @Nullable WrappedTask lastPlayerTask;
 
-    private static final Map<UUID, EntityManager> entities = new ConcurrentHashMap<>();
+    private static final Map<UUID, EntityCtx> ENTITY_CONTEXTS = new ConcurrentHashMap<>();
 
-    public EntityManager(Entity entity, UUID entityUUID, MobType mobType) {
+    public EntityCtx(Entity entity, MobType mobType) {
         this.entity = entity;
-        this.entityUUID = entityUUID;
+        this.uuid = entity.getUniqueId();
         this.mobType = mobType;
-        entities.put(entityUUID, this);
     }
 
     public Entity getEntity() {
         return entity;
     }
 
-    public UUID getEntityUUID() {
-        return entityUUID;
+    public UUID getUUID() {
+        return uuid;
     }
 
     public MobType getMobType() {
@@ -55,29 +54,29 @@ public class EntityManager {
         this.damageCause = damageCause;
     }
 
-    public DamageCause getLastDamage() {
+    public DamageCause getLastDamageCause() {
         return damageCause;
     }
 
-    public void setLastPlayerDamager(PlayerManager pm) {
+    public void setLastPlayerDamager(PlayerCtx playerCtx) {
         setLastExplosiveEntity(null);
         setLastProjectileEntity(null);
 
-        this.lastPlayerDamager = pm;
+        this.lastPlayerDamager = playerCtx;
 
         if (lastPlayerTask != null) {
             lastPlayerTask.cancel();
         }
-        lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(this::destroy, FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+        lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> EntityCtx.remove(this.getUUID()), FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
         this.damageCause = DamageCause.CUSTOM;
     }
 
-    public @Nullable PlayerManager getLastPlayerDamager() {
+    public @Nullable PlayerCtx getLastPlayerDamager() {
         return lastPlayerDamager;
     }
 
-    public void setLastExplosiveEntity(Entity e) {
-        this.lastExplosiveEntity = e;
+    public void setLastExplosiveEntity(Entity entity) {
+        this.lastExplosiveEntity = entity;
     }
 
     public Entity getLastExplosiveEntity() {
@@ -100,11 +99,16 @@ public class EntityManager {
         return lastLocation;
     }
 
-    public static @Nullable EntityManager getEntity(UUID uuid) {
-        return entities.get(uuid);
+    public static @Nullable EntityCtx of(UUID uuid) {
+        return ENTITY_CONTEXTS.get(uuid);
     }
 
-    public void destroy() {
-        entities.remove(this.entityUUID);
+    public static void create(EntityCtx entityCtx) {
+        UUID uuid = entityCtx.getUUID();
+        ENTITY_CONTEXTS.put(uuid, entityCtx);
+    }
+
+    public static void remove(UUID uuid) {
+        ENTITY_CONTEXTS.remove(uuid);
     }
 }

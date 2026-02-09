@@ -2,9 +2,9 @@ package dev.mrshawn.deathmessages.utils;
 
 import com.cryptomorin.xseries.XMaterial;
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.PlayerDeathMessages;
@@ -57,7 +57,7 @@ public class Assets {
     // Dreeam TODO - to figure out why the value defined in private static field will not change with the change of the config value
     //private static final CommentedConfiguration config = Settings.getInstance().getConfig();
 
-    public static TextComponent[] playerNatureDeathMessage(PlayerManager pm, Player player) {
+    public static TextComponent[] playerNatureDeathMessage(PlayerCtx pm, Player player) {
         TextComponent[] components = ComponentUtil.empty();
 
         if (Settings.getInstance().getConfig().getBoolean(Config.ADD_PREFIX_TO_ALL_MESSAGES.getPath())) {
@@ -72,9 +72,9 @@ public class Assets {
             components[1] = Assets.getNaturalDeath(pm, "TNT");
         } else if (pm.getLastExplosiveEntity() instanceof Firework) {
             components[1] = Assets.getNaturalDeath(pm, "Firework");
-        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
+        } else if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.FALL)) {
             components[1] = Assets.getNaturalDeath(pm, "Climbable");
-        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+        } else if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
             ExplosionManager explosion = ExplosionManager.getManagerIfEffected(player.getUniqueId());
             if (explosion != null) {
                 if (explosion.getMaterial().name().contains("BED")) {
@@ -85,7 +85,7 @@ public class Assets {
                 }
                 // Dreeam TODO: Check weather needs to handle unknow explosion to prevent potential empty death message
             }
-        } else if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+        } else if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleProjectile(pm.getLastProjectileEntity()));
         } else if (Util.isOlderAndEqual(999, 999) && pm.getLastEntityDamager() instanceof AreaEffectCloud) { // Fix MC-84595 - Killed by Dragon's Breath
             AreaEffectCloud cloud = (AreaEffectCloud) pm.getLastEntityDamager();
@@ -97,15 +97,15 @@ public class Assets {
                 );
             }
 
-            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
+            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamageCause()));
         } else {
-            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamage()));
+            components[1] = Assets.getNaturalDeath(pm, Assets.getSimpleCause(pm.getLastDamageCause()));
         }
 
         return components;
     }
 
-    public static TextComponent[] playerDeathMessage(PlayerManager pm, boolean gang) {
+    public static TextComponent[] playerDeathMessage(PlayerCtx pm, boolean gang) {
         LivingEntity mob = (LivingEntity) pm.getLastEntityDamager();
         TextComponent[] components = ComponentUtil.empty();
 
@@ -114,7 +114,7 @@ public class Assets {
             components[0] = prefix;
         }
 
-        if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+        if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             switch (pm.getLastExplosiveEntity()) {
                 case EnderCrystal ignored -> {
                     components[1] = get(gang, pm, mob, "End-Crystal");
@@ -135,35 +135,35 @@ public class Assets {
             }
         }
 
-        if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+        if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
             ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(pm.getUUID());
             if (explosionManager != null) {
-                PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-                if (pyro != null) {
+                PlayerCtx pyroCtx = PlayerCtx.of(explosionManager.getPyro());
+                if (pyroCtx != null) {
                     // Bed kill
                     if (explosionManager.getMaterial().name().contains("BED")) {
-                        components[1] = get(gang, pm, pyro.getPlayer(), "Bed");
+                        components[1] = get(gang, pm, pyroCtx.getPlayer(), "Bed");
                         return components;
                     }
 
                     // Respawn Anchor kill
                     if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                        components[1] = get(gang, pm, pyro.getPlayer(), "Respawn-Anchor");
+                        components[1] = get(gang, pm, pyroCtx.getPlayer(), "Respawn-Anchor");
                         return components;
                     }
                 }
             }
         }
 
-        boolean hasWeapon = MaterialUtil.hasWeapon(mob, pm.getLastDamage());
+        boolean hasWeapon = MaterialUtil.hasWeapon(mob, pm.getLastDamageCause());
 
         if (hasWeapon) {
-            if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+            if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                 components[1] = getWeapon(gang, pm, mob);
                 return components;
             }
 
-            if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && pm.getLastProjectileEntity() instanceof Arrow) {
+            if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE) && pm.getLastProjectileEntity() instanceof Arrow) {
                 components[1] = getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
                 return components;
             }
@@ -173,12 +173,12 @@ public class Assets {
         } else {
             // Dreeam TODO: idk why there is for loop used to if (pm.getLastDamage().equals(dc)), no need, waste performance..
             for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
-                if (pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                if (pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
                     components[1] = getProjectile(gang, pm, mob, getSimpleProjectile(pm.getLastProjectileEntity()));
                     return components;
                 }
 
-                if (pm.getLastDamage().equals(dc)) {
+                if (pm.getLastDamageCause().equals(dc)) {
                     components[1] = get(gang, pm, mob, getSimpleCause(dc));
                     return components;
                 }
@@ -188,8 +188,8 @@ public class Assets {
         }
     }
 
-    public static TextComponent[] entityDeathMessage(EntityManager em, MobType mobType) {
-        PlayerManager pm = em.getLastPlayerDamager();
+    public static TextComponent[] entityDeathMessage(EntityCtx em, MobType mobType) {
+        PlayerCtx pm = em.getLastPlayerDamager();
 
         if (pm == null) return ComponentUtil.empty();
 
@@ -201,7 +201,7 @@ public class Assets {
             components[0] = prefix;
         }
 
-        if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+        if (em.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             switch (em.getLastExplosiveEntity()) {
                 case EnderCrystal ignored -> {
                     components[1] = getEntityDeath(p, em.getEntity(), "End-Crystal", mobType);
@@ -222,35 +222,35 @@ public class Assets {
             }
         }
 
-        if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-            ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(em.getEntityUUID());
+        if (em.getLastDamageCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+            ExplosionManager explosionManager = ExplosionManager.getManagerIfEffected(em.getUUID());
             if (explosionManager != null) {
-                PlayerManager pyro = PlayerManager.getPlayer(explosionManager.getPyro());
-                if (pyro != null) {
+                PlayerCtx pyroCtx = PlayerCtx.of(explosionManager.getPyro());
+                if (pyroCtx != null) {
                     // Bed kill
                     if (explosionManager.getMaterial().name().contains("BED")) {
-                        components[1] = getEntityDeath(pyro.getPlayer(), em.getEntity(), "Bed", mobType);
+                        components[1] = getEntityDeath(pyroCtx.getPlayer(), em.getEntity(), "Bed", mobType);
                         return components;
                     }
 
                     // Respawn Anchor kill
                     if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
-                        components[1] = getEntityDeath(pyro.getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
+                        components[1] = getEntityDeath(pyroCtx.getPlayer(), em.getEntity(), "Respawn-Anchor", mobType);
                         return components;
                     }
                 }
             }
         }
 
-        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.getLastDamage());
+        boolean hasWeapon = MaterialUtil.hasWeapon(p, pm.getLastDamageCause());
 
         if (hasWeapon) {
-            if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+            if (em.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                 components[1] = getEntityDeathWeapon(p, em.getEntity(), mobType);
                 return components;
             }
 
-            if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE) && em.getLastProjectileEntity() instanceof Arrow) {
+            if (em.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE) && em.getLastProjectileEntity() instanceof Arrow) {
                 components[1] = getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
                 return components;
             }
@@ -259,12 +259,12 @@ public class Assets {
             return components;
         } else {
             for (EntityDamageEvent.DamageCause dc : EntityDamageEvent.DamageCause.values()) {
-                if (em.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                if (em.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
                     components[1] = getEntityDeathProjectile(p, em, getSimpleProjectile(em.getLastProjectileEntity()), mobType);
                     return components;
                 }
 
-                if (em.getLastDamage().equals(dc)) {
+                if (em.getLastDamageCause().equals(dc)) {
                     components[1] = getEntityDeath(p, em.getEntity(), getSimpleCause(dc), mobType);
                     return components;
                 }
@@ -274,7 +274,7 @@ public class Assets {
         }
     }
 
-    public static TextComponent getNaturalDeath(PlayerManager pm, String damageCause) {
+    public static TextComponent getNaturalDeath(PlayerCtx pm, String damageCause) {
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList("Natural-Cause." + damageCause), pm.getPlayer(), pm.getPlayer());
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -304,7 +304,7 @@ public class Assets {
                 pm.setLastEntityDamager(null);
                 return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.SUFFOCATION));
             }
-        } else if (msg.contains("%climbable%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.FALL)) {
+        } else if (msg.contains("%climbable%") && pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.FALL)) {
             try {
                 String material = pm.getLastClimbing().toString().toLowerCase();
                 String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
@@ -314,7 +314,7 @@ public class Assets {
                 pm.setLastClimbing(null);
                 return getNaturalDeath(pm, getSimpleCause(EntityDamageEvent.DamageCause.FALL));
             }
-        } else if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+        } else if (msg.contains("%weapon%") && pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             ItemStack i = pm.getPlayer().getEquipment().getItemInMainHand();
 
             if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
@@ -364,7 +364,7 @@ public class Assets {
         return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, null);
     }
 
-    public static TextComponent getWeapon(boolean gang, PlayerManager pm, LivingEntity mob) {
+    public static TextComponent getWeapon(boolean gang, PlayerCtx pm, LivingEntity mob) {
         final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
         String entityName = EntityUtil.getConfigNodeByEntity(mob);
         final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
@@ -511,7 +511,7 @@ public class Assets {
         return (TextComponent) entityDeathPlaceholders(baseWithEvents, p, e, hasOwner);
     }
 
-    public static TextComponent get(boolean gang, PlayerManager pm, LivingEntity mob, String damageCause) {
+    public static TextComponent get(boolean gang, PlayerCtx pm, LivingEntity mob, String damageCause) {
         final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
         String entityName = EntityUtil.getConfigNodeByEntity(mob);
         final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
@@ -567,7 +567,7 @@ public class Assets {
         return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, mob);
     }
 
-    public static TextComponent getProjectile(boolean gang, PlayerManager pm, LivingEntity mob, String projectileDamage) {
+    public static TextComponent getProjectile(boolean gang, PlayerCtx pm, LivingEntity mob, String projectileDamage) {
         final boolean basicMode = getPlayerDeathMessages().getBoolean("Basic-Mode.Enabled");
         String entityName = EntityUtil.getConfigNodeByEntity(mob);
         final String mode = basicMode ? DeathModes.BASIC_MODE.getValue() : DeathModes.MOBS.getValue()
@@ -603,7 +603,7 @@ public class Assets {
         List<String> rawEvents = new ArrayList<>();
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
-        if (msg.contains("%weapon%") && pm.getLastDamage().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+        if (msg.contains("%weapon%") && pm.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             Component weaponHover;
             ItemStack i = mob.getEquipment().getItemInMainHand();
 
@@ -658,14 +658,14 @@ public class Assets {
         return (TextComponent) playerDeathPlaceholders(baseWithEvents, pm, mob);
     }
 
-    public static TextComponent getEntityDeathProjectile(Player p, EntityManager em, String projectileDamage, MobType mobType) {
+    public static TextComponent getEntityDeathProjectile(Player p, EntityCtx em, String projectileDamage, MobType mobType) {
         String entityName = EntityUtil.getConfigNodeByEntity(em.getEntity());
         boolean hasOwner = EntityUtil.hasOwner(em.getEntity());
         List<String> msgs = sortList(getEntityDeathMessages().getStringList("Entities." + entityName + "." + projectileDamage), p, em.getEntity());
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String mmMobType = null;
-            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(em.getEntityUUID())) {
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(em.getUUID())) {
                 mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(em.getEntity()).getMobType();
             }
 
@@ -930,7 +930,7 @@ public class Assets {
         return msg;
     }
 
-    public static Component playerDeathPlaceholders(Component msg, PlayerManager pm, Entity mob) {
+    public static Component playerDeathPlaceholders(Component msg, PlayerCtx pm, Entity mob) {
         final boolean hasBiome = msg.contains(Component.text("%biome%"));
         final boolean hasDistance = msg.contains(Component.text("%distance%"));
 
@@ -1001,7 +1001,7 @@ public class Assets {
         return msg;
     }
 
-    public static String playerDeathPlaceholders(String msg, PlayerManager pm, Entity mob) {
+    public static String playerDeathPlaceholders(String msg, PlayerCtx pm, Entity mob) {
         final boolean hasBiome = msg.contains("%biome%");
         final boolean hasDistance = msg.contains("%distance%");
 

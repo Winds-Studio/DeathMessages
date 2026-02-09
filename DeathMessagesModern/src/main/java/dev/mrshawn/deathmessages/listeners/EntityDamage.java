@@ -1,12 +1,11 @@
 package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -23,20 +22,20 @@ public class EntityDamage implements Listener {
     public void onEntityDamage(EntityDamageEvent e) {
         if (e.isCancelled()) return;
 
-        if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+        if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            PlayerManager getPlayer = PlayerManager.getPlayer(p);
-            if (getPlayer != null) {
-                getPlayer.setLastDamageCause(e.getCause());
+            PlayerCtx playerCtx = PlayerCtx.of(p.getUniqueId());
+            if (playerCtx != null) {
+                playerCtx.setLastDamageCause(e.getCause());
 
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
                     // For >= 1.20.3, because TNT explosion became BLOCK_EXPLOSION since 1.20.3
                     if (e.getDamageSource().getDirectEntity() instanceof TNTPrimed) {
                         TNTPrimed tnt = (TNTPrimed) e.getDamageSource().getDirectEntity();
                         if (tnt.getSource() instanceof LivingEntity) {
-                            getPlayer.setLastEntityDamager(tnt.getSource());
+                            playerCtx.setLastEntityDamager(tnt.getSource());
                         }
-                        getPlayer.setLastExplosiveEntity(tnt);
+                        playerCtx.setLastExplosiveEntity(tnt);
                     }
                 }
             }
@@ -57,17 +56,17 @@ public class EntityDamage implements Listener {
 
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))) {
-                    EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+                    EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
 
-                    if (getEntity != null) {
-                        getEntity.setLastDamageCause(e.getCause());
+                    if (entityCtx != null) {
+                        entityCtx.setLastDamageCause(e.getCause());
                     } else {
                         MobType mobType = MobType.VANILLA;
                         if (DeathMessages.getHooks().mythicmobsEnabled
                                 && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
                             mobType = MobType.MYTHIC_MOB;
                         }
-                        new EntityManager(e.getEntity(), e.getEntity().getUniqueId(), mobType);
+                        EntityCtx.create(new EntityCtx(e.getEntity(), mobType));
                     }
                 }
             }

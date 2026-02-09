@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.api.events.BroadcastDeathMessageEvent;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import dev.mrshawn.deathmessages.config.Gangs;
@@ -29,89 +29,88 @@ public class EntityDeath implements Listener {
 
     void onEntityDeath(EntityDeathEvent e) {
         // Player death
-        if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
+        if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
-            PlayerManager getPlayer = PlayerManager.getPlayer(player);
-            if (getPlayer != null) {
-                if (getPlayer.isCommandDeath()) { // If died by using suicide like command
-                    // set to null since it is command death
-                    getPlayer.setLastEntityDamager(null);
-                    getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
-                    getPlayer.setCommandDeath(false);
-                } else if (e.getEntity().getLastDamageCause() == null) {
-                    getPlayer.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
-                } else { // Reset lastDamageCause
-                    getPlayer.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
+            PlayerCtx playerCtx = PlayerCtx.of(player.getUniqueId());
+
+            if (playerCtx == null) return;
+
+            if (playerCtx.isCommandDeath()) { // If died by using suicide like command
+                // set to null since it is command death
+                playerCtx.setLastEntityDamager(null);
+                playerCtx.setLastDamageCause(EntityDamageEvent.DamageCause.SUICIDE);
+                playerCtx.setCommandDeath(false);
+            } else if (e.getEntity().getLastDamageCause() == null) {
+                playerCtx.setLastDamageCause(EntityDamageEvent.DamageCause.CUSTOM);
+            } else { // Reset lastDamageCause
+                playerCtx.setLastDamageCause(e.getEntity().getLastDamageCause().getCause());
+            }
+
+            if (playerCtx.isBlacklisted()) return;
+
+            if (!(playerCtx.getLastEntityDamager() instanceof LivingEntity) || playerCtx.getLastEntityDamager() == e.getEntity()) {
+                TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(playerCtx, player);
+                TextComponent oldNaturalDeath = naturalDeath[0].append(naturalDeath[1]); // Dreeam TODO: Remove in 1.4.21
+
+                if (!ComponentUtil.isMessageEmpty(naturalDeath)) {
+                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
+                            player,
+                            null,
+                            MessageType.NATURAL,
+                            oldNaturalDeath,
+                            naturalDeath,
+                            Util.getBroadcastWorlds(player),
+                            false
+                    );
+                    Bukkit.getPluginManager().callEvent(event);
                 }
+            } else {
+                // Killed by mob
+                Entity ent = playerCtx.getLastEntityDamager();
+                boolean gangKill = false;
 
-                if (getPlayer.isBlacklisted()) return;
+                if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
+                    String mobName = EntityUtil.getConfigNodeByEntity(ent);
+                    int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Radius");
+                    int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Amount");
 
-                if (!(getPlayer.getLastEntityDamager() instanceof LivingEntity) || getPlayer.getLastEntityDamager() == e.getEntity()) {
-                    TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(getPlayer, player);
-                    TextComponent oldNaturalDeath = naturalDeath[0].append(naturalDeath[1]); // Dreeam TODO: Remove in 1.4.21
+                    int totalMobEntities = 0;
+                    List<Entity> nearbyEntities = player.getNearbyEntities(radius, radius, radius);
 
-                    if (!ComponentUtil.isMessageEmpty(naturalDeath)) {
-                        BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
-                                player,
-                                null,
-                                MessageType.NATURAL,
-                                oldNaturalDeath,
-                                naturalDeath,
-                                Util.getBroadcastWorlds(player),
-                                false
-                        );
-                        Bukkit.getPluginManager().callEvent(event);
-                    }
-                } else {
-                    // Killed by mob
-                    Entity ent = getPlayer.getLastEntityDamager();
-                    boolean gangKill = false;
+                    for (Entity entity : nearbyEntities) {
+                        if (entity.toString().contains("EnderDragonPart")) { // Exclude EnderDragonPart
+                            continue;
+                        }
 
-                    if (Gangs.getInstance().getConfig().getBoolean("Gang.Enabled")) {
-                        String mobName = EntityUtil.getConfigNodeByEntity(ent);
-                        int radius = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Radius");
-                        int amount = Gangs.getInstance().getConfig().getInt("Gang.Mobs." + mobName + ".Amount");
-
-                        int totalMobEntities = 0;
-                        List<Entity> nearbyEntities = player.getNearbyEntities(radius, radius, radius);
-
-                        for (Entity entity : nearbyEntities) {
-                            if (entity.toString().contains("EnderDragonPart")) { // Exclude EnderDragonPart
-                                continue;
-                            }
-
-                            if (entity.getType().equals(ent.getType())) {
-                                if (++totalMobEntities >= amount) {
-                                    gangKill = true;
-                                    break;
-                                }
+                        if (entity.getType().equals(ent.getType())) {
+                            if (++totalMobEntities >= amount) {
+                                gangKill = true;
+                                break;
                             }
                         }
                     }
-
-                    TextComponent[] playerDeath = Assets.playerDeathMessage(getPlayer, gangKill);
-                    TextComponent oldPlayerDeath = playerDeath[0].append(playerDeath[1]); // Dreeam TODO: Remove in 1.4.21
-
-                    if (!ComponentUtil.isMessageEmpty(playerDeath)) {
-                        MessageType messageType = ent instanceof Player ? MessageType.PLAYER : MessageType.MOB;
-                        BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
-                                player,
-                                (LivingEntity) getPlayer.getLastEntityDamager(),
-                                messageType,
-                                oldPlayerDeath,
-                                playerDeath,
-                                Util.getBroadcastWorlds(player),
-                                gangKill
-                        );
-                        Bukkit.getPluginManager().callEvent(event);
-                    }
                 }
-            } else {
-                new PlayerManager(player);
+
+                TextComponent[] playerDeath = Assets.playerDeathMessage(playerCtx, gangKill);
+                TextComponent oldPlayerDeath = playerDeath[0].append(playerDeath[1]); // Dreeam TODO: Remove in 1.4.21
+
+                if (!ComponentUtil.isMessageEmpty(playerDeath)) {
+                    MessageType messageType = ent instanceof Player ? MessageType.PLAYER : MessageType.MOB;
+                    BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
+                            player,
+                            (LivingEntity) playerCtx.getLastEntityDamager(),
+                            messageType,
+                            oldPlayerDeath,
+                            playerDeath,
+                            Util.getBroadcastWorlds(player),
+                            gangKill
+                    );
+                    Bukkit.getPluginManager().callEvent(event);
+                }
             }
         } else {
             // Entity killed by Player
-            EntityManager getEntity = EntityManager.getEntity(e.getEntity().getUniqueId());
+            EntityCtx getEntity = EntityCtx.of(e.getEntity().getUniqueId());
             if (getEntity != null) {
                 MobType mobType = MobType.VANILLA;
                 if (DeathMessages.getHooks().mythicmobsEnabled) {
@@ -120,7 +119,7 @@ public class EntityDeath implements Listener {
                     }
                 }
 
-                PlayerManager damager = getEntity.getLastPlayerDamager();
+                PlayerCtx damager = getEntity.getLastPlayerDamager();
                 if (damager == null) return; // Entity killed by Entity should not include in DM
 
                 TextComponent[] entityDeath = Assets.entityDeathMessage(getEntity, mobType);

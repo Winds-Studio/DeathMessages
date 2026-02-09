@@ -1,8 +1,8 @@
 package dev.mrshawn.deathmessages.listeners.customlisteners;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.api.events.BroadcastEntityDeathMessageEvent;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.files.Config;
@@ -27,7 +27,7 @@ public class BroadcastEntityDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-        final PlayerManager pm = e.getPlayer();
+        final PlayerCtx pm = e.getPlayer();
         final Entity entity = e.getEntity();
         final boolean hasOwner = EntityUtil.hasOwner(entity);
         final TextComponent[] components = e.getTextComponents();
@@ -61,18 +61,18 @@ public class BroadcastEntityDeathListener implements Listener {
             }
 
             for (Player player : world.getPlayers()) {
-                PlayerManager getPlayer = PlayerManager.getPlayer(player);
+                PlayerCtx playerCtx = PlayerCtx.of(player.getUniqueId());
                 if (privateTameable) {
-                    if (getPlayer != null) {
-                        if (getPlayer.getUUID().equals(pm.getPlayer().getUniqueId())) {
-                            if (getPlayer.getMessagesEnabled()) {
+                    if (playerCtx != null) {
+                        if (playerCtx.getUUID().equals(pm.getUUID())) {
+                            if (playerCtx.isMessageEnabled()) {
                                 player.sendMessage(message);
                             }
                         }
                     }
                 } else {
-                    if (getPlayer != null) {
-                        if (getPlayer.getMessagesEnabled()) {
+                    if (playerCtx != null) {
+                        if (playerCtx.isMessageEnabled()) {
                             if (DeathMessages.getHooks().worldGuardExtension != null) {
                                 if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())) {
                                     return;
@@ -80,7 +80,7 @@ public class BroadcastEntityDeathListener implements Listener {
                             }
 
                             player.sendMessage(message);
-                            PluginMessaging.sendPluginMSG(getPlayer.getPlayer(), Util.convertToLegacy(message));
+                            PluginMessaging.sendPluginMSG(playerCtx.getPlayer(), Util.convertToLegacy(message));
                         }
                     }
 
@@ -114,9 +114,9 @@ public class BroadcastEntityDeathListener implements Listener {
         }
 
         PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(message));
-        EntityManager getEntity = EntityManager.getEntity(entity.getUniqueId());
+        EntityCtx getEntity = EntityCtx.of(entity.getUniqueId());
         if (getEntity != null) {
-            getEntity.destroy();
+            EntityCtx.remove(getEntity.getUUID());
         }
     }
 }

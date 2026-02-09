@@ -1,9 +1,9 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityManager;
+import dev.mrshawn.deathmessages.api.EntityCtx;
 import dev.mrshawn.deathmessages.api.ExplosionManager;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
@@ -128,22 +128,22 @@ public class Util {
 
         getNearby.forEach(ent -> {
                     if (ent instanceof Player) {
-                        PlayerManager getPlayer = PlayerManager.getPlayer((Player) ent);
-                        if (getPlayer != null) {
+                        PlayerCtx playerCtx = PlayerCtx.of(ent.getUniqueId());
+                        if (playerCtx != null) {
                             effected.add(ent.getUniqueId());
-                            getPlayer.setLastEntityDamager(p);
+                            playerCtx.setLastEntityDamager(p);
                         }
                     } else {
-                        EntityManager getEntity = EntityManager.getEntity(ent.getUniqueId());
-                        PlayerManager getPlayer = PlayerManager.getPlayer(p);
-                        if (getEntity != null) {
+                        EntityCtx entityCtx = EntityCtx.of(ent.getUniqueId());
+                        if (entityCtx != null) {
                             effected.add(ent.getUniqueId());
 
-                            if (getPlayer != null) {
-                                getEntity.setLastPlayerDamager(getPlayer);
+                            PlayerCtx playerCtx = PlayerCtx.of(p.getUniqueId());
+                            if (playerCtx != null) {
+                                entityCtx.setLastPlayerDamager(playerCtx);
                             }
                         } else {
-                            new EntityManager(ent, ent.getUniqueId(), MobType.VANILLA);
+                            EntityCtx.create(new EntityCtx(ent, MobType.VANILLA));
                         }
                     }
                 }
@@ -220,7 +220,7 @@ public class Util {
         return sb.toString();
     }
 
-    public static String getPlayerName(PlayerManager pm) {
+    public static String getPlayerName(PlayerCtx pm) {
         if (isPlayerVanished(pm.getPlayer())) {
             return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
         }
@@ -236,7 +236,7 @@ public class Util {
         return player.getName();
     }
 
-    public static String getPlayerDisplayName(PlayerManager pm) {
+    public static String getPlayerDisplayName(PlayerCtx pm) {
         final Player player = pm.getPlayer();
 
         if (isPlayerVanished(player)) {
@@ -254,7 +254,7 @@ public class Util {
         return player.getDisplayName();
     }
 
-    public static Component getPlayerDisplayNameComponent(PlayerManager pm) {
+    public static Component getPlayerDisplayNameComponent(PlayerCtx pm) {
         final Player player = pm.getPlayer();
 
         if (isPlayerVanished(player)) {

@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -80,7 +80,7 @@ public class ComponentUtil {
      */
     public static Component buildHoverEvents(
             String rawEvent,
-            PlayerManager pm,
+            PlayerCtx pm,
             Player p,
             Entity e,
             boolean hasOwner,

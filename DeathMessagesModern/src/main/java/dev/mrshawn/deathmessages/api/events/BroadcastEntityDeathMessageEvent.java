@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.api.events;
 
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.World;
@@ -14,7 +14,7 @@ import java.util.List;
 public class BroadcastEntityDeathMessageEvent extends Event implements Cancellable {
 
     // The killer
-    private final PlayerManager player;
+    private final PlayerCtx player;
     // The entity that was killed by a player
     private final Entity entity;
     private final MessageType messageType;
@@ -25,7 +25,7 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastEntityDeathMessageEvent(PlayerManager pm, Entity entity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
+    public BroadcastEntityDeathMessageEvent(PlayerCtx pm, Entity entity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
                                             List<World> broadcastedWorlds) {
         this.player = pm;
         this.entity = entity;
@@ -55,7 +55,7 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
         return HANDLERS;
     }
 
-    public PlayerManager getPlayer() {
+    public PlayerCtx getPlayer() {
         return this.player;
     }
 

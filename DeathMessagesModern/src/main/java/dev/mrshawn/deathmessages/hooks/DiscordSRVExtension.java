@@ -1,7 +1,7 @@
 package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.enums.MessageType;
 import dev.mrshawn.deathmessages.config.files.Config;
@@ -30,7 +30,7 @@ public class DiscordSRVExtension {
     public DiscordSRVExtension() {
     }
 
-    public void sendDiscordMessage(TextComponent[] components, MessageType messageType, PlayerManager pm) {
+    public void sendDiscordMessage(TextComponent[] components, MessageType messageType, PlayerCtx pm) {
         final List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 
         for (String groups : channels) {
@@ -92,7 +92,7 @@ public class DiscordSRVExtension {
         }
     }
 
-    public void sendEntityDiscordMessage(TextComponent[] components, MessageType messageType, PlayerManager pm, Entity entity, boolean hasOwner) {
+    public void sendEntityDiscordMessage(TextComponent[] components, MessageType messageType, PlayerCtx pm, Entity entity, boolean hasOwner) {
         final List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 
         for (String groups : channels) {
@@ -151,7 +151,7 @@ public class DiscordSRVExtension {
         }
     }
 
-    private MessageEmbed buildMessage(PlayerManager pm, String message) {
+    private MessageEmbed buildMessage(PlayerCtx pm, String message) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setColor(getDeathMessageColor());
