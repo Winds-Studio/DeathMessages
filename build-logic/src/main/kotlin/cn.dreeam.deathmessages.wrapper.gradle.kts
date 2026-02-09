@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.mrshawn.deathmessages"
-version = "1.4.21-SNAPSHOT"
+version = "1.5.0-SNAPSHOT"
 
 repositories {
     mavenCentral()

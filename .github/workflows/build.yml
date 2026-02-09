@@ -29,7 +29,7 @@ jobs:
         # TODO: Update release
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          title: "DeathMessages v1.4.21-SNAPSHOT"
+          title: "DeathMessages v1.5.0-SNAPSHOT"
           automatic_release_tag: "latest"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           files: |
