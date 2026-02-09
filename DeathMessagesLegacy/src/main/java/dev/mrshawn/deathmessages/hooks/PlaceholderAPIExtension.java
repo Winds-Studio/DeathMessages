@@ -1,9 +1,10 @@
 package dev.mrshawn.deathmessages.hooks;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.jspecify.annotations.NullMarked;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 @NullMarked
@@ -94,25 +95,27 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      */
     @Override
     public String onPlaceholderRequest(Player player, String params) {
-        PlayerManager getPlayer = PlayerManager.getPlayer(player);
+        PlayerCtx playerCtx = PlayerCtx.of(player.getUniqueId());
 
-        if (getPlayer == null) {
+        if (playerCtx == null) {
             return "null";
         }
 
+        final Entity lastEntityDamager = playerCtx.getLastEntityDamager();
+
         switch (params) {
             case "messages_enabled":
-                return String.valueOf(getPlayer.getMessagesEnabled());
+                return String.valueOf(playerCtx.isMessageEnabled());
             case "is_blacklisted":
-                return String.valueOf(getPlayer.isBlacklisted());
+                return String.valueOf(playerCtx.isBlacklisted());
             case "victim_name":
-                return getPlayer.getName();
+                return playerCtx.getName();
             case "victim_display_name":
-                return getPlayer.getPlayer().getDisplayName();
+                return playerCtx.getPlayer().getDisplayName();
             case "killer_name":
-                return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getName() : "null";
+                return lastEntityDamager != null ? lastEntityDamager.getName() : "null";
             case "killer_display_name":
-                return (getPlayer.getLastEntityDamager() != null) ? getPlayer.getLastEntityDamager().getCustomName() : "null";
+                return lastEntityDamager != null ? lastEntityDamager.getCustomName() : "null";
             default:
                 return "null";
         }

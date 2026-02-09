@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.listeners;
 
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.files.Config;
 import org.bukkit.event.EventHandler;
@@ -14,12 +14,12 @@ public class OnCommand implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
-        final PlayerManager getPlayer = PlayerManager.getPlayer(e.getPlayer());
+        final PlayerCtx playerCtx = PlayerCtx.of(e.getPlayer().getUniqueId());
 
-        if (getPlayer != null) {
+        if (playerCtx != null) {
             final List<String> commands = Settings.getInstance().getConfig().getStringList(Config.CUSTOM_SUICIDE_COMMANDS.getPath());
             if (commands.contains(e.getMessage())) {
-                getPlayer.setCommandDeath(true);
+                playerCtx.setCommandDeath(true);
             }
         }
     }

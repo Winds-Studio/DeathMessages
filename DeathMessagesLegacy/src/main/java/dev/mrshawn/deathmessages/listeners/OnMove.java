@@ -1,6 +1,6 @@
 package dev.mrshawn.deathmessages.listeners;
 
-import dev.mrshawn.deathmessages.api.PlayerManager;
+import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.utils.MaterialUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,11 +18,11 @@ public class OnMove implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
-        PlayerManager getPlayer = PlayerManager.getPlayer(p);
-        if (getPlayer != null) {
+        PlayerCtx playerCtx = PlayerCtx.of(p.getUniqueId());
+        if (playerCtx != null) {
             lastBlock = e.getTo().getBlock().getType();
             if (MaterialUtil.isClimbable(lastBlock)) {
-                getPlayer.setLastClimbing(lastBlock);
+                playerCtx.setLastClimbing(lastBlock);
             } else {
                 if (p.getFallDistance() > 0) {
                     message = true;
@@ -32,7 +32,7 @@ public class OnMove implements Listener {
                     }
                 } else {
                     if (message) {
-                        getPlayer.setLastClimbing(null);
+                        playerCtx.setLastClimbing(null);
                         falling = false;
                         message = false;
                     }
