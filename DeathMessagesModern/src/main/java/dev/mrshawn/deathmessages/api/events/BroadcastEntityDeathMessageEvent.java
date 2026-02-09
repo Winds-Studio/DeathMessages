@@ -13,21 +13,22 @@ import java.util.List;
 
 public class BroadcastEntityDeathMessageEvent extends Event implements Cancellable {
 
-    // The killer
-    private final PlayerCtx player;
+    // The killer context
+    private final PlayerCtx playerCtx;
     // The entity that was killed by a player
     private final Entity entity;
     private final MessageType messageType;
     private final TextComponent textComponent;
-    private final TextComponent[] textComponents; // 0: Prefix, 1: Message body
+    // 0: Prefix, 1: Message body
+    private final TextComponent[] textComponents;
     private final List<World> broadcastedWorlds;
     private boolean isCancelled;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastEntityDeathMessageEvent(PlayerCtx pm, Entity entity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
+    public BroadcastEntityDeathMessageEvent(PlayerCtx playerCtx, Entity entity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
                                             List<World> broadcastedWorlds) {
-        this.player = pm;
+        this.playerCtx = playerCtx;
         this.entity = entity;
         this.messageType = messageType;
         this.textComponent = textComponent;
@@ -55,8 +56,8 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
         return HANDLERS;
     }
 
-    public PlayerCtx getPlayer() {
-        return this.player;
+    public PlayerCtx getPlayerContext() {
+        return this.playerCtx;
     }
 
     public Entity getEntity() {

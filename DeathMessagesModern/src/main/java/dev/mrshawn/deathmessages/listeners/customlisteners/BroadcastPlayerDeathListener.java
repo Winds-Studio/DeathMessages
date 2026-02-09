@@ -66,29 +66,29 @@ public class BroadcastPlayerDeathListener implements Listener {
                 continue;
             }
 
-            for (Player player : world.getPlayers()) {
-                PlayerCtx otherPlayerCtx = PlayerCtx.of(player.getUniqueId());
+            for (Player otherPlayer : world.getPlayers()) {
+                PlayerCtx otherPlayerCtx = PlayerCtx.of(otherPlayer.getUniqueId());
 
                 if  (otherPlayerCtx == null) continue;
 
                 if (e.getMessageType().equals(MessageType.PLAYER)) {
                     if (privatePlayer && (e.getPlayer().getUniqueId().equals(otherPlayerCtx.getUUID())
                             || e.getLivingEntity().getUniqueId().equals(otherPlayerCtx.getUUID()))) {
-                        normal(e, components, message, otherPlayerCtx, player, e.getBroadcastedWorlds());
+                        normal(e, components, message, otherPlayerCtx, otherPlayer, e.getBroadcastedWorlds());
                     } else if (!privatePlayer) {
-                        normal(e, components, message, otherPlayerCtx, player, e.getBroadcastedWorlds());
+                        normal(e, components, message, otherPlayerCtx, otherPlayer, e.getBroadcastedWorlds());
                     }
                 } else if (e.getMessageType().equals(MessageType.MOB)) {
                     if (privateMobs && e.getPlayer().getUniqueId().equals(otherPlayerCtx.getUUID())) {
-                        normal(e, components, message, otherPlayerCtx, player, e.getBroadcastedWorlds());
+                        normal(e, components, message, otherPlayerCtx, otherPlayer, e.getBroadcastedWorlds());
                     } else if (!privateMobs) {
-                        normal(e, components, message, otherPlayerCtx, player, e.getBroadcastedWorlds());
+                        normal(e, components, message, otherPlayerCtx, otherPlayer, e.getBroadcastedWorlds());
                     }
                 } else if (e.getMessageType().equals(MessageType.NATURAL)) {
                     if (privateNatural && e.getPlayer().getUniqueId().equals(otherPlayerCtx.getUUID())) {
-                        normal(e, components, message, otherPlayerCtx, player, e.getBroadcastedWorlds());
+                        normal(e, components, message, otherPlayerCtx, otherPlayer, e.getBroadcastedWorlds());
                     } else if (!privateNatural) {
-                        normal(e, components, message, otherPlayerCtx, player, e.getBroadcastedWorlds());
+                        normal(e, components, message, otherPlayerCtx, otherPlayer, e.getBroadcastedWorlds());
                     }
                 }
             }
@@ -97,16 +97,16 @@ public class BroadcastPlayerDeathListener implements Listener {
         PluginMessaging.sendPluginMSG(e.getPlayer(), Util.convertToLegacy(message));
     }
 
-    private void normal(BroadcastDeathMessageEvent e, TextComponent[] components, TextComponent message, PlayerCtx pm, Player player, List<World> worlds) {
+    private void normal(BroadcastDeathMessageEvent e, TextComponent[] components, TextComponent message, PlayerCtx otherPlayerCtx, Player otherPlayer, List<World> worlds) {
         if (DeathMessages.getHooks().worldGuardExtension != null) {
-            if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())
+            if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(otherPlayer, e.getMessageType().getValue())
                     || DeathMessages.getHooks().worldGuardExtension.denyFromRegion(e.getPlayer(), e.getMessageType().getValue())) {
                 return;
             }
         }
 
-        if (pm.isMessageEnabled()) {
-            player.sendMessage(message);
+        if (otherPlayerCtx.isMessageEnabled()) {
+            otherPlayer.sendMessage(message);
         }
 
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_WORLD_WHITELIST_ENABLED)) {

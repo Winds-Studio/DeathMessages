@@ -76,11 +76,11 @@ public class ComponentUtil {
 
     /*
         Process and build hover events from raw events list
-        Only for playerDeath: pm, e, Only for EntityDeath: p, e, hasOwner
+        Only for playerDeath: playerCtx, e, Only for EntityDeath: p, e, hasOwner
      */
     public static Component buildHoverEvents(
             String rawEvent,
-            PlayerCtx pm,
+            PlayerCtx playerCtx,
             Player p,
             Entity e,
             boolean hasOwner,
@@ -103,7 +103,7 @@ public class ComponentUtil {
         if (rawHover.length == 4) {
             ClickEvent click = null;
             final String content = isPlayerDeath
-                    ? Assets.playerDeathPlaceholders(rawHover[3], pm, e)
+                    ? Assets.playerDeathPlaceholders(rawHover[3], playerCtx, e)
                     : Assets.entityDeathPlaceholders(rawHover[3], p, e, hasOwner);
 
             switch (rawHover[2]) {

@@ -194,9 +194,9 @@ public class PlayerCtx {
         return PLAYER_CONTEXTS.get(uuid);
     }
 
-    public static void create(PlayerCtx playerContext) {
-        UUID uuid = playerContext.uuid;
-        PLAYER_CONTEXTS.put(uuid, playerContext);
+    public static void create(PlayerCtx playerCtx) {
+        UUID uuid = playerCtx.uuid;
+        PLAYER_CONTEXTS.put(uuid, playerCtx);
     }
 
     public static void remove(UUID uuid) {

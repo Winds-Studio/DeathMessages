@@ -27,7 +27,7 @@ public class BroadcastEntityDeathListener implements Listener {
 
     @EventHandler
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
-        final PlayerCtx pm = e.getPlayer();
+        final PlayerCtx playerCtx = e.getPlayerContext();
         final Entity entity = e.getEntity();
         final boolean hasOwner = EntityUtil.hasOwner(entity);
         final TextComponent[] components = e.getTextComponents();
@@ -37,7 +37,7 @@ public class BroadcastEntityDeathListener implements Listener {
 
         if (Messages.getInstance().getConfig().getBoolean("Console.Enabled")) {
             Component rawMessage = Util.convertFromLegacy(Messages.getInstance().getConfig().getString("Console.Message"));
-            Component consoleMessage = Assets.entityDeathPlaceholders(rawMessage, pm.getPlayer(), entity, hasOwner)
+            Component consoleMessage = Assets.entityDeathPlaceholders(rawMessage, playerCtx.getPlayer(), entity, hasOwner)
                     .replaceText(TextReplacementConfig.builder()
                             .matchLiteral("%message%")
                             .replacement(message)
@@ -46,10 +46,10 @@ public class BroadcastEntityDeathListener implements Listener {
             ComponentUtil.sendConsoleMessage(consoleMessage);
         }
 
-        if (pm.isInCooldown()) {
+        if (playerCtx.isInCooldown()) {
             return;
         } else {
-            pm.setCooldown();
+            playerCtx.setCooldown();
         }
 
         final boolean privateTameable = FileStore.CONFIG.getBoolean(Config.PRIVATE_MESSAGES_MOBS);
@@ -60,27 +60,27 @@ public class BroadcastEntityDeathListener implements Listener {
                 continue;
             }
 
-            for (Player player : world.getPlayers()) {
-                PlayerCtx playerCtx = PlayerCtx.of(player.getUniqueId());
+            for (Player otherPlayer : world.getPlayers()) {
+                PlayerCtx otherPlayerCtx = PlayerCtx.of(otherPlayer.getUniqueId());
                 if (privateTameable) {
-                    if (playerCtx != null) {
-                        if (playerCtx.getUUID().equals(pm.getUUID())) {
-                            if (playerCtx.isMessageEnabled()) {
-                                player.sendMessage(message);
+                    if (otherPlayerCtx != null) {
+                        if (otherPlayerCtx.getUUID().equals(playerCtx.getUUID())) {
+                            if (otherPlayerCtx.isMessageEnabled()) {
+                                otherPlayer.sendMessage(message);
                             }
                         }
                     }
                 } else {
-                    if (playerCtx != null) {
-                        if (playerCtx.isMessageEnabled()) {
+                    if (otherPlayerCtx != null) {
+                        if (otherPlayerCtx.isMessageEnabled()) {
                             if (DeathMessages.getHooks().worldGuardExtension != null) {
-                                if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(player, e.getMessageType().getValue())) {
+                                if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(otherPlayer, e.getMessageType().getValue())) {
                                     return;
                                 }
                             }
 
-                            player.sendMessage(message);
-                            PluginMessaging.sendPluginMSG(playerCtx.getPlayer(), Util.convertToLegacy(message));
+                            otherPlayer.sendMessage(message);
+                            PluginMessaging.sendPluginMSG(otherPlayerCtx.getPlayer(), Util.convertToLegacy(message));
                         }
                     }
 
@@ -103,7 +103,7 @@ public class BroadcastEntityDeathListener implements Listener {
                         DeathMessages.getHooks().discordSRVExtension.sendEntityDiscordMessage(
                                 components,
                                 e.getMessageType(),
-                                pm,
+                                playerCtx,
                                 entity,
                                 hasOwner
                         );
@@ -113,10 +113,7 @@ public class BroadcastEntityDeathListener implements Listener {
             }
         }
 
-        PluginMessaging.sendPluginMSG(e.getPlayer().getPlayer(), Util.convertToLegacy(message));
-        EntityCtx entityCtx = EntityCtx.of(entity.getUniqueId());
-        if (entityCtx != null) {
-            EntityCtx.remove(entityCtx.getUUID());
-        }
+        PluginMessaging.sendPluginMSG(e.getPlayerContext().getPlayer(), Util.convertToLegacy(message));
+        EntityCtx.remove(entity.getUniqueId());
     }
 }

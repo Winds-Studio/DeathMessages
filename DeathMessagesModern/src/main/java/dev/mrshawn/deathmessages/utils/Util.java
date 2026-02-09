@@ -220,12 +220,12 @@ public class Util {
         return sb.toString();
     }
 
-    public static String getPlayerName(PlayerCtx pm) {
-        if (isPlayerVanished(pm.getPlayer())) {
+    public static String getPlayerName(PlayerCtx playerCtx) {
+        if (isPlayerVanished(playerCtx.getPlayer())) {
             return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
         }
 
-        return pm.getName();
+        return playerCtx.getName();
     }
 
     public static String getPlayerName(Player player) {
@@ -236,8 +236,8 @@ public class Util {
         return player.getName();
     }
 
-    public static String getPlayerDisplayName(PlayerCtx pm) {
-        final Player player = pm.getPlayer();
+    public static String getPlayerDisplayName(PlayerCtx playerCtx) {
+        final Player player = playerCtx.getPlayer();
 
         if (isPlayerVanished(player)) {
             return PlainTextComponentSerializer.plainText().serialize(getVanishedName());
@@ -254,8 +254,8 @@ public class Util {
         return player.getDisplayName();
     }
 
-    public static Component getPlayerDisplayNameComponent(PlayerCtx pm) {
-        final Player player = pm.getPlayer();
+    public static Component getPlayerDisplayNameComponent(PlayerCtx playerCtx) {
+        final Player player = playerCtx.getPlayer();
 
         if (isPlayerVanished(player)) {
             return getVanishedName();
