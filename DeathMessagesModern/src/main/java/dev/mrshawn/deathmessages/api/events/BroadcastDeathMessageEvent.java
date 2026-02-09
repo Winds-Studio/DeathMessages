@@ -17,7 +17,6 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
     private final Player player;
     private final @Nullable LivingEntity livingEntity;
     private final MessageType messageType;
-    private final TextComponent textComponent;
     // 0: Prefix, 1: Message body
     private final TextComponent[] textComponents;
     private final boolean isGangDeath;
@@ -26,12 +25,11 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastDeathMessageEvent(Player player, @Nullable LivingEntity livingEntity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
+    public BroadcastDeathMessageEvent(Player player, @Nullable LivingEntity livingEntity, MessageType messageType, TextComponent[] textComponents,
                                       List<World> broadcastedWorlds, boolean isGangDeath) {
         this.player = player;
         this.livingEntity = livingEntity;
         this.messageType = messageType;
-        this.textComponent = textComponent;
         this.textComponents = textComponents;
         this.broadcastedWorlds = broadcastedWorlds;
         this.isGangDeath = isGangDeath;
@@ -67,11 +65,6 @@ public class BroadcastDeathMessageEvent extends Event implements Cancellable {
 
     public MessageType getMessageType() {
         return this.messageType;
-    }
-
-    @Deprecated(forRemoval = true, since = "1.4.21")
-    public TextComponent getTextComponent() {
-        return this.textComponent;
     }
 
     public TextComponent[] getTextComponents() {

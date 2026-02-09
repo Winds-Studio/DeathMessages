@@ -50,14 +50,12 @@ public class EntityDeath implements Listener {
 
             if (!(playerCtx.getLastEntityDamager() instanceof LivingEntity) || playerCtx.getLastEntityDamager() == e.getEntity()) {
                 TextComponent[] naturalDeath = Assets.playerNatureDeathMessage(playerCtx, player);
-                TextComponent oldNaturalDeath = naturalDeath[0].append(naturalDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                 if (!ComponentUtil.isMessageEmpty(naturalDeath)) {
                     BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
                             player,
                             null,
                             MessageType.NATURAL,
-                            oldNaturalDeath,
                             naturalDeath,
                             Util.getBroadcastWorlds(player),
                             false
@@ -92,7 +90,6 @@ public class EntityDeath implements Listener {
                 }
 
                 TextComponent[] playerDeath = Assets.playerDeathMessage(playerCtx, gangKill);
-                TextComponent oldPlayerDeath = playerDeath[0].append(playerDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                 if (!ComponentUtil.isMessageEmpty(playerDeath)) {
                     MessageType messageType = ent instanceof Player ? MessageType.PLAYER : MessageType.MOB;
@@ -100,7 +97,6 @@ public class EntityDeath implements Listener {
                             player,
                             (LivingEntity) playerCtx.getLastEntityDamager(),
                             messageType,
-                            oldPlayerDeath,
                             playerDeath,
                             Util.getBroadcastWorlds(player),
                             gangKill
@@ -123,14 +119,12 @@ public class EntityDeath implements Listener {
                 if (damagerCtx == null) return; // Entity killed by Entity should not include in DM
 
                 TextComponent[] entityDeath = Assets.entityDeathMessage(entityCtx, mobType);
-                TextComponent oldEntityDeath = entityDeath[0].append(entityDeath[1]); // Dreeam TODO: Remove in 1.4.21
 
                 if (!ComponentUtil.isMessageEmpty(entityDeath)) {
                     BroadcastEntityDeathMessageEvent event = new BroadcastEntityDeathMessageEvent(
                             damagerCtx,
                             e.getEntity(),
                             MessageType.ENTITY,
-                            oldEntityDeath,
                             entityDeath,
                             Util.getBroadcastWorlds(e.getEntity())
                     );

@@ -68,14 +68,11 @@ public class PlayerUntag implements Listener {
 
         deathMessage[1] = deathMessageBody;
 
-        TextComponent oldDeathMessage = deathMessage[0].append(deathMessage[1]); // Dreeam TODO: Remove in 1.4.21
-
         if (!ComponentUtil.isMessageEmpty(deathMessage)) {
             BroadcastDeathMessageEvent event = new BroadcastDeathMessageEvent(
                     player,
                     (LivingEntity) e.getPreviousEnemies().get(0),
                     MessageType.PLAYER,
-                    oldDeathMessage,
                     deathMessage,
                     Util.getBroadcastWorlds(player),
                     gangKill

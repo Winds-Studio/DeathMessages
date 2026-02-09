@@ -18,7 +18,6 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
     // The entity that was killed by a player
     private final Entity entity;
     private final MessageType messageType;
-    private final TextComponent textComponent;
     // 0: Prefix, 1: Message body
     private final TextComponent[] textComponents;
     private final List<World> broadcastedWorlds;
@@ -26,12 +25,11 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    public BroadcastEntityDeathMessageEvent(PlayerCtx playerCtx, Entity entity, MessageType messageType, TextComponent textComponent, TextComponent[] textComponents,
+    public BroadcastEntityDeathMessageEvent(PlayerCtx playerCtx, Entity entity, MessageType messageType, TextComponent[] textComponents,
                                             List<World> broadcastedWorlds) {
         this.playerCtx = playerCtx;
         this.entity = entity;
         this.messageType = messageType;
-        this.textComponent = textComponent;
         this.textComponents = textComponents;
         this.broadcastedWorlds = broadcastedWorlds;
         this.isCancelled = false;
@@ -66,12 +64,6 @@ public class BroadcastEntityDeathMessageEvent extends Event implements Cancellab
 
     public MessageType getMessageType() {
         return this.messageType;
-    }
-
-    // forRemoval = true, since = "1.4.21"
-    @Deprecated
-    public TextComponent getTextComponent() {
-        return this.textComponent;
     }
 
     public TextComponent[] getTextComponents() {
