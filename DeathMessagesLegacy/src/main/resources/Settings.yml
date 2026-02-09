@@ -42,6 +42,9 @@ Hooks:
     # Supports: SayanVanish, SuperVanish, PremiumVanish, EssentialsX, VanishNoPacket and more
     # Enable/Disable common vanish plugin hook
     CommonVanishPlugins: true
+    # String used to replace the vanished player name in the message
+    # Allow to use HEX color in DeathMessagesModern
+    VanishedName: "Unknown"
 
   # If DiscordSRV (https://www.spigotmc.org/resources/discordsrv.18494/) is installed, and enabled here.
   # To get the Guild ID and Channel-IDs, you must have developer mode enabled in discord. Then, you will right-click the

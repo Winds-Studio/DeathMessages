@@ -26,8 +26,8 @@ public class CommandBackup extends DeathMessagesCommand {
             return;
         }
 
-        boolean b = Boolean.parseBoolean(args[0]);
-        String code = ConfigManager.getInstance().backup(b);
+        boolean excludeUserData = Boolean.parseBoolean(args[0]);
+        String code = ConfigManager.getInstance().backup(excludeUserData);
 
         Component message = Util.formatMessage("Commands.DeathMessages.Sub-Commands.Backup.Backed-Up")
                 .replaceText(TextReplacementConfig.builder()

@@ -23,7 +23,6 @@ public class EntityDamageByBlock implements Listener {
         if (e.getEntity() instanceof Player && Bukkit.getServer().getOnlinePlayers().contains((Player) e.getEntity())) {
             Player p = (Player) e.getEntity();
             PlayerManager getPlayer = PlayerManager.getPlayer(p);
-
             if (getPlayer != null) {
                 getPlayer.setLastDamageCause(e.getCause());
             }

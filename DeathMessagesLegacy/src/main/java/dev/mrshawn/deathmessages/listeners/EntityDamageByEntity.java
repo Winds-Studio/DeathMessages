@@ -82,6 +82,9 @@ public class EntityDamageByEntity implements Listener {
                 }
             }
         } else if (!(e.getEntity() instanceof Player) && e.getDamager() instanceof Player) {
+            // Cleanup this part below
+            // listenedMobs should not use loop
+            // should use listenedMobs.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))
             ConfigurationSection entityConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Entities");
 
             if (entityConfig == null) return;
