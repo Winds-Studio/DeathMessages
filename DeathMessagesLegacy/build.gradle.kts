@@ -2,6 +2,7 @@ plugins {
     id("cn.dreeam.deathmessages.wrapper")
     id("com.gradleup.shadow") version "9.0.0-beta16"
     id("com.willfp.libreforge-gradle-plugin") version "1.0.3"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 val adventureVersion = findProperty("adventure-version")
@@ -61,6 +62,10 @@ tasks {
 
     libreforgeJar {
         dependsOn(jar)
+    }
+
+    runServer {
+        minecraftVersion("1.21.4")
     }
 }
 
