@@ -902,6 +902,7 @@ public class Assets {
         return msg;
     }
 
+    @Deprecated
     public static String entityDeathPlaceholders(String msg, Player player, Entity entity, boolean hasOwner) {
         final boolean hasBiome = msg.contains("%biome%");
         final boolean hasDistance = msg.contains("%distance%");
@@ -992,6 +993,9 @@ public class Assets {
 
             if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
                 mobName = EntityUtil.getEntityCustomNameComponent(mob);
+            } else if (mob instanceof Player) {
+                Player p = (Player) mob;
+                mobName = Util.getPlayerNameComponent(p);
             }
 
             msg = msg.replaceText(Util.replace("%killer%", mobName))
@@ -1017,6 +1021,7 @@ public class Assets {
         return msg;
     }
 
+    @Deprecated
     public static String playerDeathPlaceholders(String msg, PlayerCtx playerCtx, Entity mob) {
         final boolean hasBiome = msg.contains("%biome%");
         final boolean hasDistance = msg.contains("%distance%");
@@ -1062,6 +1067,9 @@ public class Assets {
 
             if (!(mob instanceof Player) && Settings.getInstance().getConfig().getBoolean(Config.DISABLE_NAMED_MOBS.getPath())) {
                 mobName = EntityUtil.getEntityCustomName(mob);
+            } else if (mob instanceof Player) {
+                Player p = (Player) mob;
+                mobName = Util.getPlayerName(p);
             }
 
             msg = msg.replaceAll("%killer%", mobName)
