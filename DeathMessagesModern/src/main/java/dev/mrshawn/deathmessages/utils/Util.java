@@ -25,6 +25,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.BoundingBox;
@@ -120,6 +122,15 @@ public class Util {
         }
 
         return false;
+    }
+
+    public static void registerEvents(Listener... listeners) {
+        final PluginManager manager = Bukkit.getPluginManager();
+        final DeathMessages instance = DeathMessages.getInstance();
+
+        for (Listener listener : listeners) {
+            manager.registerEvents(listener, instance);
+        }
     }
 
     public static void getExplosionNearbyEffected(Player p, Block b) {

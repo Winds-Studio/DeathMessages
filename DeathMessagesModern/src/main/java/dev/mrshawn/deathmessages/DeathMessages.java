@@ -24,9 +24,9 @@ import dev.mrshawn.deathmessages.listeners.customlisteners.BlockExplosion;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastEntityDeathListener;
 import dev.mrshawn.deathmessages.listeners.customlisteners.BroadcastPlayerDeathListener;
 import dev.mrshawn.deathmessages.utils.ComponentUtil;
-import dev.mrshawn.deathmessages.utils.EventUtil;
 import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import dev.mrshawn.deathmessages.utils.Updater;
+import dev.mrshawn.deathmessages.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
@@ -85,7 +85,7 @@ public class DeathMessages extends JavaPlugin {
     }
 
     private void initListeners() {
-        EventUtil.registerEvents(
+        Util.registerEvents(
                 // DeathMessages
                 new BroadcastPlayerDeathListener(),
                 new BroadcastEntityDeathListener(),
