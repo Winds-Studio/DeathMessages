@@ -33,9 +33,8 @@ import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -56,10 +55,9 @@ public class Util {
             .matchLiteral("%prefix%")
             .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
             .build();
+    public static final UUID NIL_UUID = new UUID(0, 0);
 
     public static Pattern[] customWeaponNamePatterns;
-
-    public static final Map<UUID, LivingEntity> crystalDeathData = new HashMap<>(); // <EndCrystal UUID, Causing Entity instance>
 
     public static TextReplacementConfig replace(String matchLiteral, String replace) {
         return TextReplacementConfig.builder()
@@ -169,20 +167,63 @@ public class Util {
         Bukkit.getPluginManager().callEvent(explodeEvent);
     }
 
-    public static void loadCrystalDamager(Entity entity, Entity damager) {
+    public static CrystalDeathContext loadCrystalDamager(Entity entity, Entity damager) {
         // Scenario 1
         // Player clicked (damaged) crystal
         // I didn't consider the scenario about entity clicked crystal, idk if it's needed?
         if (entity instanceof EnderCrystal && damager instanceof Player) {
-            crystalDeathData.put(entity.getUniqueId(), (Player) damager);
+            return new CrystalDeathContext(entity.getUniqueId(), (Player) damager);
         }
         // Scenario 2
         // The crystal is triggered by a projectile when pass through (player A / LivingEntity -> projectile -> crystal -> Player A/B / Entity)
         else if (entity instanceof EnderCrystal && damager instanceof Projectile) {
             ProjectileSource shooter = ((Projectile) damager).getShooter();
             if (shooter instanceof LivingEntity) {
-                crystalDeathData.put(entity.getUniqueId(), (LivingEntity) shooter);
+                return new CrystalDeathContext(entity.getUniqueId(), (LivingEntity) shooter);
             }
+        }
+
+        return new CrystalDeathContext(Util.NIL_UUID, null);
+    }
+
+    // K: EndCrystal UUID
+    // V: Causing Entity instance
+    public static class CrystalDeathContext {
+        private final UUID uuid;
+        private final LivingEntity entity;
+
+        public CrystalDeathContext(UUID uuid, LivingEntity entity) {
+            this.uuid = uuid;
+            this.entity = entity;
+        }
+
+        public UUID uuid() {
+            return uuid;
+        }
+
+        public LivingEntity entity() {
+            return entity;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            CrystalDeathContext that = (CrystalDeathContext) obj;
+            return Objects.equals(this.uuid, that.uuid) &&
+                    Objects.equals(this.entity, that.entity);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(uuid, entity);
+        }
+
+        @Override
+        public String toString() {
+            return "CrystalDeathContext[" +
+                    "uuid=" + uuid + ", " +
+                    "entity=" + entity + ']';
         }
     }
 
