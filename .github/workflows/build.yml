@@ -38,7 +38,7 @@ jobs:
           prerelease: true
 
       - name: Upload DeathMessages Nightly
-        if: github.ref_name == 'dev'
+        if: github.ref_name == 'dev' || github.event_name == 'pull_request'
         uses: actions/upload-artifact@v6
         with:
           name: DeathMessages-Nightly

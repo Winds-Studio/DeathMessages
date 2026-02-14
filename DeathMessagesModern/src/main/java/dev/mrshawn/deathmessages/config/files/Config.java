@@ -13,6 +13,7 @@ public enum Config {
     ADD_PREFIX_TO_ALL_MESSAGES("Add-Prefix-To-All-Messages", true),
 
     HOOKS_MYTHICMOBS_ENABLED("Hooks.MythicMobs.Enabled", true),
+    HOOKS_MYTHICMOBS_USE_MYTHICMOBS_DEATH_MESSAGE("Hooks.MythicMobs.UseMythicMobsDeathMessage", false),
     HOOKS_WORLDGUARD_ENABLED("Hooks.WorldGuard.Enabled", true),
     HOOKS_COMBATLOGX_ENABLED("Hooks.CombatLogX.Enabled", true),
     HOOKS_VANISH_VANILLA_ENABLED("Hooks.Vanish.Vanilla", true),
