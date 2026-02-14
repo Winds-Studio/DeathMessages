@@ -1,15 +1,11 @@
 package dev.mrshawn.deathmessages.utils;
 
 import dev.mrshawn.deathmessages.DeathMessages;
-import dev.mrshawn.deathmessages.api.EntityCtx;
-import dev.mrshawn.deathmessages.api.ExplosionManager;
 import dev.mrshawn.deathmessages.api.PlayerCtx;
-import dev.mrshawn.deathmessages.api.events.DMBlockExplodeEvent;
 import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
-import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.hooks.CommonVanishPluginExtension;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -19,22 +15,14 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -130,100 +118,6 @@ public class Util {
 
         for (Listener listener : listeners) {
             manager.registerEvents(listener, instance);
-        }
-    }
-
-    public static void getExplosionNearbyEffected(Player p, Block b) {
-        List<UUID> effected = new ArrayList<>();
-        Collection<Entity> getNearby = isNewerAndEqual(13, 0)
-                ? b.getWorld().getNearbyEntities(BoundingBox.of(b).expand(24)) // TODO: make it configurable
-                : b.getWorld().getNearbyEntities(b.getLocation(), 24, 24, 24);
-
-        getNearby.forEach(ent -> {
-                    if (ent instanceof Player) {
-                        PlayerCtx playerCtx = PlayerCtx.of(ent.getUniqueId());
-                        if (playerCtx != null) {
-                            effected.add(ent.getUniqueId());
-                            playerCtx.setLastEntityDamager(p);
-                        }
-                    } else {
-                        EntityCtx entityCtx = EntityCtx.of(ent.getUniqueId());
-                        if (entityCtx != null) {
-                            effected.add(ent.getUniqueId());
-
-                            PlayerCtx playerCtx = PlayerCtx.of(p.getUniqueId());
-                            if (playerCtx != null) {
-                                entityCtx.setLastPlayerDamager(playerCtx);
-                            }
-                        } else {
-                            EntityCtx.create(new EntityCtx(ent, MobType.VANILLA));
-                        }
-                    }
-                }
-        );
-
-        new ExplosionManager(p.getUniqueId(), b.getType(), b.getLocation(), effected);
-        DMBlockExplodeEvent explodeEvent = new DMBlockExplodeEvent(p, b);
-        Bukkit.getPluginManager().callEvent(explodeEvent);
-    }
-
-    public static CrystalDeathContext loadCrystalDamager(Entity entity, Entity damager) {
-        // Scenario 1
-        // Player clicked (damaged) crystal
-        // I didn't consider the scenario about entity clicked crystal, idk if it's needed?
-        if (entity instanceof EnderCrystal && damager instanceof Player) {
-            return new CrystalDeathContext(entity.getUniqueId(), (Player) damager);
-        }
-        // Scenario 2
-        // The crystal is triggered by a projectile when pass through (player A / LivingEntity -> projectile -> crystal -> Player A/B / Entity)
-        else if (entity instanceof EnderCrystal && damager instanceof Projectile) {
-            ProjectileSource shooter = ((Projectile) damager).getShooter();
-            if (shooter instanceof LivingEntity) {
-                return new CrystalDeathContext(entity.getUniqueId(), (LivingEntity) shooter);
-            }
-        }
-
-        return new CrystalDeathContext(Util.NIL_UUID, null);
-    }
-
-    // K: EndCrystal UUID
-    // V: Causing Entity instance
-    public static class CrystalDeathContext {
-        private final UUID uuid;
-        private final LivingEntity entity;
-
-        public CrystalDeathContext(UUID uuid, LivingEntity entity) {
-            this.uuid = uuid;
-            this.entity = entity;
-        }
-
-        public UUID uuid() {
-            return uuid;
-        }
-
-        public LivingEntity entity() {
-            return entity;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) return true;
-            if (obj == null || obj.getClass() != this.getClass()) return false;
-            CrystalDeathContext that = (CrystalDeathContext) obj;
-            return Objects.equals(this.uuid, that.uuid) &&
-                    Objects.equals(this.entity, that.entity);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(uuid, entity);
-        }
-
-        @Override
-        public String toString() {
-            return "CrystalDeathContext[" +
-                    "uuid=" + uuid + ", " +
-                    "entity=" + entity + ']';
         }
     }
 

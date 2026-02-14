@@ -6,7 +6,6 @@ import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
-import dev.mrshawn.deathmessages.utils.Util;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.EnderCrystal;
@@ -30,7 +29,7 @@ public class EntityDamageByEntity implements Listener {
     @EventHandler
     public void entityDamageByEntity(EntityDamageByEntityEvent e) {
         // Get the damager of ender crystal
-        Util.CrystalDeathContext crystalDeathContext = Util.loadCrystalDamager(e.getEntity(), e.getDamager());
+        EntityUtil.CrystalDeathContext crystalDeathContext = EntityUtil.loadCrystalDamager(e.getEntity(), e.getDamager());
 
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
