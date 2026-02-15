@@ -29,9 +29,10 @@ Compatibility
 - [Github Releases](https://github.com/Winds-Studio/DeathMessages/releases) (Latest DEV Version)
 - [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Latest Stable Version)
 
-## Contact
+## 📫 Contact
 
-- 📫 Discord: `dreeam___` | QQ: `2682173972`
+- Discord: [`https://discord.gg/pUYdgX8cQM`](https://discord.gg/pUYdgX8cQM)
+- QQ: `2682173972`
 
 ## Translations
 
