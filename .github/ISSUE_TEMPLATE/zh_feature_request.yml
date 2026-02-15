@@ -11,6 +11,6 @@ body:
   - type: textarea
     attributes:
       label: 你想加入什么功能？
-      description: 用几句话尽可能清晰, 详细的描述你所需要的功能, 建议, 或者你想让 DeathMessages 兼容的插件
+      description: 用几句话尽可能清晰，详细的描述你所需要的功能，建议，或者你想让 DeathMessages 兼容的插件
     validations:
       required: true
