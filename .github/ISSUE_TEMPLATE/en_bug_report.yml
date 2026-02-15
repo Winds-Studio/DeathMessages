@@ -18,7 +18,7 @@ body:
           required: true
         - label: I ticked all the boxes without actually reading them
           required: false
-        - label: I am using latest dev build from https://github.com/Winds-Studio/DeathMessages/releases/tag/dev-build
+        - label: I am using latest dev build from https://github.com/Winds-Studio/DeathMessages/releases/tag/latest
           required: true
 
   - type: textarea
