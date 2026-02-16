@@ -25,6 +25,7 @@ public class HookInstance {
 
     public MythicBukkit mythicMobs = null;
     public boolean mythicmobsEnabled = false;
+    public boolean useMythicMobsDeathMessages = false;
 
     public WorldGuardExtension worldGuardExtension;
     public boolean worldGuardEnabled;
@@ -134,6 +135,7 @@ public class HookInstance {
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
             mythicMobs = MythicBukkit.inst();
             mythicmobsEnabled = true;
+            useMythicMobsDeathMessages = FileStore.CONFIG.getBoolean(Config.HOOKS_MYTHICMOBS_USE_MYTHICMOBS_DEATH_MESSAGE);
             Bukkit.getPluginManager().registerEvents(new MobDeath(), instance);
             DeathMessages.LOGGER.info("MythicMobs Hook Enabled!");
         }

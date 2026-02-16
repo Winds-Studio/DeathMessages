@@ -378,7 +378,7 @@ public class Assets {
             //Bukkit.broadcastMessage("is myth - " + mmMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + ".Weapon"), playerCtx.getPlayer(), mob);
 
-            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
+            if (msgs.isEmpty() || DeathMessages.getHooks().useMythicMobsDeathMessages) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -452,7 +452,7 @@ public class Assets {
 
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + ".Weapon"), p, e);
 
-            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
+            if (msgs.isEmpty() || DeathMessages.getHooks().useMythicMobsDeathMessages) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -524,7 +524,7 @@ public class Assets {
             //System.out.println("is myth - " + mmMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + "." + damageCause), playerCtx.getPlayer(), mob);
 
-            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
+            if (msgs.isEmpty() || DeathMessages.getHooks().useMythicMobsDeathMessages) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -579,7 +579,7 @@ public class Assets {
             String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + "." + projectileDamage), playerCtx.getPlayer(), mob);
 
-            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
+            if (msgs.isEmpty() || DeathMessages.getHooks().useMythicMobsDeathMessages) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -671,7 +671,7 @@ public class Assets {
 
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + "." + projectileDamage), p, entityCtx.getEntity());
 
-            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
+            if (msgs.isEmpty() || DeathMessages.getHooks().useMythicMobsDeathMessages) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))
@@ -761,7 +761,7 @@ public class Assets {
 
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + "." + damageCause), player, e);
 
-            if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
+            if (msgs.isEmpty() || DeathMessages.getHooks().useMythicMobsDeathMessages) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
         }
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DEBUG.getPath()))

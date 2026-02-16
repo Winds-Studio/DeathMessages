@@ -17,6 +17,9 @@ Hooks:
   # Enable/Disable MythicMobs hook
   MythicMobs:
     Enabled: true
+    # Whether to let MythicMobs to handle MythicMobs mob's death message
+    # If enabled, DeathMessages will not broadcast death message if kill or killed by MythicMobs mobs
+    UseMythicMobsDeathMessage: false
 
   # If WorldGuard is found, enable the hook
   # This creates custom flags for regions. These flags are set to ALLOW by default

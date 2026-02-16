@@ -49,7 +49,7 @@ public class EntityDamage implements Listener {
             Set<String> listenedMobs = entityConfig.getKeys(false);
             ConfigurationSection mobConfig = EntityDeathMessages.getInstance().getConfig().getConfigurationSection("Mythic-Mobs-Entities");
 
-            if (mobConfig != null && DeathMessages.getHooks().mythicmobsEnabled) {
+            if (mobConfig != null && DeathMessages.getHooks().mythicmobsEnabled && !DeathMessages.getHooks().useMythicMobsDeathMessages) {
                 listenedMobs.addAll(mobConfig.getKeys(false));
             }
 
