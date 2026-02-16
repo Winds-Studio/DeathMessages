@@ -23,7 +23,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +42,6 @@ public class Util {
             .matchLiteral("%prefix%")
             .replacement(convertFromLegacy(Messages.getInstance().getConfig().getString("Prefix")))
             .build();
-    public static final UUID NIL_UUID = new UUID(0, 0);
 
     public static Pattern[] customWeaponNamePatterns;
 

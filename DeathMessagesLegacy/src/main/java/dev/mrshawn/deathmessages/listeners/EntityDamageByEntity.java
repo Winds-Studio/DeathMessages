@@ -30,14 +30,14 @@ public class EntityDamageByEntity implements Listener {
     @EventHandler
     public void entityDamageByEntity(EntityDamageByEntityEvent e) {
         // Get the damager of ender crystal
-        EntityUtil.CrystalDeathContext crystalDeathContext = EntityUtil.loadCrystalDamager(e.getEntity(), e.getDamager());
+        EntityUtil.loadCrystalDamager(e.getEntity(), e.getDamager());
 
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             PlayerCtx playerCtx = PlayerCtx.of(p.getUniqueId());
             if (playerCtx != null) {
                 if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                    Entity lastCrystalDamager = crystalDeathContext.uuid().equals(e.getDamager().getUniqueId()) ? crystalDeathContext.entity() : null;
+                    Entity lastCrystalDamager = EntityUtil.crystalDeathContext.get(e.getDamager().getUniqueId());
 
                     if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
                         playerCtx.setLastEntityDamager(lastCrystalDamager);
@@ -103,7 +103,7 @@ public class EntityDamageByEntity implements Listener {
                     EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
                     if (entityCtx != null) {
                         if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
-                            Entity lastCrystalDamager = crystalDeathContext.uuid().equals(e.getDamager().getUniqueId()) ? crystalDeathContext.entity() : null;
+                            Entity lastCrystalDamager = EntityUtil.crystalDeathContext.get(e.getDamager().getUniqueId());
 
                             if (e.getDamager() instanceof EnderCrystal && lastCrystalDamager != null) {
                                 if (lastCrystalDamager instanceof Player) {

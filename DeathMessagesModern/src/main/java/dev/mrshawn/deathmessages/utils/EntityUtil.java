@@ -22,7 +22,9 @@ import org.bukkit.util.BoundingBox;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class EntityUtil {
@@ -107,6 +109,10 @@ public class EntityUtil {
             "breeze"
     );
 
+    // K: EndCrystal UUID
+    // V: Causing Entity instance
+    public static final Map<UUID, LivingEntity> crystalDeathContext = new HashMap<>();
+
     public static List<String> getEntityList() {
         return list;
     }
@@ -181,26 +187,20 @@ public class EntityUtil {
         Bukkit.getPluginManager().callEvent(explodeEvent);
     }
 
-    public static CrystalDeathContext loadCrystalDamager(Entity entity, Entity damager) {
+    public static void loadCrystalDamager(Entity entity, Entity damager) {
         // Scenario 1
         // Player clicked (damaged) crystal
         // I didn't consider the scenario about entity clicked crystal, idk if it's needed?
         if (entity instanceof EnderCrystal && damager instanceof Player) {
-            return new CrystalDeathContext(entity.getUniqueId(), (Player) damager);
+            crystalDeathContext.put(entity.getUniqueId(), (Player) damager);
         }
         // Scenario 2
         // The crystal is triggered by a projectile when pass through (player A / LivingEntity -> projectile -> crystal -> Player A/B / Entity)
         else if (entity instanceof EnderCrystal && damager instanceof Projectile) {
             ProjectileSource shooter = ((Projectile) damager).getShooter();
             if (shooter instanceof LivingEntity) {
-                return new CrystalDeathContext(entity.getUniqueId(), (LivingEntity) shooter);
+                crystalDeathContext.put(entity.getUniqueId(), (LivingEntity) shooter);
             }
         }
-
-        return new CrystalDeathContext(Util.NIL_UUID, null);
     }
-
-    // K: EndCrystal UUID
-    // V: Causing Entity instance
-    public record CrystalDeathContext(UUID uuid, LivingEntity entity) {}
 }
