@@ -236,6 +236,15 @@ public class Util {
         return Util.convertFromLegacy(name != null ? name : "");
     }
 
+    public static boolean doesClassExists(String clazz) {
+        try {
+            Class.forName(clazz);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
     /*
         Sakamoto Util
      */
