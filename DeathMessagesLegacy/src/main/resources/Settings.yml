@@ -37,7 +37,7 @@ Hooks:
 
   Vanish:
     # Enable/Disable vanilla potion effect vanish hook
-    Vanilla: true
+    Vanilla: false
     # If common vanish plugins are found, enable the hook
     # Supports: SayanVanish, SuperVanish, PremiumVanish, EssentialsX, VanishNoPacket and more
     # Enable/Disable common vanish plugin hook
