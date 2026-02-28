@@ -37,11 +37,16 @@ jobs:
             DeathMessagesModern/build/libs/DeathMessages-*.jar
           prerelease: true
 
-      - name: Upload DeathMessages Nightly
+      - name: Upload DeathMessages Legacy Nightly
         if: github.ref_name == 'dev'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: DeathMessages-Nightly
-          path: |
-            DeathMessagesLegacy/build/libs/DeathMessages-*.jar
-            DeathMessagesModern/build/libs/DeathMessages-*.jar
+          path: DeathMessagesLegacy/build/libs/DeathMessages-*.jar
+          archive: false
+
+      - name: Upload DeathMessages Modern Nightly
+        if: github.ref_name == 'dev'
+        uses: actions/upload-artifact@v7
+        with:
+          path: DeathMessagesModern/build/libs/DeathMessages-*.jar
+          archive: false
