@@ -35,6 +35,7 @@ public class CommandVersion extends DeathMessagesCommand {
 
         sender.sendMessage(message);
 
+        if (true) return; // TODO: refactor updater
         sender.sendMessage(Component.text("Checking update..."));
         Updater.checkUpdate();
         switch (Updater.shouldUpdate) {

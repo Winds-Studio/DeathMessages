@@ -60,7 +60,7 @@ public class DeathMessages extends JavaPlugin {
         new Metrics(instance, 24145); // Move to single class for more Metrics function
         LOGGER.info("bStats Hook Enabled!");
         ComponentUtil.sendConsoleMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
-        checkUpdate();
+        if (false) checkUpdate(); // TODO: refactor updater
     }
 
     @Override
