@@ -1,6 +1,6 @@
 plugins {
     id("cn.dreeam.deathmessages.wrapper")
-    id("com.gradleup.shadow") version "9.0.0-beta16"
+    id("com.gradleup.shadow") version "9.3.2"
     id("com.willfp.libreforge-gradle-plugin") version "1.0.3"
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
@@ -15,18 +15,18 @@ dependencies {
 
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT") // Universal
     compileOnly("commons-io:commons-io:2.18.0") // Remove this
-    compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.25.3")
     compileOnlyApi("org.jspecify:jspecify:1.0.0")
-    implementation("com.github.cryptomorin:XSeries:13.3.1")
-    implementation("org.bstats:bstats-bukkit:3.1.0")
-    implementation("com.github.technicallycoded:FoliaLib:0.4.4")
+    implementation("com.github.cryptomorin:XSeries:13.6.0")
+    implementation("org.bstats:bstats-bukkit:3.2.1")
+    implementation("com.tcoded:FoliaLib:0.5.1")
 
-    implementation("de.tr7zw:item-nbt-api:2.15.0")
-    compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.discordsrv:discordsrv:1.29.0")
-    compileOnly("io.lumine:Mythic-Dist:5.9.0")
-    compileOnly("com.willfp:eco:6.76.0")
-    compileOnly("com.willfp:EcoEnchants:12.22.0")
+    implementation("de.tr7zw:item-nbt-api:2.15.5")
+    compileOnly("me.clip:placeholderapi:2.12.2")
+    compileOnly("com.discordsrv:discordsrv:1.30.4")
+    compileOnly("io.lumine:Mythic-Dist:5.11.2")
+    compileOnly("com.willfp:eco:6.77.0") // Java 8 Compatibility
+    compileOnly("com.willfp:EcoEnchants:12.25.0") // Java 8 Compatibility
     compileOnly("com.sk89q.worldguard:worldguard-legacy:6.2")
     compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT") // Last JAVA 8 compatibility
     compileOnly(files("libs/LangUtils-1.9.jar"))

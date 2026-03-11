@@ -22,7 +22,7 @@ repositories {
     // PlaceholderAPI
     maven {
         name = "placeholderapi-repo"
-        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+        url = uri("https://repo.helpch.at/releases/")
     }
 
     // NBT-API
@@ -71,6 +71,12 @@ repositories {
     maven {
         name = "minebench-repo"
         url = uri("https://repo.minebench.de/")
+    }
+
+    // FoliaLib
+    maven {
+        name = "tcoded-releases"
+        url = uri("https://repo.tcoded.com/releases")
     }
 }
 
