@@ -414,9 +414,9 @@ public class Assets {
             }
 
             TextComponent deathMessage = Util.convertFromLegacy(msg);
-            Component weaponHover = ComponentUtil.buildItemHover(playerCtx.getPlayer(), i, displayName);
+            Component weapon = ComponentUtil.buildItemHover(playerCtx.getPlayer(), i, displayName);
 
-            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
+            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weapon).build()));
         } else {
             TextComponent deathMessage = Util.convertFromLegacy(msg);
             base.append(deathMessage);
@@ -488,9 +488,9 @@ public class Assets {
             }
 
             TextComponent deathMessage = Util.convertFromLegacy(msg);
-            Component weaponHover = ComponentUtil.buildItemHover(p, i, displayName);
+            Component weapon = ComponentUtil.buildItemHover(p, i, displayName);
 
-            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
+            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weapon).build()));
         } else {
             TextComponent deathMessage = Util.convertFromLegacy(msg);
             base.append(deathMessage);
@@ -604,7 +604,7 @@ public class Assets {
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
         if (msg.contains("%weapon%") && playerCtx.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
-            Component weaponHover;
+            Component weapon;
             ItemStack i = mob.getEquipment().getItemInMainHand();
 
             // If there is no item in killer's main hands, then it can be seen as the victim got attack by projectile
@@ -626,18 +626,18 @@ public class Assets {
                     displayName = ComponentUtil.getItemStackDisplayName(i);
                 }
 
-                weaponHover = ComponentUtil.buildItemHover(playerCtx.getPlayer(), i, displayName);
+                weapon = ComponentUtil.buildItemHover(playerCtx.getPlayer(), i, displayName);
             } else {
                 Entity projectile = playerCtx.getLastProjectileEntity();
                 Component projectileName = projectile.customName() != null
                         ? projectile.customName()
                         : getI18nName(projectile, playerCtx.getPlayer());
 
-                weaponHover = projectileName;
+                weapon = projectileName;
             }
 
             TextComponent deathMessage = Util.convertFromLegacy(msg);
-            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
+            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weapon).build()));
         } else {
             TextComponent deathMessage = Util.convertFromLegacy(msg);
             base.append(deathMessage);
@@ -692,7 +692,7 @@ public class Assets {
         msg = ComponentUtil.sortHoverEvents(msg, rawEvents);
 
         if (msg.contains("%weapon%") && entityCtx.getLastProjectileEntity() instanceof Arrow) {
-            Component weaponHover;
+            Component weapon;
             ItemStack i = p.getEquipment().getItemInMainHand();
 
             if (!MaterialUtil.isAir(i)) {
@@ -710,18 +710,18 @@ public class Assets {
                     displayName = ComponentUtil.getItemStackDisplayName(i);
                 }
 
-                weaponHover = ComponentUtil.buildItemHover(p, i, displayName);
+                weapon = ComponentUtil.buildItemHover(p, i, displayName);
             } else {
                 Entity projectile = entityCtx.getLastProjectileEntity();
                 Component projectileName = projectile.customName() != null
                         ? projectile.customName()
                         : getI18nName(projectile, p);
 
-                weaponHover = projectileName;
+                weapon = projectileName;
             }
 
             TextComponent deathMessage = Util.convertFromLegacy(msg);
-            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weaponHover).build()));
+            base.append(deathMessage.replaceText(TextReplacementConfig.builder().matchLiteral("%weapon%").replacement(weapon).build()));
         } else {
             TextComponent deathMessage = Util.convertFromLegacy(msg);
             base.append(deathMessage);
