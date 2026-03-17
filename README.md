@@ -14,20 +14,20 @@
 
 Compatibility
 
-|                       |           Legacy           |      Modern       |
-|-----------------------|:--------------------------:|:-----------------:|
-| Java Version          |           `>= 8`           |      `>= 21`      |
-| Minecraft Version     |      1.12.2 ~ 1.20.4       |      1.20.5+      |
-| Compatibility         | Spigot / Paper / Forks / * | Paper / Forks / * |
-| Folia Support         |            Yes             |        Yes        |
-| Multi Plugins Support |            Yes             |        Yes        |
+|                       |          Support           |
+|-----------------------|:--------------------------:|
+| Java Version          |          `>= 21`           |  
+| Minecraft Version     |      1.12.2 ~ 1.21.11      |
+| Compatibility         | Spigot / Paper / Forks / * |
+| Folia Support         |            Yes             |
+| Multi Plugins Support |            Yes             |
 
 - *Compatibility for Forge / Bukkit Hybrid Server Software is limited, if there is an issue, report!
 
 ## Portals
 
-- [Github Releases](https://github.com/Winds-Studio/DeathMessages/releases) (Latest DEV Version)
-- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Latest Stable Version)
+- [GitHub Releases](https://github.com/Winds-Studio/DeathMessages/releases) (Latest dev build)
+- [SpigotMC](https://www.spigotmc.org/resources/deathmessages-deathmessagesprime-remastered.3789/) (Latest stable version)
 
 ## 📫 Contact
 
@@ -50,7 +50,7 @@ Please feel free to contribute or modify existing translations if they are not r
 ## Building
 
 - Use Java 21
-- Open your IDE, recommended to use IDEA
+- Open your IDE, recommended to use IntelliJ IDEA
 - Build the plugin with: `./gradlew clean build`
 
 ## TODOs

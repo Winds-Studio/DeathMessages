@@ -80,21 +80,12 @@ repositories {
     }
 }
 
-configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-    }
-
-    processResources {
-        filesMatching("**/plugin.yml") {
-            expand(
-                "version" to project.version
-            )
-        }
     }
 }

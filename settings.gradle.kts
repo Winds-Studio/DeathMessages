@@ -9,13 +9,18 @@ pluginManagement {
 rootProject.name = "DeathMessages"
 
 include(
-    ":Modern",
-    ":Legacy",
+    ":core",
 
-    ":Hooks:WorldGuard",
-    ":Hooks:WorldGuard6",
-    ":Hooks:WorldGuard7",
+    "nms:abstraction",
+
+    "nms:spigot:v1_12_2",
+    "nms:spigot:v1_13",
+    "nms:spigot:v1_16_5",
+
+    "nms:paper:v1_16_5",
+    "nms:paper:v1_21_4",
+
+    ":hooks:worldguard",
+    ":hooks:worldguard6",
+    ":hooks:worldguard7",
 )
-
-project(":Modern").projectDir = file("DeathMessagesModern")
-project(":Legacy").projectDir = file("DeathMessagesLegacy")
