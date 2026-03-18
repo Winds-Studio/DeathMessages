@@ -3,6 +3,7 @@ package dev.mrshawn.deathmessages.nms.paper.v1_16_5;
 import dev.mrshawn.deathmessages.nms.NMSAdaptor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -46,8 +47,13 @@ public class NMSAdaptorImpl implements NMSAdaptor {
     }
 
     @Override
-    public Component itemDisplayName(ItemStack i) {;
+    public Component itemDisplayName(ItemStack i) {
         return i.getItemMeta().displayName();
+    }
+
+    @Override
+    public HoverEvent<HoverEvent.ShowItem> itemHoverEvent(ItemStack i) {
+        return i.asHoverEvent();
     }
 
     @Override

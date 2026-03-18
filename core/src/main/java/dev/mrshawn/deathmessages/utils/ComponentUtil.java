@@ -1,6 +1,5 @@
 package dev.mrshawn.deathmessages.utils;
 
-import com.cryptomorin.xseries.XMaterial;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import dev.mrshawn.deathmessages.DeathMessages;
@@ -60,27 +59,12 @@ public class ComponentUtil {
             return displayName;
         }
 
-        HoverEvent<HoverEvent.ShowItem> showItem = null;
-        String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
-
         // Eco item process
         if (DeathMessages.getHooks().ecoEnchantsEnabled && DeathMessages.getHooks().ecoExtension.isEcoEnchantsItem(i)) {
             i = DeathMessages.getHooks().ecoExtension.getEcoEnchantsItem(i, player);
         }
 
-        // For <= 1.20.4
-        if (Util.isOlderAndEqual(20, 4)) {
-            ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
-            showItem = i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
-                    // Item with NBT
-                    ? HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
-                    // Item without NBT (tag compound)
-                    : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
-        } else {
-            // For >= 1.20.5
-            // TODO
-            //showItem = i.asHoverEvent();
-        }
+        final HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getNMS().itemHoverEvent(i);
 
         return displayName.hoverEvent(showItem);
     }

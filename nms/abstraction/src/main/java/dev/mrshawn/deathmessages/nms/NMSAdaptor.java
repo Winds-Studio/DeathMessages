@@ -2,6 +2,7 @@ package dev.mrshawn.deathmessages.nms;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
@@ -24,6 +25,8 @@ public interface NMSAdaptor {
     BukkitAudiences adventure();
 
     Component itemDisplayName(ItemStack i);
+
+    HoverEvent<HoverEvent.ShowItem> itemHoverEvent(ItemStack i);
 
     Component entityCustomName(Entity entity);
 
