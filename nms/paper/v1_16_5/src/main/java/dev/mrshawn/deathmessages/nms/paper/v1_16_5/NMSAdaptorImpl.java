@@ -66,8 +66,8 @@ public class NMSAdaptorImpl implements NMSAdaptor {
     }
 
     @Override
-    public String biomeName(Biome biome) {
+    public String biomeKeyName(Biome biome) {
         // Deprecated since 1.21.3, Planned to remove since 1.22
-        return biome.toString();
+        return biome.name();
     }
 }

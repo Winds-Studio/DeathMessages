@@ -16,6 +16,8 @@ public class NMSProvider {
         if (PlatformUtil.IS_PAPER) {
             if (Util.isNewerAndEqual(21, 4)) {
                 instClassPath = "paper.v1_21_4";
+            } else if (Util.isNewerAndEqual(21, 3)) {
+                instClassPath = "paper.v1_21_3";
             } else if (Util.isNewerAndEqual(16, 5)) {
                 instClassPath = "paper.v1_16_5";
             } else if (Util.isNewerAndEqual(13, 0)) { // Just use Spigot impl for <= Paper 1.16.5
@@ -27,7 +29,9 @@ public class NMSProvider {
                 throw new UnsupportedOperationException();
             }
         } else {
-            if (Util.isNewerAndEqual(16, 5)) {
+            if (Util.isNewerAndEqual(21, 3)) {
+                instClassPath = "spigot.v1_21_3";
+            } else if (Util.isNewerAndEqual(16, 5)) {
                 instClassPath = "spigot.v1_16_5";
             } else if (Util.isNewerAndEqual(13, 0)) {
                 instClassPath = "spigot.v1_13";

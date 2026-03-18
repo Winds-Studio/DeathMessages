@@ -31,7 +31,7 @@ public interface NMSAdaptor {
 
     void showDeathMessages(World world, boolean show);
 
-    String biomeName(Biome biome);
+    String biomeKeyName(Biome biome);
 
     //Material getFallingBlockMaterial();
 }

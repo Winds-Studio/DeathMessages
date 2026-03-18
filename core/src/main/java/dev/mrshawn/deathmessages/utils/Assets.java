@@ -878,7 +878,7 @@ public class Assets {
         String biomeName;
         try {
             final Biome biome = entity.getLocation().getBlock().getBiome();
-            biomeName = DeathMessages.getNMS().biomeName(biome);
+            biomeName = Util.getBiomeName(biome);
         } catch (NullPointerException e) {
             DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
             DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
@@ -932,7 +932,7 @@ public class Assets {
             String biomeName;
             try {
                 final Biome biome = entity.getLocation().getBlock().getBiome();
-                biomeName = DeathMessages.getNMS().biomeName(biome);
+                biomeName = Util.getBiomeName(biome);
             } catch (NullPointerException e) {
                 DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
                 DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
@@ -971,7 +971,7 @@ public class Assets {
         String biomeName;
         try {
             final Biome biome = playerCtx.getLastLocation().getBlock().getBiome();
-            biomeName = DeathMessages.getNMS().biomeName(biome);
+            biomeName = Util.getBiomeName(biome);
         } catch (NullPointerException e) {
             DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
             DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
@@ -1048,7 +1048,7 @@ public class Assets {
             String biomeName;
             try {
                 final Biome biome = playerCtx.getLastLocation().getBlock().getBiome();
-                biomeName = DeathMessages.getNMS().biomeName(biome);
+                biomeName = Util.getBiomeName(biome);
             } catch (NullPointerException e) {
                 DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
                 DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
@@ -1120,11 +1120,11 @@ public class Assets {
             } else if (DeathMessages.getHooks().langUtilsEnabled) {
                 i18nName = Component.text(LanguageHelper.getItemName(i, p.getLocale()));
             } else {
-                String name = capitalize(i.getType().name());
+                String name = Util.capitalize(i.getType().name());
                 i18nName = Component.text(name);
             }
         } else {
-            String name = capitalize(i.getType().name());
+            String name = Util.capitalize(i.getType().name());
             i18nName = Component.text(name);
         }
 
@@ -1146,39 +1146,15 @@ public class Assets {
             } else if (DeathMessages.getHooks().langUtilsEnabled && !(mob instanceof ShulkerBullet)) { // <= 1.12.2 no ShulkerBullet lang key
                 i18nName = Component.text(LanguageHelper.getEntityName(mob, p.getLocale()));
             } else {
-                String name = capitalize(mob.getType().name());
+                String name = Util.capitalize(mob.getType().name());
                 i18nName = Component.text(name);
             }
         } else {
-            String name = capitalize(mob.getType().name());
+            String name = Util.capitalize(mob.getType().name());
             i18nName = Component.text(name);
         }
 
         return i18nName;
-    }
-
-    private static String capitalize(String name) {
-        // Split with "_"
-        String[] list = name.split("_");
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-
-        // To make the first letter of each word capitalized, then append the rest of the string in each word together
-        for (String s : list) {
-            String fst = s.substring(0, 1);
-            String snd = s.substring(1).toLowerCase();
-
-            sb.append(fst).append(snd);
-
-            // Add space between split words
-            if (i < list.length - 1) {
-                sb.append(" ");
-            }
-
-            i++;
-        }
-
-        return sb.toString();
     }
 
     public static String getEnvironment(World.Environment environment) {

@@ -14,6 +14,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -97,6 +98,48 @@ public class Util {
         return false;
     }
 
+    // The simpler and better version of common-lang's RandomStringUtils#randomNumeric
+    public static String randomNumeric(int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Length must be greater than zero.");
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            // Bound range 0~9
+            int digit = ThreadLocalRandom.current().nextInt(10);
+            sb.append(digit);
+        }
+
+        return sb.toString();
+    }
+
+    // e.g. FLOWER_FOREST -> Flower Forest
+    public static String capitalize(String name) {
+        // Split with "_"
+        String[] list = name.split("_");
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+
+        // To make the first letter of each word capitalized, then append the rest of the string in each word together
+        for (String s : list) {
+            String fst = s.substring(0, 1).toUpperCase();
+            String snd = s.substring(1).toLowerCase();
+
+            sb.append(fst).append(snd);
+
+            // Add space between split words
+            if (i < list.length - 1) {
+                sb.append(" ");
+            }
+
+            i++;
+        }
+
+        return sb.toString();
+    }
+
     public static void registerEvents(Listener... listeners) {
         final PluginManager manager = Bukkit.getPluginManager();
         final DeathMessages instance = DeathMessages.getInstance();
@@ -136,23 +179,6 @@ public class Util {
         }
 
         return broadcastWorlds;
-    }
-
-    // The simpler and better version of common-lang's RandomStringUtils#randomNumeric
-    public static String randomNumeric(int length) {
-        if (length <= 0) {
-            throw new IllegalArgumentException("Length must be greater than zero.");
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < length; i++) {
-            // Bound range 0~9
-            int digit = ThreadLocalRandom.current().nextInt(10);
-            sb.append(digit);
-        }
-
-        return sb.toString();
     }
 
     @Deprecated
@@ -243,6 +269,10 @@ public class Util {
         final String name = Settings.getInstance().getConfig().getString(Config.HOOKS_VANISH_VANISHED_NAME.getPath());
 
         return Util.convertFromLegacy(name != null ? name : "");
+    }
+
+    public static String getBiomeName(Biome biome) {
+        return capitalize(DeathMessages.getNMS().biomeKeyName(biome));
     }
 
     public static boolean doesClassExists(String clazz) {
