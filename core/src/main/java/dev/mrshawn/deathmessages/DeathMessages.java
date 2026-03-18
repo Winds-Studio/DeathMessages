@@ -128,11 +128,11 @@ public class DeathMessages extends JavaPlugin {
 
     private void checkGameRules() {
         if (FileStore.CONFIG.getBoolean(Config.DISABLE_DEFAULT_MESSAGES)) {
-            final NMSAdaptor nmsProvider = getNMS();
+            final NMSAdaptor nmsAdaptor = getNMS();
             foliaLib.getScheduler().runNextTick(task -> {
                 for (World world : Bukkit.getWorlds()) {
-                    if (nmsProvider.showDeathMessages(world)) {
-                        nmsProvider.showDeathMessages(world, false);
+                    if (nmsAdaptor.showDeathMessages(world)) {
+                        nmsAdaptor.showDeathMessages(world, false);
                     }
                 }
             });
