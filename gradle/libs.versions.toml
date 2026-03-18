@@ -1,0 +1,48 @@
+[versions]
+adventure = "4.26.1"
+adventure-platform = "4.4.1"
+
+[plugins]
+shadow = "com.gradleup.shadow:9.3.2"
+run-paper = "xyz.jpenilla.run-paper:3.0.2"
+
+[libraries]
+common-io = "commons-io:commons-io:2.18.0"
+log4j-api = "org.apache.logging.log4j:log4j-api:2.25.3"
+jspecify = "org.jspecify:jspecify:1.0.0"
+xseries = "com.github.cryptomorin:XSeries:13.6.0"
+bstats = "org.bstats:bstats-bukkit:3.2.1"
+folialib = "com.tcoded:FoliaLib:0.5.1"
+
+itemnbtapi = "de.tr7zw:item-nbt-api:2.15.5"
+placeholderapi = "me.clip:placeholderapi:2.12.2"
+discordsrv = "com.discordsrv:discordsrv:1.30.4"
+mythicdist = "io.lumine:Mythic-Dist:5.11.2"
+eco = "com.willfp:eco:7.0.0"
+ecoenchants = "com.willfp:EcoEnchants:12.26.0"
+combatlogx = "com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT"
+
+# Dreeam - Don't bump worldedit/worldguard dependencies!!!!
+# Unless API changed then we need to create new Gradle module
+worldedit6-bukkit = "com.sk89q.worldedit:worldedit-bukkit:6.1"
+worldedit7-bukkit = "com.sk89q.worldedit:worldedit-bukkit:7.2.5"
+worldguard6 = "com.sk89q.worldguard:worldguard-legacy:6.2"
+worldguard7-core = "com.sk89q.worldguard:worldguard-core:7.0.5"
+worldguard7-bukkit = "com.sk89q.worldguard:worldguard-bukkit:7.0.5"
+
+adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
+adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
+adventure-text-serializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
+adventure-key = { module = "net.kyori:adventure-key", version.ref = "adventure" }
+
+[bundles]
+adventure = [
+    "adventure-platform-bukkit", "adventure-api", "adventure-text-minimessage",
+    "adventure-text-serializer-legacy", "adventure-text-serializer-plain", "adventure-text-serializer-gson",
+    "adventure-key"
+]
+worldguard6 = ["worldedit6-bukkit", "worldguard6"]
+worldguard7 = ["worldedit7-bukkit", "worldguard7-core", "worldguard7-bukkit"]

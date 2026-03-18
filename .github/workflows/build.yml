@@ -2,8 +2,6 @@ name: Build DeathMessages
 
 on:
   push:
-    branches: [ "master", "dev" ]
-  pull_request:
     branches: [ "master" ]
 
 jobs:
@@ -32,21 +30,11 @@ jobs:
           title: "DeathMessages v1.5.0-SNAPSHOT"
           automatic_release_tag: "latest"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: |
-            DeathMessagesLegacy/build/libs/DeathMessages-*.jar
-            DeathMessagesModern/build/libs/DeathMessages-*.jar
+          files: core/build/libs/DeathMessages-*.jar
           prerelease: true
 
-      - name: Upload DeathMessages Legacy Nightly
-        if: github.ref_name == 'dev'
-        uses: actions/upload-artifact@v7
-        with:
-          path: DeathMessagesLegacy/build/libs/DeathMessages-*.jar
-          archive: false
-
-      - name: Upload DeathMessages Modern Nightly
-        if: github.ref_name == 'dev'
-        uses: actions/upload-artifact@v7
-        with:
-          path: DeathMessagesModern/build/libs/DeathMessages-*.jar
-          archive: false
+#      - name: Upload DeathMessages Nightly
+#        uses: actions/upload-artifact@v7
+#        with:
+#          path: core/build/libs/DeathMessages-*.jar
+#          archive: false
