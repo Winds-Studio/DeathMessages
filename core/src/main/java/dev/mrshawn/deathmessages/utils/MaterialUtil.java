@@ -25,11 +25,7 @@ public class MaterialUtil {
         if (Util.isOlderAndEqual(13, 0)) {
             // From 1.14 org.bukkit.Material.isAir()
             return switch (i.getType()) {
-                //<editor-fold defaultstate="collapsed" desc="isAir">
-                // ----- Legacy Separator -----
-                case AIR, CAVE_AIR, VOID_AIR, LEGACY_AIR ->
-                    //</editor-fold>
-                        true;
+                case AIR, CAVE_AIR, VOID_AIR, LEGACY_AIR -> true;
                 default -> false;
             };
         }
@@ -41,11 +37,7 @@ public class MaterialUtil {
         if (Util.isOlderAndEqual(13, 2)) {
             // From 1.14 org.bukkit.Material.isAir()
             return switch (material) {
-                //<editor-fold defaultstate="collapsed" desc="isAir">
-                // ----- Legacy Separator -----
-                case AIR, CAVE_AIR, VOID_AIR, LEGACY_AIR ->
-                    //</editor-fold>
-                        true;
+                case AIR, CAVE_AIR, VOID_AIR, LEGACY_AIR -> true;
                 default -> false;
             };
         }
