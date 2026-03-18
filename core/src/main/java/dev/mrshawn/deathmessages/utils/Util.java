@@ -23,7 +23,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Util {
@@ -217,6 +216,7 @@ public class Util {
             return getVanishedName();
         }
 
+        // TODO
         //return player.displayName();
         return null;
     }
@@ -226,8 +226,8 @@ public class Util {
             return getVanishedName();
         }
 
+        // TODO
         //return player.displayName();
-
         return null;
     }
 

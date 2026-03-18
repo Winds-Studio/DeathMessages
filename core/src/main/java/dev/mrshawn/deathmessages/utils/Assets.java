@@ -860,9 +860,6 @@ public class Assets {
 
     // TODO: Check all component related utils
     public static Component entityDeathPlaceholders(Component msg, Player player, Entity entity, boolean hasOwner) {
-        final boolean hasBiome = msg.contains(Component.text("%biome%"));
-        final boolean hasDistance = msg.contains(Component.text("%distance%"));
-
         msg = msg.replaceText(Util.replace("%entity%", EntityUtil.getEntityCustomNameComponent(entity)))
                 // TODO - to component
                 .replaceText(Util.replace("%entity_display%", entity.getCustomName() != null ? entity.getCustomName() : EntityUtil.getEntityCustomName(entity)))
@@ -878,21 +875,19 @@ public class Assets {
             msg = msg.replaceText(Util.replace("%owner%", ((Tameable) entity).getOwner().getName()));
         }
 
-        if (hasBiome) {
-            String biomeName;
-            try {
-                final Biome biome = entity.getLocation().getBlock().getBiome();
-                biomeName = DeathMessages.getNMS().biomeName(biome);
-            } catch (NullPointerException e) {
-                DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
-                DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-                biomeName = "Unknown";
-            }
-
-            msg = msg.replaceText(Util.replace("%biome%", biomeName));
+        String biomeName;
+        try {
+            final Biome biome = entity.getLocation().getBlock().getBiome();
+            biomeName = DeathMessages.getNMS().biomeName(biome);
+        } catch (NullPointerException e) {
+            DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+            DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+            biomeName = "Unknown";
         }
 
-        if (hasDistance && entity != null && entity.getLocation() != null) {
+        msg = msg.replaceText(Util.replace("%biome%", biomeName));
+
+        if (entity != null && entity.getLocation() != null) {
             try {
                 msg = msg.replaceText(Util.replace("%distance%", String.valueOf((int) Math.round(player.getLocation().distance(entity.getLocation())))));
             } catch (Exception ex) {
@@ -965,9 +960,6 @@ public class Assets {
 
     // TODO: Check all component related utils
     public static Component playerDeathPlaceholders(Component msg, PlayerCtx playerCtx, Entity mob) {
-        final boolean hasBiome = msg.contains(Component.text("%biome%"));
-        final boolean hasDistance = msg.contains(Component.text("%distance%"));
-
         msg = msg.replaceText(Util.replace("%player%", Util.getPlayerName(playerCtx)))
                 .replaceText(Util.replace("%player_display%", Util.getPlayerDisplayName(playerCtx)))
                 .replaceText(Util.replace("%world%", playerCtx.getLastLocation().getWorld().getName()))
@@ -976,21 +968,19 @@ public class Assets {
                 .replaceText(Util.replace("%y%", String.valueOf(playerCtx.getLastLocation().getBlock().getY())))
                 .replaceText(Util.replace("%z%", String.valueOf(playerCtx.getLastLocation().getBlock().getZ())));
 
-        if (hasBiome) {
-            String biomeName;
-            try {
-                final Biome biome = playerCtx.getLastLocation().getBlock().getBiome();
-                biomeName = DeathMessages.getNMS().biomeName(biome);
-            } catch (NullPointerException e) {
-                DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
-                DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
-                biomeName = "Unknown";
-            }
-
-            msg = msg.replaceText(Util.replace("%biome%",biomeName));
+        String biomeName;
+        try {
+            final Biome biome = playerCtx.getLastLocation().getBlock().getBiome();
+            biomeName = DeathMessages.getNMS().biomeName(biome);
+        } catch (NullPointerException e) {
+            DeathMessages.LOGGER.error("Custom Biome detected. Using 'Unknown' for a biome name.");
+            DeathMessages.LOGGER.error("Custom Biomes are not supported yet.'");
+            biomeName = "Unknown";
         }
 
-        if (hasDistance && mob != null && mob.getLocation() != null) {
+        msg = msg.replaceText(Util.replace("%biome%", biomeName));
+
+        if (mob != null && mob.getLocation() != null) {
             try {
                 msg = msg.replaceText(Util.replace("%distance%", String.valueOf((int) Math.round(playerCtx.getLastLocation().distance(mob.getLocation())))));
             } catch (Exception ex) {

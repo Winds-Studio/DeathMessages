@@ -78,6 +78,7 @@ public class ComponentUtil {
                     : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
         } else {
             // For >= 1.20.5
+            // TODO
             //showItem = i.asHoverEvent();
         }
 
