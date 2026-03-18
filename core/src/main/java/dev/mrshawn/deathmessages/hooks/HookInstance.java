@@ -9,6 +9,7 @@ import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.utils.Util;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -78,6 +79,9 @@ public class HookInstance {
 
     public void registerHooks() {
         final PluginManager pluginManager = Bukkit.getPluginManager();
+
+        new Metrics(instance, 24145);
+        DeathMessages.LOGGER.info("bStats Hook Enabled!");
 
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");

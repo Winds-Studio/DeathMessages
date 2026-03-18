@@ -33,7 +33,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -59,8 +58,6 @@ public class DeathMessages extends JavaPlugin {
         initOnlinePlayers();
         checkGameRules();
 
-        new Metrics(instance, 24145); // Move to single class for more Metrics function
-        LOGGER.info("bStats Hook Enabled!");
         ComponentUtil.sendConsoleMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
         if (false) checkUpdate(); // TODO: refactor updater
     }
