@@ -15,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HookInstance {
@@ -78,13 +79,14 @@ public class HookInstance {
 
     public void registerHooks() {
         final PluginManager pluginManager = Bukkit.getPluginManager();
+        final List<String> hooksName = new ArrayList<>();
 
         new Metrics(instance, 24145);
-        DeathMessages.LOGGER.info("bStats Hook Enabled!");
+        hooksName.add("bStats");
 
         fastStatsHook = new FastStatsHook();
         fastStatsHook.get().ready();
-        DeathMessages.LOGGER.info("FastStats Hook Enabled!");
+        hooksName.add("FastStats");
 
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
@@ -95,28 +97,28 @@ public class HookInstance {
                 bungeeInit = false;
                 bungeeServerDisplayName = FileStore.CONFIG.getString(Config.HOOKS_BUNGEE_SERVER_NAME_DISPLAY_NAME);
             }
-            DeathMessages.LOGGER.info("Bungee Hook enabled!");
+            hooksName.add("Bungee");
         }
 
         if (pluginManager.getPlugin("PlaceholderAPI") != null) {
             new PlaceholderAPIExtension(instance).register();
             placeholderAPIEnabled = true;
-            DeathMessages.LOGGER.info("PlaceholderAPI Hook Enabled!");
+            hooksName.add("PlaceholderAPI");
         }
 
         if (pluginManager.getPlugin("NBTAPI") != null) {
             // Dreeam - Remove this useless notice in the future.
-            DeathMessages.LOGGER.info("Item-NBT-API Hook Enabled!");
+            hooksName.add("Item-NBT-API");
         }
 
         if (worldGuardEnabled) {
-            DeathMessages.LOGGER.info("WorldGuard Hook Enabled!");
+            hooksName.add("WorldGuard");
         }
 
         if (pluginManager.getPlugin("DiscordSRV") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
             discordSRVExtension = new DiscordSRVExtension();
             discordSRVEnabled = true;
-            DeathMessages.LOGGER.info("DiscordSRV Hook Enabled!");
+            hooksName.add("DiscordSRV");
 
             if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
                     || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
@@ -143,6 +145,7 @@ public class HookInstance {
                         ignoredPlugins.add("DeathMessages");
                     }
                 }
+                hooksName.add("PlugMan");
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException |
                      ClassNotFoundException e) {
                 DeathMessages.LOGGER.error("Error adding plugin to ignored plugins list: ", e);
@@ -152,25 +155,25 @@ public class HookInstance {
         if (pluginManager.getPlugin("CombatLogX") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_COMBATLOGX_ENABLED)) {
             combatLogXAPIEnabled = true;
             pluginManager.registerEvents(new PlayerUntag(), instance);
-            DeathMessages.LOGGER.info("CombatLogX Hook Enabled!");
+            hooksName.add("CombatLogX");
         }
 
         if (pluginManager.getPlugin("MythicMobs") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
             mythicMobs = MythicBukkit.inst();
             mythicmobsEnabled = true;
             pluginManager.registerEvents(new MobDeath(), instance);
-            DeathMessages.LOGGER.info("MythicMobs Hook Enabled!");
+            hooksName.add("MythicMobs");
         }
 
         if (pluginManager.getPlugin("eco") != null && pluginManager.getPlugin("EcoEnchants") != null) {
             ecoExtension = new EcoExtension();
             ecoEnchantsEnabled = true;
-            DeathMessages.LOGGER.info("EcoEnchants Hook Enabled!");
+            hooksName.add("EcoEnchants");
         }
 
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_VANISH_COMMON_PLUGINS_ENABLED)) {
             commonVanishPluginsEnabled = true;
-            DeathMessages.LOGGER.info("Common Vanish Plugins Hook Enabled!");
+            hooksName.add("Common Vanish Plugins");
         }
 
         if (!disableI18nDisplay && Util.isOlderAndEqual(12, 2)) {
@@ -178,7 +181,7 @@ public class HookInstance {
                     || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
                 if (pluginManager.getPlugin("LangUtils") != null) {
                     langUtilsEnabled = true;
-                    DeathMessages.LOGGER.info("LangUtils Hook Enabled!");
+                    hooksName.add("LangUtils");
                 } else {
                     langUtilsEnabled = false;
                     DeathMessages.LOGGER.error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
@@ -186,6 +189,18 @@ public class HookInstance {
                 }
             }
         }
+
+        final StringBuilder sb = new StringBuilder("Enabled hooks for: \n");
+        for (int i = 0, size = hooksName.size(); i < size; i++) {
+            final String name = hooksName.get(i);
+
+            sb.append("- ").append(name);
+
+            if (i < size - 1) {
+                sb.append("\n");
+            }
+        }
+        DeathMessages.LOGGER.info(sb.toString());
     }
 
     public HookInstance getInstance() {
