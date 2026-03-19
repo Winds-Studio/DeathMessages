@@ -27,9 +27,6 @@ import java.util.List;
 
 public class DiscordSRVExtension {
 
-    public DiscordSRVExtension() {
-    }
-
     public void sendDiscordMessage(TextComponent[] components, MessageType messageType, PlayerCtx playerCtx) {
         final List<String> channels = DiscordAssets.getInstance().getIDs(messageType);
 

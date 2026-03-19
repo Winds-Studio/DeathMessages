@@ -57,12 +57,12 @@
 #
 # To completely remove the message for a certain death. Configure as followed:
 # Natrual-Death:
-#   Bed: []
+#   Bed: [""]
 # or
 # Mobs:
 #   Creeper:
 #     Solo:
-#       Explosion: []
+#       Explosion: [""]
 
 # Due for there being no cure for laziness, this option ignores everything in the Mobs section and makes all messages
 # appear the same.

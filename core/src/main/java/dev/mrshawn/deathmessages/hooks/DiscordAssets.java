@@ -8,9 +8,6 @@ import java.util.List;
 
 public class DiscordAssets {
 
-    public DiscordAssets() {
-    }
-
     private static final DiscordAssets instance = new DiscordAssets();
 
     public static DiscordAssets getInstance() {
