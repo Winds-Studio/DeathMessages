@@ -24,9 +24,10 @@ public class HookInstance {
     public boolean placeholderAPIEnabled = false;
     public boolean combatLogXAPIEnabled = false;
     public boolean langUtilsEnabled = false;
+    public boolean commonVanishPluginsEnabled = false; // TODO: really needs this (to keep consistency with other enabled)? Or just use config boolean?
+    public boolean disableI18nDisplay = false;
 
-    public MythicBukkit mythicMobs = null;
-    public boolean mythicmobsEnabled = false;
+    public FastStatsHook fastStatsHook;
 
     public WorldGuardExtension worldGuardExtension;
     public boolean worldGuardEnabled;
@@ -39,13 +40,11 @@ public class HookInstance {
     public DiscordSRVExtension discordSRVExtension;
     public boolean discordSRVEnabled = false;
 
+    public MythicBukkit mythicMobs = null;
+    public boolean mythicmobsEnabled = false;
+
     public EcoExtension ecoExtension;
     public boolean ecoEnchantsEnabled = false;
-
-    // TODO: really needs this (to keep consistency with other enabled)? Or just use config boolean?
-    public boolean commonVanishPluginsEnabled = false;
-
-    public boolean disableI18nDisplay = false;
 
     public HookInstance(DeathMessages pluginInstance) {
         instance = pluginInstance;
@@ -82,6 +81,10 @@ public class HookInstance {
 
         new Metrics(instance, 24145);
         DeathMessages.LOGGER.info("bStats Hook Enabled!");
+
+        fastStatsHook = new FastStatsHook();
+        fastStatsHook.get().ready();
+        DeathMessages.LOGGER.info("FastStats Hook Enabled!");
 
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
             Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");

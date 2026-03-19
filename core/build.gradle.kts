@@ -14,6 +14,7 @@ dependencies {
     compileOnlyApi(libs.jspecify)
     implementation(libs.xseries)
     implementation(libs.bstats)
+    implementation(libs.faststats)
     implementation(libs.folialib)
 
     implementation(libs.itemnbtapi)
@@ -55,6 +56,7 @@ tasks {
 //            }
         relocate("com.cryptomorin.xseries", "${project.group}.libs.xseries")
         relocate("org.bstats", "${project.group}.libs.bstats")
+        relocate("dev.faststats", "${project.group}.libs.faststats")
         relocate("com.tcoded.folialib", "${project.group}.libs.folialib")
         relocate("de.tr7zw.changeme.nbtapi", "${project.group}.libs.nbtapi")
     }

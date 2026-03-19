@@ -78,6 +78,12 @@ repositories {
         name = "tcoded-releases"
         url = uri("https://repo.tcoded.com/releases")
     }
+
+    // FastStats
+    maven {
+        name = "faststatsReleases"
+        url = uri("https://repo.faststats.dev/releases")
+    }
 }
 
 java {

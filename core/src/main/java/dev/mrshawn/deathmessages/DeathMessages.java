@@ -72,6 +72,7 @@ public class DeathMessages extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getHooks().fastStatsHook.get().shutdown();
         getNMS().shutdownAdventure();
 
         instance = null;
