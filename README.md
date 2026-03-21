@@ -53,12 +53,6 @@ Please feel free to contribute or modify existing translations if they are not r
 - Open your IDE, recommended to use IntelliJ IDEA
 - Build the plugin with: `./gradlew clean build`
 
-## TODOs
-
-> - PVPManager support
-> - Actionbar message and private Actionbar message
-> - Check getBiome name in assets
-
 ## Special Thanks To
 
 <a href="https://cloud.swordsman.com.cn/"><img src="JiankeServer.jpg" alt="Jianke Cloud Host" align="left" hspace="8"></a>
