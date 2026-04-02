@@ -71,14 +71,18 @@ public class NMSAdaptorImpl implements NMSAdaptor {
 
     @Override
     public HoverEvent<HoverEvent.ShowItem> itemHoverEvent(ItemStack i) {
-        String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
-        ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
+        //noinspection PatternValidation
+        final String iNamespace = XMaterial.matchXMaterial(i.getType().name()).get().name().toLowerCase();
+        //noinspection PatternValidation - Dreeam: we can sure that this namespace above can build a valid adventure key
+        final Key itemKey = Key.key(iNamespace);
+        final ReadWriteNBT nbt = NBT.itemStackToNBT(i).getCompound("tag");
+
         return i.hasItemMeta() && nbt != null && !nbt.toString().isEmpty()
                 // Item with NBT
                 // TODO: Note - Not working on Spigot 1.20.5+ I guess
-                ? HoverEvent.showItem(Key.key(iNamespace), i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
+                ? HoverEvent.showItem(itemKey, i.getAmount(), BinaryTagHolder.binaryTagHolder(nbt.toString()))
                 // Item without NBT (tag compound)
-                : HoverEvent.showItem(Key.key(iNamespace), i.getAmount());
+                : HoverEvent.showItem(itemKey, i.getAmount());
     }
 
     @Override
