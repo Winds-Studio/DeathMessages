@@ -45,7 +45,7 @@ public class MaterialUtil {
         return material.isAir();
     }
 
-    public static boolean itemNameIsWeapon(ItemStack itemStack) {
+    private static boolean itemNameIsWeapon(ItemStack itemStack) {
         if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return false;
 
         String displayName = itemStack.getItemMeta().getDisplayName();
@@ -73,7 +73,7 @@ public class MaterialUtil {
         return false;
     }
 
-    public static boolean itemMaterialIsWeapon(ItemStack itemStack) {
+    private static boolean itemMaterialIsWeapon(ItemStack itemStack) {
         for (String s : Settings.getInstance().getConfig().getStringList(Config.CUSTOM_ITEM_MATERIAL_IS_WEAPON.getPath())) {
             Material material = Material.getMaterial(s);
             if (itemStack.getType().equals(material)) {
@@ -83,7 +83,7 @@ public class MaterialUtil {
         return false;
     }
 
-    public static boolean isWeapon(ItemStack itemStack) {
+    private static boolean isWeapon(ItemStack itemStack) {
         return isWeapon(itemStack.getType())
                 || itemNameIsWeapon(itemStack)
                 || itemMaterialIsWeapon(itemStack);
@@ -91,7 +91,7 @@ public class MaterialUtil {
 
     // Refer https://minecraft.wiki/w/Weapon
     // Or https://zh.minecraft.wiki/w/%E6%AD%A6%E5%99%A8
-    public static boolean isWeapon(Material material) {
+    private static boolean isWeapon(Material material) {
         String materialName = material.toString();
         return materialName.contains("SHOVEL")
                 || materialName.contains("PICKAXE")
