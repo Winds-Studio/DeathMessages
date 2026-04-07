@@ -1194,7 +1194,7 @@ public class Assets {
             case PROJECTILE -> "Projectile";
             case SUFFOCATION -> "Suffocation";
             case FALL -> "Fall";
-            case FIRE -> "Fire";
+            case CAMPFIRE, FIRE -> "Fire";
             case FIRE_TICK -> "Fire-Tick";
             case MELTING -> "Melting";
             case LAVA -> "Lava";
