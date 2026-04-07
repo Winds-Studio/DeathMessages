@@ -1364,15 +1364,37 @@ Mobs:
   # 1.21.4
   creaking:
     Solo:
-      Projectile-Fireball:
-        - "%player% was knocked by %killer%"
       Melee:
         - "%player% was knocked by a %killer%"
     Gang:
-      Projectile-Fireball:
-        - "%player% was knocked by a bunch of %killer%s"
       Melee:
         - "%player% was knocked by a bunch of %killer%'s"
+  # 1.21.11
+  nautilus:
+    Solo:
+      Melee:
+        - "%player% was slain by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was slain by a bunch of %killer%'s"
+  zombienautilus:
+    Solo:
+      Melee:
+        - "%player% was slain by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was slain by a bunch of %killer%'s"
+  parched:
+    Solo:
+      Projectile-Arrow:
+        - "%player% was shot by a %killer% somehow using %weapon%"
+      Melee:
+        - "%player% was slain by a %killer%"
+    Gang:
+      Melee:
+        - "%player% was slain by a bunch of %killer%'s"
+      Projectile-Arrow:
+        - "%player% was ganged up on by some %killer%! One shot them with %weapon%"
   player:
     Solo:
       Bed:
