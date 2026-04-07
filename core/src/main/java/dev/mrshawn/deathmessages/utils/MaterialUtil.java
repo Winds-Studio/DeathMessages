@@ -101,8 +101,10 @@ public class MaterialUtil {
                 || materialName.contains("BOW")
                 || materialName.contains("CROSSBOW")
                 || materialName.contains("ARROW")
+                // Dreeam note: these three weapons below all have their own unique kill messages in vanilla
                 || materialName.contains("TRIDENT")
-                || materialName.contains("MACE");
+                || materialName.contains("MACE")
+                || materialName.contains("SPEAR");
     }
 
     public static boolean hasWeapon(LivingEntity mob, EntityDamageEvent.DamageCause damageCause) {
