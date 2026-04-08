@@ -3,24 +3,24 @@ adventure = "4.26.1"
 adventure-platform = "4.4.1"
 
 [plugins]
-shadow = "com.gradleup.shadow:9.3.2"
+shadow = "com.gradleup.shadow:9.4.1"
 run-paper = "xyz.jpenilla.run-paper:3.0.2"
 
 [libraries]
 common-io = "commons-io:commons-io:2.18.0"
-log4j-api = "org.apache.logging.log4j:log4j-api:2.25.3"
+log4j-api = "org.apache.logging.log4j:log4j-api:2.25.4"
 jspecify = "org.jspecify:jspecify:1.0.0"
 xseries = "com.github.cryptomorin:XSeries:13.6.0"
 bstats = "org.bstats:bstats-bukkit:3.2.1"
-faststats = "dev.faststats.metrics:bukkit:0.18.1"
+faststats = "dev.faststats.metrics:bukkit:0.21.0"
 folialib = "com.tcoded:FoliaLib:0.5.1"
 
-itemnbtapi = "de.tr7zw:item-nbt-api:2.15.5"
+itemnbtapi = "de.tr7zw:item-nbt-api:2.15.7"
 placeholderapi = "me.clip:placeholderapi:2.12.2"
 discordsrv = "com.discordsrv:discordsrv:1.30.4"
 mythicdist = "io.lumine:Mythic-Dist:5.11.2"
-eco = "com.willfp:eco:7.0.0"
-ecoenchants = "com.willfp:EcoEnchants:12.26.0"
+eco = "com.willfp:eco:7.2.0"
+ecoenchants = "com.willfp:EcoEnchants:13.1.1"
 combatlogx = "com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT"
 
 # Dreeam - Don't bump worldedit/worldguard dependencies!!!!
