@@ -22,7 +22,7 @@ public class MaterialUtil {
     }
 
     public static boolean isAir(ItemStack i) {
-        if (Util.isOlderAndEqual(13, 0)) {
+        if (PlatformUtil.isOlderAndEqual(13, 0)) {
             // From 1.14 org.bukkit.Material.isAir()
             return switch (i.getType()) {
                 case AIR, CAVE_AIR, VOID_AIR, LEGACY_AIR -> true;
@@ -34,7 +34,7 @@ public class MaterialUtil {
     }
 
     public static boolean isAir(Material material) {
-        if (Util.isOlderAndEqual(13, 2)) {
+        if (PlatformUtil.isOlderAndEqual(13, 2)) {
             // From 1.14 org.bukkit.Material.isAir()
             return switch (material) {
                 case AIR, CAVE_AIR, VOID_AIR, LEGACY_AIR -> true;

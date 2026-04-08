@@ -6,7 +6,7 @@ import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.config.EntityDeathMessages;
 import dev.mrshawn.deathmessages.enums.MobType;
 import dev.mrshawn.deathmessages.utils.EntityUtil;
-import dev.mrshawn.deathmessages.utils.Util;
+import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.EnderCrystal;
@@ -50,7 +50,7 @@ public class EntityDamageByEntity implements Listener {
                             }
                             playerCtx.setLastExplosiveEntity(e.getDamager());
                         }
-                        case Firework firework when Util.isNewerAndEqual(16, 0) -> { // Firework extends Entity under <= 1.15
+                        case Firework firework when PlatformUtil.isNewerAndEqual(16, 0) -> { // Firework extends Entity under <= 1.15
                             try {
                                 if (firework.getShooter() instanceof LivingEntity) {
                                     playerCtx.setLastEntityDamager((LivingEntity) firework.getShooter());
@@ -127,7 +127,7 @@ public class EntityDamageByEntity implements Listener {
                                     }
                                     entityCtx.setLastExplosiveEntity(e.getDamager());
                                 }
-                                case Firework firework when Util.isNewerAndEqual(16, 0) -> {
+                                case Firework firework when PlatformUtil.isNewerAndEqual(16, 0) -> {
                                     try {
                                         if (firework.getShooter() instanceof Player) {
                                             PlayerCtx playerCtx = PlayerCtx.of(((Player) firework.getShooter()).getUniqueId());

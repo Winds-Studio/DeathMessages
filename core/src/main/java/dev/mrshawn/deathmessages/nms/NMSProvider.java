@@ -14,28 +14,28 @@ public class NMSProvider {
     public static void initNMS() {
         final String instClassPath;
         if (PlatformUtil.IS_PAPER) {
-            if (Util.isNewerAndEqual(21, 4)) {
+            if (PlatformUtil.isNewerAndEqual(21, 4)) {
                 instClassPath = "paper.v1_21_4";
-            } else if (Util.isNewerAndEqual(21, 3)) {
+            } else if (PlatformUtil.isNewerAndEqual(21, 3)) {
                 instClassPath = "paper.v1_21_3";
-            } else if (Util.isNewerAndEqual(16, 5)) {
+            } else if (PlatformUtil.isNewerAndEqual(16, 5)) {
                 instClassPath = "paper.v1_16_5";
-            } else if (Util.isNewerAndEqual(13, 0)) { // Just use Spigot impl for <= Paper 1.16.5
+            } else if (PlatformUtil.isNewerAndEqual(13, 0)) { // Just use Spigot impl for <= Paper 1.16.5
                 instClassPath = "spigot.v1_13";
-            } else if (Util.isNewerAndEqual(12, 2)) {
+            } else if (PlatformUtil.isNewerAndEqual(12, 2)) {
                 instClassPath = "spigot.v1_12_2";
             } else {
                 // TODO - Whether need to support lower?
                 throw new UnsupportedOperationException();
             }
         } else {
-            if (Util.isNewerAndEqual(21, 3)) {
+            if (PlatformUtil.isNewerAndEqual(21, 3)) {
                 instClassPath = "spigot.v1_21_3";
-            } else if (Util.isNewerAndEqual(16, 5)) {
+            } else if (PlatformUtil.isNewerAndEqual(16, 5)) {
                 instClassPath = "spigot.v1_16_5";
-            } else if (Util.isNewerAndEqual(13, 0)) {
+            } else if (PlatformUtil.isNewerAndEqual(13, 0)) {
                 instClassPath = "spigot.v1_13";
-            } else if (Util.isNewerAndEqual(12, 2)) {
+            } else if (PlatformUtil.isNewerAndEqual(12, 2)) {
                 instClassPath = "spigot.v1_12_2";
             } else {
                 // TODO - Whether need to support lower?

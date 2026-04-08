@@ -2,7 +2,7 @@ package dev.mrshawn.deathmessages.listeners;
 
 import dev.mrshawn.deathmessages.utils.EntityUtil;
 import dev.mrshawn.deathmessages.utils.MaterialUtil;
-import dev.mrshawn.deathmessages.utils.Util;
+import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -26,7 +26,7 @@ public class OnInteract implements Listener {
             if (getBlock.getType().name().endsWith("BED") || getBlock.getType().name().endsWith("BED_BLOCK")) {
                 EntityUtil.getExplosionNearbyEffected(e.getPlayer(), getBlock);
             }
-        } else if (Util.isNewerAndEqual(16, 0)) {
+        } else if (PlatformUtil.isNewerAndEqual(16, 0)) {
             if (!getBlock.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
                 if (getBlock.getType().equals(Material.RESPAWN_ANCHOR)) {
                     EntityUtil.getExplosionNearbyEffected(e.getPlayer(), getBlock);

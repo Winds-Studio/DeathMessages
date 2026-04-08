@@ -7,6 +7,7 @@ import dev.mrshawn.deathmessages.config.files.FileStore;
 import dev.mrshawn.deathmessages.listeners.PluginMessaging;
 import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
+import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import dev.mrshawn.deathmessages.utils.Util;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import org.bstats.bukkit.Metrics;
@@ -176,7 +177,7 @@ public class HookInstance {
             hooksName.add("Common Vanish Plugins");
         }
 
-        if (!disableI18nDisplay && Util.isOlderAndEqual(12, 2)) {
+        if (!disableI18nDisplay && PlatformUtil.isOlderAndEqual(12, 2)) {
             if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_ITEM_NAME.getPath())
                     || Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath())) {
                 if (pluginManager.getPlugin("LangUtils") != null) {

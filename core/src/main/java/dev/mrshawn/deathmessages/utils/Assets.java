@@ -82,7 +82,7 @@ public class Assets {
                 if (explosion.getMaterial().name().contains("BED")) {
                     components[1] = Assets.getNaturalDeath(playerCtx, "Bed");
                 }
-                if (Util.isNewerAndEqual(16, 0)) {
+                if (PlatformUtil.isNewerAndEqual(16, 0)) {
                     if (explosion.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
                         components[1] = Assets.getNaturalDeath(playerCtx, "Respawn-Anchor");
                     }
@@ -91,7 +91,7 @@ public class Assets {
             }
         } else if (playerCtx.getLastDamageCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             components[1] = Assets.getNaturalDeath(playerCtx, Assets.getSimpleProjectile(playerCtx.getLastProjectileEntity()));
-        } else if (Util.isNewerAndEqual(9, 0) && Util.isOlderAndEqual(999, 999) && playerCtx.getLastEntityDamager() instanceof AreaEffectCloud cloud) { // Fix MC-84595 - Killed by Dragon's Breath
+        } else if (PlatformUtil.isNewerAndEqual(9, 0) && PlatformUtil.isOlderAndEqual(999, 999) && playerCtx.getLastEntityDamager() instanceof AreaEffectCloud cloud) { // Fix MC-84595 - Killed by Dragon's Breath
             if (cloud.getSource() instanceof EnderDragon) {
                 playerCtx.setLastDamageCause(
                         Settings.getInstance().getConfig().getBoolean(Config.FIX_MC_84595.getPath())
@@ -150,7 +150,7 @@ public class Assets {
                     }
 
                     // Respawn Anchor kill
-                    if (Util.isNewerAndEqual(16, 0)) {
+                    if (PlatformUtil.isNewerAndEqual(16, 0)) {
                         if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
                             components[1] = get(gang, playerCtx, pyroCtx.getPlayer(), "Respawn-Anchor");
                             return components;
@@ -240,7 +240,7 @@ public class Assets {
                     }
 
                     // Respawn Anchor kill
-                    if (Util.isNewerAndEqual(16, 0)) {
+                    if (PlatformUtil.isNewerAndEqual(16, 0)) {
                         if (explosionManager.getMaterial().equals(Material.RESPAWN_ANCHOR)) {
                             components[1] = getEntityDeath(pyroCtx.getPlayer(), entityCtx.getEntity(), "Respawn-Anchor", mobType);
                             return components;
@@ -302,7 +302,7 @@ public class Assets {
         if (msg.contains("%block%") && playerCtx.getLastEntityDamager() instanceof FallingBlock fb) {
             try {
                 // TODO: to NMS hook
-                String material = Util.isNewerAndEqual(12, 0)
+                String material = PlatformUtil.isNewerAndEqual(12, 0)
                         ? fb.getBlockData().getMaterial().toString().toLowerCase()
                         : fb.getMaterial().toString().toLowerCase();
                 String configValue = Messages.getInstance().getConfig().getString("Blocks." + material);
@@ -330,7 +330,7 @@ public class Assets {
             if (!i.getType().equals(XMaterial.BOW.parseMaterial())) {
                 return getNaturalDeath(playerCtx, "Projectile-Unknown");
             }
-            if (Util.isNewerAndEqual(14, 0)) {
+            if (PlatformUtil.isNewerAndEqual(14, 0)) {
                 if (!i.getType().equals(XMaterial.CROSSBOW.parseMaterial())) {
                     return getNaturalDeath(playerCtx, "Projectile-Unknown");
                 }
@@ -1111,7 +1111,7 @@ public class Assets {
         Component i18nName;
 
         if (!DeathMessages.getHooks().disableI18nDisplay) {
-            if (Util.isNewerAndEqual(12, 0)) {
+            if (PlatformUtil.isNewerAndEqual(12, 0)) {
                 // Block: block.minecraft.example
                 // Item: item.minecraft.example
                 String materialType = i.getType().isBlock() ? "block" : "item";
@@ -1139,7 +1139,7 @@ public class Assets {
         Component i18nName;
 
         if (Settings.getInstance().getConfig().getBoolean(Config.DISPLAY_I18N_MOB_NAME.getPath()) && !DeathMessages.getHooks().discordSRVEnabled) {
-            if (Util.isNewerAndEqual(12, 0)) {
+            if (PlatformUtil.isNewerAndEqual(12, 0)) {
                 // Entity: entity.minecraft.example
                 String rawTranslatable = "<lang:entity.minecraft." + mob.getType().name().toLowerCase() + ">";
                 i18nName = MiniMessage.miniMessage().deserialize(rawTranslatable);
