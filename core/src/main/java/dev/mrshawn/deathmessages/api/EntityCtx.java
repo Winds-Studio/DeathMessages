@@ -25,8 +25,8 @@ public class EntityCtx {
     private final MobType mobType;
     private DamageCause damageCause;
     private @Nullable PlayerCtx lastPlayerDamager;
-    private Entity lastExplosiveEntity;
-    private Projectile lastPlayerProjectile;
+    private @Nullable Entity lastExplosiveEntity;
+    private @Nullable Projectile lastPlayerProjectile;
     private Location lastLocation;
     private @Nullable WrappedTask lastPlayerTask;
 
@@ -75,19 +75,19 @@ public class EntityCtx {
         return lastPlayerDamager;
     }
 
-    public void setLastExplosiveEntity(Entity entity) {
+    public void setLastExplosiveEntity(@Nullable Entity entity) {
         this.lastExplosiveEntity = entity;
     }
 
-    public Entity getLastExplosiveEntity() {
+    public @Nullable Entity getLastExplosiveEntity() {
         return lastExplosiveEntity;
     }
 
-    public void setLastProjectileEntity(Projectile projectile) {
+    public void setLastProjectileEntity(@Nullable Projectile projectile) {
         this.lastPlayerProjectile = projectile;
     }
 
-    public Projectile getLastProjectileEntity() {
+    public @Nullable Projectile getLastProjectileEntity() {
         return lastPlayerProjectile;
     }
 

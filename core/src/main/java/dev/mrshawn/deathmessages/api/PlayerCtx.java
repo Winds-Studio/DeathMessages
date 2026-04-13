@@ -31,10 +31,10 @@ public class PlayerCtx {
     private boolean isBlacklisted;
     private boolean isCommandDeath;
     private DamageCause damageCause;
-    private Entity lastEntityDamager;
-    private Entity lastExplosiveEntity;
-    private Projectile lastProjectileEntity;
-    private Material climbingBlock;
+    private @Nullable Entity lastEntityDamager;
+    private @Nullable Entity lastExplosiveEntity;
+    private @Nullable Projectile lastProjectileEntity;
+    private @Nullable Material climbingBlock;
     //private Location location; // Uncomment if we really need to track it and put it in onMove
     private Inventory inventory;
     private int cooldown = 0;
@@ -123,11 +123,11 @@ public class PlayerCtx {
         this.isCommandDeath = isCommandDeath;
     }
 
-    public Entity getLastEntityDamager() {
+    public @Nullable Entity getLastEntityDamager() {
         return lastEntityDamager;
     }
 
-    public void setLastEntityDamager(Entity damager) {
+    public void setLastEntityDamager(@Nullable Entity damager) {
         setLastExplosiveEntity(null);
         setLastProjectileEntity(null);
         this.lastEntityDamager = damager;
@@ -138,19 +138,19 @@ public class PlayerCtx {
         lastEntityTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> setLastEntityDamager(null), FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
     }
 
-    public Entity getLastExplosiveEntity() {
+    public @Nullable Entity getLastExplosiveEntity() {
         return lastExplosiveEntity;
     }
 
-    public void setLastExplosiveEntity(Entity e) {
+    public void setLastExplosiveEntity(@Nullable Entity e) {
         this.lastExplosiveEntity = e;
     }
 
-    public Projectile getLastProjectileEntity() {
+    public @Nullable Projectile getLastProjectileEntity() {
         return lastProjectileEntity;
     }
 
-    public void setLastProjectileEntity(Projectile lastProjectileEntity) {
+    public void setLastProjectileEntity(@Nullable Projectile lastProjectileEntity) {
         this.lastProjectileEntity = lastProjectileEntity;
     }
 
@@ -158,7 +158,7 @@ public class PlayerCtx {
         return climbingBlock;
     }
 
-    public void setLastClimbing(Material climbingBlock) {
+    public void setLastClimbing(@Nullable Material climbingBlock) {
         this.climbingBlock = climbingBlock;
     }
 

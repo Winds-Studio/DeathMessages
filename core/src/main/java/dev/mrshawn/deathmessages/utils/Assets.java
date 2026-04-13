@@ -118,23 +118,10 @@ public class Assets {
 
         if (playerCtx.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             switch (playerCtx.getLastExplosiveEntity()) {
-                case EnderCrystal enderCrystal -> {
-                    components[1] = get(gang, playerCtx, mob, "End-Crystal");
-                    return components;
-                }
-                case TNTPrimed tntPrimed -> {
-                    components[1] = get(gang, playerCtx, mob, "TNT");
-                    return components;
-                }
-                case Firework firework -> {
-                    components[1] = get(gang, playerCtx, mob, "Firework");
-                    return components;
-                }
-                default -> {
-                }
+                case EnderCrystal enderCrystal -> components[1] = get(gang, playerCtx, mob, "End-Crystal");
+                case TNTPrimed tntPrimed -> components[1] = get(gang, playerCtx, mob, "TNT");
+                case null, default -> components[1] = get(gang, playerCtx, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
             }
-
-            components[1] = get(gang, playerCtx, mob, getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION));
             return components;
         }
 
@@ -208,23 +195,11 @@ public class Assets {
 
         if (entityCtx.getLastDamageCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
             switch (entityCtx.getLastExplosiveEntity()) {
-                case EnderCrystal enderCrystal -> {
-                    components[1] = getEntityDeath(p, entityCtx.getEntity(), "End-Crystal", mobType);
-                    return components;
-                }
-                case TNTPrimed tntPrimed -> {
-                    components[1] = getEntityDeath(p, entityCtx.getEntity(), "TNT", mobType);
-                    return components;
-                }
-                case Firework firework -> {
-                    components[1] = getEntityDeath(p, entityCtx.getEntity(), "Firework", mobType);
-                    return components;
-                }
-                default -> {
-                }
+                case EnderCrystal enderCrystal -> components[1] = getEntityDeath(p, entityCtx.getEntity(), "End-Crystal", mobType);
+                case TNTPrimed tntPrimed -> components[1] = getEntityDeath(p, entityCtx.getEntity(), "TNT", mobType);
+                case Firework firework -> components[1] = getEntityDeath(p, entityCtx.getEntity(), "Firework", mobType);
+                case null, default -> components[1] = getEntityDeath(p, entityCtx.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION), mobType);
             }
-
-            components[1] = getEntityDeath(p, entityCtx.getEntity(), getSimpleCause(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION), mobType);
             return components;
         }
 
