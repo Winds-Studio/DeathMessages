@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Collection;
 
-public interface WorldGuardExtension {
+public interface WorldGuardHook {
 
     StateFlag BROADCAST_PLAYER = new StateFlag("broadcast-deathmessage-player", true);
     StateFlag BROADCAST_MOBS = new StateFlag("broadcast-deathmessage-mobs", true);

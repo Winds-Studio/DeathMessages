@@ -29,7 +29,7 @@ public class HookInstance {
 
     public FastStatsHook fastStats;
 
-    public WorldGuardExtension worldGuard;
+    public WorldGuardHook worldGuard;
     public boolean worldGuardEnabled;
 
     public String bungeeServerName; // Own identification name in Bungee
@@ -58,14 +58,14 @@ public class HookInstance {
         if (pluginManager.getPlugin("WorldGuard") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_WORLDGUARD_ENABLED)) {
             try {
                 final String version = pluginManager.getPlugin("WorldGuard").getDescription().getVersion();
-                final String extensionClass;
+                final String hookClass;
                 if (version.startsWith("7")) {
-                    extensionClass = "WorldGuard7Extension";
+                    hookClass = "WorldGuard7Hook";
                 } else if (version.startsWith("6")) {
-                    extensionClass = "WorldGuard6Extension";
+                    hookClass = "WorldGuard6Hook";
                 } else throw new UnsupportedOperationException();
 
-                worldGuard = (WorldGuardExtension) Class.forName(Util.HOOKS_PACKAGE_PREFIX_NAME + extensionClass).getConstructor().newInstance();
+                worldGuard = (WorldGuardHook) Class.forName(Util.HOOKS_PACKAGE_PREFIX_NAME + hookClass).getConstructor().newInstance();
                 worldGuard.registerFlags();
                 worldGuardEnabled = true;
             } catch (Throwable t) {

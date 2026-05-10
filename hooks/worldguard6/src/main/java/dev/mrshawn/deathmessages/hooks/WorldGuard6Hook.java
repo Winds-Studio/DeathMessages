@@ -10,7 +10,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.entity.Player;
 
-public final class WorldGuard6Extension implements WorldGuardExtension {
+public final class WorldGuard6Hook implements WorldGuardHook {
 
     @Override
     public void registerFlags() {

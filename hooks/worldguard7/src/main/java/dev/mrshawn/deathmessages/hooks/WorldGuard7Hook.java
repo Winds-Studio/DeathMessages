@@ -12,7 +12,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.entity.Player;
 
-public final class WorldGuard7Extension implements WorldGuardExtension {
+public final class WorldGuard7Hook implements WorldGuardHook {
 
     public void registerFlags() {
         final FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
