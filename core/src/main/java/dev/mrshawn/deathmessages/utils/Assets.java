@@ -360,8 +360,8 @@ public class Assets {
         //Bukkit.broadcastMessage(DeathMessages.getInstance().mythicmobsEnabled + " - " + DeathMessages.getInstance().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId()));
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + ".Weapon"), playerCtx.getPlayer(), mob);
 
-        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(mob.getUniqueId())) {
+            String mmMobType = DeathMessages.getHooks().mythicMobs.get().getMythicMobInstance(mob).getMobType();
             //Bukkit.broadcastMessage("is myth - " + mmMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + ".Weapon"), playerCtx.getPlayer(), mob);
 
@@ -431,8 +431,8 @@ public class Assets {
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String mmMobType = null;
-            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(e.getUniqueId())) {
+                mmMobType = DeathMessages.getHooks().mythicMobs.get().getMythicMobInstance(e).getMobType();
             } else {
                 // reserved
             }
@@ -506,8 +506,8 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + damageCause), playerCtx.getPlayer(), mob);
 
-        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(mob.getUniqueId())) {
+            String mmMobType = DeathMessages.getHooks().mythicMobs.get().getMythicMobInstance(mob).getMobType();
             //System.out.println("is myth - " + mmMobType);
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + "." + damageCause), playerCtx.getPlayer(), mob);
 
@@ -562,8 +562,8 @@ public class Assets {
         final String affiliation = gang ? DeathAffiliation.GANG.getValue() : DeathAffiliation.SOLO.getValue();
         List<String> msgs = sortList(getPlayerDeathMessages().getStringList(mode + "." + affiliation + "." + projectileDamage), playerCtx.getPlayer(), mob);
 
-        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(mob.getUniqueId())) {
-            String mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(mob).getMobType();
+        if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(mob.getUniqueId())) {
+            String mmMobType = DeathMessages.getHooks().mythicMobs.get().getMythicMobInstance(mob).getMobType();
             msgs = sortList(getPlayerDeathMessages().getStringList("Custom-Mobs.Mythic-Mobs." + mmMobType + "." + affiliation + "." + projectileDamage), playerCtx.getPlayer(), mob);
 
             if (msgs.isEmpty()) return Component.empty(); // Don't send mm mob death msg if no configured death msg.
@@ -653,8 +653,8 @@ public class Assets {
 
         if (mobType.equals(MobType.MYTHIC_MOB)) {
             String mmMobType = null;
-            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(entityCtx.getUUID())) {
-                mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(entityCtx.getEntity()).getMobType();
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(entityCtx.getUUID())) {
+                mmMobType = DeathMessages.getHooks().mythicMobs.get().getMythicMobInstance(entityCtx.getEntity()).getMobType();
             }
 
             msgs = sortList(getEntityDeathMessages().getStringList("Mythic-Mobs-Entities." + mmMobType + "." + projectileDamage), p, entityCtx.getEntity());
@@ -742,8 +742,8 @@ public class Assets {
                     e.getName().toLowerCase() + ".Tamed"), player, e);
         } else if (mobType.equals(MobType.MYTHIC_MOB)) {
             String mmMobType = null;
-            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getUniqueId())) {
-                mmMobType = DeathMessages.getHooks().mythicMobs.getAPIHelper().getMythicMobInstance(e).getMobType();
+            if (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(e.getUniqueId())) {
+                mmMobType = DeathMessages.getHooks().mythicMobs.get().getMythicMobInstance(e).getMobType();
             } else {
                 // reserved
             }
@@ -821,7 +821,7 @@ public class Assets {
                 Matcher m = Util.DM_REGION_PATTERN.matcher(s);
                 while (m.find()) {
                     String regionID = m.group(1);
-                    s = DeathMessages.getHooks().worldGuardExtension.isInRegion(victim, regionID)
+                    s = DeathMessages.getHooks().worldGuard.isInRegion(victim, regionID)
                             ? s.replace("REGION[" + regionID + "]", "") : "";
                 }
             }

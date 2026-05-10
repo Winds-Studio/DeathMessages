@@ -73,8 +73,8 @@ public class BroadcastEntityDeathListener implements Listener {
                 } else {
                     if (otherPlayerCtx != null) {
                         if (otherPlayerCtx.isMessageEnabled()) {
-                            if (DeathMessages.getHooks().worldGuardExtension != null) {
-                                if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(otherPlayer, e.getMessageType().getValue())) {
+                            if (DeathMessages.getHooks().worldGuard != null) {
+                                if (DeathMessages.getHooks().worldGuard.denyFromRegion(otherPlayer, e.getMessageType().getValue())) {
                                     return;
                                 }
                             }
@@ -99,8 +99,8 @@ public class BroadcastEntityDeathListener implements Listener {
                         // Will reach the discord broadcast
                     }
 
-                    if (DeathMessages.getHooks().discordSRVExtension != null && !discordSent) {
-                        DeathMessages.getHooks().discordSRVExtension.sendEntityDiscordMessage(
+                    if (DeathMessages.getHooks().discordSRV != null && !discordSent) {
+                        DeathMessages.getHooks().discordSRV.sendEntityDiscordMessage(
                                 components,
                                 e.getMessageType(),
                                 playerCtx,

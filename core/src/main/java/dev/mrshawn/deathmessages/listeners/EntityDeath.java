@@ -110,7 +110,7 @@ public class EntityDeath implements Listener {
             if (entityCtx != null) {
                 MobType mobType = MobType.VANILLA;
                 if (DeathMessages.getHooks().mythicmobsEnabled) {
-                    if (DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
+                    if (DeathMessages.getHooks().mythicMobs.get().isMythicMob(e.getEntity().getUniqueId())) {
                         mobType = MobType.MYTHIC_MOB;
                     }
                 }

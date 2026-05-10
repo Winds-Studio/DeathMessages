@@ -5,7 +5,7 @@ import com.willfp.ecoenchants.target.EnchantmentTargets;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class EcoExtension {
+public class EcoHook {
 
     public ItemStack getEcoEnchantsItem(ItemStack i, Player player) {
         return Display.displayAndFinalize(i, player);

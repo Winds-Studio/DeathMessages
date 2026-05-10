@@ -9,13 +9,11 @@ import dev.mrshawn.deathmessages.listeners.combatlogx.PlayerUntag;
 import dev.mrshawn.deathmessages.listeners.mythicmobs.MobDeath;
 import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import dev.mrshawn.deathmessages.utils.Util;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +27,9 @@ public class HookInstance {
     public boolean commonVanishPluginsEnabled = false; // TODO: really needs this (to keep consistency with other enabled)? Or just use config boolean?
     public boolean disableI18nDisplay = false;
 
-    public FastStatsHook fastStatsHook;
+    public FastStatsHook fastStats;
 
-    public WorldGuardExtension worldGuardExtension;
+    public WorldGuardExtension worldGuard;
     public boolean worldGuardEnabled;
 
     public String bungeeServerName; // Own identification name in Bungee
@@ -39,13 +37,13 @@ public class HookInstance {
     public boolean bungeeServerNameRequest = true;
     public boolean bungeeInit = false;
 
-    public DiscordSRVExtension discordSRVExtension;
+    public DiscordSRVHook discordSRV;
     public boolean discordSRVEnabled = false;
 
-    public MythicBukkit mythicMobs = null;
+    public MythicMobsHook mythicMobs;
     public boolean mythicmobsEnabled = false;
 
-    public EcoExtension ecoExtension;
+    public EcoHook eco;
     public boolean ecoEnchantsEnabled = false;
 
     public HookInstance(DeathMessages pluginInstance) {
@@ -67,13 +65,12 @@ public class HookInstance {
                     extensionClass = "WorldGuard6Extension";
                 } else throw new UnsupportedOperationException();
 
-                worldGuardExtension = (WorldGuardExtension) Class.forName(Util.HOOKS_PACKAGE_PREFIX_NAME + extensionClass).getConstructor().newInstance();
-                worldGuardExtension.registerFlags();
+                worldGuard = (WorldGuardExtension) Class.forName(Util.HOOKS_PACKAGE_PREFIX_NAME + extensionClass).getConstructor().newInstance();
+                worldGuard.registerFlags();
                 worldGuardEnabled = true;
-            } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException | NoSuchMethodException | UnsupportedOperationException e) {
+            } catch (Throwable t) {
                 worldGuardEnabled = false;
-                DeathMessages.LOGGER.error("Error loading WorldGuardHook. Error: ", e);
+                DeathMessages.LOGGER.warn("Failed to hook WorldGuard.", t);
             }
         }
     }
@@ -85,8 +82,8 @@ public class HookInstance {
         new Metrics(instance, 24145);
         hooksName.add("bStats");
 
-        fastStatsHook = new FastStatsHook();
-        fastStatsHook.get().ready();
+        fastStats = new FastStatsHook();
+        fastStats.get().ready();
         hooksName.add("FastStats");
 
         if (FileStore.CONFIG.getBoolean(Config.HOOKS_BUNGEE_ENABLED)) {
@@ -102,9 +99,13 @@ public class HookInstance {
         }
 
         if (pluginManager.getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIExtension(instance).register();
-            placeholderAPIEnabled = true;
-            hooksName.add("PlaceholderAPI");
+            try {
+                new PlaceholderAPIHook(instance).register();
+                placeholderAPIEnabled = true;
+                hooksName.add("PlaceholderAPI");
+            } catch (Throwable t) {
+                DeathMessages.LOGGER.warn("Failed to hook PlaceholderAPI.", t);
+            }
         }
 
         if (pluginManager.getPlugin("NBTAPI") != null) {
@@ -117,7 +118,7 @@ public class HookInstance {
         }
 
         if (pluginManager.getPlugin("DiscordSRV") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_DISCORD_ENABLED)) {
-            discordSRVExtension = new DiscordSRVExtension();
+            discordSRV = new DiscordSRVHook();
             discordSRVEnabled = true;
             hooksName.add("DiscordSRV");
 
@@ -130,7 +131,7 @@ public class HookInstance {
 
         // Logic binds to PlugMan's impl instead of PlugMan version or Minecraft versions that PlugMan supports (So report if got errors)
         // Use Reflection here to make things easier, since new PlugMan version doesn't have maven repo
-        if (pluginManager.isPluginEnabled("PlugMan") && worldGuardExtension != null) {
+        if (pluginManager.isPluginEnabled("PlugMan") && worldGuard != null) {
             Plugin plugManInstance = pluginManager.getPlugin("PlugMan");
             DeathMessages.LOGGER.info("Detected PlugMan and WorldGuard. DeathMessages can't be unloaded using PlugMan now, due to DeathMessages's WorldGuard onLoad hook being enabled!");
             try {
@@ -147,9 +148,8 @@ public class HookInstance {
                     }
                 }
                 hooksName.add("PlugMan");
-            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException |
-                     ClassNotFoundException e) {
-                DeathMessages.LOGGER.error("Error adding plugin to ignored plugins list: ", e);
+            } catch (Throwable t) {
+                DeathMessages.LOGGER.warn("Failed to hook PlugMan.", t);
             }
         }
 
@@ -160,14 +160,18 @@ public class HookInstance {
         }
 
         if (pluginManager.getPlugin("MythicMobs") != null && FileStore.CONFIG.getBoolean(Config.HOOKS_MYTHICMOBS_ENABLED)) {
-            mythicMobs = MythicBukkit.inst();
-            mythicmobsEnabled = true;
-            pluginManager.registerEvents(new MobDeath(), instance);
-            hooksName.add("MythicMobs");
+            try {
+                mythicMobs = new MythicMobsHook();
+                mythicmobsEnabled = true;
+                pluginManager.registerEvents(new MobDeath(), instance);
+                hooksName.add("MythicMobs");
+            } catch (Throwable t) {
+                DeathMessages.LOGGER.warn("Failed to hook MythicMobs.", t);
+            }
         }
 
         if (pluginManager.getPlugin("eco") != null && pluginManager.getPlugin("EcoEnchants") != null) {
-            ecoExtension = new EcoExtension();
+            eco = new EcoHook();
             ecoEnchantsEnabled = true;
             hooksName.add("EcoEnchants");
         }
@@ -185,8 +189,8 @@ public class HookInstance {
                     hooksName.add("LangUtils");
                 } else {
                     langUtilsEnabled = false;
-                    DeathMessages.LOGGER.error("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
-                    DeathMessages.LOGGER.error("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
+                    DeathMessages.LOGGER.warn("You enable the I18N Display feature, you need LangUtils plugin to make this feature works under <=1.12.2");
+                    DeathMessages.LOGGER.warn("Turn off I18N Display feature in config, or install LangUtils: https://github.com/MascusJeoraly/LanguageUtils/releases");
                 }
             }
         }

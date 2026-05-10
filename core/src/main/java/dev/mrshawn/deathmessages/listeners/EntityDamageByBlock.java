@@ -48,7 +48,7 @@ public class EntityDamageByBlock implements Listener {
                     } else {
                         MobType mobType = MobType.VANILLA;
                         if (DeathMessages.getHooks().mythicmobsEnabled
-                                && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
+                                && DeathMessages.getHooks().mythicMobs.get().isMythicMob(e.getEntity().getUniqueId())) {
                             mobType = MobType.MYTHIC_MOB;
                         }
                         EntityCtx.create(new EntityCtx(e.getEntity(), mobType));

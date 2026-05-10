@@ -4,7 +4,7 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
-public class CommonVanishPluginExtension {
+public class CommonVanishPluginHook {
 
     public static boolean isPluginVanished(Player p) {
         if (DeathMessages.getHooks().commonVanishPluginsEnabled) {

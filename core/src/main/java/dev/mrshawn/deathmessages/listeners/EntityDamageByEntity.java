@@ -102,7 +102,7 @@ public class EntityDamageByEntity implements Listener {
 
             for (String listened : listenedMobs) {
                 if (listened.contains(EntityUtil.getConfigNodeByEntity(e.getEntity()))
-                        || (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId()))) {
+                        || (DeathMessages.getHooks().mythicmobsEnabled && DeathMessages.getHooks().mythicMobs.get().isMythicMob(e.getEntity().getUniqueId()))) {
                     EntityCtx entityCtx = EntityCtx.of(e.getEntity().getUniqueId());
                     if (entityCtx != null) {
                         if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
@@ -167,7 +167,7 @@ public class EntityDamageByEntity implements Listener {
                     } else {
                         MobType mobType = MobType.VANILLA;
                         if (DeathMessages.getHooks().mythicmobsEnabled
-                                && DeathMessages.getHooks().mythicMobs.getAPIHelper().isMythicMob(e.getEntity().getUniqueId())) {
+                                && DeathMessages.getHooks().mythicMobs.get().isMythicMob(e.getEntity().getUniqueId())) {
                             mobType = MobType.MYTHIC_MOB;
                         }
 

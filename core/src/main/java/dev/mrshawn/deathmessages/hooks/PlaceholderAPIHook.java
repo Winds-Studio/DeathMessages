@@ -8,7 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 @NullMarked
-public class PlaceholderAPIExtension extends PlaceholderExpansion {
+public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     private final DeathMessages plugin;
 
@@ -19,7 +19,7 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
      *
      * @param plugin The instance of our plugin.
      */
-    public PlaceholderAPIExtension(DeathMessages plugin) {
+    public PlaceholderAPIHook(DeathMessages plugin) {
         this.plugin = plugin;
     }
 

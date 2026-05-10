@@ -6,7 +6,7 @@ import dev.mrshawn.deathmessages.config.Messages;
 import dev.mrshawn.deathmessages.config.Settings;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
-import dev.mrshawn.deathmessages.hooks.CommonVanishPluginExtension;
+import dev.mrshawn.deathmessages.hooks.CommonVanishPluginHook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -262,7 +262,7 @@ public class Util {
             return true;
         }
 
-        return CommonVanishPluginExtension.isPluginVanished(player);
+        return CommonVanishPluginHook.isPluginVanished(player);
     }
 
     public static Component getVanishedName() {

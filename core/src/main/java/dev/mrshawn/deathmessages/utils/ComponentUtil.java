@@ -56,8 +56,8 @@ public class ComponentUtil {
         }
 
         // Eco item process
-        if (DeathMessages.getHooks().ecoEnchantsEnabled && DeathMessages.getHooks().ecoExtension.isEcoEnchantsItem(i)) {
-            i = DeathMessages.getHooks().ecoExtension.getEcoEnchantsItem(i, player);
+        if (DeathMessages.getHooks().ecoEnchantsEnabled && DeathMessages.getHooks().eco.isEcoEnchantsItem(i)) {
+            i = DeathMessages.getHooks().eco.getEcoEnchantsItem(i, player);
         }
 
         final HoverEvent<HoverEvent.ShowItem> showItem = DeathMessages.getNMS().itemHoverEvent(i);

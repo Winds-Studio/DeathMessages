@@ -98,9 +98,9 @@ public class BroadcastPlayerDeathListener implements Listener {
     }
 
     private void normal(BroadcastDeathMessageEvent e, TextComponent[] components, TextComponent message, PlayerCtx otherPlayerCtx, Player otherPlayer, List<World> worlds) {
-        if (DeathMessages.getHooks().worldGuardExtension != null) {
-            if (DeathMessages.getHooks().worldGuardExtension.denyFromRegion(otherPlayer, e.getMessageType().getValue())
-                    || DeathMessages.getHooks().worldGuardExtension.denyFromRegion(e.getPlayer(), e.getMessageType().getValue())) {
+        if (DeathMessages.getHooks().worldGuard != null) {
+            if (DeathMessages.getHooks().worldGuard.denyFromRegion(otherPlayer, e.getMessageType().getValue())
+                    || DeathMessages.getHooks().worldGuard.denyFromRegion(e.getPlayer(), e.getMessageType().getValue())) {
                 return;
             }
         }
@@ -126,8 +126,8 @@ public class BroadcastPlayerDeathListener implements Listener {
 
         PlayerCtx playerCtx = PlayerCtx.of(e.getPlayer().getUniqueId());
         if (playerCtx != null) {
-            if (DeathMessages.getHooks().discordSRVExtension != null && !discordSent) {
-                DeathMessages.getHooks().discordSRVExtension.sendDiscordMessage(
+            if (DeathMessages.getHooks().discordSRV != null && !discordSent) {
+                DeathMessages.getHooks().discordSRV.sendDiscordMessage(
                         components,
                         e.getMessageType(),
                         playerCtx
