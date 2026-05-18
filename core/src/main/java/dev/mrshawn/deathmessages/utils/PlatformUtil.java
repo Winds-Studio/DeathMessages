@@ -4,6 +4,8 @@ import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.nms.NMSProvider;
 import org.bukkit.Bukkit;
 
+import java.util.Arrays;
+
 public class PlatformUtil {
 
     public static final boolean IS_PAPER = Util.doesClassExists("io.papermc.paper.configuration.GlobalConfiguration");
@@ -118,6 +120,12 @@ public class PlatformUtil {
             }
         }
 
-        return version.split("\\.");
+        String[] ret = version.split("\\.");
+
+        if (ret.length < 2 || ret.length > 3) {
+            throw new IllegalArgumentException("Invalid version format: [" + version + "]!");
+        }
+
+        return ret;
     }
 }
