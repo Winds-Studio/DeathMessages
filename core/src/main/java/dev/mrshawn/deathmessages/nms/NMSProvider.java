@@ -3,6 +3,7 @@ package dev.mrshawn.deathmessages.nms;
 import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.utils.PlatformUtil;
 import dev.mrshawn.deathmessages.utils.Util;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +53,7 @@ public class NMSProvider {
         }
     }
 
-    public static NMSAdaptor get() {
+    public static @Nullable NMSAdaptor get() {
         return instance;
     }
 }

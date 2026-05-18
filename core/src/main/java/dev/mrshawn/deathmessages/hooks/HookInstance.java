@@ -208,6 +208,12 @@ public class HookInstance {
         DeathMessages.LOGGER.info(sb.toString());
     }
 
+    public void shutdownFastStats() {
+        if (fastStats != null) {
+            fastStats.get().shutdown();
+        }
+    }
+
     public HookInstance getInstance() {
         return this;
     }

@@ -33,6 +33,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -72,8 +73,11 @@ public class DeathMessages extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getHooks().fastStats.get().shutdown();
-        getNMS().shutdownAdventure();
+        getHooks().shutdownFastStats();
+
+        if (getNMS() != null) {
+            getNMS().shutdownAdventure();
+        }
 
         instance = null;
     }
@@ -162,7 +166,7 @@ public class DeathMessages extends JavaPlugin {
         return hookInstance.getInstance();
     }
 
-    public static NMSAdaptor getNMS() {
+    public static @Nullable NMSAdaptor getNMS() {
         return NMSProvider.get();
     }
 
