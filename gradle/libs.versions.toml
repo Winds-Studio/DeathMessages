@@ -4,7 +4,7 @@ adventure = "4.26.1"
 adventure-platform = "4.4.1"
 
 [plugins]
-shadow = "com.gradleup.shadow:9.4.1"
+shadow = "com.gradleup.shadow:9.4.2"
 run-paper = "xyz.jpenilla.run-paper:3.0.2"
 
 [libraries]
