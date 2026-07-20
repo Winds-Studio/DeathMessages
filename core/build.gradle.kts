@@ -9,7 +9,6 @@ dependencies {
     implementation(project(":nms:abstraction"))
 
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT") // Latest
-    compileOnly(libs.common.io) // Remove this
     compileOnly(libs.log4j.api)
     compileOnlyApi(libs.jspecify)
     implementation(libs.xseries)
