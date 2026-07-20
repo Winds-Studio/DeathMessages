@@ -28,7 +28,10 @@ import java.util.regex.Pattern;
 
 public class Util {
 
-    private static final Pattern BUNGEE_RGB_PATTERN = Pattern.compile("(?<!&)(#[0-9a-fA-F]{6})"); // Match bungee RGB color code only, use Negative Lookbehind to avoid matching code begin with &
+    // Match bungee RGB color code only, use Negative Lookbehind to avoid matching code begin with &
+    private static final Pattern BUNGEE_HEX_BUKKIT_PATTERN = Pattern.compile("(?<!&)(#[0-9a-fA-F]{6})");
+    // Match format like: §x§7§A§0§0§F§F
+    private static final Pattern BUNGEE_HEX_VANILLA_PATTERN = Pattern.compile("§x(§[0-9A-Fa-f]){6}");
     public static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + "§" + "[0-9A-FK-ORX]");
     public static final Pattern DM_PERM_PATTERN = Pattern.compile("PERMISSION\\[(.*?)]");
     public static final Pattern DM_KILLER_PERM_PATTERN = Pattern.compile("PERMISSION_KILLER\\[(.*?)]");
@@ -83,9 +86,25 @@ public class Util {
         To support both bungee and adventure RGB color code in legacy
     */
     private static String bungeeHexToAdventureInConfig(String s) {
-        return BUNGEE_RGB_PATTERN
+        return BUNGEE_HEX_BUKKIT_PATTERN
                 .matcher(s)
                 .replaceAll(match -> "&" + match.group(1));
+    }
+
+    public static String bungeeHexToAdventure(String input) {
+        final String adventureHexPrefix = "&#";
+        return BUNGEE_HEX_VANILLA_PATTERN
+                .matcher(input)
+                .replaceAll(match -> {
+                    String s = match.group();
+
+                    StringBuilder hex = new StringBuilder(adventureHexPrefix);
+                    for (int i = 3; i < s.length(); i += 2) {
+                        hex.append(s.charAt(i));
+                    }
+
+                    return hex.toString();
+                });
     }
 
     public static boolean isNumeric(String s) {

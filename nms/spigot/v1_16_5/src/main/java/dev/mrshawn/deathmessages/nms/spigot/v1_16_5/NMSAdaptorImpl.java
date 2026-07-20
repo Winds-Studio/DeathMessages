@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class NMSAdaptorImpl extends dev.mrshawn.deathmessages.nms.spigot.v1_13.NMSAdaptorImpl {
 
     // Match format like: §x§7§A§0§0§F§F
-    private static final Pattern BUNGEE_HEX_PATTERN = Pattern.compile("§x(§[0-9A-Fa-f]){6}");
+    private static final Pattern BUNGEE_HEX_VANILLA_PATTERN = Pattern.compile("§x(§[0-9A-Fa-f]){6}");
 
     @Override
     public Component itemDisplayName(ItemStack i) {
@@ -30,7 +30,7 @@ public class NMSAdaptorImpl extends dev.mrshawn.deathmessages.nms.spigot.v1_13.N
 
     private static String bungeeHexToAdventure(String input) {
         final String adventureHexPrefix = "&#";
-        return BUNGEE_HEX_PATTERN
+        return BUNGEE_HEX_VANILLA_PATTERN
                 .matcher(input)
                 .replaceAll(match -> {
                     String s = match.group();

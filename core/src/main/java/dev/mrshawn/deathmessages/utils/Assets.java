@@ -876,7 +876,10 @@ public class Assets {
 
             while (identifiers.find()) {
                 String identifier = identifiers.group(0);
-                msg = msg.replaceText(Util.replace(identifier, PlaceholderAPI.setPlaceholders(player, identifier)));
+                String parsedString = PlaceholderAPI.setPlaceholders(player, identifier);
+                parsedString = Util.bungeeHexToAdventure(parsedString);
+
+                msg = msg.replaceText(Util.replace(identifier, Util.convertFromLegacy(parsedString)));
             }
         }
 
@@ -928,6 +931,7 @@ public class Assets {
 
         if (DeathMessages.getHooks().placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(player, msg);
+            msg = Util.bungeeHexToAdventure(msg);
         }
 
         return msg;
@@ -998,7 +1002,9 @@ public class Assets {
 
             while (params.find()) {
                 String param = params.group(0);
-                msg = msg.replaceText(Util.replace(param, PlaceholderAPI.setPlaceholders(playerCtx.getPlayer(), param)));
+                String parsedString = PlaceholderAPI.setPlaceholders(playerCtx.getPlayer(), param);
+                parsedString = Util.bungeeHexToAdventure(parsedString);
+                msg = msg.replaceText(Util.replace(param, Util.convertFromLegacy(parsedString)));
             }
         }
 
@@ -1072,6 +1078,7 @@ public class Assets {
 
         if (DeathMessages.getHooks().placeholderAPIEnabled) {
             msg = PlaceholderAPI.setPlaceholders(playerCtx.getPlayer(), msg);
+            msg = Util.bungeeHexToAdventure(msg);
         }
 
         return msg;
