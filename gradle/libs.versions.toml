@@ -5,7 +5,7 @@ adventure-platform = "4.4.1"
 
 [plugins]
 shadow = "com.gradleup.shadow:9.6.1"
-run-paper = "xyz.jpenilla.run-paper:3.0.2"
+run-paper = "xyz.jpenilla.run-paper:3.1.0"
 
 [libraries]
 log4j-api = "org.apache.logging.log4j:log4j-api:2.26.1"
