@@ -1,7 +1,5 @@
 package dev.mrshawn.deathmessages.api;
 
-import com.tcoded.folialib.wrapper.task.WrappedTask;
-import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.UserData;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
@@ -38,8 +36,7 @@ public class PlayerCtx {
     //private Location location; // Uncomment if we really need to track it and put it in onMove
     private Inventory inventory;
     private int cooldown = 0;
-    private @Nullable WrappedTask cooldownTask;
-    private @Nullable WrappedTask lastEntityTask;
+    private long lastDamagerTimestamp = 0;
 
     private static final Map<UUID, PlayerCtx> PLAYER_CONTEXTS = new ConcurrentHashMap<>();
 
@@ -131,11 +128,7 @@ public class PlayerCtx {
         setLastExplosiveEntity(null);
         setLastProjectileEntity(null);
         this.lastEntityDamager = damager;
-
-        if (lastEntityTask != null) {
-            lastEntityTask.cancel();
-        }
-        lastEntityTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> setLastEntityDamager(null), FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 20L);
+        this.lastDamagerTimestamp = damager != null ? System.currentTimeMillis() : 0;
     }
 
     public @Nullable Entity getLastExplosiveEntity() {
@@ -173,12 +166,6 @@ public class PlayerCtx {
 
     public void setCooldown() {
         cooldown = FileStore.CONFIG.getInt(Config.COOLDOWN);
-        cooldownTask = DeathMessages.getInstance().foliaLib.getScheduler().runTimer(() -> {
-            if (cooldown <= 0) {
-                cooldownTask.cancel();
-            }
-            cooldown--;
-        }, 1, 20);
     }
 
     public Inventory getInventory() {
@@ -201,5 +188,31 @@ public class PlayerCtx {
 
     public static void remove(UUID uuid) {
         PLAYER_CONTEXTS.remove(uuid);
+    }
+
+    /**
+     * Called by the global cooldown ticker in DeathMessages every second.
+     * Decrements the cooldown counter for all players with an active cooldown.
+     */
+    public static void tickCooldowns() {
+        for (PlayerCtx ctx : PLAYER_CONTEXTS.values()) {
+            if (ctx.cooldown > 0) {
+                ctx.cooldown--;
+            }
+        }
+    }
+
+    /**
+     * Called by the global ticker. Clears lastEntityDamager for players whose damage attribution has expired.
+     */
+    public static void cleanExpiredDamagers() {
+        long now = System.currentTimeMillis();
+        long expireMillis = FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_PLAYER) * 1000L;
+        for (PlayerCtx ctx : PLAYER_CONTEXTS.values()) {
+            if (ctx.lastEntityDamager != null && ctx.lastDamagerTimestamp > 0
+                    && (now - ctx.lastDamagerTimestamp) >= expireMillis) {
+                ctx.setLastEntityDamager(null);
+            }
+        }
     }
 }

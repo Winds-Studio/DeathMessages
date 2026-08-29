@@ -1,6 +1,8 @@
 package dev.mrshawn.deathmessages;
 
 import com.tcoded.folialib.FoliaLib;
+import com.tcoded.folialib.wrapper.task.WrappedTask;
+import dev.mrshawn.deathmessages.api.EntityCtx;
 import dev.mrshawn.deathmessages.api.PlayerCtx;
 import dev.mrshawn.deathmessages.commands.CommandManager;
 import dev.mrshawn.deathmessages.commands.TabCompleter;
@@ -46,6 +48,7 @@ public class DeathMessages extends JavaPlugin {
     private static DeathMessages instance;
     private static HookInstance hookInstance;
     public final FoliaLib foliaLib = new FoliaLib(this);
+    private @Nullable WrappedTask cooldownTickTask;
 
     private static EventPriority eventPriority = EventPriority.HIGH;
 
@@ -57,6 +60,7 @@ public class DeathMessages extends JavaPlugin {
         initCommands();
         getHooks().registerHooks();
         initOnlinePlayers();
+        initCooldownTicker();
         checkGameRules();
 
         ComponentUtil.sendConsoleMessage(Component.text("DeathMessages " + instance.getDescription().getVersion() + " successfully loaded!", NamedTextColor.GOLD));
@@ -74,6 +78,10 @@ public class DeathMessages extends JavaPlugin {
     @Override
     public void onDisable() {
         getHooks().shutdownFastStats();
+
+        if (cooldownTickTask != null) {
+            cooldownTickTask.cancel();
+        }
 
         if (getNMS() != null) {
             getNMS().shutdownAdventure();
@@ -126,6 +134,14 @@ public class DeathMessages extends JavaPlugin {
         for (Player player : getServer().getOnlinePlayers()) {
             PlayerCtx.create(new PlayerCtx(player));
         }
+    }
+
+    private void initCooldownTicker() {
+        cooldownTickTask = foliaLib.getScheduler().runTimer(() -> {
+            PlayerCtx.tickCooldowns();
+            PlayerCtx.cleanExpiredDamagers();
+            EntityCtx.cleanExpiredEntities();
+        }, 20, 20);
     }
 
     private void checkGameRules() {

@@ -1,7 +1,5 @@
 package dev.mrshawn.deathmessages.api;
 
-import com.tcoded.folialib.wrapper.task.WrappedTask;
-import dev.mrshawn.deathmessages.DeathMessages;
 import dev.mrshawn.deathmessages.config.files.Config;
 import dev.mrshawn.deathmessages.config.files.FileStore;
 import dev.mrshawn.deathmessages.enums.MobType;
@@ -28,7 +26,7 @@ public class EntityCtx {
     private @Nullable Entity lastExplosiveEntity;
     private @Nullable Projectile lastPlayerProjectile;
     private Location lastLocation;
-    private @Nullable WrappedTask lastPlayerTask;
+    private long lastDamagerTimestamp = 0;
 
     private static final Map<UUID, EntityCtx> ENTITY_CONTEXTS = new ConcurrentHashMap<>();
 
@@ -63,11 +61,7 @@ public class EntityCtx {
         setLastProjectileEntity(null);
 
         this.lastPlayerDamager = damagerCtx;
-
-        if (lastPlayerTask != null) {
-            lastPlayerTask.cancel();
-        }
-        lastPlayerTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> EntityCtx.remove(this.getUUID()), FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 20L);
+        this.lastDamagerTimestamp = damagerCtx != null ? System.currentTimeMillis() : 0;
         this.damageCause = DamageCause.CUSTOM;
     }
 
@@ -110,5 +104,18 @@ public class EntityCtx {
 
     public static void remove(UUID uuid) {
         ENTITY_CONTEXTS.remove(uuid);
+    }
+
+    /**
+     * Called by the global ticker. Removes EntityCtx entries whose player damage attribution has expired.
+     */
+    public static void cleanExpiredEntities() {
+        long now = System.currentTimeMillis();
+        long expireMillis = FileStore.CONFIG.getInt(Config.EXPIRE_LAST_DAMAGE_EXPIRE_ENTITY) * 1000L;
+        ENTITY_CONTEXTS.entrySet().removeIf(entry -> {
+            EntityCtx ctx = entry.getValue();
+            return ctx.lastPlayerDamager != null && ctx.lastDamagerTimestamp > 0
+                    && (now - ctx.lastDamagerTimestamp) >= expireMillis;
+        });
     }
 }

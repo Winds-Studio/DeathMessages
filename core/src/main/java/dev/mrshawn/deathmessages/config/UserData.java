@@ -1,6 +1,8 @@
 package dev.mrshawn.deathmessages.config;
 
+import com.tcoded.folialib.wrapper.task.WrappedTask;
 import dev.mrshawn.deathmessages.DeathMessages;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -32,6 +34,7 @@ public class UserData {
 
     private IOOperation ioRunning = null;
     private final Stack<IOOperation> ioOperations = new Stack<>();
+    private @Nullable WrappedTask pendingSaveTask;
 
     public void save() {
         this.save(false);
@@ -41,7 +44,14 @@ public class UserData {
         if (ioRunning != null) ioOperations.push(IOOperation.SAVE);
         // We should not halt the main server thread
         if (!sync) {
-            DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> saveFile());
+            // Debounce: cancel any pending save and reschedule to batch rapid-fire saves
+            if (pendingSaveTask != null) {
+                pendingSaveTask.cancel();
+            }
+            pendingSaveTask = DeathMessages.getInstance().foliaLib.getScheduler().runLater(() -> {
+                pendingSaveTask = null;
+                saveFile();
+            }, 60);
         } else {
             saveFile();
         }
@@ -73,7 +83,7 @@ public class UserData {
         if (!sync) {
             DeathMessages.getInstance().foliaLib.getScheduler().runAsync(task -> reloadFile());
         } else {
-            saveFile();
+            reloadFile();
         }
     }
 
