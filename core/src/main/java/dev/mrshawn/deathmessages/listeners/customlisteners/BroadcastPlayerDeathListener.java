@@ -25,7 +25,7 @@ public class BroadcastPlayerDeathListener implements Listener {
 
     private boolean discordSent = false;
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void broadcastListener(BroadcastDeathMessageEvent e) {
         PlayerCtx playerCtx = PlayerCtx.of(e.getPlayer().getUniqueId());
 
