@@ -25,7 +25,7 @@ import java.util.List;
 
 public class BroadcastEntityDeathListener implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void broadcastListener(BroadcastEntityDeathMessageEvent e) {
         final PlayerCtx playerCtx = e.getPlayerContext();
         final Entity entity = e.getEntity();
